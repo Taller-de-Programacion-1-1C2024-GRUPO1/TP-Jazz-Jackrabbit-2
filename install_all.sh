@@ -1,5 +1,8 @@
 #!/bin/bash
 sudo apt-get install libsdl2-dev
+sudo apt-get install libsdl2-image-dev
+sudo apt-get install libsdl2-ttf-dev
+sudo apt-get install libsdl2-mixer-dev
 sudo apt-get install qtbase5-dev
 sudo apt-get install qtmultimedia5-dev
 sudo apt-get install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
