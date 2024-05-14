@@ -1,9 +1,7 @@
 #include <exception>
 #include <iostream>
 
-#include "../common_src/common_resolver.h"
-
-#include "client.h"
+#include "client_src/client.h"
 
 /*
 gdb --tui ./server
@@ -20,7 +18,6 @@ tiburoncin -o -A 127.0.0.1:8081 -B 127.0.0.1:8080
 pre-commit run --hook-stage manual --files xxx.cpp
 pre-commit run --hook-stage manual --all-files
 */
-
 
 int main(int argc, char* argv[]) {
     try {
