@@ -15,4 +15,4 @@ add_library(common_lib ${common_src_files})
 target_include_directories(common_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Link libraries (if applicable)
-target_link_libraries(common_lib)
+target_link_libraries(common_lib yaml-cpp)

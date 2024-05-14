@@ -20,7 +20,6 @@ target_include_directories(jazz_client PRIVATE common_src)
 target_link_libraries(jazz_client common_lib client_lib)
 target_link_libraries(jazz_server common_lib pthread server_lib)
 
-
 set_target_properties(jazz_client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -fPIC -std=c++17")
 
