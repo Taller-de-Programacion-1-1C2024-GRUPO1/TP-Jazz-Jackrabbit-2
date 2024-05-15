@@ -10,12 +10,16 @@
 #include "../common_src/protocol.h"
 #include "../common_src/utils.h"
 
+#include "client_drawer.h"
+#include "client_listener.h"
 #include "client_parser.h"
 
 
 class Client {
 private:
     ClientProtocol protocol;
+    ClientListener listener;
+    // ClientDrawer drawer;
     Parser parser;
 
     bool action_handler(std::pair<uint8_t, int> result);
@@ -27,6 +31,14 @@ public:
     // Lee de entrada estandar, procesa la linea, envia informacion al servidor y recibe e imprime
     // la respuesta
     void run();
+
+
+    /////////////////////////////// IMPLEMENTAR ///////////////////////////////
+    void reap_dead();
+    void kill();
+    void kill_all();
+    /////////////////////////////// IMPLEMENTAR ///////////////////////////////
+
 
     ~Client();
 };

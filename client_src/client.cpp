@@ -2,19 +2,17 @@
 
 
 Client::Client(const std::string& host, const std::string& service):
-        protocol(std::move(host), std::move(service)) {}
-
+        protocol(std::move(host), std::move(service)), listener(protocol) {}
+//,
+// drawer(protocol) {}
 
 void Client::run() {
+    listener.start();
+    // drawer.start();
     std::string line;
     while (std::getline(std::cin, line)) {
-
-        if (this->protocol.is_close()) {
-            std::cout << "El servidor se ha desconectado." << std::endl;
-            break;
-        }
-        std::pair<uint8_t, int> serialized_line = this->parser.line_to_bytes_parser(line);
-        if (!action_handler(serialized_line)) {
+        if (line == "q") {
+            // VER QUE HACER ACA
             break;
         }
     }
