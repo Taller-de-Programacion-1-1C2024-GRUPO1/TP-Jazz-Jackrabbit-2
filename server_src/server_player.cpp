@@ -1,6 +1,6 @@
-#include "server_user.h"
+#include "server_player.h"
 
-ServerUser::ServerUser(Socket&& peer, Queue<uint8_t>& client_cmds_q,
+ServerPlayer::ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q,
                        ProtectedListOfQueues& list_of_q_msgs):
         protocol(std::move(peer)),
         list_of_q_msgs(list_of_q_msgs),
@@ -8,19 +8,19 @@ ServerUser::ServerUser(Socket&& peer, Queue<uint8_t>& client_cmds_q,
         client_cmds_q(client_cmds_q),
         server_receiver(protocol, client_cmds_q) {}
 
-void ServerUser::run() {
+void ServerPlayer::run() {
     server_sender.start();
     server_receiver.start();
 }
 
-bool ServerUser::is_dead() {
+bool ServerPlayer::is_dead() {
     if (server_sender.is_dead() && server_receiver.is_dead()) {
         return true;
     }
     return false;
 }
 
-void ServerUser::kill() {
+void ServerPlayer::kill() {
     this->protocol.~ServerProtocol();
     server_sender.kill();
     server_receiver.kill();
@@ -29,4 +29,4 @@ void ServerUser::kill() {
 }
 
 
-ServerUser::~ServerUser() {}
+ServerPlayer::~ServerPlayer() {}
