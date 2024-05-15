@@ -2,7 +2,10 @@
 *.d
 *.o
 *.dump
-.vscode/
+vscode/
+build/
+*.json
+
 # Compiled Object files
 *.slo
 *.lo
