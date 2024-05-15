@@ -22,12 +22,14 @@ include_directories(${SDL2PP_INCLUDE_DIRS})
 # add the executable
 add_executable(jazz_server server_main.cpp)
 add_executable(jazz_client client_main.cpp)
+add_executable(example_sdl client_src/example_sdl.cpp)
 
 target_include_directories(jazz_client PRIVATE client_src)
 target_include_directories(jazz_client PRIVATE common_src)
 
 target_link_libraries(jazz_client common_lib client_lib SDL2pp)
 target_link_libraries(jazz_server common_lib pthread server_lib)
+target_link_libraries(example_sdl common_lib client_lib SDL2pp)
 
 set_target_properties(jazz_client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -fPIC -std=c++17")
