@@ -1,4 +1,5 @@
 #include "server_src/server.h"
+#include "server_src/config.h"
 
 int main(int argc, char* argv[]) {
     try {
@@ -11,6 +12,8 @@ int main(int argc, char* argv[]) {
             return ret;
         }
 
+        std::string config_file = "external/config/config.yaml";
+        ConfigSingleton::getInstance(config_file);
         Server server(servname);
         server.run();
 
