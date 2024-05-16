@@ -8,7 +8,7 @@
 
 #include "../common_src/common_socket.h"
 #include "../common_src/protocol.h"
-#include "../common_src/utils.h"
+#include "../common_src/constants.h"
 
 #include "client_parser.h"
 

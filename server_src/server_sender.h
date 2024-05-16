@@ -11,7 +11,7 @@
 #include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
-#include "../common_src/utils.h"
+#include "../common_src/constants.h"
 
 
 class ServerSender: public Thread {
