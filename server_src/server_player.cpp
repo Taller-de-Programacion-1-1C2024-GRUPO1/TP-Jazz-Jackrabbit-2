@@ -1,7 +1,7 @@
 #include "server_player.h"
 
 ServerPlayer::ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q,
-                       ProtectedListOfQueues& list_of_q_msgs):
+                           ProtectedListOfQueues& list_of_q_msgs):
         protocol(std::move(peer)),
         list_of_q_msgs(list_of_q_msgs),
         server_sender(protocol, list_of_q_msgs),

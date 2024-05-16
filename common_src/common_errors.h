@@ -69,8 +69,8 @@ public:
 };
 
 // Error de cliente cerrado
-struct ClientClosed : public std::runtime_error {
-    ClientClosed() : std::runtime_error("Client is closed") {} 
-}; 
+struct ClientClosed: public std::runtime_error {
+    ClientClosed(): std::runtime_error("Client is closed") {}
+};
 
 #endif

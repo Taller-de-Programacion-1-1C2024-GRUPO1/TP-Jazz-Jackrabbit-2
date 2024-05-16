@@ -23,7 +23,8 @@ private:
     std::atomic<bool> is_alive;
 
 public:
-    ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q, ProtectedListOfQueues& list_of_q_msgs);
+    ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q,
+                 ProtectedListOfQueues& list_of_q_msgs);
     void run();
     bool is_dead();
     void kill();
