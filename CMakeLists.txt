@@ -38,13 +38,13 @@ install(TARGETS jazz_server jazz_client
         RUNTIME DESTINATION /usr/bin
 )
 
-#install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yaml
-#        DESTINATION /etc/jazz
-#)
+install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yaml
+        DESTINATION /etc/jazz
+)
 
-#install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
-#        DESTINATION /etc/jazz
-#)
+install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
+        DESTINATION /etc/jazz
+)
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/client_src
         DESTINATION /var/jazz
@@ -58,6 +58,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/common_src
         DESTINATION /var/jazz
 )
 
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
-#        DESTINATION /var/jazz
-#)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
+        DESTINATION /var/jazz
+)
