@@ -1,6 +1,4 @@
-
 #include "protocol.h"
-
 
 // Protocol
 Protocol::Protocol(const std::string& host, const std::string& service):

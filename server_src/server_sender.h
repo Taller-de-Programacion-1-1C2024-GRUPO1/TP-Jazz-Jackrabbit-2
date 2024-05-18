@@ -17,7 +17,7 @@
 class ServerSender: public Thread {
 private:
     ServerProtocol& protocol;
-    Queue<uint16_t> q_msgs;
+    Queue<Message> q_msgs;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
     ProtectedListOfQueues& list_of_q_msgs;

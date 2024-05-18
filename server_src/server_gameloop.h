@@ -14,6 +14,7 @@
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
 
+#include "broadcaster.h"
 #include "enemy.h"
 
 
@@ -23,13 +24,13 @@ private:
     Enemies enemies;
     std::atomic<bool> is_alive;
     std::atomic<bool> keep_talking;
-    ProtectedListOfQueues& list_of_q_msgs;
+    Broadcaster broadcaster;
 
 public:
     explicit GameLoop(Queue<uint8_t>& client_cmds_q, ProtectedListOfQueues& list_of_q_msgs);
     virtual void run() override;
     void kill();
-    void gameloop_push_msg(const uint16_t& event_type);
+    void gameloop_push_msg(const Message& msg);
 };
 
 
