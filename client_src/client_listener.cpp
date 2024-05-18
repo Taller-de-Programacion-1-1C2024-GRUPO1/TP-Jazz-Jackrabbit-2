@@ -1,5 +1,5 @@
 #include "client_listener.h"
-
+#define ATACK static_cast<const uint8_t>(3)
 
 ClientListener::ClientListener(ClientProtocol& protocol):
         protocol(protocol), keep_talking(true), is_alive(true) {}
@@ -7,7 +7,12 @@ ClientListener::ClientListener(ClientProtocol& protocol):
 void ClientListener::run() {
     while (keep_talking) {
         try {
+
+            std::cout << "escuchandso" << std::endl;
+        
+            /*
             SDL_Event event;
+            uint8_t atackValue = ATACK;
             while (SDL_PollEvent(&event)) {
                 if (event.type == SDL_QUIT) {
                     keep_talking = false;
@@ -15,28 +20,18 @@ void ClientListener::run() {
                 if (event.type == SDL_KEYDOWN) {
                     switch (event.key.keysym.sym) {
                         case SDLK_RIGHT:  // Si la tecla presionada es la flecha derecha
-                            std::cout << "derecha" << std::endl;
-                            /// this->protocol.send(derecha)
+                            //std::cout << "derecha" << std::endl;
+                            this->protocol.send_byte(atackValue);
                             break;
+                    
 
-                        case SDLK_LEFT:
-
-                            break;
-
-                        case SDLK_ESCAPE:
-                            keep_talking = false;  // Cierra el juego
-
-                            break;
-                        case SDLK_UP:
-
-                            break;
-                        case SDLK_DOWN:
-
-                            break;
+                        
                     }
                 }
                 // Aquí puedes manejar otros eventos como teclas presionadas, etc.
             }
+            */
+            
         }
 
 

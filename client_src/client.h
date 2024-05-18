@@ -19,7 +19,7 @@ class Client {
 private:
     ClientProtocol protocol;
     ClientListener listener;
-    // ClientDrawer drawer;
+    ClientDrawer drawer;
     Parser parser;
 
     bool action_handler(std::pair<uint8_t, int> result);
@@ -32,12 +32,6 @@ public:
     // la respuesta
     void run();
 
-
-    /////////////////////////////// IMPLEMENTAR ///////////////////////////////
-    void reap_dead();
-    void kill();
-    void kill_all();
-    /////////////////////////////// IMPLEMENTAR ///////////////////////////////
 
 
     ~Client();

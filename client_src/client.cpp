@@ -2,20 +2,30 @@
 
 
 Client::Client(const std::string& host, const std::string& service):
-        protocol(std::move(host), std::move(service)), listener(protocol) {}
-//,
-// drawer(protocol) {}
+        protocol(std::move(host), std::move(service)), listener(protocol), drawer(protocol) {}
 
 void Client::run() {
-    listener.start();
-    // drawer.start();
-    std::string line;
-    while (std::getline(std::cin, line)) {
-        if (line == "q") {
-            // VER QUE HACER ACA
-            break;
+
+
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        std::cerr << "Error al iniciar SDL: " << SDL_GetError() << std::endl;
+        return;
+    } else {
+        drawer.start();
+        listener.start();
+        std::string line;
+        while (std::getline(std::cin, line)) {
+            if (line == "q") {
+                // VER QUE HACER ACA
+
+                //  joins??
+                break;
+            }
         }
+
     }
+
+
 }
 
 bool Client::action_handler(std::pair<uint8_t, int> result) {
@@ -56,4 +66,8 @@ void Client::read_handler(int num_msgs_to_read) {
 }
 
 
-Client::~Client() { this->protocol.~ClientProtocol(); }
+Client::~Client() { 
+    //  joins??
+    SDL_Quit();
+    this->protocol.~ClientProtocol(); 
+}
