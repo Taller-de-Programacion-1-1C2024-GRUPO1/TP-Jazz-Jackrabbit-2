@@ -5,8 +5,8 @@
 #include <mutex>
 #include <thread>
 
-#include "queue.h"
 #include "constants.h"
+#include "queue.h"
 
 class ProtectedListOfQueues {
 private:

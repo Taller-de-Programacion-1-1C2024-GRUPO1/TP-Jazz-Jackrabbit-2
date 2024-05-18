@@ -33,7 +33,7 @@ enum /* CHEATS */ {
 #define RABBIT_WIDTH 0.5
 #define RABBIT_HEIGHT 0.5
 
-#define MAP_WIDTH_DEFAULT 100 //modificar
-#define MAP_HEIGHT_DEFAULT 100 //modificar
+#define MAP_WIDTH_DEFAULT 100   // modificar
+#define MAP_HEIGHT_DEFAULT 100  // modificar
 
 #endif

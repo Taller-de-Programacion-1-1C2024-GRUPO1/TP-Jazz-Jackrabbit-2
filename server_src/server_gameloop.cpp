@@ -16,14 +16,16 @@ void GameLoop::run() {
         try {
             int num_resurrected = enemies.try_resurrect_enemies();
             for (int i = 0; i < num_resurrected; i++) {
-                Message msg = {MSG_INDICATOR, enemies.get_num_alive_enemies(), enemies.get_num_of_dead_enemies(), EVENT_RESURRECT};
+                Message msg = {MSG_INDICATOR, enemies.get_num_alive_enemies(),
+                               enemies.get_num_of_dead_enemies(), EVENT_RESURRECT};
                 gameloop_push_msg(msg);
             }
-            bool msg = client_cmds_q.try_pop(cmd);
-            if (msg && cmd == ATACK) {
+            bool popeo = client_cmds_q.try_pop(cmd);
+            if (popeo && cmd == ATACK) {
                 bool could_kill = enemies.try_kill_enemy();
                 if (could_kill) {
-                    Message msg = {MSG_INDICATOR, enemies.get_num_alive_enemies(), enemies.get_num_of_dead_enemies(), EVENT_DEAD};
+                    Message msg = {MSG_INDICATOR, enemies.get_num_alive_enemies(),
+                                   enemies.get_num_of_dead_enemies(), EVENT_DEAD};
                     gameloop_push_msg(msg);
                 }
             }
@@ -35,6 +37,4 @@ void GameLoop::run() {
     this->is_alive = false;
 }
 
-void GameLoop::gameloop_push_msg(const Message& msg) {
-    broadcaster.broadcast(msg);
-}
+void GameLoop::gameloop_push_msg(const Message& msg) { broadcaster.broadcast(msg); }

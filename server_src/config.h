@@ -61,8 +61,7 @@ private:
             throw std::runtime_error("Config file path is not set");
         }
         if (!std::filesystem::exists(file_path)) {
-            throw std::runtime_error(
-                    "Config file does not exist: " + file_path);
+            throw std::runtime_error("Config file does not exist: " + file_path);
         }
         try {
             std::cout << "Reading config file: " << file_path << std::endl;
