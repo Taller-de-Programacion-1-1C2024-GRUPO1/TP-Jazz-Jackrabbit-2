@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
             return ret;
         }
 
-        std::string config_file = "/etc/worms/config.yaml";
+        std::string config_file = "/etc/jazz/config.yml";
         ConfigSingleton::getInstance(config_file);
         Server server(servname);
         server.run();

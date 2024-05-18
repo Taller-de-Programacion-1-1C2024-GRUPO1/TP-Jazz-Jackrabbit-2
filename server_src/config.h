@@ -20,7 +20,7 @@ public:
     int getRabbitSpeed() const { return rabbit_speed; }
     int getRabbitRunSpeed() const { return rabbit_run_speed; }
     int getRabbitJumpSpeed() const { return rabbit_jump_speed; }
-    int getRabbitJumpHeight() const { return rabbit_jump_height; }
+    int getRabbitJumpHorSpeed() const { return rabbit_jump_hor_speed; }
     int getBlasterDamage() const { return blaster_damage; }
     int getBlasterSpeed() const { return blaster_speed; }
     bool getBlasterInfiniteAmmo() const { return blaster_infinite_ammo; }
@@ -62,12 +62,10 @@ private:
         }
         if (!std::filesystem::exists(file_path)) {
             throw std::runtime_error(
-                    "Config file does not exist: " + file_path +
-                    ". Please create it properly and pass the absolute path to it. E.g. "
-                    "/etc/worms/config.yaml. See the README for more information.");
+                    "Config file does not exist: " + file_path);
         }
         try {
-            std::cout << "Reading config file..." << std::endl;
+            std::cout << "Reading config file: " << file_path << std::endl;
             YAML::Node config = YAML::LoadFile(file_path);
             max_players = config["max_players"].as<int>();
             starting_life = config["starting_life"].as<int>();
@@ -75,7 +73,7 @@ private:
             rabbit_speed = config["rabbit_speed"].as<int>();
             rabbit_run_speed = config["rabbit_run_speed"].as<int>();
             rabbit_jump_speed = config["rabbit_jump_speed"].as<int>();
-            rabbit_jump_height = config["rabbit_jump_height"].as<int>();
+            rabbit_jump_hor_speed = config["rabbit_jump_hor_speed"].as<int>();
             blaster_damage = config["blaster_damage"].as<int>();
             blaster_speed = config["blaster_speed"].as<int>();
             blaster_infinite_ammo = config["blaster_infinite_ammo"].as<bool>();
@@ -87,7 +85,7 @@ private:
             enemy_lizard_speed = config["enemy_lizard_speed"].as<int>();
             enemy_lizard_damage = config["enemy_lizard_damage"].as<int>();
             enemy_lizard_life = config["enemy_lizard_life"].as<int>();
-            enemy_lizard_attack_range = config["enemy_lizard_attack_speed"].as<int>();
+            enemy_lizard_attack_range = config["enemy_lizard_attack_range"].as<int>();
             enemy_lizard_kill_points = config["enemy_lizard_kill_points"].as<int>();
             enemy_crab_speed = config["enemy_crab_speed"].as<int>();
             enemy_crab_damage = config["enemy_crab_damage"].as<int>();
@@ -118,7 +116,7 @@ private:
     int rabbit_speed;
     int rabbit_run_speed;
     int rabbit_jump_speed;
-    int rabbit_jump_height;
+    int rabbit_jump_hor_speed;
 
     // Weapons
     int blaster_damage;

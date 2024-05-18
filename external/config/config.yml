@@ -11,7 +11,6 @@ rabbit_run_speed: 4
 rabbit_jump_speed: 6
 rabbit_jump_hor_speed: 4
 
-
 # Weapons
 blaster_damage: 10
 blaster_speed: 10

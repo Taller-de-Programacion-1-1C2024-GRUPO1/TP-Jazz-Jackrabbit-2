@@ -39,7 +39,7 @@ install(TARGETS jazz_server jazz_client
         RUNTIME DESTINATION /usr/bin
 )
 
-install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yaml
+install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yml
         DESTINATION /etc/jazz
 )
 
