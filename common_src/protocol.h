@@ -9,8 +9,6 @@
 
 #include <arpa/inet.h>
 
-#include "constants.h"
-
 #include "../game_src/commands/cheats.h"
 #include "../game_src/commands/command_jump.h"
 #include "../game_src/commands/command_match.h"
@@ -20,6 +18,7 @@
 
 #include "common_errors.h"
 #include "common_socket.h"
+#include "constants.h"
 
 class Protocol {
 protected:
