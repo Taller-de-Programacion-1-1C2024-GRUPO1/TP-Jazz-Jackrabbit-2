@@ -7,11 +7,6 @@ Protocol::Protocol(const std::string& host, const std::string& service):
 
 Protocol::Protocol(Socket peer): socket(std::move(peer)), was_closed(false) {}
 
-void Protocol::send_float(float num) {
-    // convertimos el float ???
-    check_closed();
-}
-
 void Protocol::send_uintEight(uint8_t num) {
     socket.sendall(&num, sizeof(num), &was_closed);
     check_closed();
@@ -33,12 +28,6 @@ void Protocol::send_string(const std::string& str) {
     send_uintSixteen(str.size());
     socket.sendall(str.c_str(), str.size(), &was_closed);
     check_closed();
-}
-
-float Protocol::receive_float() {
-    // ni idea como trabajar el punto flotante
-    check_closed();
-    return 0.0;
 }
 
 uint8_t Protocol::receive_uintEight() {
