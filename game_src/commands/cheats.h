@@ -3,6 +3,8 @@
 
 #include "command.h"
 
+class Protocol;
+
 class Cheats: public Command {
 private:
     int playerID;
@@ -11,11 +13,10 @@ private:
 
 public:
     Cheats(int playerID, int cheatID);
-    bool executeCommand(bool* cheatON, bool& needsMove) override;
-    void send(Protocol& protocol) override;
-    int getPlayerId() override;
+    bool execute_Command(bool* cheatON, bool& needsMove) override;
+    int get_playerId() override;
     int getCheatID();
-    int getCommandType() override;
+    int get_commandType() override;
     ~Cheats();
 };
 

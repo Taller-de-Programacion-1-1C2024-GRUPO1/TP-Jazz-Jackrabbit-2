@@ -5,6 +5,14 @@
 #include <iostream>
 #include <string>
 
+// Error commando inválido
+class InvalidCommand: public std::exception {
+public:
+    InvalidCommand() {}
+    ~InvalidCommand() {}
+    virtual const char* what() const noexcept { return "Invalid command"; }
+};
+
 // Error de partida ya existente
 class MatchAlreadyExists: public std::exception {
 public:
@@ -71,6 +79,10 @@ public:
 // Error de cliente cerrado
 struct ClientClosed: public std::runtime_error {
     ClientClosed(): std::runtime_error("Client is closed") {}
+};
+
+struct SocketClosed: public std::runtime_error {
+    SocketClosed(): std::runtime_error("Socket is closed") {}
 };
 
 #endif

@@ -2,19 +2,15 @@
 
 Move::Move(int id, int dir): Command(id), playerID(id), dir(dir) {}
 
-bool Move::executeCommand(bool* cheatOn, bool& needsMove) {
+bool Move::execute_Command(bool* cheatOn, bool& needsMove) {
     // game_world.movePlayer(this->playerID, this->dir);
     return needsMove;
 }
 
-void Move::send(Protocol& protocol) {
-    // protocol.sendCommand(this);
-}
+int Move::get_playerId() { return this->playerID; }
 
-int Move::getPlayerId() { return this->playerID; }
+int Move::get_dir() { return this->dir; }
 
-int Move::getDir() { return this->dir; }
-
-int Move::getCommandType() { return this->commandType; }
+int Move::get_commandType() { return this->commandType; }
 
 Move::~Move() {}
