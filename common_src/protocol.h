@@ -97,10 +97,6 @@ public:
 
     // ------------------- Funciones para Client y Server -------------------
 
-    // Envia un float
-    void send_float(float num);
-    float receive_float();
-
     // Envia un uint8_t
     void send_uintEight(uint8_t num);
     uint8_t receive_uintEight();
