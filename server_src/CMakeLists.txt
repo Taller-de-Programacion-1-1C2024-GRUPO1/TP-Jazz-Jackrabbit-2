@@ -11,4 +11,4 @@ endforeach(file)
 add_library(server_lib STATIC ${server_src_files})
 
 # Link libraries (if applicable)
-target_link_libraries(server_lib common_lib)
+target_link_libraries(server_lib common_lib game_lib)

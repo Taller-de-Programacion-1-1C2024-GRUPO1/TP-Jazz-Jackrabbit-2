@@ -1,5 +1,5 @@
-#ifndef SERVERSENDER_H
-#define SERVERSENDER_H
+#ifndef CLIENTRECEIVER_H
+#define CLIENTRECEIVER_H
 #include <iostream>
 #include <list>
 #include <sstream>
@@ -8,22 +8,20 @@
 #include <vector>
 
 #include "../common_src/constants.h"
-#include "../common_src/protected_list_of_queues.h"
 #include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
+#include "../common_src/snapshots/snapshot.h"
 
-
-class ServerSender: public Thread {
+class Client_Receiver: public Thread {
 private:
-    ServerProtocol& protocol;
-    Queue<Message> q_msgs;
+    ClientProtocol& protocol;
+    Queue<Snapshot>& q_snapshots;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
-    ProtectedListOfQueues& list_of_q_msgs;
 
 public:
-    explicit ServerSender(ServerProtocol& protocol, ProtectedListOfQueues& list_of_q_msgs);
+    explicit Client_Receiver(ClientProtocol& protocol, Queue<Snapshot>& q_snapshots);
     virtual void run() override;
     bool is_dead();
     void kill();

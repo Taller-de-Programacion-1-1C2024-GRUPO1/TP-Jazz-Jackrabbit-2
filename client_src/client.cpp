@@ -2,29 +2,24 @@
 
 
 Client::Client(const std::string& host, const std::string& service):
-        protocol(std::move(host), std::move(service)), listener(protocol), drawer(protocol) {}
+        protocol(std::move(host), std::move(service)), q_cmds(), q_snapshots(), client_sender(protocol, q_cmds), client_receiver(protocol, q_snapshots) {}
+
 
 void Client::run() {
+    client_sender.start();
+    client_receiver.start();
+    std::string line;
+    while (std::getline(std::cin, line)) {
 
-
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
-        std::cerr << "Error al iniciar SDL: " << SDL_GetError() << std::endl;
-        return;
-    } else {
-        drawer.start();
-        listener.start();
-        std::string line;
-        while (std::getline(std::cin, line)) {
-            if (line == "q") {
-                // VER QUE HACER ACA
-
-                //  joins??
-                break;
-            }
+        if (this->protocol.is_close()) {
+            std::cout << "El servidor se ha desconectado." << std::endl;
+            break;
+        }  
+        std::pair<uint8_t, int> serialized_line = this->parser.line_to_bytes_parser(line);
+        if (!action_handler(serialized_line)) {
+            break;
         }
-
     }
-
 
 }
 
@@ -67,7 +62,10 @@ void Client::read_handler(int num_msgs_to_read) {
 
 
 Client::~Client() { 
-    //  joins??
-    SDL_Quit();
     this->protocol.~ClientProtocol(); 
-}
+    client_sender.kill();
+    client_receiver.kill();
+    client_receiver.join();
+    client_sender.join(); 
+    
+    }

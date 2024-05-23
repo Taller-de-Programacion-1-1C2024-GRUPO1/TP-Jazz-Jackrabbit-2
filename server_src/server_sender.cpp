@@ -15,13 +15,8 @@ void ServerSender::run() {
 
     while (keep_talking) {
         try {
-            Message msg;
-            msg.msg_indicator = uint8_t(q_msgs.pop());
-            msg.num_alive_enemies = q_msgs.pop();
-            msg.num_dead_enemies = q_msgs.pop();
-            msg.event_type = uint8_t(q_msgs.pop());
+            Message msg = q_msgs.pop();
             this->protocol.send_server_enemy_status_count(msg);
-
         } catch (const ClosedQueue& e) {
             // std::cerr << "Se cerró la queue" << std::endl;
             break;

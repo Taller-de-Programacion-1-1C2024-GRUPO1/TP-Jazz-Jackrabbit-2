@@ -12,7 +12,7 @@
 
 #include "server_acceptor.h"
 #include "server_gameloop.h"
-#include "server_user.h"
+#include "server_player.h"
 
 class Server {
 private:

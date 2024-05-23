@@ -4,17 +4,6 @@
 #include "client_src/client.h"
 
 /*
-gdb --tui ./server
-start 8080
-
-./server 8080
-tiburoncin -o -A 127.0.0.1:8081 -B 127.0.0.1:8080
-./client localhost 8081
-
-
-./run_tests.sh . casos/ multi-client no-valgrind 60 10 no
-./compare_outputs.sh casos/ salidas/
-
 pre-commit run --hook-stage manual --files xxx.cpp
 pre-commit run --hook-stage manual --all-files
 */

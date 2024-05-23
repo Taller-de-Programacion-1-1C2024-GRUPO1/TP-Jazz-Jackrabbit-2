@@ -10,6 +10,7 @@ project(Jazz
 add_subdirectory(server_src)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
+add_subdirectory(game_src)
 
 # add SDL2pp
 set(SDL2PP_WITH_IMAGE ON)
@@ -28,7 +29,7 @@ target_include_directories(jazz_client PRIVATE client_src)
 target_include_directories(jazz_client PRIVATE common_src)
 
 target_link_libraries(jazz_client common_lib client_lib SDL2pp)
-target_link_libraries(jazz_server common_lib pthread server_lib)
+target_link_libraries(jazz_server common_lib pthread server_lib game_lib)
 target_link_libraries(example_sdl common_lib client_lib SDL2pp)
 
 set_target_properties(jazz_client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
@@ -38,13 +39,13 @@ install(TARGETS jazz_server jazz_client
         RUNTIME DESTINATION /usr/bin
 )
 
-#install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yaml
-#        DESTINATION /etc/jazz
-#)
+install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yml
+        DESTINATION /etc/jazz
+)
 
-#install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
-#        DESTINATION /etc/jazz
-#)
+install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
+        DESTINATION /etc/jazz
+)
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/client_src
         DESTINATION /var/jazz
@@ -58,6 +59,6 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/common_src
         DESTINATION /var/jazz
 )
 
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
-#        DESTINATION /var/jazz
-#)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
+        DESTINATION /var/jazz
+)

@@ -8,7 +8,7 @@
 
 #include <arpa/inet.h>
 
-#include "../common_src/utils.h"
+#include "../common_src/constants.h"
 
 #include "common_socket.h"
 

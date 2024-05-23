@@ -1,0 +1,47 @@
+# Game Settings
+max_players: 3
+
+# World
+starting_life: 5
+null_state: 0
+
+# Physics
+rabbit_speed: 2
+rabbit_run_speed: 4
+rabbit_jump_speed: 6
+rabbit_jump_hor_speed: 4
+
+# Weapons
+blaster_damage: 10
+blaster_speed: 10
+blaster_infinite_ammo: true
+
+# Enemies
+# RAT: enemigo que se mueve de izquierda a derecha. Si estas en cierto rango, te ataca.
+enemy_rat_speed: 2
+enemy_rat_damage: 1
+enemy_rat_life: 30
+enemy_rat_attack_range: 20
+enemy_rat_kill_points: 200
+
+# LIZARD: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
+enemy_lizard_speed: 1
+enemy_lizard_damage: 1
+enemy_lizard_life: 50
+enemy_lizard_attack_range: 10
+enemy_lizard_kill_points: 100
+
+# CRAB: enemigo que se mueve de izquierda a derecha, solo hace daño si lo pisas.
+enemy_crab_speed: 3
+enemy_crab_damage: 1
+enemy_crab_life: 50
+enemy_crab_attack_range: 0
+enemy_crab_kill_points: 300
+
+# Health Items
+cant_health_carrot_life: 1
+
+# Points
+kill_rabbit_points: 1000
+coin_points: 100
+gem_points: 500

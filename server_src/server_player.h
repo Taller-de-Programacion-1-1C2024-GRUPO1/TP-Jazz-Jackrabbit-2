@@ -12,7 +12,7 @@
 #include "server_receiver.h"
 #include "server_sender.h"
 
-class ServerUser {
+class ServerPlayer {
 private:
     ServerProtocol protocol;
     ProtectedListOfQueues& list_of_q_msgs;
@@ -23,11 +23,12 @@ private:
     std::atomic<bool> is_alive;
 
 public:
-    ServerUser(Socket&& peer, Queue<uint8_t>& client_cmds_q, ProtectedListOfQueues& list_of_q_msgs);
+    ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q,
+                 ProtectedListOfQueues& list_of_q_msgs);
     void run();
     bool is_dead();
     void kill();
-    ~ServerUser();
+    ~ServerPlayer();
 };
 
 #endif

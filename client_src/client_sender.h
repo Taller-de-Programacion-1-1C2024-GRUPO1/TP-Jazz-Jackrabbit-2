@@ -1,5 +1,5 @@
-#ifndef SERVERSENDER_H
-#define SERVERSENDER_H
+#ifndef CLIENTSENDER_H
+#define CLIENTSENDER_H
 #include <iostream>
 #include <list>
 #include <sstream>
@@ -8,22 +8,20 @@
 #include <vector>
 
 #include "../common_src/constants.h"
-#include "../common_src/protected_list_of_queues.h"
 #include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
+#include "../game_src/commands/command_move.h"
 
-
-class ServerSender: public Thread {
+class ClientSender: public Thread {
 private:
-    ServerProtocol& protocol;
-    Queue<Message> q_msgs;
+    ClientProtocol& protocol;
+    Queue<Command>& q_cmds;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
-    ProtectedListOfQueues& list_of_q_msgs;
 
 public:
-    explicit ServerSender(ServerProtocol& protocol, ProtectedListOfQueues& list_of_q_msgs);
+    explicit ClientSender(ClientProtocol& protocol, Queue<Command>& q_cmds);
     virtual void run() override;
     bool is_dead();
     void kill();

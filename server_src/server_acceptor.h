@@ -9,7 +9,7 @@
 #include "../common_src/protected_list_of_queues.h"
 #include "../common_src/thread.h"
 
-#include "server_user.h"
+#include "server_player.h"
 
 
 class ServerAcceptor: public Thread {
@@ -19,7 +19,7 @@ private:
     bool sk_was_closed;
     Queue<uint8_t>& client_cmds_q;
     ProtectedListOfQueues& list_of_q_msgs;
-    std::list<ServerUser*> server_users;
+    std::list<ServerPlayer*> server_players;
     std::atomic<bool> is_alive;
     std::atomic<bool> keep_talking;
 

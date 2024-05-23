@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #define LOOP_TIME 200
 #define NUM_OF_ENEMIES 5
@@ -26,5 +26,37 @@ struct Message {
     // cppcheck-suppress unusedStructMember
     uint8_t event_type;
 };
+
+// ----------------- Generic Constants -----------------
+
+enum /*Direction*/ {
+    LEFT_DIR = 0,
+    RIGHT_DIR,
+    FORWARD_DIR,
+    BACKWARD_DIR,
+};
+
+enum /*MATCH TYPE*/ {
+    NEW_MATCH = 0,
+    JOIN,
+    REFRESH,
+};
+
+enum action {
+    STANDING,  // 0
+    MOVING,    // 1
+    JUMPING,   // 2
+};
+
+enum /*GAME TYPE*/ {
+    GAME_MAP = 0,
+    GAME_INFO,
+};
+
+
+#define WAITING 0
+#define STARTED 1
+
+#define PLAYING -1
 
 #endif

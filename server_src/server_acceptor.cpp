@@ -7,7 +7,7 @@ ServerAcceptor::ServerAcceptor(const char* servname, Queue<uint8_t>& client_cmds
         sk_was_closed(false),
         client_cmds_q(client_cmds_q),
         list_of_q_msgs(list_of_q_msgs),
-        server_users(),
+        server_players(),
         is_alive(true),
         keep_talking(true) {}
 
@@ -16,10 +16,10 @@ void ServerAcceptor::run() {
     while (keep_talking && !sk_was_closed) {
         try {
             Socket peer = sk.accept();
-            ServerUser* th = new ServerUser(std::move(peer), client_cmds_q, list_of_q_msgs);
+            ServerPlayer* th = new ServerPlayer(std::move(peer), client_cmds_q, list_of_q_msgs);
             th->run();
             reap_dead();
-            server_users.push_back(th);
+            server_players.push_back(th);
         } catch (const std::exception& e) {
             // std::cerr << "Error en el accept" << std::endl;
             break;
@@ -30,7 +30,7 @@ void ServerAcceptor::run() {
 
 
 void ServerAcceptor::reap_dead() {
-    server_users.remove_if([](ServerUser* u) {
+    server_players.remove_if([](ServerPlayer* u) {
         if (u->is_dead()) {
             delete u;
             return true;
@@ -41,11 +41,11 @@ void ServerAcceptor::reap_dead() {
 
 
 void ServerAcceptor::kill_all() {
-    for (auto& c: server_users) {
+    for (auto& c: server_players) {
         c->kill();
         delete c;
     }
-    server_users.clear();
+    server_players.clear();
 }
 
 
