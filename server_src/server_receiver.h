@@ -5,9 +5,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
+
+#include "server_protocol.h"
 
 
 class ServerReceiver: public Thread {

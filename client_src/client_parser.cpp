@@ -1,6 +1,5 @@
 #include "client_parser.h"
 
-
 Parser::Parser() {}
 
 std::pair<uint8_t, int> Parser::line_to_bytes_parser(const std::string& str) {

@@ -1,6 +1,5 @@
 #include "server_receiver.h"
 
-
 ServerReceiver::ServerReceiver(ServerProtocol& protocol, Queue<uint8_t>& client_cmds_q):
         protocol(protocol), client_cmds_q(client_cmds_q), keep_talking(true), is_alive(true) {}
 

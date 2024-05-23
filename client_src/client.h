@@ -8,10 +8,9 @@
 
 #include "../common_src/common_socket.h"
 #include "../common_src/constants.h"
-#include "../common_src/protocol.h"
 
 #include "client_parser.h"
-
+#include "client_protocol.h"
 
 class Client {
 private:

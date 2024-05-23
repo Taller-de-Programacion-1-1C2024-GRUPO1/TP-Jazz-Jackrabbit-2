@@ -11,7 +11,6 @@
 
 #include "server_player.h"
 
-
 class ServerAcceptor: public Thread {
 
 private:

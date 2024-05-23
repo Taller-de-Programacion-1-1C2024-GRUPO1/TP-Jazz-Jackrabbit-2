@@ -1,6 +1,4 @@
-
 #include "server_sender.h"
-
 
 ServerSender::ServerSender(ServerProtocol& protocol, ProtectedListOfQueues& list_of_q_msgs):
         protocol(protocol),
