@@ -7,6 +7,9 @@ Protocol::Protocol(const std::string& host, const std::string& service):
 
 Protocol::Protocol(Socket peer): socket(std::move(peer)), was_closed(false) {}
 
+
+// ----------------------------- SEND BYTES/STRING/CHAR -----------------------------
+
 void Protocol::send_uintEight(uint8_t num) {
     socket.sendall(&num, sizeof(num), &was_closed);
     check_closed();
@@ -29,6 +32,13 @@ void Protocol::send_string(const std::string& str) {
     socket.sendall(str.c_str(), str.size(), &was_closed);
     check_closed();
 }
+
+void Protocol::send_char(char c) {
+    socket.sendall(&c, sizeof(c), &was_closed);
+    check_closed();
+}
+
+// ----------------------------- RECEIVE BYTES/STRINGS/CHAR -----------------------------
 
 uint8_t Protocol::receive_uintEight() {
     uint8_t num;
@@ -59,11 +69,6 @@ std::string Protocol::receive_string() {
     return str;
 }
 
-void Protocol::send_char(char c) {
-    socket.sendall(&c, sizeof(c), &was_closed);
-    check_closed();
-}
-
 char Protocol::receive_char() {
     char c;
     socket.recvall(&c, sizeof(c), &was_closed);
@@ -79,7 +84,7 @@ void Protocol::check_closed() {
     }
 }
 
-// -------------------------- SEND COMMANDS -----------------------------
+// ----------------------------- SEND COMMANDS -----------------------------
 
 void Protocol::send_Move(Move* move) {
     check_closed();
@@ -125,6 +130,7 @@ void Protocol::send_Command(Command* command) {
     switch (command->get_commandType()) {
         case COMMAND_CHEAT:
             // send_Cheat();
+            std::cout << "Cheat not implemented yet" << std::endl;
         case COMMAND_JUMP:
             send_Jump(dynamic_cast<Jump*>(command));
         case COMMAND_MOVE:
@@ -135,12 +141,13 @@ void Protocol::send_Command(Command* command) {
             send_Shoot(dynamic_cast<Shoot*>(command));
         case COMMAND_MATCH:
             // send_Match();
+            std::cout << "Match not implemented yet" << std::endl;
         default:
             break;
     }
 }
 
-// -------------------------- RECEIVE COMMANDS -----------------------------
+// ----------------------------- RECEIVE COMMANDS -----------------------------
 
 std::shared_ptr<Move> Protocol::receive_Move() {
     uint8_t player_id = receive_uintEight();
@@ -188,6 +195,70 @@ std::shared_ptr<Command> Protocol::receive_Command() {
         default:
             throw InvalidCommand();
     }
+}
+
+// ----------------------------- SEND SNAPSHOTS -----------------------------
+
+
+void Protocol::send_dimensions(const Snapshot& snapshot) {
+    std::cout << "Sending dimensions" << std::endl;
+}
+
+void Protocol::send_rabbits(const Snapshot& snapshot) {
+    std::cout << "Sending rabbits" << std::endl;
+}
+
+
+void Protocol::send_projectiles(const Snapshot& snapshot) {
+    std::cout << "Sending projectiles" << std::endl;
+}
+
+void Protocol::send_supplies(const Snapshot& snapshot) {
+    std::cout << "Sending supplies" << std::endl;
+}
+
+
+void Protocol::send_Snapshot(const Snapshot& snapshot) {
+    send_dimensions(snapshot);
+    send_rabbits(snapshot);
+    send_projectiles(snapshot);
+    send_supplies(snapshot);
+}
+
+
+// ----------------------------- RECEIVE SNAPSHOTS -----------------------------
+
+void Protocol::receive_dimensions(const Snapshot& snapshot) {
+    /*
+    uint32_t width = receive_uintThirtyTwo();
+    uint32_t height = receive_uintThirtyTwo();
+    snapshot.set_dimensions(width, height);
+    */
+}
+
+void Protocol::receive_rabbits(const Snapshot& snapshot) {
+    std::cout << "Receiving rabbits" << std::endl;
+    // recibir y setear rabbits en el snapshot pasado por referencia
+}
+
+void Protocol::receive_projectiles(const Snapshot& snapshot) {
+    std::cout << "Receiving projectiles" << std::endl;
+    // recibir y setear projectiles en el snapshot pasado por referencia
+}
+
+void Protocol::receive_supplies(const Snapshot& snapshot) {
+    std::cout << "Receiving supplies" << std::endl;
+    // recibir y setear supplies en el snapshot pasado por referencia
+}
+
+// Se recibe crea un Snapshot vacio y se le van agregando los elementos
+Snapshot Protocol::receive_Snapshot() {
+    Snapshot snapshot;
+    receive_dimensions(snapshot);
+    receive_rabbits(snapshot);
+    receive_projectiles(snapshot);
+    receive_supplies(snapshot);
+    return snapshot;
 }
 
 Protocol::~Protocol() {

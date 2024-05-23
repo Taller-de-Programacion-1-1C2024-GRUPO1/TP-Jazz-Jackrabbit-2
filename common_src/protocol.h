@@ -15,6 +15,7 @@
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
+#include "snapshots/snapshot.h"
 
 #include "common_errors.h"
 #include "common_socket.h"
@@ -28,6 +29,7 @@ protected:
     bool was_closed = false;
 
 private:
+    // ------------------- SEND AND RECEIVE COMMANDS -------------------
     void send_Move(Move* move);
 
     void send_MoveFaster(MoveFaster* moveFaster);
@@ -52,6 +54,24 @@ private:
 
     // std::shared_ptr<Cheats> receive_Cheat();
 
+    // ------------------- SEND AND RECEIVE SNAPSHOTS -------------------
+
+    void send_dimensions(const Snapshot& snapshot);
+
+    void send_rabbits(const Snapshot& snapshot);
+
+    void send_projectiles(const Snapshot& snapshot);
+
+    void send_supplies(const Snapshot& snapshot);
+
+    void receive_dimensions(const Snapshot& snapshot);
+
+    void receive_rabbits(const Snapshot& snapshot);
+
+    void receive_projectiles(const Snapshot& snapshot);
+
+    void receive_supplies(const Snapshot& snapshot);
+
 public:
     // Constructor para el cliente
     Protocol(const std::string& host, const std::string& service);
@@ -61,11 +81,19 @@ public:
 
     // ------------------- Funciones para Server -------------------
 
+    // Recibe un comando
     std::shared_ptr<Command> receive_Command();
+
+    // Envia un Snapshot
+    void send_Snapshot(const Snapshot& snapshot);
 
     // ------------------- Funciones para Client -------------------
 
+    // Envia un comando
     void send_Command(Command* command);
+
+    // Recibe un Snapshot
+    Snapshot receive_Snapshot();
 
     // ------------------- Funciones para Client y Server -------------------
 
