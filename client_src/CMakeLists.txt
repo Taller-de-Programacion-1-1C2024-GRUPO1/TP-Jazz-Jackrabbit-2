@@ -1,18 +1,17 @@
 project(Jazz)
+FILE(GLOB client_src_files "*.cpp"  "*.h")
 
-FILE(GLOB client_src_files "*.cpp" "*.h")
-
-# MESSAGE
+#Messages
 message(STATUS "Files in ${PROJECT_SOURCE_DIR}")
 foreach(file ${client_src_files})
     message(STATUS "client_src_files: ${file}")
 endforeach()
 
-# Add library target
-add_library(client_lib STATIC ${client_src_files})
-
-# Add compile options
+#add_subdirectory(QT)
+add_library(client_lib STATIC
+${client_src_files})
 target_compile_options(client_lib PRIVATE -fPIC)
+set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++17")
+#target_include_directories(client_lib PRIVATE QT)
+target_link_libraries(client_lib common_lib ${SDL2PP_LIBRARIES}) #qt_lib)
 
-# Link libraries (if applicable)
-target_link_libraries(client_lib common_lib ${SDL2PP_LIBRARIES})
