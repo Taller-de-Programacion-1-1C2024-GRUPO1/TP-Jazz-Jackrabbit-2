@@ -15,13 +15,13 @@
 
 class Client_Receiver: public Thread {
 private:
-    ClientProtocol& protocol;
+    Protocol& protocol;
     Queue<Snapshot>& q_snapshots;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
 
 public:
-    explicit Client_Receiver(ClientProtocol& protocol, Queue<Snapshot>& q_snapshots);
+    explicit Client_Receiver(Protocol& protocol, Queue<Snapshot>& q_snapshots);
     virtual void run() override;
     bool is_dead();
     void kill();
