@@ -1,15 +1,14 @@
-<a href="https://repology.org/metapackage/libsdl2pp/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/libsdl2pp.svg" alt="libsdl2pp packaging status" align="right">
-</a>
+# libSDL2pp #
 
-[![CI](https://github.com/libSDL2pp/libSDL2pp/actions/workflows/ci.yml/badge.svg)](https://github.com/libSDL2pp/libSDL2pp/actions/workflows/ci.yml)
-[![Github commits (since latest release)](https://img.shields.io/github/commits-since/libSDL2pp/libSDL2pp/latest.svg)](https://github.com/libSDL2pp/libSDL2pp)
+[![Build Status](https://travis-ci.org/libSDL2pp/libSDL2pp.svg?branch=master)](https://travis-ci.org/libSDL2pp/libSDL2pp)
+[![Build status](https://ci.appveyor.com/api/projects/status/qhfpa29qd8bt619t/branch/master?svg=true)](https://ci.appveyor.com/project/AMDmi3/libsdl2pp)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/3980/badge.svg)](https://scan.coverity.com/projects/3980)
+[![Coverage Status](https://coveralls.io/repos/github/libSDL2pp/libSDL2pp/badge.svg?branch=master)](https://coveralls.io/github/libSDL2pp/libSDL2pp?branch=master)
+[![Packaging status](https://repology.org/badge/tiny-repos/libsdl2pp.svg)](https://repology.org/metapackage/libsdl2pp)
 
-# libSDL2pp
+This library provides C++11 bindings/wrapper for SDL2 and satellite libraries.
 
-This library provides C++17 bindings/wrapper for SDL2 and satellite libraries.
-
-## Synopsis
+## Synopsis ##
 
 ```cpp
 try {
@@ -84,7 +83,7 @@ try {
 
 There's also more elaborate [tutorial](https://github.com/libSDL2pp/libSDL2pp-tutorial).
 
-## Features
+## Features ##
 
 Currently, the library provides wrapper classes for
 
@@ -126,7 +125,7 @@ methods. These classes support:
   need to manually check return code after each function call)
 * Method overloading, default arguments, method chaining allow shorter
   and cleaner code
-* Move semantics support, which allow you to store SDL objects
+* C++11 move semantics support, which allow you to store SDL objects
   in containers and pass/return them by value without noticeable overhead
 
 Set of functional extensions above SDL2 is also available:
@@ -136,7 +135,10 @@ Set of functional extensions above SDL2 is also available:
   (for which SDL2 usually uses NULL pointers)
 * Number of additional methods and operator support for Point and Rect
 
-## Building
+## Building ##
+
+To build libSDL2pp, you need a compiler with C++11 support, for
+example clang 3.4+ or gcc 4.8+.
 
 Dependencies:
 * [cmake](https://cmake.org/)
@@ -154,12 +156,14 @@ Following variables may be supplied to CMake to affect build:
 * ```SDL2PP_WITH_IMAGE``` - enable SDL_image support (default ON)
 * ```SDL2PP_WITH_MIXER``` - enable SDL_mixer support (default ON)
 * ```SDL2PP_WITH_TTF``` - enable SDL_ttf support (default ON)
+* ```SDL2PP_WITH_WERROR``` - treat warnings as errors, useful for CI (default OFF)
+* ```SDL2PP_CXXSTD``` - override C++ standard (default C++11). With C++1y some additional features are enabled such as usage of [[deprecated]] attribute and using stock experimental/optional from C++ standard library
 * ```SDL2PP_WITH_EXAMPLES``` - enable building example programs (only for standalone build, default ON)
 * ```SDL2PP_WITH_TESTS``` - enable building tests (only for standalone build, default ON)
 * ```SDL2PP_STATIC``` - build static library instead of shared (only for standalone build, default OFF)
 * ```SDL2PP_ENABLE_LIVE_TESTS``` - enable tests which require X11 and/or audio device to run (only for standalone build, default ON)
 
-## Installation
+## Installation ##
 
 To install the library system-wide, run:
 
@@ -182,6 +186,16 @@ INCLUDE_DIRECTORIES(${SDL2PP_INCLUDE_DIRS})
 ...
 TARGET_LINK_LIBRARIES(... ${SDL2PP_LIBRARIES})
 ```
+
+SDL2pp is also already available from the following package
+repositories:
+
+<a href="https://repology.org/metapackage/libsdl2pp"><img src="https://repology.org/badge/vertical-allrepos/libsdl2pp.svg" alt="Packaging status" align="right"></a>
+
+* [Arch Linux AUR](https://aur.archlinux.org/packages/sdl2pp-git/)
+* [DragonflyBSD DPorts](https://github.com/DragonFlyBSD/DPorts/tree/master/devel/sdl2pp)
+* [FreeBSD ports](http://www.freshports.org/devel/sdl2pp/)
+* [Yet Another Cygwin Ports](https://github.com/fd00/yacp/tree/master/libSDL2pp)
 
 ## Bundling ##
 
@@ -215,7 +229,7 @@ If bundled, libSDL2pp does not build examples and becomes a static
 library, providing required SDL2 includes/libs in the mentioned
 variables.
 
-## Completeness
+## Completeness ##
 
 The library still doesn't cover all aspects of SDL2, and the development
 is generally guided by the author's needs and interest without a goal
@@ -228,10 +242,10 @@ any wrappers over non object-oriented SDL2 code, as these will not bring
 any benefits over using plain C API. E.g. I see no point in implementing
 SDL2pp::Delay() as it won't bring any convenience over SDL_Delay().
 
-The same strongly applies to the SDL2 bits which duplicate C++17
+The same strongly applies to the SDL2 bits which duplicate C++11
 standard library, e.g. threads and atomic ops.
 
-## Users
+## Users ##
 
 Projects using libSDL2pp:
 
@@ -243,16 +257,16 @@ Projects using libSDL2pp:
 * [osmview](https://bitbucket.org/ipopov/osmview) - Desktop OpenStreetMap viewer
 * [planetonomy](https://github.com/AMDmi3/planetonomy) - Old-school platformer/exploration game with CGA graphics
 
-## WWW
+## WWW ##
 
 * [GitHub page](https://github.com/libSDL2pp/libSDL2pp)
 * [Online documentation](https://sdl2pp.amdmi3.ru/)
 
-## Author
+## Author ##
 
 * [Dmitry Marakasov](https://github.com/AMDmi3) <amdmi3@amdmi3.ru>
 
-## Contributors
+## Contributors ##
 
 * [Aargonian](https://github.com/Aargonian)
 * [Carl Schwope](https://github.com/Lowest0ne)
@@ -263,6 +277,6 @@ Projects using libSDL2pp:
 * [Vladimir Gamalian](https://github.com/vladimirgamalian)
 * [Vraiment](https://github.com/Vraiment)
 
-## License
+## License ##
 
 libSDL2pp comes under zlib license, the same license as SDL2. See COPYING.txt.

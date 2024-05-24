@@ -1,10 +1,10 @@
 #include "cheats.h"
 
-Cheats::Cheats(int wormID, int cheatID): Command(wormID), playerID(wormID), cheatID(cheatID) {}
+Cheats::Cheats(int playerID, int cheatID): Command(playerID), playerID(playerID), cheatID(cheatID) {}
 
 bool Cheats::executeCommand(bool* cheatOn, bool& needsMove) {
     if (cheatID == ADD_HEALTH) {
-        // game_world.addHealthToWorm(playerID);
+        // game_world.addHealthToPlayer(playerID);
     }
     return needsMove;
 }
