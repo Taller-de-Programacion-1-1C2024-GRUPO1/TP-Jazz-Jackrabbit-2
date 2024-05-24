@@ -1,12 +1,3 @@
-//#include <iostream>
-
-//#include <SDL2/SDL_image.h>
-//#include <SDL2/SDL_mixer.h>
-//#include <unistd.h>  // for sleep
-
-//#include "SDL2/SDL.h"
-
-
 //#define BACKGROUND_IMG BACKGROUNDS_PATH "/fondo.png"
 //#define MUSIC_FILE DSOUNDS_PATH "/music.wav"
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png"
@@ -21,6 +12,10 @@
 #define GAME_TITLE "Juego"
 #define MUSIC_VOLUME 5
 
+
+
+
+
 // pre-commit run --hook-stage manual --all-files
 
 
@@ -32,6 +27,8 @@
 #include <SDL2pp/SDL2pp.hh>
 
 using SDL2pp::Font;
+using SDL2pp::Mixer;
+using SDL2pp::Music;
 using SDL2pp::NullOpt;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
@@ -40,16 +37,12 @@ using SDL2pp::SDLTTF;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 using SDL2pp::Window;
-using SDL2pp::Mixer;
-using SDL2pp::Music;
 
 int main() try {
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
     SDLTTF ttf;
-
-
     // Inicialización de SDL_mixer a través de SDL2pp::Mixer
     Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
     // Cargar música de fondo
@@ -61,42 +54,26 @@ int main() try {
 
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600,
-                  SDL_WINDOW_RESIZABLE);
+    Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
+                  SDL_WINDOW_SHOWN);
+
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-
 
 
     // Load sprites image as a new texture; since there's no alpha channel
     // but we need transparency, use helper surface for which set color key
     // to color index 0 -> black background on image will be transparent on our
     // texture
-    Texture sprites(renderer, Surface(PLAYER_IMG).SetColorKey(true, 0));
+    SDL_Color colorKey = {44, 102, 150, 255}; // Color en formato RGBA
+    Surface surface(PLAYER_IMG);
+    SDL_SetColorKey(surface.Get(), SDL_TRUE, SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
+    Texture sprites(renderer, surface);
+
 
     // Enable alpha blending for the sprites
     sprites.SetBlendMode(SDL_BLENDMODE_BLEND);
-
-    // Gradient texture to be generated
-    Texture gradient(renderer, SDL_PIXELFORMAT_BGR888, SDL_TEXTUREACCESS_STATIC, 1, 256);
-    {
-        // Array holding RGB values for 256 pixels
-        unsigned char grad[256 * 3];
-        int n = 0;  // counter
-
-        // Fill array with fading gray values from white to black; its contents will be
-        // 255,255,255, 254,254,254, 253,253,253 ... 1,1,1, 0,0,0
-        std::generate(grad, grad + sizeof(grad), [&]() { return 255 - n++ / 3; });
-
-        // Update texture with our raw color data, enable blending and set color
-        // and alpha modulation, so when rendered our texture will be dark cyan
-        gradient.Update(NullOpt, grad, 3)
-                .SetBlendMode(SDL_BLENDMODE_BLEND)
-                .SetColorMod(0, 255, 255)
-                .SetAlphaMod(85);
-    }
 
     // Load font, 12pt size
     Font font(FONT, 12);
@@ -105,6 +82,7 @@ int main() try {
     bool is_running = false;  // whether the character is currently running
     int run_phase = -1;       // run animation phase
     float position = 0.0;     // player position
+    int score = 0;            // player score
 
     unsigned int prev_ticks = SDL_GetTicks();
     // Main loop
@@ -137,6 +115,7 @@ int main() try {
                 switch (event.key.keysym.sym) {
                     case SDLK_RIGHT:
                         is_running = false;
+                        score++;
                         break;
                 }
             }
@@ -161,9 +140,7 @@ int main() try {
         // Clear screen
         renderer.Clear();
 
-        // Copy our gradient texture, stretching it to the whole window
-        renderer.Copy(gradient, NullOpt,
-                      Rect(0, vcenter, renderer.GetOutputWidth(), renderer.GetOutputHeight() / 2));
+        
 
         // Pick sprite from sprite atlas based on whether
         // player is running and run animation phase
@@ -176,7 +153,7 @@ int main() try {
 
         // Draw player sprite
         sprites.SetAlphaMod(255);  // sprite is fully opaque
-        renderer.Copy(sprites, Rect(src_x, src_y, 50, 50),
+        renderer.Copy(sprites, Rect(src_x, src_y, 25, 50),
                       Rect((int)position, vcenter - 50, 50, 50));
 
         // Draw the same sprite, below the first one, 50% transparent and
@@ -188,7 +165,7 @@ int main() try {
                       SDL_FLIP_VERTICAL);  // vertical flip
 
         // Create text string to render
-        std::string text = "Position: " + std::to_string((int)position) +
+        std::string text = "Score: " + std::to_string(score) +
                            ", running: " + (is_running ? "true" : "false");
 
         // Render the text into new texture. Note that SDL_ttf render
