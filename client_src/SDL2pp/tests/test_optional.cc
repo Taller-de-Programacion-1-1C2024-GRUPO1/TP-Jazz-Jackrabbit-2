@@ -19,6 +19,7 @@ BEGIN_TEST(int, char*[])
 
 		// accessing disengaged fails
 		EXPECT_EXCEPTION(i = o.value(), BadOptionalAccess);
+		EXPECT_EXCEPTION(i = o.value(), std::logic_error);
 
 		// value_or test
 		EXPECT_EQUAL(i = o.value_or(234), 234);

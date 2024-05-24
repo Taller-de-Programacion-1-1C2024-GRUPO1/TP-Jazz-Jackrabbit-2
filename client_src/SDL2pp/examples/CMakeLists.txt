@@ -1,6 +1,6 @@
-add_definitions(-DTESTDATA_DIR="${PROJECT_SOURCE_DIR}/testdata")
+ADD_DEFINITIONS(-DTESTDATA_DIR="${PROJECT_SOURCE_DIR}/testdata")
 
-set(EXAMPLES
+SET(EXAMPLES
 	audio_sine
 	audio_wav
 	lines
@@ -8,29 +8,29 @@ set(EXAMPLES
 	sprites
 )
 
-if(SDL2PP_WITH_IMAGE)
-	set(EXAMPLES ${EXAMPLES}
+IF(SDL2PP_WITH_IMAGE)
+	SET(EXAMPLES ${EXAMPLES}
 		image
 		fill
 	)
-endif()
+ENDIF(SDL2PP_WITH_IMAGE)
 
-if(SDL2PP_WITH_MIXER)
-	set(EXAMPLES ${EXAMPLES}
+IF(SDL2PP_WITH_MIXER)
+	SET(EXAMPLES ${EXAMPLES}
 		mixer
 		mixer_music
 		mixer_music_sine
 		mixer_effects
 	)
-endif()
+ENDIF(SDL2PP_WITH_MIXER)
 
-if(SDL2PP_WITH_TTF)
-	set(EXAMPLES ${EXAMPLES}
+IF(SDL2PP_WITH_TTF)
+	SET(EXAMPLES ${EXAMPLES}
 		ttf
 	)
-endif()
+ENDIF(SDL2PP_WITH_TTF)
 
-foreach(EXAMPLE ${EXAMPLES})
-	add_executable(${EXAMPLE} ${EXAMPLE}.cc)
-	target_link_libraries(${EXAMPLE} SDL2pp::SDL2pp)
-endforeach()
+FOREACH(EXAMPLE ${EXAMPLES})
+	ADD_EXECUTABLE(${EXAMPLE} ${EXAMPLE}.cc)
+	TARGET_LINK_LIBRARIES(${EXAMPLE} ${SDL2PP_LIBRARIES})
+ENDFOREACH(EXAMPLE)

@@ -1,9 +1,17 @@
 #include "client.h"
 
+
 Client::Client(const std::string& host, const std::string& service):
-        protocol(std::move(host), std::move(service)) {}
+        protocol(std::move(host), std::move(service)),
+        q_cmds(),
+        q_snapshots(),
+        client_sender(protocol, q_cmds),
+        client_receiver(protocol, q_snapshots) {}
+
 
 void Client::run() {
+    client_sender.start();
+    client_receiver.start();
     std::string line;
     while (std::getline(std::cin, line)) {
 
@@ -23,9 +31,9 @@ bool Client::action_handler(std::pair<uint8_t, int> result) {
         read_handler(result.second);
         return true;
     } else if (result.first == ATACK) {
-        if (this->protocol.send_byte(result.first)) {
-            return true;
-        }
+        //if (this->protocol.send_byte(result.first)) {
+        //    return true;
+        //}
         std::cout << "Error al enviar el byte o Server cerrado." << std::endl;
         return false;
     } else if (result.first == EXIT) {
@@ -36,10 +44,11 @@ bool Client::action_handler(std::pair<uint8_t, int> result) {
     }
 }
 
+
 void Client::read_handler(int num_msgs_to_read) {
     for (int i = 0; i < num_msgs_to_read; i++) {
         Message msg;
-        this->protocol.get_msg(msg);
+        //this->protocol.get_msg(msg);
         // Imprimir el mensaje
         std::cout << "Un enemigo ha ";
         if (msg.event_type == EVENT_DEAD_8) {
@@ -54,4 +63,11 @@ void Client::read_handler(int num_msgs_to_read) {
     }
 }
 
-Client::~Client() { this->protocol.~ClientProtocol(); }
+
+Client::~Client() {
+    this->protocol.~Protocol();
+    client_sender.kill();
+    client_receiver.kill();
+    client_receiver.join();
+    client_sender.join();
+}
