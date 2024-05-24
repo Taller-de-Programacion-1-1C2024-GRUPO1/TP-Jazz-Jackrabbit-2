@@ -29,6 +29,8 @@ target_link_libraries(example_sdl2pp common_lib client_lib SDL2pp)
 #target_include_directories(jazz_client PRIVATE client_src/QT)
 target_include_directories(jazz_client PRIVATE client_src)
 target_include_directories(jazz_client PRIVATE common_src)
+target_include_directories(example_sdl PRIVATE common_src)
+target_include_directories(example_sdl2pp PRIVATE common_src)
 
 set_target_properties(jazz_client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -fPIC -std=c++17")

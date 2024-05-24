@@ -11,8 +11,8 @@
 #include "../common_src/protocol.h"
 
 #include "client_parser.h"
-#include "client_sender.h"
 #include "client_receiver.h"
+#include "client_sender.h"
 
 
 class Client {

@@ -1,6 +1,9 @@
 project(Jazz)
 FILE(GLOB client_src_files "*.cpp"  "*.h")
 
+# PREGUNTAR
+#add_definitions(-DCHARACTERS_PATH="${PROJECT_SOURCE_DIR}/client_src/resources/characters")
+
 #Messages
 message(STATUS "Files in ${PROJECT_SOURCE_DIR}")
 foreach(file ${client_src_files})

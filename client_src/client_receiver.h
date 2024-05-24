@@ -10,8 +10,8 @@
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/queue.h"
-#include "../common_src/thread.h"
 #include "../common_src/snapshots/snapshot.h"
+#include "../common_src/thread.h"
 
 class Client_Receiver: public Thread {
 private:
