@@ -19,6 +19,7 @@
 #define PLAYER_IMG "../client_src/resources/characters/Jazz.png"
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
 #define GAME_TITLE "Juego"
+#define MUSIC_VOLUME 5
 
 // pre-commit run --hook-stage manual --all-files
 
@@ -39,12 +40,25 @@ using SDL2pp::SDLTTF;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 using SDL2pp::Window;
+using SDL2pp::Mixer;
+using SDL2pp::Music;
 
 int main() try {
     // Initialize SDL library
-    SDL sdl(SDL_INIT_VIDEO);
+    SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
     SDLTTF ttf;
+
+
+    // Inicialización de SDL_mixer a través de SDL2pp::Mixer
+    Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
+    // Cargar música de fondo
+    Music backgroundMusic(MUSIC_FILE);
+    // Set music volume
+    mixer.SetMusicVolume(MUSIC_VOLUME);
+    // Reproducir música en bucle
+    mixer.PlayMusic(backgroundMusic, -1);
+
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600,
@@ -52,6 +66,9 @@ int main() try {
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+
+
 
     // Load sprites image as a new texture; since there's no alpha channel
     // but we need transparency, use helper surface for which set color key
