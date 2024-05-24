@@ -43,6 +43,9 @@ int main() try {
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
     SDLTTF ttf;
+
+
+
     // Inicialización de SDL_mixer a través de SDL2pp::Mixer
     Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
     // Cargar música de fondo
@@ -60,6 +63,9 @@ int main() try {
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    // Dibuja la imagen de fondo
+    Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
+    
 
 
     // Load sprites image as a new texture; since there's no alpha channel
@@ -139,7 +145,7 @@ int main() try {
 
         // Clear screen
         renderer.Clear();
-
+        renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
         
 
         // Pick sprite from sprite atlas based on whether
