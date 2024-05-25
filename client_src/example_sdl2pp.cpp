@@ -9,22 +9,22 @@
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
 #define PLAYER_IMG "../client_src/resources/characters/Jazz.png"
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
+#define ITEMS_IMG "../client_src/resources/items/items.png"
 #define GAME_TITLE "Juego"
 #define MUSIC_VOLUME 5
 
-
-
-
-
 // pre-commit run --hook-stage manual --all-files
-
 
 #include <algorithm>
 #include <exception>
 #include <iostream>
 #include <string>
 
+#include <map>
+
 #include <SDL2pp/SDL2pp.hh>
+#include "../client_src/client_animation.h"
+#include "../client_src/client_shifting_drawable.h"
 
 using SDL2pp::Font;
 using SDL2pp::Mixer;
@@ -38,13 +38,52 @@ using SDL2pp::Surface;
 using SDL2pp::Texture;
 using SDL2pp::Window;
 
+int x_counter = 10;
+
+void handle_events(bool &game_running, bool &player_running, int &score, ShiftingDrawable &player) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            game_running = false;
+        }
+    }
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
+
+    }
+    else if(state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
+
+    }
+    else if(state[SDL_SCANCODE_RIGHT]) {
+        player_running = true;
+        score++;
+        player.setPosition(++x_counter, 10);
+        player.setAnimation("Walk");
+    }
+    else if (state[SDL_SCANCODE_LEFT]) {
+        player.setPosition(--x_counter, 10);
+        player.setAnimation("Walk");
+    }
+    else if (state[SDL_SCANCODE_UP]) {
+
+    }
+    else if (state[SDL_SCANCODE_DOWN]) {
+
+    }
+    else if (state[SDL_SCANCODE_ESCAPE]) {
+        game_running = false;
+    }
+    else {
+        player_running = false;
+        player.setAnimation("Idle");
+    }
+}
+
 int main() try {
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
     SDLTTF ttf;
-
-
 
     // Inicialización de SDL_mixer a través de SDL2pp::Mixer
     Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
@@ -55,18 +94,14 @@ int main() try {
     // Reproducir música en bucle
     mixer.PlayMusic(backgroundMusic, -1);
 
-
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
                   SDL_WINDOW_SHOWN);
-
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Dibuja la imagen de fondo
     Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
-    
-
 
     // Load sprites image as a new texture; since there's no alpha channel
     // but we need transparency, use helper surface for which set color key
@@ -77,14 +112,28 @@ int main() try {
     SDL_SetColorKey(surface.Get(), SDL_TRUE, SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
     Texture sprites(renderer, surface);
 
-
     // Enable alpha blending for the sprites
     sprites.SetBlendMode(SDL_BLENDMODE_BLEND);
 
     // Load font, 12pt size
     Font font(FONT, 12);
 
+    // A testing player
+    ShiftingDrawable player(10,10,64,64,renderer,PLAYER_IMG,colorKey);
+    player.loadAnimations("../external/animations/jazz.yml");
+
+    SDL_Color itemsColorKey = {0,128,255,1};
+    ShiftingDrawable coin(80,15,32,32,renderer,ITEMS_IMG,itemsColorKey);
+    ShiftingDrawable diamond(150,15,32,32,renderer,ITEMS_IMG,itemsColorKey);
+
+    coin.loadAnimations("../external/animations/resources.yml");
+    diamond.loadAnimations("../external/animations/resources.yml");
+
+    coin.setAnimation("Coin-flip");
+    diamond.setAnimation("Diamond-flip");
+
     // Game state
+    bool running = true; // whether the game is running
     bool is_running = false;  // whether the character is currently running
     int run_phase = -1;       // run animation phase
     float position = 0.0;     // player position
@@ -92,7 +141,7 @@ int main() try {
 
     unsigned int prev_ticks = SDL_GetTicks();
     // Main loop
-    while (1) {
+    while (running) {
         // Timing: calculate difference between this and previous frame
         // in milliseconds
         unsigned int frame_ticks = SDL_GetTicks();
@@ -104,28 +153,7 @@ int main() try {
         //   quit the application
         // - If Right key is pressed, character would run
         // - If Right key is released, character would stop
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                return 0;
-            } else if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                    case SDLK_q:
-                        return 0;
-                    case SDLK_RIGHT:
-                        is_running = true;
-                        break;
-                }
-            } else if (event.type == SDL_KEYUP) {
-                switch (event.key.keysym.sym) {
-                    case SDLK_RIGHT:
-                        is_running = false;
-                        score++;
-                        break;
-                }
-            }
-        }
+        handle_events(running, is_running, score, player);
 
         // Update game state for this frame:
         // if character is runnung, move it to the right
@@ -143,10 +171,16 @@ int main() try {
 
         int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
 
+        player.update();
+        coin.update();
+        diamond.update();
+
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
-        
+        player.render(renderer);
+        coin.render(renderer);
+        diamond.render(renderer);
 
         // Pick sprite from sprite atlas based on whether
         // player is running and run animation phase
@@ -196,3 +230,4 @@ int main() try {
     std::cerr << e.what() << std::endl;
     return 1;
 }
+
