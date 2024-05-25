@@ -6,6 +6,8 @@
 #include "character.h"
 #include "item.h"
 #include "physical_map.h"
+#include "player.h"
+#include "enemy.h"
 
 // COMPILACION:
 //  g++ -g -std=c++17 *.cpp -I.include -o prog -lSDL2 -ldl
@@ -19,30 +21,29 @@ void handleEvents(Player& player) {
         if (event.type == SDL_QUIT) {
             running = false;
         }
-        if (event.type == SDL_KEYDOWN) {
-            switch (event.key.keysym.sym) {
-                case SDLK_RIGHT:
-                    player.add_run_right();
-                    break;
-                case SDLK_LEFT:
-                    player.add_run_left();
-                    break;
-                case SDLK_UP:
-                    player.add_jump();
-                    break;
-                case SDLK_DOWN:
-
-                    break;
-                case SDLK_ESCAPE:
-                    running = false;
-                    break;
-                case SDLK_SPACE:
-                    player.add_run_fast_right();
-                    break;
-            }
+        const Uint8* state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_LSHIFT] && state[SDL_SCANCODE_RIGHT]) {
+            player.run_fast_right();
         }
-        if (event.type == SDL_KEYUP) {
-            // No se está presionando ninguna tecla (Stand)
+        else if(state[SDL_SCANCODE_LSHIFT] && state[SDL_SCANCODE_LEFT]) {
+            player.run_fast_left();
+        }
+        else if(state[SDL_SCANCODE_RIGHT]) {
+            player.add_run_right();
+        }
+        else if (state[SDL_SCANCODE_LEFT]) {
+            player.add_run_left();
+        }
+        else if (state[SDL_SCANCODE_UP]) {
+            player.add_jump();
+        }
+        else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_LEFT]) {
+            player.add_jump();
+            player.add_run_left();
+        }
+        else if (state[SDL_SCANCODE_UP] && state[SDL_SCANCODE_RIGHT]) {
+            player.add_jump();
+            player.add_run_right();
         }
     }
 }
@@ -102,8 +103,8 @@ int main() {
         SDL_RenderClear(renderer);
         // ACA VAN TODOS LOS RENDER DE LAS ENTIDADES
 
-        gameMap.render(renderer);
         player.render(renderer);
+        gameMap.render(renderer);
         enemy.render(renderer), SDL_RenderPresent(renderer);
 
         frameTime = SDL_GetTicks() - frameStart;

@@ -19,7 +19,6 @@ class Character;
 class PhysicalMap {
 private:
     int phisicaMap[MAP_WIDTH][MAP_HEIGHT];
-    // void position_on_map(int& pos_x, int& pos_y);
     void load_map(const int* map);
 
 public:

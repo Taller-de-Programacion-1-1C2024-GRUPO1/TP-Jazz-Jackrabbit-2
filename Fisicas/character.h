@@ -1,28 +1,8 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <queue>
-
 #include "physical_objects.h"
 class PhysicalMap;
-// PLAYER CONSTANTS
-enum ACTIONS {
-    STAND,
-    RUN,
-    RUN_FAST,
-    JUMPING,
-    FALLING,
-    JUMP_FORWARD,
-    FALL_FORWARD,
-    SHOOT,
-    SPECIAL_ATTACK,
-    DIE
-};
-enum DIRECTIONS { LEFT, RIGHT };
-
-#define PLAYER_SIDE BLOCK_DIVISION * 2
-#define PLAYER_SPEED 5
-#define JUMPING_INITIAL_SPEED 10
 
 // FISIC
 #define GRAVITY 1
@@ -66,42 +46,7 @@ public:
     void reset_map_colision_flags();
 };
 
-#define PLAYER_INITIAL_HEALTH 100
 
-class Player: public Character {
-private:
-    int action;
-    int direction;
-    std::queue<int> events_queue;
-
-    // MODIFICACION DE POSICION
-    const int acc_y;
-
-public:
-    Player(int init_pos_x, int init_pos_y, PhysicalMap& map);
-    void update();
-
-    // EVENTS
-    void jump();
-    void run_right();
-    void run_fast_right();
-    void run_left();
-    void run_fast_left();
-    void shoot();
-    void special_attack();
-
-    // TESTING
-    // RENDER
-    void render(SDL_Renderer* renderer);
-    void imprimir_posicion();
-
-    // COLA
-    void add_jump();
-    void add_run_right();
-    void add_run_fast_right();
-    void add_run_left();
-    void add_run_fast_left();
-};
 
 class Enemy: public Character {
 private:
