@@ -1,6 +1,5 @@
 #include "server.h"
 
-
 Server::Server(const char* servname):
         client_cmds_q(),
         sk_was_closed(false),

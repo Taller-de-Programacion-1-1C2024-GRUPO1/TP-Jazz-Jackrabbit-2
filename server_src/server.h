@@ -7,12 +7,12 @@
 
 #include "../common_src/common_socket.h"
 #include "../common_src/protected_list_of_queues.h"
-#include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 
 #include "server_acceptor.h"
 #include "server_gameloop.h"
 #include "server_player.h"
+#include "server_protocol.h"
 
 class Server {
 private:

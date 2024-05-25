@@ -1,5 +1,5 @@
-#ifndef MOVE_H
-#define MOVE_H
+#ifndef MOVE_FASTER_H
+#define MOVE_FASTER_H
 
 #include "command.h"
 
@@ -13,11 +13,10 @@ private:
 
 public:
     MoveFaster(int playerID, int dir);
-    bool executeCommand(bool* cheatON, bool& needsMove) override;
-    void send(Protocol& protocol) override;
-    int getPlayerId() override;
-    int getDir();
-    int getCommandType() override;
+    bool execute_Command(bool* cheatON, bool& needsMove) override;
+    int get_playerId() override;
+    int get_dir();
+    int get_commandType() override;
     ~MoveFaster();
 };
 

@@ -8,70 +8,260 @@ Protocol::Protocol(const std::string& host, const std::string& service):
 Protocol::Protocol(Socket peer): socket(std::move(peer)), was_closed(false) {}
 
 
+// ----------------------------- SEND BYTES/STRING/CHAR -----------------------------
+
+void Protocol::send_uintEight(uint8_t num) {
+    socket.sendall(&num, sizeof(num), &was_closed);
+    check_closed();
+}
+
+void Protocol::send_uintSixteen(uint16_t num) {
+    uint16_t num_htons = htons(num);
+    socket.sendall(&num_htons, sizeof(num_htons), &was_closed);
+    check_closed();
+}
+
+void Protocol::send_uintThirtyTwo(uint32_t num) {
+    uint32_t num_htonl = htonl(num);
+    socket.sendall(&num_htonl, sizeof(num_htonl), &was_closed);
+    check_closed();
+}
+
+void Protocol::send_string(const std::string& str) {
+    send_uintSixteen(str.size());
+    socket.sendall(str.c_str(), str.size(), &was_closed);
+    check_closed();
+}
+
+void Protocol::send_char(char c) {
+    socket.sendall(&c, sizeof(c), &was_closed);
+    check_closed();
+}
+
+// ----------------------------- RECEIVE BYTES/STRINGS/CHAR -----------------------------
+
+uint8_t Protocol::receive_uintEight() {
+    uint8_t num;
+    socket.recvall(&num, sizeof(num), &was_closed);
+    check_closed();
+    return num;
+}
+
+uint16_t Protocol::receive_uintSixteen() {
+    uint16_t num;
+    socket.recvall(&num, sizeof(num), &was_closed);
+    check_closed();
+    return ntohs(num);
+}
+
+uint32_t Protocol::receive_uintThirtyTwo() {
+    uint32_t num;
+    socket.recvall(&num, sizeof(num), &was_closed);
+    check_closed();
+    return ntohl(num);
+}
+
+std::string Protocol::receive_string() {
+    uint16_t length_string = receive_uintSixteen();
+    std::string str(length_string, '\0');
+    socket.recvall((void*)str.data(), length_string, &was_closed);
+    check_closed();
+    return str;
+}
+
+char Protocol::receive_char() {
+    char c;
+    socket.recvall(&c, sizeof(c), &was_closed);
+    check_closed();
+    return c;
+}
+
 bool Protocol::is_close() { return this->was_closed; }
 
+void Protocol::check_closed() {
+    if (is_close()) {
+        throw SocketClosed();
+    }
+}
+
+// ----------------------------- SEND COMMANDS -----------------------------
+
+void Protocol::send_Move(Move* move) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_MOVE);
+    send_uintEight(move->get_playerId());
+    send_uintEight(move->get_dir());
+}
+
+void Protocol::send_MoveFaster(MoveFaster* moveFaster) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_MOVE_FASTER);
+    send_uintEight(moveFaster->get_playerId());
+    send_uintEight(moveFaster->get_dir());
+}
+
+void Protocol::send_Jump(Jump* jump) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_JUMP);
+    send_uintEight(jump->get_playerId());
+    send_uintEight(jump->get_dir());
+}
+
+void Protocol::send_Shoot(Shoot* shoot) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_SHOOT);
+    send_uintEight(shoot->get_playerId());
+    send_uintEight(shoot->get_dir());
+}
+
+/*
+void Protocol::send_Match() {
+    check_closed();
+    send_uintEight(SEND_COMMAND_MATCH);
+}
+
+void Protocol::send_Cheat() {
+    check_closed();
+    send_uintEight(SEND_COMMAND_CHEAT);
+}
+*/
+
+void Protocol::send_Command(Command* command) {
+    switch (command->get_commandType()) {
+        case COMMAND_CHEAT:
+            // send_Cheat();
+            std::cout << "Cheat not implemented yet" << std::endl;
+        case COMMAND_JUMP:
+            send_Jump(dynamic_cast<Jump*>(command));
+        case COMMAND_MOVE:
+            send_Move(dynamic_cast<Move*>(command));
+        case COMMAND_MOVE_FASTER:
+            send_MoveFaster(dynamic_cast<MoveFaster*>(command));
+        case COMMAND_SHOOT:
+            send_Shoot(dynamic_cast<Shoot*>(command));
+        case COMMAND_MATCH:
+            // send_Match();
+            std::cout << "Match not implemented yet" << std::endl;
+        default:
+            break;
+    }
+}
+
+// ----------------------------- RECEIVE COMMANDS -----------------------------
+
+std::shared_ptr<Move> Protocol::receive_Move() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_shared<Move>(player_id, dir);
+}
+
+std::shared_ptr<MoveFaster> Protocol::receive_MoveFaster() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_shared<MoveFaster>(player_id, dir);
+}
+
+std::shared_ptr<Jump> Protocol::receive_Jump() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_shared<Jump>(player_id, dir);
+}
+
+std::shared_ptr<Shoot> Protocol::receive_Shoot() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_shared<Shoot>(player_id, dir);
+}
+
+// std::shared_ptr<Match> Protocol::receive_Match() { return std::make_shared<Match>(); }
+
+// std::shared_ptr<Cheats> Protocol::receive_Cheat() { return std::make_shared<Cheats>(); }
+
+std::shared_ptr<Command> Protocol::receive_Command() {
+    uint8_t command = receive_uintEight();
+    switch (command) {
+        case SEND_COMMAND_MOVE:
+            return receive_Move();
+        case SEND_COMMAND_MOVE_FASTER:
+            return receive_MoveFaster();
+        case SEND_COMMAND_JUMP:
+            return receive_Jump();
+        case SEND_COMMAND_SHOOT:
+            return receive_Shoot();
+        case SEND_COMMAND_MATCH:
+            // return receive_Match();
+        case SEND_COMMAND_CHEAT:
+            // return receive_Cheat();
+        default:
+            throw InvalidCommand();
+    }
+}
+
+// ----------------------------- SEND SNAPSHOTS -----------------------------
+
+
+void Protocol::send_dimensions(const Snapshot& snapshot) {
+    std::cout << "Sending dimensions" << std::endl;
+}
+
+void Protocol::send_rabbits(const Snapshot& snapshot) {
+    std::cout << "Sending rabbits" << std::endl;
+}
+
+
+void Protocol::send_projectiles(const Snapshot& snapshot) {
+    std::cout << "Sending projectiles" << std::endl;
+}
+
+void Protocol::send_supplies(const Snapshot& snapshot) {
+    std::cout << "Sending supplies" << std::endl;
+}
+
+
+void Protocol::send_Snapshot(const Snapshot& snapshot) {
+    send_dimensions(snapshot);
+    send_rabbits(snapshot);
+    send_projectiles(snapshot);
+    send_supplies(snapshot);
+}
+
+
+// ----------------------------- RECEIVE SNAPSHOTS -----------------------------
+
+void Protocol::receive_dimensions(const Snapshot& snapshot) {
+    /*
+    uint32_t width = receive_uintThirtyTwo();
+    uint32_t height = receive_uintThirtyTwo();
+    snapshot.set_dimensions(width, height);
+    */
+}
+
+void Protocol::receive_rabbits(const Snapshot& snapshot) {
+    std::cout << "Receiving rabbits" << std::endl;
+    // recibir y setear rabbits en el snapshot pasado por referencia
+}
+
+void Protocol::receive_projectiles(const Snapshot& snapshot) {
+    std::cout << "Receiving projectiles" << std::endl;
+    // recibir y setear projectiles en el snapshot pasado por referencia
+}
+
+void Protocol::receive_supplies(const Snapshot& snapshot) {
+    std::cout << "Receiving supplies" << std::endl;
+    // recibir y setear supplies en el snapshot pasado por referencia
+}
+
+// Se recibe crea un Snapshot vacio y se le van agregando los elementos
+Snapshot Protocol::receive_Snapshot() {
+    Snapshot snapshot;
+    receive_dimensions(snapshot);
+    receive_rabbits(snapshot);
+    receive_projectiles(snapshot);
+    receive_supplies(snapshot);
+    return snapshot;
+}
 
 Protocol::~Protocol() {
     this->was_closed = true;
     this->socket.~Socket();
-}
-
-
-// ClientProtocol
-ClientProtocol::ClientProtocol(const std::string& host, const std::string& service):
-        Protocol(host, service) {}
-
-bool ClientProtocol::send_byte(uint8_t& msg) {
-    int sz = this->socket.sendall(&msg, 1, &this->was_closed);  // envio 1 byte
-    if (sz <= 0) {
-        return false;  // Si no se recibieron bytes o ocurrió un error, retornamos false
-    }
-    return true;
-}
-
-
-void ClientProtocol::get_msg(Message& msg) {
-    try {
-        int sz_1 = this->socket.recvall(&msg.msg_indicator, 1, &was_closed);
-        uint16_t new_num_alive_enemies;
-        int sz_2 = this->socket.recvall(&new_num_alive_enemies, 2, &was_closed);
-        msg.num_alive_enemies = ntohs(new_num_alive_enemies);
-        uint16_t new_num_dead_enemies;
-        int sz_3 = this->socket.recvall(&new_num_dead_enemies, 2, &was_closed);
-        msg.num_dead_enemies = ntohs(new_num_dead_enemies);
-        int sz_4 = this->socket.recvall(&msg.event_type, 1, &was_closed);
-        if (sz_1 <= 0 or sz_2 <= 0 or sz_3 <= 0 or sz_4 <= 0 or this->was_closed) {
-            throw std::runtime_error("No se recibio el el mensaje o el socket estaba cerrado");
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "Error en la recepción de mensajes del client protocol" << std::endl;
-    }
-}
-
-
-// ServerProtocol
-ServerProtocol::ServerProtocol(Socket peer): Protocol(std::move(peer)) {}
-
-
-void ServerProtocol::send_server_enemy_status_count(const Message& msg) {
-    this->socket.sendall(&msg.msg_indicator, 1, &this->was_closed);
-    uint16_t new_num_alive_enemies = htons(msg.num_alive_enemies);
-    this->socket.sendall(&new_num_alive_enemies, 2, &this->was_closed);
-    uint16_t new_num_dead_enemies = htons(msg.num_dead_enemies);
-    this->socket.sendall(&new_num_dead_enemies, 2, &this->was_closed);
-    this->socket.sendall(&msg.event_type, 1, &this->was_closed);
-}
-
-
-uint8_t ServerProtocol::get_byte() {
-    uint8_t buf;
-    try {
-        int sz = this->socket.recvall(&buf, sizeof(buf), &was_closed);
-        if (sz <= 0) {
-            throw std::runtime_error("ServerProtocol::get_byte() could not receive.");
-        }
-        return buf;
-    } catch (const std::exception& e) {
-        throw;
-    }
 }

@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-ClientSender::ClientSender(ClientProtocol& protocol, Queue<Command>& q_cmds):
+ClientSender::ClientSender(Protocol& protocol, Queue<Command>& q_cmds):
         protocol(protocol), q_cmds(q_cmds), keep_talking(true), is_alive(true) {}
 
 

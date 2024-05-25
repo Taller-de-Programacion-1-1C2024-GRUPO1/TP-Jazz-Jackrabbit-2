@@ -2,7 +2,7 @@
 
 Jump::Jump(int id, int dir): Command(id), playerID(id), dir(dir) {}
 
-bool Jump::executeCommand(bool* cheatOn, bool& needsMove) {
+bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {
     if (dir == FORWARD_DIR) {
         // game_world.jumpForwardPlayer(playerID);
     } else if (dir == BACKWARD_DIR) {
@@ -13,14 +13,10 @@ bool Jump::executeCommand(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void Jump::send(Protocol& protocol) {
-    // protocol.sendCommand(this);
-}
+int Jump::get_playerId() { return this->playerID; }
 
-int Jump::getPlayerId() { return this->playerID; }
+int Jump::get_dir() { return this->dir; }
 
-int Jump::getDir() { return this->dir; }
-
-int Jump::getCommandType() { return this->commandType; }
+int Jump::get_commandType() { return this->commandType; }
 
 Jump::~Jump() {}

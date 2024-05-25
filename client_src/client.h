@@ -17,7 +17,7 @@
 
 class Client {
 private:
-    ClientProtocol protocol;
+    Protocol protocol;
     Parser parser;
     Queue<Command> q_cmds;
     Queue<Snapshot> q_snapshots;

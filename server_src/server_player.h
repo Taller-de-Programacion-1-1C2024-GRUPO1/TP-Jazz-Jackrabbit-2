@@ -6,9 +6,9 @@
 
 #include "../common_src/common_socket.h"
 #include "../common_src/protected_list_of_queues.h"
-#include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 
+#include "server_protocol.h"
 #include "server_receiver.h"
 #include "server_sender.h"
 

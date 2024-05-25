@@ -1,6 +1,5 @@
 #include "server_acceptor.h"
 
-
 ServerAcceptor::ServerAcceptor(const char* servname, Queue<uint8_t>& client_cmds_q,
                                ProtectedListOfQueues& list_of_q_msgs):
         sk(servname),

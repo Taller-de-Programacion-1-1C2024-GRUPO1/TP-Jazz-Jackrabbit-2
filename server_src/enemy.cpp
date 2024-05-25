@@ -1,14 +1,10 @@
 #include "enemy.h"
 
-
 Enemy::Enemy(): is_alive(true), num_of_iterations_dead(0) {}
-
 
 bool Enemy::enemy_is_alive() const { return is_alive; }
 
-
 void Enemy::kill() { is_alive = false; }
-
 
 bool Enemy::try_resurrect() {
     if (!is_alive) {
@@ -22,14 +18,12 @@ bool Enemy::try_resurrect() {
     return false;
 }
 
-
 Enemies::Enemies(int num_of_enemies):
         num_of_enemies(num_of_enemies), enemies(), num_alive_enemies(num_of_enemies) {
     for (int i = 0; i < num_of_enemies; i++) {
         enemies.push_back(Enemy());
     }
 }
-
 
 bool Enemies::try_kill_enemy() {
     auto aliveEnemyIter =
@@ -43,7 +37,6 @@ bool Enemies::try_kill_enemy() {
     }
     return false;
 }
-
 
 int Enemies::try_resurrect_enemies() {
     int num_of_resurrected = 0;
@@ -59,6 +52,5 @@ int Enemies::try_resurrect_enemies() {
 }
 
 uint16_t Enemies::get_num_alive_enemies() const { return num_alive_enemies; }
-
 
 uint16_t Enemies::get_num_of_dead_enemies() const { return num_of_enemies - num_alive_enemies; }
