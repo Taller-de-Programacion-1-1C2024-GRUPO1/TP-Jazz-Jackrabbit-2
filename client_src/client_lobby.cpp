@@ -5,7 +5,7 @@ ClientLobby::ClientLobby() {}
 
 
 void ClientLobby::run() {
-    //QT
+    // QT
     std::cout << "ClientLobby::run()\n";
     std::cout << "ClientLobby finished end\n";
 }

@@ -2,15 +2,15 @@
 #define CLIENTLOBBY_H
 
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
-#include <iostream>
 
 
 class ClientLobby {
 private:
-    //QT
+    // QT
 
 public:
     ClientLobby();

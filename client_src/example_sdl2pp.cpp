@@ -13,9 +13,6 @@
 #define MUSIC_VOLUME 5
 
 
-
-
-
 // pre-commit run --hook-stage manual --all-files
 
 
@@ -45,7 +42,6 @@ int main() try {
     SDLTTF ttf;
 
 
-
     // Inicialización de SDL_mixer a través de SDL2pp::Mixer
     Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
     // Cargar música de fondo
@@ -65,16 +61,16 @@ int main() try {
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Dibuja la imagen de fondo
     Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
-    
 
 
     // Load sprites image as a new texture; since there's no alpha channel
     // but we need transparency, use helper surface for which set color key
     // to color index 0 -> black background on image will be transparent on our
     // texture
-    SDL_Color colorKey = {44, 102, 150, 255}; // Color en formato RGBA
+    SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
     Surface surface(PLAYER_IMG);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE, SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
+    SDL_SetColorKey(surface.Get(), SDL_TRUE,
+                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
     Texture sprites(renderer, surface);
 
 
@@ -146,7 +142,7 @@ int main() try {
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
-        
+
 
         // Pick sprite from sprite atlas based on whether
         // player is running and run animation phase
@@ -171,8 +167,8 @@ int main() try {
                       SDL_FLIP_VERTICAL);  // vertical flip
 
         // Create text string to render
-        std::string text = "Score: " + std::to_string(score) +
-                           ", running: " + (is_running ? "true" : "false");
+        std::string text =
+                "Score: " + std::to_string(score) + ", running: " + (is_running ? "true" : "false");
 
         // Render the text into new texture. Note that SDL_ttf render
         // text into Surface, which is converted into texture on the fly

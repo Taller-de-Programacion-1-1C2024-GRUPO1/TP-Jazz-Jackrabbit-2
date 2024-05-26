@@ -6,10 +6,8 @@ ClientRenderer::ClientRenderer(const std::string& host, const std::string& servi
 
 
 void ClientRenderer::run() {
-    //SDL2pp
+    // SDL2pp
     std::cout << "ClientRenderer::run()\n";
     manager.run();
     std::cout << "ClientRenderer finished end\n";
 }
-
-
