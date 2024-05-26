@@ -2,6 +2,7 @@
 #define PHYSICAL_MAP_H
 
 #include <math.h>
+#include "../game_src/entities/character.h"
 
 #include "SDL2/SDL.h"
 #define MAP_HEIGHT 15  // 64

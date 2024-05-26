@@ -11,6 +11,7 @@ add_subdirectory(server_src)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
 add_subdirectory(game_src)
+add_subdirectory(physics_src)
 
 # add SDL2pp
 set(SDL2PP_WITH_IMAGE ON)

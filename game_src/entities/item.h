@@ -1,6 +1,7 @@
 #ifndef ITEM_H
 #define ITEM_H
-#include "physical_objects.h"
+
+#include "../../physics_src/physical_objects.h"
 
 class Item: public PhysicalObject {
 public:

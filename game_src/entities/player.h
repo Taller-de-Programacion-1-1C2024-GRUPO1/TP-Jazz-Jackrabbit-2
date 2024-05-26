@@ -1,8 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "character.h"
 
+#include "character.h"
 #include <queue>
+
 #define MAX_FALLING_SPEED 10
 #define PLAYER_SIDE BLOCK_DIVISION * 2
 #define PLAYER_INITIAL_HEALTH 100
@@ -34,7 +35,6 @@ enum ACTIONS {
     DIE
 };
 enum DIRECTIONS { LEFT, RIGHT };
-
 
 class Player: public Character {
 private:

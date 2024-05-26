@@ -1,7 +1,9 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "physical_objects.h"
+#include "../../physics_src/physical_objects.h"
+#include "../../physics_src/physical_map.h"
+
 class PhysicalMap;
 
 // FISIC
@@ -19,14 +21,8 @@ protected:
     bool on_right_wall;
 
 public:
-    Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health):
-            PhysicalObject(width, height, init_pos_x, init_pos_y),
-            map(map),
-            health(health),
-            on_floor(false),
-            on_roof(false),
-            on_left_wall(false),
-            on_right_wall(false) {}
+    Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health);
+            
 
     void receive_damage(int damage) { health -= damage; }
 
@@ -44,19 +40,6 @@ public:
     void is_on_left_wall();
     void is_on_right_wall();
     void reset_map_colision_flags();
-};
-
-
-
-class Enemy: public Character {
-private:
-    // MODIFICACION DE POSICION
-    int acc_y;
-
-public:
-    Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map);
-    // RENDER
-    void render(SDL_Renderer* renderer);
 };
 
 #endif

@@ -2,12 +2,12 @@
 
 #include "SDL2/SDL.h"
 
-#include "bullet.h"
-#include "character.h"
-#include "item.h"
+#include "../game_src/entities/bullet.h"
+#include "../game_src/entities/character.h"
+#include "../game_src/entities/enemy.h"
+#include "../game_src/entities/item.h"
+#include "../game_src/entities/player.h"
 #include "physical_map.h"
-#include "player.h"
-#include "enemy.h"
 
 // COMPILACION:
 //  g++ -g -std=c++17 *.cpp -I.include -o prog -lSDL2 -ldl

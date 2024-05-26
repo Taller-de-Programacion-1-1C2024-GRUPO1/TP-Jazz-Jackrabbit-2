@@ -90,7 +90,6 @@ void Player::render(SDL_Renderer* renderer) {
 
 void Player::imprimir_posicion() { printf("X: %d Y: %d\n", pos_x, pos_y); }
 
-
 // EVENTS
 // JUMP
 void Player::jump() {
@@ -111,23 +110,26 @@ void Player::run_fast_right() {
         spe_x = PLAYER_SPEED * 2;
     }
 }
+
 // LEFT
 void Player::run_left() {
     if (!on_left_wall) {
         spe_x = -PLAYER_SPEED;
     }
 }
+
 // LEFT SPRINT
 void Player::run_fast_left() {
     if (on_floor && !on_left_wall) {
         spe_x = -(PLAYER_SPEED * 2);
     }
 }
+
 // SHOOT
 void Player::shoot() { action = SHOOT; }
+
 // SPECIAL ATTACK
 void Player::special_attack() { action = SPECIAL_ATTACK; }
-
 
 // COLA
 void Player::add_jump() { events_queue.push(EVENT_JUMP); }

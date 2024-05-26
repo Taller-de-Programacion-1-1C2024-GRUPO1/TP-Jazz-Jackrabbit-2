@@ -1,7 +1,5 @@
 #include "physical_map.h"
 
-#include "character.h"
-
 PhysicalMap::PhysicalMap(const int* map) { load_map(map); }
 
 void PhysicalMap::load_map(const int* map) {
