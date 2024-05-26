@@ -1,11 +1,15 @@
 #include "client_shifting_drawable.h"
-#include <yaml-cpp/yaml.h>
+
 #include <fstream>
 
-ShiftingDrawable::ShiftingDrawable(int x, int y, int w, int h, SDL2pp::Renderer& renderer, const std::string& path, const SDL_Color& colorKey)
-    : x(x), y(y), w(w), h(h), texture(renderer, SDL2pp::Surface(path)) {
+#include <yaml-cpp/yaml.h>
+
+ShiftingDrawable::ShiftingDrawable(int x, int y, int w, int h, SDL2pp::Renderer& renderer,
+                                   const std::string& path, const SDL_Color& colorKey):
+        x(x), y(y), w(w), h(h), texture(renderer, SDL2pp::Surface(path)), angle(0) {
     SDL2pp::Surface surface(path);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE, SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
+    SDL_SetColorKey(surface.Get(), SDL_TRUE,
+                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
     this->texture = SDL2pp::Texture(renderer, surface);
 }
 
@@ -32,12 +36,14 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
 
 void ShiftingDrawable::render(SDL2pp::Renderer& renderer) {
     destRect = SDL2pp::Rect(x, y, w, h);
-    renderer.Copy(texture, srcRect, destRect);
+    renderer.Copy(texture, srcRect, destRect, angle, SDL2pp::Point(0, 0),
+                  direction == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
 void ShiftingDrawable::update() {
-    Animation *currentAnimation = &animations[currentAnimationName];
-    int frame = static_cast<int>((SDL_GetTicks() / currentAnimation->speed) % currentAnimation->frames);
+    Animation* currentAnimation = &animations[currentAnimationName];
+    int frame =
+            static_cast<int>((SDL_GetTicks() / currentAnimation->speed) % currentAnimation->frames);
     srcRect = currentAnimation->frameRects[frame];
 }
 
@@ -46,6 +52,8 @@ void ShiftingDrawable::setPosition(int newx, int newy) {
     y = newy;
 }
 
-void ShiftingDrawable::setAnimation(const char* name) {
-    currentAnimationName = name;
-}
+void ShiftingDrawable::setAngle(int newAngle) { angle = newAngle; }
+
+void ShiftingDrawable::setDirection(int dir) { direction = dir; }
+
+void ShiftingDrawable::setAnimation(const char* name) { currentAnimationName = name; }

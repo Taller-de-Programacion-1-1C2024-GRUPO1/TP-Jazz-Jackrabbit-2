@@ -7,7 +7,11 @@
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
-#define PLAYER_IMG "../client_src/resources/characters/Jazz.png"
+
+#define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
+#define LORI_IMG "../client_src/resources/characters/Lori.png"
+#define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
+
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
 #define ITEMS_IMG "../client_src/resources/items/items.png"
 #define GAME_TITLE "Juego"
@@ -18,11 +22,11 @@
 #include <algorithm>
 #include <exception>
 #include <iostream>
+#include <map>
 #include <string>
 
-#include <map>
-
 #include <SDL2pp/SDL2pp.hh>
+
 #include "../client_src/client_animation.h"
 #include "../client_src/client_shifting_drawable.h"
 
@@ -40,7 +44,8 @@ using SDL2pp::Window;
 
 int x_counter = 10;
 
-void handle_events(bool &game_running, bool &player_running, int &score, ShiftingDrawable &player) {
+void handle_events(bool& game_running, bool& player_running, int& score, ShiftingDrawable& jazz,
+                   ShiftingDrawable& spaz, ShiftingDrawable& lori) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -50,32 +55,46 @@ void handle_events(bool &game_running, bool &player_running, int &score, Shiftin
     const Uint8* state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
 
-    }
-    else if(state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
+    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
 
-    }
-    else if(state[SDL_SCANCODE_RIGHT]) {
+    } else if (state[SDL_SCANCODE_RIGHT]) {
         player_running = true;
         score++;
-        player.setPosition(++x_counter, 10);
-        player.setAnimation("Walk");
-    }
-    else if (state[SDL_SCANCODE_LEFT]) {
-        player.setPosition(--x_counter, 10);
-        player.setAnimation("Walk");
-    }
-    else if (state[SDL_SCANCODE_UP]) {
 
-    }
-    else if (state[SDL_SCANCODE_DOWN]) {
+        jazz.setPosition(++x_counter, 10);
+        jazz.setAnimation("Run");
+        jazz.setDirection(1);
 
-    }
-    else if (state[SDL_SCANCODE_ESCAPE]) {
+        spaz.setPosition(++x_counter, 100);
+        spaz.setAnimation("Run");
+        spaz.setDirection(1);
+
+        lori.setPosition(++x_counter, 200);
+        lori.setAnimation("Run");
+        lori.setDirection(1);
+    } else if (state[SDL_SCANCODE_LEFT]) {
+        jazz.setPosition(--x_counter, 10);
+        jazz.setAnimation("Run");
+        jazz.setDirection(-1);
+
+        spaz.setPosition(--x_counter, 100);
+        spaz.setAnimation("Run");
+        spaz.setDirection(-1);
+
+        lori.setPosition(--x_counter, 200);
+        lori.setAnimation("Run");
+        lori.setDirection(-1);
+    } else if (state[SDL_SCANCODE_UP]) {
+
+    } else if (state[SDL_SCANCODE_DOWN]) {
+
+    } else if (state[SDL_SCANCODE_ESCAPE]) {
         game_running = false;
-    }
-    else {
+    } else {
         player_running = false;
-        player.setAnimation("Idle");
+        jazz.setAnimation("Idle");
+        spaz.setAnimation("Idle");
+        lori.setAnimation("Idle");
     }
 }
 
@@ -107,9 +126,10 @@ int main() try {
     // but we need transparency, use helper surface for which set color key
     // to color index 0 -> black background on image will be transparent on our
     // texture
-    SDL_Color colorKey = {44, 102, 150, 255}; // Color en formato RGBA
-    Surface surface(PLAYER_IMG);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE, SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
+    SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
+    Surface surface(JAZZ_IMG);
+    SDL_SetColorKey(surface.Get(), SDL_TRUE,
+                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
     Texture sprites(renderer, surface);
 
     // Enable alpha blending for the sprites
@@ -119,21 +139,31 @@ int main() try {
     Font font(FONT, 12);
 
     // A testing player
-    ShiftingDrawable player(10,10,64,64,renderer,PLAYER_IMG,colorKey);
-    player.loadAnimations("../external/animations/jazz.yml");
+    ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey);
+    jazz.loadAnimations("../external/animations/jazz.yml");
 
-    SDL_Color itemsColorKey = {0,128,255,1};
-    ShiftingDrawable coin(80,15,32,32,renderer,ITEMS_IMG,itemsColorKey);
-    ShiftingDrawable diamond(150,15,32,32,renderer,ITEMS_IMG,itemsColorKey);
+    // Another testing player
+    ShiftingDrawable spaz(10, 100, 64, 64, renderer, SPAZ_IMG, colorKey);
+    spaz.loadAnimations("../external/animations/spaz.yml");
 
+    // A third one
+    ShiftingDrawable lori(10, 200, 64, 64, renderer, LORI_IMG, colorKey);
+    lori.loadAnimations("../external/animations/lori.yml");
+
+    // A coin and a diamond
+    SDL_Color itemsColorKey = {0, 128, 255, 1};
+
+    ShiftingDrawable coin(80, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey);
     coin.loadAnimations("../external/animations/resources.yml");
+
+    ShiftingDrawable diamond(150, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey);
     diamond.loadAnimations("../external/animations/resources.yml");
 
     coin.setAnimation("Coin-flip");
     diamond.setAnimation("Diamond-flip");
 
     // Game state
-    bool running = true; // whether the game is running
+    bool running = true;      // whether the game is running
     bool is_running = false;  // whether the character is currently running
     int run_phase = -1;       // run animation phase
     float position = 0.0;     // player position
@@ -153,7 +183,7 @@ int main() try {
         //   quit the application
         // - If Right key is pressed, character would run
         // - If Right key is released, character would stop
-        handle_events(running, is_running, score, player);
+        handle_events(running, is_running, score, jazz, spaz, lori);
 
         // Update game state for this frame:
         // if character is runnung, move it to the right
@@ -171,14 +201,21 @@ int main() try {
 
         int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
 
-        player.update();
+        jazz.update();
+        spaz.update();
+        lori.update();
+
         coin.update();
         diamond.update();
 
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
-        player.render(renderer);
+
+        jazz.render(renderer);
+        spaz.render(renderer);
+        lori.render(renderer);
+
         coin.render(renderer);
         diamond.render(renderer);
 
@@ -205,8 +242,8 @@ int main() try {
                       SDL_FLIP_VERTICAL);  // vertical flip
 
         // Create text string to render
-        std::string text = "Score: " + std::to_string(score) +
-                           ", running: " + (is_running ? "true" : "false");
+        std::string text =
+                "Score: " + std::to_string(score) + ", running: " + (is_running ? "true" : "false");
 
         // Render the text into new texture. Note that SDL_ttf render
         // text into Surface, which is converted into texture on the fly
@@ -230,4 +267,3 @@ int main() try {
     std::cerr << e.what() << std::endl;
     return 1;
 }
-
