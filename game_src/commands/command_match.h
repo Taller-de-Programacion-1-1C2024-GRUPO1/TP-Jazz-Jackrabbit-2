@@ -6,7 +6,7 @@
 #include "command.h"
 
 // Comando que crea partidas (se usaría en un futuro probablemente)
-class MatchCommand: public Command {
+class Match: public Command {
 private:
     int type;
     int nrPlayers;
@@ -15,15 +15,14 @@ private:
     int commandType = COMMAND_MATCH;
 
 public:
-    MatchCommand(int type, int nrPlayers, std::string match, std::string map);
-    ~MatchCommand();
-    void send(Protocol& protocol) override;
-    int getPlayerId() override;
+    Match(int type, int nrPlayers, std::string match, std::string map);
+    ~Match();
+    int get_playerId() override;
     int getType();
     int getNrPlayers();
     std::string getMatchName();
     std::string getMapName();
-    int getCommandType() override;
+    int get_commandType() override;
 };
 
 #endif

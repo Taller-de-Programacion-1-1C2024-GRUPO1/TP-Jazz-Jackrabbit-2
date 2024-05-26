@@ -1,9 +1,7 @@
 #include "client.h"
 
-
 Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)) {}
-
 
 void Client::run() {
     std::string line;
@@ -38,7 +36,6 @@ bool Client::action_handler(std::pair<uint8_t, int> result) {
     }
 }
 
-
 void Client::read_handler(int num_msgs_to_read) {
     for (int i = 0; i < num_msgs_to_read; i++) {
         Message msg;
@@ -56,6 +53,5 @@ void Client::read_handler(int num_msgs_to_read) {
                   << std::endl;
     }
 }
-
 
 Client::~Client() { this->protocol.~ClientProtocol(); }

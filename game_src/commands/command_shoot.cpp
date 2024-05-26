@@ -2,19 +2,15 @@
 
 Shoot::Shoot(int id, int dir): Command(id), playerID(id), dir(dir) {}
 
-bool Shoot::executeCommand(bool* cheatOn, bool& needsMove) {
+bool Shoot::execute_Command(bool* cheatOn, bool& needsMove) {
     // game_world.shootPlayer(this->playerID, this->dir);
     return needsMove;
 }
 
-void Shoot::send(Protocol& protocol) {
-    // protocol.sendCommand(this);
-}
+int Shoot::get_playerId() { return this->playerID; }
 
-int Shoot::getPlayerId() { return this->playerID; }
+int Shoot::get_dir() { return this->dir; }
 
-int Shoot::getDir() { return this->dir; }
-
-int Shoot::getCommandType() { return this->commandType; }
+int Shoot::get_commandType() { return this->commandType; }
 
 Shoot::~Shoot() {}

@@ -29,6 +29,18 @@ struct Message {
 
 // ----------------- Generic Constants -----------------
 
+enum /*Senders*/ {
+    READ_MAP = 0,
+    READ_INFO,
+    SEND_COMMAND,
+    SEND_COMMAND_CHEAT,
+    SEND_COMMAND_MATCH,
+    SEND_COMMAND_JUMP,
+    SEND_COMMAND_SHOOT,
+    SEND_COMMAND_MOVE,
+    SEND_COMMAND_MOVE_FASTER,
+};
+
 enum /*Direction*/ {
     LEFT_DIR = 0,
     RIGHT_DIR,

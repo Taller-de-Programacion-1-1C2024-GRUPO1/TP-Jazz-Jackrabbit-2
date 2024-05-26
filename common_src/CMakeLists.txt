@@ -19,4 +19,4 @@ add_library(common_lib ${common_src_files} ${snapshots_files})
 target_include_directories(common_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/snapshots")
 
 # Link libraries (if applicable)
-target_link_libraries(common_lib yaml-cpp)
+target_link_libraries(common_lib yaml-cpp game_lib)
