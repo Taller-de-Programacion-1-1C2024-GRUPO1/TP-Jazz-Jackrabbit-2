@@ -2,11 +2,11 @@
 #define PHYSICAL_MAP_H
 
 #include <math.h>
-#include "../game_src/entities/character.h"
 
+#include "../game_src/entities/character.h"
 #include "SDL2/SDL.h"
-#define MAP_HEIGHT 15  // 64
-#define MAP_WIDTH 15   // 128
+#define MAP_HEIGHT 25  // 64
+#define MAP_WIDTH 25   // 128
 
 #define BLOCK_DIVISION 32  // Lado de un bloque mapa
 

@@ -1,8 +1,8 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "../../physics_src/physical_objects.h"
 #include "../../physics_src/physical_map.h"
+#include "../../physics_src/physical_objects.h"
 
 class Enemy: public Character {
 private:
@@ -13,6 +13,7 @@ public:
     Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map);
     // RENDER
     void render(SDL_Renderer* renderer);
+    void update();
 };
 
 #endif

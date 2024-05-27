@@ -1,13 +1,6 @@
 #include "character.h"
 
-Character::Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health):
-        PhysicalObject(width, height, init_pos_x, init_pos_y),
-            map(map),
-            health(health),
-            on_floor(false),
-            on_roof(false),
-            on_left_wall(false),
-            on_right_wall(false) {}
+#include "../../physics_src/physical_map.h"
 
 // COLISIONES CON MAPA
 void Character::check_colision_with_map() {
@@ -23,9 +16,24 @@ void Character::is_on_left_wall() { on_left_wall = true; }
 
 void Character::is_on_right_wall() { on_right_wall = true; }
 
+void Character::is_on_left_slope() {
+    on_left_slope = true;
+    if (pos_x % BLOCK_DIVISION >= pos_y % BLOCK_DIVISION) {
+        on_floor = true;
+    }
+}
+void Character::is_on_right_slope() {
+    on_right_slope = true;
+    if (pos_x % BLOCK_DIVISION >= pos_y % BLOCK_DIVISION) {
+        on_floor = true;
+    }
+}
+
 void Character::reset_map_colision_flags() {
     on_floor = false;
     on_roof = false;
     on_left_wall = false;
     on_right_wall = false;
+    on_left_slope = false;
+    on_right_slope = false;
 }

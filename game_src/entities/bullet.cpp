@@ -1,10 +1,9 @@
 #include "bullet.h"
 
 Bullet::Bullet(int init_pos_x, int init_pos_y, int bullet_speed, int damage):
-            PhysicalObject(BLOCK_DIVISION, BLOCK_DIVISION / 4, init_pos_x, init_pos_y),
-            damage(damage) {
-        spe_x = bullet_speed;
-    }
+        PhysicalObject(BLOCK_DIVISION, BLOCK_DIVISION / 4, init_pos_x, init_pos_y), damage(damage) {
+    spe_x = bullet_speed;
+}
 
 void Bullet::update() { pos_x += spe_x * DELTA_TIME; }
 

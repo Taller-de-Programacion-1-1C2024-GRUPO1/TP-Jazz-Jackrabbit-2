@@ -1,14 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "character.h"
 #include <queue>
 
-#define MAX_FALLING_SPEED 10
+#include "character.h"
+#define MAX_FALLING_SPEED 15
 #define PLAYER_SIDE BLOCK_DIVISION * 2
 #define PLAYER_INITIAL_HEALTH 100
 #define PLAYER_SPEED 5
-#define JUMPING_INITIAL_SPEED 10
+#define JUMPING_INITIAL_SPEED 20
 
 // TESTING
 enum EVENTS {
@@ -36,6 +36,7 @@ enum ACTIONS {
 };
 enum DIRECTIONS { LEFT, RIGHT };
 
+
 class Player: public Character {
 private:
     int action;
@@ -49,8 +50,11 @@ public:
     Player(int init_pos_x, int init_pos_y, PhysicalMap& map);
     void update();
     void update_state();
+    void update_position();
 
     // EVENTS
+    void handle_events();
+
     void jump();
     void run_right();
     void run_fast_right();
