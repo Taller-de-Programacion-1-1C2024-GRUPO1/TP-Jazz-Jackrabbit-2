@@ -13,7 +13,7 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    ClientLobby(QWidget* parent = nullptr);
+    explicit ClientLobby(QWidget* parent = nullptr);
     ~ClientLobby();
 
 private:

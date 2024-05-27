@@ -1,10 +1,15 @@
-project(Jazz)
+project(JazzClient)
 
 # Buscar paquetes de Qt5
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-FILE(GLOB client_src_files "*.cpp"  "*.h")
-FILE(GLOB qt_src_files "/QT/*.cpp" "/QT/*.h" "/QT/*.ui")
+# Activar AUTOUIC, AUTOMOC y AUTORCC
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+file(GLOB client_src_files "*.cpp" "*.h")
+file(GLOB qt_src_files "QT/*.cpp" "QT/*.h" "QT/*.ui")
 
 
 # PREGUNTAR
