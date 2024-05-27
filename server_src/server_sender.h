@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "../common_src/constants.h"
-#include "../common_src/constants.h"
 #include "../common_src/protected_list_of_queues.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
