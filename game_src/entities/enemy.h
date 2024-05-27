@@ -1,8 +1,12 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
+#include "../../physics_src/constants_physics.h"
 #include "../../physics_src/physical_map.h"
 #include "../../physics_src/physical_objects.h"
+#include "../constants_game.h"
+
+#include "character.h"
 
 class Enemy: public Character {
 private:

@@ -15,6 +15,10 @@
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
+#include "../game_src/entities/bullet.h"
+#include "../game_src/entities/character.h"
+#include "../game_src/entities/item.h"
+#include "../game_src/entities/player.h"
 #include "snapshots/snapshot.h"
 
 #include "common_errors.h"
@@ -58,19 +62,19 @@ private:
 
     void send_dimensions(const Snapshot& snapshot);
 
-    void send_rabbits(const Snapshot& snapshot);
+    void send_rabbits(Snapshot& snapshot);
 
-    void send_projectiles(const Snapshot& snapshot);
+    void send_projectiles(Snapshot& snapshot);
 
-    void send_supplies(const Snapshot& snapshot);
+    void send_supplies(Snapshot& snapshot);
 
-    void receive_dimensions(const Snapshot& snapshot);
+    void receive_dimensions(Snapshot& snapshot);
 
-    void receive_rabbits(const Snapshot& snapshot);
+    void receive_rabbits(Snapshot& snapshot);
 
-    void receive_projectiles(const Snapshot& snapshot);
+    void receive_projectiles(Snapshot& snapshot);
 
-    void receive_supplies(const Snapshot& snapshot);
+    void receive_supplies(Snapshot& snapshot);
 
 public:
     // Constructor para el cliente
@@ -85,7 +89,7 @@ public:
     std::shared_ptr<Command> receive_Command();
 
     // Envia un Snapshot
-    void send_Snapshot(const Snapshot& snapshot);
+    void send_Snapshot(Snapshot& snapshot);
 
     // ------------------- Funciones para Client -------------------
 

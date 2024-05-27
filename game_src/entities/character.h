@@ -6,9 +6,6 @@
 
 class PhysicalMap;
 
-// FISIC
-#define GRAVITY 1
-
 class Character: public PhysicalObject {
 
 protected:

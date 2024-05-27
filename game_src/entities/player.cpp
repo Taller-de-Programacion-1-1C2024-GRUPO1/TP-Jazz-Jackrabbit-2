@@ -4,7 +4,7 @@ Player::Player(int init_pos_x, int init_pos_y, PhysicalMap& map):
         Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
         action(STAND),
         acc_y(GRAVITY),
-        direction(LEFT) {}
+        direction(LEFT_DIR) {}
 
 void Player::update() {
     check_colision_with_map();
@@ -60,9 +60,9 @@ void Player::update() {
 void Player::update_state() {
     // DIRECCION
     if (spe_x > 0) {
-        direction = RIGHT;
+        direction = RIGHT_DIR;
     } else if (spe_x < 0) {
-        direction = LEFT;
+        direction = LEFT_DIR;
     }
 
     // CAMBIO DE ACCION
@@ -120,14 +120,14 @@ void Player::run_fast_right() {
     }
 }
 
-// LEFT
+// LEFT_DIR
 void Player::run_left() {
     if (!on_left_wall) {
         spe_x = -PLAYER_SPEED;
     }
 }
 
-// LEFT SPRINT
+// LEFT_DIR SPRINT
 void Player::run_fast_left() {
     if (on_floor && !on_left_wall) {
         spe_x = -(PLAYER_SPEED * 2);

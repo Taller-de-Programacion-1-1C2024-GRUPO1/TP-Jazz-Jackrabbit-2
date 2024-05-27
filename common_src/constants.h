@@ -54,12 +54,6 @@ enum /*MATCH TYPE*/ {
     REFRESH,
 };
 
-enum action {
-    STANDING,  // 0
-    MOVING,    // 1
-    JUMPING,   // 2
-};
-
 enum /*GAME TYPE*/ {
     GAME_MAP = 0,
     GAME_INFO,

@@ -3,6 +3,10 @@
 
 #include <queue>
 
+#include "../../physics_src/constants_physics.h"
+#include "../common_src/constants.h"
+#include "../constants_game.h"
+
 #include "character.h"
 
 #define MAX_FALLING_SPEED 10
@@ -21,21 +25,6 @@ enum EVENTS {
     EVENT_SHOOT,
     EVENT_SPECIAL_ATTACK
 };
-
-// PLAYER CONSTANTS
-enum ACTIONS {
-    STAND,
-    RUN,
-    RUN_FAST,
-    JUMPING,
-    FALLING,
-    JUMP_FORWARD,
-    FALL_FORWARD,
-    SHOOT,
-    SPECIAL_ATTACK,
-    DIE
-};
-enum DIRECTIONS { LEFT, RIGHT };
 
 class Player: public Character {
 private:

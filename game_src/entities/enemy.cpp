@@ -1,7 +1,5 @@
 #include "enemy.h"
 
-#define ENEMY_INITIAL_HEALTH 100
-
 Enemy::Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map):
         Character(/*ANCHO ENEMIGO*/ BLOCK_DIVISION * 2, /*ALTO ENEMIGO*/ BLOCK_DIVISION, init_pos_x,
                   init_pos_y, map, /*VIDA ENEMIGO*/ ENEMY_INITIAL_HEALTH),
