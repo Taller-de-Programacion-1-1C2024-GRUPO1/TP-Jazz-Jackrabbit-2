@@ -1,5 +1,5 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef CLIENTMANAGER_H
+#define CLIENTMANAGER_H
 
 #include <fstream>
 #include <string>
@@ -15,7 +15,7 @@
 #include "client_sender.h"
 
 
-class Client {
+class ClientManager {
 private:
     Protocol protocol;
     Parser parser;
@@ -28,11 +28,12 @@ private:
     void read_handler(int num_msgs_to_read);
 
 public:
-    Client(const std::string& host, const std::string& service);
+    ClientManager(const std::string& host, const std::string& service);
+
 
     void run();
 
-    //~Client();
+    ~ClientManager();
 };
 
 #endif

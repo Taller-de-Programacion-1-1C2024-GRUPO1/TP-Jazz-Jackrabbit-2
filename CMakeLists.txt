@@ -13,6 +13,7 @@ include_directories(${SDL2PP_INCLUDE_DIRS})
 add_subdirectory(server_src)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
+add_subdirectory(physics_src)
 add_subdirectory(game_src)
 
 add_executable(jazz_server server_main.cpp)
@@ -62,15 +63,5 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/common_src
 )
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
-DESTINATION /var/jazz
+        DESTINATION /var/jazz
 )
-
-#PARA TESTS
-
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/tests
-#        DESTINATION /var/jazz
-#)
-
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/cmake
-#        DESTINATION /var/jazz
-#)

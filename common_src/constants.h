@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <cstdint>
+
 #define LOOP_TIME 200
 #define NUM_OF_ENEMIES 5
 
@@ -52,12 +54,6 @@ enum /*MATCH TYPE*/ {
     NEW_MATCH = 0,
     JOIN,
     REFRESH,
-};
-
-enum action {
-    STANDING,  // 0
-    MOVING,    // 1
-    JUMPING,   // 2
 };
 
 enum /*GAME TYPE*/ {

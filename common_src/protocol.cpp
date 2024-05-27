@@ -202,23 +202,72 @@ std::shared_ptr<Command> Protocol::receive_Command() {
 
 void Protocol::send_dimensions(const Snapshot& snapshot) {
     std::cout << "Sending dimensions" << std::endl;
+    send_uintThirtyTwo(snapshot.map_dimensions.width);
+    send_uintThirtyTwo(snapshot.map_dimensions.height);
+    send_uintThirtyTwo(snapshot.map_dimensions.rabbit_amount);
+    send_uintThirtyTwo(snapshot.map_dimensions.rabbit_width);
+    send_uintThirtyTwo(snapshot.map_dimensions.rabbit_height);
 }
 
-void Protocol::send_rabbits(const Snapshot& snapshot) {
+void Protocol::send_rabbits(Snapshot& snapshot) {
     std::cout << "Sending rabbits" << std::endl;
+    // enviar la cantidad de conejos
+    send_uintEight(snapshot.rabbits.size());
+
+    // enviar cada conejo
+    for (auto& rabbit: snapshot.rabbits) {
+        send_char(rabbit.id);
+        send_uintThirtyTwo(rabbit.pos_x);
+        send_uintThirtyTwo(rabbit.pos_y);
+        send_uintThirtyTwo(rabbit.angle);
+        send_uintThirtyTwo(rabbit.max_health);
+        send_uintThirtyTwo(rabbit.health);
+        send_char(rabbit.direction);
+        send_uintThirtyTwo(rabbit.weapon);
+        send_uintThirtyTwo(rabbit.state);
+        send_uintThirtyTwo(rabbit.current_ammo);
+    }
 }
 
-
-void Protocol::send_projectiles(const Snapshot& snapshot) {
+void Protocol::send_projectiles(Snapshot& snapshot) {
     std::cout << "Sending projectiles" << std::endl;
+    // enviar la cantidad de proyectiles
+    send_uintEight(snapshot.projectiles.size());
+    // enviar cada proyectil
+    for (auto& projectile: snapshot.projectiles) {
+        // enviar cada atributo del proyectil
+        send_uintEight(projectile.type);
+        send_uintThirtyTwo(projectile.pos_x);
+        send_uintThirtyTwo(projectile.pos_y);
+        send_uintThirtyTwo(projectile.angle);
+        send_uintThirtyTwo(projectile.direction);
+        send_uintThirtyTwo(projectile.state);
+        send_char(projectile.id);
+        send_uintThirtyTwo(projectile.explosion_radius);
+        send_uintThirtyTwo(projectile.radius);
+        send_uintThirtyTwo(projectile.width);
+        send_uintThirtyTwo(projectile.height);
+    }
 }
 
-void Protocol::send_supplies(const Snapshot& snapshot) {
+void Protocol::send_supplies(Snapshot& snapshot) {
     std::cout << "Sending supplies" << std::endl;
+    // enviar la cantidad de suministros
+    send_uintEight(snapshot.supplies.size());
+    // enviar cada suministro
+    for (auto& supply: snapshot.supplies) {
+        send_uintEight(supply.type);
+        send_uintThirtyTwo(supply.pos_x);
+        send_uintThirtyTwo(supply.pos_y);
+        send_char(supply.id);
+        send_char(supply.state);
+        send_uintThirtyTwo(supply.width);
+        send_uintThirtyTwo(supply.height);
+    }
 }
 
 
-void Protocol::send_Snapshot(const Snapshot& snapshot) {
+void Protocol::send_Snapshot(Snapshot& snapshot) {
     send_dimensions(snapshot);
     send_rabbits(snapshot);
     send_projectiles(snapshot);
@@ -228,27 +277,90 @@ void Protocol::send_Snapshot(const Snapshot& snapshot) {
 
 // ----------------------------- RECEIVE SNAPSHOTS -----------------------------
 
-void Protocol::receive_dimensions(const Snapshot& snapshot) {
-    /*
+void Protocol::receive_dimensions(Snapshot& snapshot) {
+    std::cout << "Receiving dimensions" << std::endl;
+    // recibir y setear las dimensiones del mapa en el snapshot pasado por referencia
     uint32_t width = receive_uintThirtyTwo();
     uint32_t height = receive_uintThirtyTwo();
-    snapshot.set_dimensions(width, height);
-    */
+    uint32_t rabbit_ammount = receive_uintThirtyTwo();
+    uint32_t rabbit_width = receive_uintThirtyTwo();
+    uint32_t rabbit_height = receive_uintThirtyTwo();
+    snapshot.set_dimensions(width, height, rabbit_ammount, rabbit_width, rabbit_height);
 }
 
-void Protocol::receive_rabbits(const Snapshot& snapshot) {
+void Protocol::receive_rabbits(Snapshot& snapshot) {
     std::cout << "Receiving rabbits" << std::endl;
     // recibir y setear rabbits en el snapshot pasado por referencia
+    // recibir la cantidad de conejos
+    uint8_t rabbit_amount = receive_uintEight();
+    // recibir cada conejo
+    for (int i = 0; i < rabbit_amount; i++) {
+        // recibir cada atributo del conejo
+        char id = receive_char();
+        uint32_t pos_x = receive_uintThirtyTwo();
+        uint32_t pos_y = receive_uintThirtyTwo();
+        uint32_t angle = receive_uintThirtyTwo();
+        uint32_t max_health = receive_uintThirtyTwo();
+        uint32_t health = receive_uintThirtyTwo();
+        char direction = receive_char();
+        uint32_t weapon = receive_uintThirtyTwo();
+        uint32_t state = receive_uintThirtyTwo();
+        uint32_t current_ammo = receive_uintThirtyTwo();
+        // crear un RabbitSnapshot y agregarlo al vector de rabbits del snapshot
+        RabbitSnapshot rabbit = RabbitSnapshot(id, pos_x, pos_y, angle, max_health, health,
+                                               direction, weapon, state, current_ammo);
+        snapshot.rabbits.push_back(rabbit);
+    }
 }
 
-void Protocol::receive_projectiles(const Snapshot& snapshot) {
+void Protocol::receive_projectiles(Snapshot& snapshot) {
     std::cout << "Receiving projectiles" << std::endl;
     // recibir y setear projectiles en el snapshot pasado por referencia
+    // recibir la cantidad de proyectiles
+    uint8_t projectile_amount = receive_uintEight();
+    // recibir cada proyectil
+    for (int i = 0; i < projectile_amount; i++) {
+        // recibir cada atributo del proyectil
+        uint8_t type_receive = receive_uintEight();
+        uint32_t pos_x = receive_uintThirtyTwo();
+        uint32_t pos_y = receive_uintThirtyTwo();
+        uint32_t angle = receive_uintThirtyTwo();
+        uint32_t direction = receive_uintThirtyTwo();
+        uint32_t state_receive = receive_uintThirtyTwo();
+        char id = receive_char();
+        uint32_t explosion_radius = receive_uintThirtyTwo();
+        uint32_t radius = receive_uintThirtyTwo();
+        uint32_t width = receive_uintThirtyTwo();
+        uint32_t height = receive_uintThirtyTwo();
+        // crear un ProjectileSnapshot y agregarlo al vector de projectiles del snapshot
+        ProjectileSnapshot projectile =
+                ProjectileSnapshot(type_receive, pos_x, pos_y, angle, direction, radius,
+                                   state_receive, id, explosion_radius, width, height);
+        snapshot.projectiles.push_back(projectile);
+    }
 }
 
-void Protocol::receive_supplies(const Snapshot& snapshot) {
+void Protocol::receive_supplies(Snapshot& snapshot) {
     std::cout << "Receiving supplies" << std::endl;
     // recibir y setear supplies en el snapshot pasado por referencia
+    // recibir la cantidad de suministros
+    uint8_t supply_amount = receive_uintEight();
+    // recibir cada suministro
+    for (int i = 0; i < supply_amount; i++) {
+        // recibir cada atributo del suministro
+        uint8_t type_receive = receive_uintEight();
+        SupplyType type = static_cast<SupplyType>(type_receive);
+        uint32_t pos_x = receive_uintThirtyTwo();
+        uint32_t pos_y = receive_uintThirtyTwo();
+        char id = receive_char();
+        char state_receive = receive_char();
+        SupplyState state = static_cast<SupplyState>(state_receive);
+        uint32_t width = receive_uintThirtyTwo();
+        uint32_t height = receive_uintThirtyTwo();
+        // crear un SupplySnapshot y agregarlo al vector de supplies del snapshot
+        SupplySnapshot supply = SupplySnapshot(type, pos_x, pos_y, id, state, width, height);
+        snapshot.supplies.push_back(supply);
+    }
 }
 
 // Se recibe crea un Snapshot vacio y se le van agregando los elementos

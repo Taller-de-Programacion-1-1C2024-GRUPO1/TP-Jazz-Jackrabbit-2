@@ -10,7 +10,6 @@ bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-
 int Cheats::get_playerId() { return this->playerID; }
 
 int Cheats::getCheatID() { return this->cheatID; }
