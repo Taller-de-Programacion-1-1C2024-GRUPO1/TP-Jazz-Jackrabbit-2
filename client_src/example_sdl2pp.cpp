@@ -41,12 +41,15 @@ using SDL2pp::SDLTTF;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 using SDL2pp::Window;
+using SDL2pp::Chunk;
 
 int x_counter = 10;
+bool is_shooting = false;
 
-void handle_events(bool& game_running, bool& player_running, int& score, ShiftingDrawable& jazz,
+void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz,
                    ShiftingDrawable& spaz, ShiftingDrawable& lori) {
     SDL_Event event;
+    is_shooting = false;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             game_running = false;
@@ -58,7 +61,6 @@ void handle_events(bool& game_running, bool& player_running, int& score, Shiftin
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
 
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        player_running = true;
         score++;
 
         jazz.setPosition(++x_counter, 10);
@@ -72,7 +74,10 @@ void handle_events(bool& game_running, bool& player_running, int& score, Shiftin
         lori.setPosition(++x_counter, 200);
         lori.setAnimation("Run");
         lori.setDirection(1);
+
     } else if (state[SDL_SCANCODE_LEFT]) {
+        score--;
+
         jazz.setPosition(--x_counter, 10);
         jazz.setAnimation("Run");
         jazz.setDirection(-1);
@@ -84,14 +89,21 @@ void handle_events(bool& game_running, bool& player_running, int& score, Shiftin
         lori.setPosition(--x_counter, 200);
         lori.setAnimation("Run");
         lori.setDirection(-1);
+
     } else if (state[SDL_SCANCODE_UP]) {
 
     } else if (state[SDL_SCANCODE_DOWN]) {
+        jazz.setAnimation("Hurt");
 
     } else if (state[SDL_SCANCODE_ESCAPE]) {
         game_running = false;
-    } else {
-        player_running = false;
+    } else if (state[SDL_SCANCODE_S]) {
+        jazz.setAnimation("Shoot");
+        is_shooting = true;
+    } else if (state[SDL_SCANCODE_D]) {
+        jazz.setAnimation("Die");
+    }
+    else {
         jazz.setAnimation("Idle");
         spaz.setAnimation("Idle");
         lori.setAnimation("Idle");
@@ -127,16 +139,13 @@ int main() try {
     // to color index 0 -> black background on image will be transparent on our
     // texture
     SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
-    Surface surface(JAZZ_IMG);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE,
-                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
-    Texture sprites(renderer, surface);
-
-    // Enable alpha blending for the sprites
-    sprites.SetBlendMode(SDL_BLENDMODE_BLEND);
 
     // Load font, 12pt size
     Font font(FONT, 12);
+
+    //Sound effect
+    Chunk soundEffect("../client_src/resources/sounds/shooting.wav");
+    soundEffect.SetVolume(128);
 
     // A testing player
     ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey);
@@ -164,43 +173,26 @@ int main() try {
 
     // Game state
     bool running = true;      // whether the game is running
-    bool is_running = false;  // whether the character is currently running
-    int run_phase = -1;       // run animation phase
-    float position = 0.0;     // player position
     int score = 0;            // player score
 
-    unsigned int prev_ticks = SDL_GetTicks();
+
+    const int FPS = 60;
+    const int frameDelay = 1000 / FPS;
+    Uint32 frameStart;
+    int frameTime;
+
     // Main loop
     while (running) {
-        // Timing: calculate difference between this and previous frame
-        // in milliseconds
-        unsigned int frame_ticks = SDL_GetTicks();
-        unsigned int frame_delta = frame_ticks - prev_ticks;
-        prev_ticks = frame_ticks;
+        frameStart = SDL_GetTicks();
 
         // Event processing:
         // - If window is closed, or Q or Escape buttons are pressed,
         //   quit the application
         // - If Right key is pressed, character would run
         // - If Right key is released, character would stop
-        handle_events(running, is_running, score, jazz, spaz, lori);
+        handle_events(running, score, jazz, spaz, lori);
 
-        // Update game state for this frame:
-        // if character is runnung, move it to the right
-        if (is_running) {
-            position += frame_delta * 0.2;
-            run_phase = (frame_ticks / 100) % 8;
-        } else {
-            run_phase = 0;
-        }
-
-        // If player passes past the right side of the window, wrap him
-        // to the left side
-        if (position > renderer.GetOutputWidth())
-            position = -50;
-
-        int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
-
+        //UPDATE ENTITIES
         jazz.update();
         spaz.update();
         lori.update();
@@ -213,51 +205,32 @@ int main() try {
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         jazz.render(renderer);
+        if (is_shooting) {
+	        mixer.PlayChannel(-1, soundEffect);
+	        SDL_Delay(200);
+	        mixer.HaltChannel(-1);
+        }
+
         spaz.render(renderer);
         lori.render(renderer);
 
         coin.render(renderer);
         diamond.render(renderer);
 
-        // Pick sprite from sprite atlas based on whether
-        // player is running and run animation phase
-        int src_x = 8, src_y = 11;  // by default, standing sprite
-        if (is_running) {
-            // one of 8 run animation sprites
-            src_x = 8 + 51 * run_phase;
-            src_y = 67;
-        }
-
-        // Draw player sprite
-        sprites.SetAlphaMod(255);  // sprite is fully opaque
-        renderer.Copy(sprites, Rect(src_x, src_y, 25, 50),
-                      Rect((int)position, vcenter - 50, 50, 50));
-
-        // Draw the same sprite, below the first one, 50% transparent and
-        // vertically flipped. It'll look like reflection in the mirror
-        sprites.SetAlphaMod(127);  // 50% transparent
-        renderer.Copy(sprites, Rect(src_x, src_y, 50, 50), Rect((int)position, vcenter, 50, 50),
-                      0.0,                 // don't rotate
-                      NullOpt,             // rotation center - not needed
-                      SDL_FLIP_VERTICAL);  // vertical flip
-
         // Create text string to render
         std::string text =
-                "Score: " + std::to_string(score) + ", running: " + (is_running ? "true" : "false");
-
-        // Render the text into new texture. Note that SDL_ttf render
-        // text into Surface, which is converted into texture on the fly
-        Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-
-        // Copy texture into top-left corner of the window
-        renderer.Copy(text_sprite, NullOpt,
-                      Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+                "Score: " + std::to_string(score);
 
         // Show rendered frame
         renderer.Present();
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        SDL_Delay(1);
+        frameTime = SDL_GetTicks() - frameStart;
+
+        if (frameDelay > frameTime)
+        {
+            SDL_Delay(frameDelay - frameTime);
+        }
     }
 
     // Here all resources are automatically released and libraries deinitialized
