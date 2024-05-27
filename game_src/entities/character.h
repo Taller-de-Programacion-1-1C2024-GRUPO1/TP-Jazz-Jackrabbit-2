@@ -1,8 +1,8 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "../../physics_src/physical_objects.h"
 #include "../../physics_src/physical_map.h"
+#include "../../physics_src/physical_objects.h"
 
 class PhysicalMap;
 
@@ -22,7 +22,7 @@ protected:
 
 public:
     Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health);
-            
+
 
     void receive_damage(int damage) { health -= damage; }
 

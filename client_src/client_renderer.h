@@ -8,7 +8,6 @@
 
 #include "client_manager.h"
 
-
 class ClientRenderer {
 private:
     ClientManager manager;

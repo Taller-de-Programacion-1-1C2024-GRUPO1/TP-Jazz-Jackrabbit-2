@@ -1,8 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "character.h"
 #include <queue>
+
+#include "character.h"
 
 #define MAX_FALLING_SPEED 10
 #define PLAYER_SIDE BLOCK_DIVISION * 2

@@ -18,7 +18,7 @@ public:
     void check_colision(Character& character);
 
 
-    -->>> aca estarías especificando para cada uno de los objetos que colisiona con el bullet. 
+    -->>> aca estarías especificando para cada uno de los objetos que colisiona con el bullet.
     -->>> No es necesario, ya que el objeto base ya tiene la función check_colision (creo)
 
     void check_colision (Player& player){
@@ -28,7 +28,7 @@ public:
     void check_colision (Enemy& enemy){
         enemy.check_colision_with_bullet(pos_x, pos_y, width, height, damage);
     };
-    
+
     */
 };
 

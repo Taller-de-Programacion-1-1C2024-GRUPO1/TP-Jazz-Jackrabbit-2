@@ -40,7 +40,16 @@ void Player::update() {
 
     update_state();
 
-    printf(action == STAND ? "STAND\n" : action == RUN ? "RUN\n" : action == RUN_FAST ? "RUN_FAST\n" : action == JUMPING ? "JUMPING\n" : action == FALLING ? "FALLING\n" : action == JUMP_FORWARD ? "JUMP_FORWARD\n" : action == FALL_FORWARD ? "FALL_FORWARD\n" : action == SHOOT ? "SHOOT\n" : action == SPECIAL_ATTACK ? "SPECIAL_ATTACK\n" : "DIE\n");
+    printf(action == STAND          ? "STAND\n" :
+           action == RUN            ? "RUN\n" :
+           action == RUN_FAST       ? "RUN_FAST\n" :
+           action == JUMPING        ? "JUMPING\n" :
+           action == FALLING        ? "FALLING\n" :
+           action == JUMP_FORWARD   ? "JUMP_FORWARD\n" :
+           action == FALL_FORWARD   ? "FALL_FORWARD\n" :
+           action == SHOOT          ? "SHOOT\n" :
+           action == SPECIAL_ATTACK ? "SPECIAL_ATTACK\n" :
+                                      "DIE\n");
     // ACTUALIZA POSICIONES
     pos_x += spe_x;
     pos_y += spe_y;
@@ -48,7 +57,7 @@ void Player::update() {
     spe_x = 0;
 }
 
-void Player::update_state(){
+void Player::update_state() {
     // DIRECCION
     if (spe_x > 0) {
         direction = RIGHT;
@@ -57,9 +66,9 @@ void Player::update_state(){
     }
 
     // CAMBIO DE ACCION
-    if (!on_floor){
-        if(spe_y > 0){
-            if (spe_x != 0){
+    if (!on_floor) {
+        if (spe_y > 0) {
+            if (spe_x != 0) {
                 action = FALL_FORWARD;
             } else {
                 action = FALLING;
@@ -75,7 +84,7 @@ void Player::update_state(){
         action = STAND;
     }
 
-    //action = RUN_FAST;
+    // action = RUN_FAST;
 }
 
 void Player::render(SDL_Renderer* renderer) {

@@ -31,9 +31,9 @@ bool ClientManager::action_handler(std::pair<uint8_t, int> result) {
         read_handler(result.second);
         return true;
     } else if (result.first == ATACK) {
-        //if (this->protocol.send_byte(result.first)) {
-        //    return true;
-        //}
+        // if (this->protocol.send_byte(result.first)) {
+        //     return true;
+        // }
         std::cout << "Error al enviar el byte o Server cerrado." << std::endl;
         return false;
     } else if (result.first == EXIT) {
@@ -46,6 +46,7 @@ bool ClientManager::action_handler(std::pair<uint8_t, int> result) {
 
 
 void ClientManager::read_handler(int num_msgs_to_read) {
+    /*
     for (int i = 0; i < num_msgs_to_read; i++) {
         Message msg;
         //this->protocol.get_msg(msg);
@@ -61,6 +62,7 @@ void ClientManager::read_handler(int num_msgs_to_read) {
         std::cout << msg.num_alive_enemies << " vivo(s) y " << msg.num_dead_enemies << " muerto(s)."
                   << std::endl;
     }
+    */
 }
 
 
