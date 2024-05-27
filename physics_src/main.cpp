@@ -9,9 +9,10 @@
 #include "../game_src/entities/player.h"
 #include "physical_map.h"
 
-// COMPILACION:
-//  g++ -g -std=c++17 *.cpp -I.include -o prog -lSDL2 -ldl
-//-L/path/to/sdl/library -lSDL2_image -L/path/to/sdl_image/library -lSDL2_mixer
+/* 
+FUERA DE ESTA CARPETA, EN LA PRINCIPAL:
+    g++ -g -std=c++17 game_src/entities/*.cpp physics_src/*.cpp -I. -o prog -lSDL2 -ldl
+*/
 
 bool running = true;
 
