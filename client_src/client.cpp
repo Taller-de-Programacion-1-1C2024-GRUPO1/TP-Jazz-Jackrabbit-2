@@ -31,9 +31,9 @@ bool Client::action_handler(std::pair<uint8_t, int> result) {
         read_handler(result.second);
         return true;
     } else if (result.first == ATACK) {
-        //if (this->protocol.send_byte(result.first)) {
-        //    return true;
-        //}
+        // if (this->protocol.send_byte(result.first)) {
+        //     return true;
+        // }
         std::cout << "Error al enviar el byte o Server cerrado." << std::endl;
         return false;
     } else if (result.first == EXIT) {
@@ -48,8 +48,8 @@ bool Client::action_handler(std::pair<uint8_t, int> result) {
 void Client::read_handler(int num_msgs_to_read) {
     for (int i = 0; i < num_msgs_to_read; i++) {
         Message msg;
-        //this->protocol.get_msg(msg);
-        // Imprimir el mensaje
+        // this->protocol.get_msg(msg);
+        //  Imprimir el mensaje
         std::cout << "Un enemigo ha ";
         if (msg.event_type == EVENT_DEAD_8) {
             std::cout << "muerto. ";

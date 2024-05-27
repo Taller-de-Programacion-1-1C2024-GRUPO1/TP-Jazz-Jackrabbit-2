@@ -2,6 +2,7 @@
 #define CLIENT_SHIFTING_DRAWABLE_H
 
 #include <map>
+#include <string>
 
 #include <SDL2pp/SDL2pp.hh>
 

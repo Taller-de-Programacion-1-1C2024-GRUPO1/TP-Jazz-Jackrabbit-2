@@ -11,6 +11,7 @@
 #define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
 #define LORI_IMG "../client_src/resources/characters/Lori.png"
 #define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
+#define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
 
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
 #define ITEMS_IMG "../client_src/resources/items/items.png"
@@ -28,8 +29,14 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../client_src/client_animation.h"
+#include "../client_src/client_hearts_banner.h"
 #include "../client_src/client_shifting_drawable.h"
+#include "../client_src/client_weapon_info.h"
 
+#include "client_number_images.h"
+
+
+using SDL2pp::Chunk;
 using SDL2pp::Font;
 using SDL2pp::Mixer;
 using SDL2pp::Music;
@@ -41,13 +48,13 @@ using SDL2pp::SDLTTF;
 using SDL2pp::Surface;
 using SDL2pp::Texture;
 using SDL2pp::Window;
-using SDL2pp::Chunk;
 
 int x_counter = 10;
+int ammo = 1000;
 bool is_shooting = false;
 
-void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz,
-                   ShiftingDrawable& spaz, ShiftingDrawable& lori) {
+void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, ShiftingDrawable& spaz,
+                   ShiftingDrawable& lori) {
     SDL_Event event;
     is_shooting = false;
     while (SDL_PollEvent(&event)) {
@@ -99,11 +106,11 @@ void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz,
         game_running = false;
     } else if (state[SDL_SCANCODE_S]) {
         jazz.setAnimation("Shoot");
+        ammo--;
         is_shooting = true;
     } else if (state[SDL_SCANCODE_D]) {
         jazz.setAnimation("Die");
-    }
-    else {
+    } else {
         jazz.setAnimation("Idle");
         spaz.setAnimation("Idle");
         lori.setAnimation("Idle");
@@ -143,7 +150,12 @@ int main() try {
     // Load font, 12pt size
     Font font(FONT, 12);
 
-    //Sound effect
+    // Heart banner
+    HeartsBanner banner(renderer);
+    WeaponInfo weaponInfo(renderer);
+    weaponInfo.setWeapon(0);
+
+    // Sound effect
     Chunk soundEffect("../client_src/resources/sounds/shooting.wav");
     soundEffect.SetVolume(128);
 
@@ -171,15 +183,31 @@ int main() try {
     coin.setAnimation("Coin-flip");
     diamond.setAnimation("Diamond-flip");
 
+    // ENEMIES
+
+    // Crab
+    ShiftingDrawable crab(10, 500, 32, 32, renderer, ENEMIES_IMG, itemsColorKey);
+    crab.loadAnimations("../external/animations/crab.yml");
+    crab.setAnimation("Walk");
+
+    // Tall guy
+    ShiftingDrawable lizard(10, 400, 64, 64, renderer, ENEMIES_IMG, itemsColorKey);
+    lizard.loadAnimations("../external/animations/lizard.yml");
+    lizard.setAnimation("Walk");
+
+    int enemie_x = 10;
+    int multiplier = 1;
+
     // Game state
-    bool running = true;      // whether the game is running
-    int score = 0;            // player score
+    bool running = true;  // whether the game is running
+    int score = 0;        // player score
 
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
     Uint32 frameStart;
     int frameTime;
+
 
     // Main loop
     while (running) {
@@ -191,8 +219,21 @@ int main() try {
         // - If Right key is pressed, character would run
         // - If Right key is released, character would stop
         handle_events(running, score, jazz, spaz, lori);
+        if (enemie_x > 700) {
+            crab.setDirection(-1);
+            lizard.setDirection(-1);
+            multiplier = -1;
+        }
+        if (enemie_x < 10) {
+            crab.setDirection(1);
+            lizard.setDirection(1);
+            multiplier = 1;
+        }
+        enemie_x += 1 * multiplier;
+        crab.setPosition(enemie_x, 500);
+        lizard.setPosition(enemie_x, 400);
 
-        //UPDATE ENTITIES
+        // UPDATE ENTITIES
         jazz.update();
         spaz.update();
         lori.update();
@@ -200,26 +241,35 @@ int main() try {
         coin.update();
         diamond.update();
 
+        crab.update();
+        lizard.update();
+
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         jazz.render(renderer);
         if (is_shooting) {
-	        mixer.PlayChannel(-1, soundEffect);
-	        SDL_Delay(200);
-	        mixer.HaltChannel(-1);
+            mixer.PlayChannel(-1, soundEffect);
+            SDL_Delay(200);
+            mixer.HaltChannel(-1);
         }
 
         spaz.render(renderer);
         lori.render(renderer);
 
+        crab.render(renderer);
+        lizard.render(renderer);
+
         coin.render(renderer);
         diamond.render(renderer);
 
+        banner.render();
+        weaponInfo.setAmmo(ammo);
+        weaponInfo.render();
+
         // Create text string to render
-        std::string text =
-                "Score: " + std::to_string(score);
+        std::string text = "Score: " + std::to_string(score);
 
         // Show rendered frame
         renderer.Present();
@@ -227,8 +277,7 @@ int main() try {
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
         frameTime = SDL_GetTicks() - frameStart;
 
-        if (frameDelay > frameTime)
-        {
+        if (frameDelay > frameTime) {
             SDL_Delay(frameDelay - frameTime);
         }
     }
