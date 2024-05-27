@@ -8,11 +8,12 @@ Client::Client(const std::string& host, const std::string& service):
 
 
 void Client::run(int argc, char* argv[]) {
+    // QT
     QApplication a(argc, argv);
     ClientLobby w;
     w.show();
     a.exec();
 
-    // 7. Run the SDL drawer (assuming it's independent of the main window thread)
+    // SDL
     drawer.run();
 }

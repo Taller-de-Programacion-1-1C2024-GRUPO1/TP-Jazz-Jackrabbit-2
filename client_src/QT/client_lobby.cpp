@@ -10,9 +10,19 @@ ClientLobby::~ClientLobby() { delete ui; }
 
 int first_number, seccond_number, result;
 
-void ClientLobby::on_btnPlus_clicked() {
-    first_number = ui->txtFirstNumber->toPlainText().toInt();
-    seccond_number = ui->txtSeccondNumber->toPlainText().toInt();
-    result = first_number + seccond_number;
-    ui->txtResult->setPlainText(QString::number(result));
+
+int create_match_code;
+void ClientLobby::on_btnCreate_clicked()
+{
+    create_match_code = ui->txtCreateMatchCode->toPlainText().toInt();
+
+    ui->txtAvailableMatches->setPlainText(QString::number(create_match_code));
+
 }
+
+int join_match_code;
+void ClientLobby::on_btnJoin_clicked()
+{
+    join_match_code = ui->txtJoinMatchCode->toPlainText().toInt();
+}
+
