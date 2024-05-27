@@ -6,19 +6,20 @@
 #include <unordered_map>
 #include <utility>
 
-#include "client_lobby.h"
+#include "QT/client_lobby.h"
 #include "client_renderer.h"
+
 
 
 class Client {
 private:
-    ClientLobby lobby;
+    //ClientLobby lobby;
     ClientRenderer renderer;
 
 public:
     Client(const std::string& host, const std::string& service);
 
-    void run();
+    void run(int argc, char* argv[]);
 
     //~Client();
 };
