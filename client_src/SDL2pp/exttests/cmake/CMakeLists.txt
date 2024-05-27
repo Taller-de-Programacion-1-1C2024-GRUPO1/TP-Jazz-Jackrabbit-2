@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+PROJECT(libSDL2pp)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-project(Test)
+FIND_PACKAGE(SDL2PP REQUIRED)
 
-find_package(SDL2pp REQUIRED)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(CMAKE_CXX_STANDARD 17)
-
-add_executable(cmake-ext-test ../../examples/sprites.cc)
-target_link_libraries(cmake-ext-test SDL2pp::SDL2pp)
+INCLUDE_DIRECTORIES(${SDL2PP_INCLUDE_DIRS})
+ADD_EXECUTABLE(cmake-ext-test ../../examples/sprites.cc)
+TARGET_LINK_LIBRARIES(cmake-ext-test ${SDL2PP_LIBRARIES})

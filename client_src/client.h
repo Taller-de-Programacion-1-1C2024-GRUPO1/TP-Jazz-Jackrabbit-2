@@ -1,33 +1,26 @@
-#ifndef CLIENTE_H
-#define CLIENTE_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
 #include <fstream>
 #include <string>
 #include <unordered_map>
 #include <utility>
 
-#include "../common_src/common_socket.h"
-#include "../common_src/constants.h"
+#include "client_lobby.h"
+#include "client_renderer.h"
 
-#include "client_parser.h"
-#include "client_protocol.h"
 
 class Client {
 private:
-    ClientProtocol protocol;
-    Parser parser;
-
-    bool action_handler(std::pair<uint8_t, int> result);
-    void read_handler(int num_msgs_to_read);
+    ClientLobby lobby;
+    ClientRenderer renderer;
 
 public:
     Client(const std::string& host, const std::string& service);
 
-    // Lee de entrada estandar, procesa la linea, envia informacion al servidor y recibe e imprime
-    // la respuesta
     void run();
 
-    ~Client();
+    //~Client();
 };
 
 #endif
