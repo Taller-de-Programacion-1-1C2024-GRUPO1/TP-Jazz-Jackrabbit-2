@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <cstdint>
+
 #define LOOP_TIME 200
 #define NUM_OF_ENEMIES 5
 
