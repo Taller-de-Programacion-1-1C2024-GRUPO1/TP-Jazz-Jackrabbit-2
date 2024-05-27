@@ -12,8 +12,7 @@
 
 /*
 FUERA DE ESTA CARPETA, EN LA PRINCIPAL:
-    g++ -g -std=c++17 game_src/entities/*.cpp game_src/*.cpp physics_src/*.cpp -I. -o prog -lSDL2
--ldl
+    g++ -g -std=c++17 game_src/entities/*.cpp game_src/*.cpp physics_src/*.cpp -I. -o prog.o -lSDL2 -ldl
 */
 bool running = true;
 
