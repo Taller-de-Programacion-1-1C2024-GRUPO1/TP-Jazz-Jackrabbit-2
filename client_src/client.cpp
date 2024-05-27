@@ -4,7 +4,7 @@
 
 
 Client::Client(const std::string& host, const std::string& service):
-        renderer(std::move(host), std::move(service)) {}
+        drawer(std::move(host), std::move(service)) {}
 
 
 void Client::run(int argc, char* argv[]) {
@@ -13,6 +13,6 @@ void Client::run(int argc, char* argv[]) {
     w.show();
     a.exec();
 
-    // 7. Run the SDL renderer (assuming it's independent of the main window thread)
-    renderer.run();
+    // 7. Run the SDL drawer (assuming it's independent of the main window thread)
+    drawer.run();
 }

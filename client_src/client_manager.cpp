@@ -12,14 +12,6 @@ ClientManager::ClientManager(const std::string& host, const std::string& service
 void ClientManager::run() {
     client_sender.start();
     client_receiver.start();
-    std::string line;
-    while (std::getline(std::cin, line)) {
-
-        if (this->protocol.is_close()) {
-            std::cout << "El servidor se ha desconectado." << std::endl;
-            break;
-        }
-    }
 }
 
 ClientManager::~ClientManager() {

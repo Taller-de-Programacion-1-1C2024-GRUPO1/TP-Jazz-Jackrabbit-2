@@ -16,6 +16,9 @@ public:
     explicit ClientLobby(QWidget* parent = nullptr);
     ~ClientLobby();
 
+private slots:
+    void on_btnPlus_clicked();
+
 private:
     Ui::ClientLobby* ui;
 };
