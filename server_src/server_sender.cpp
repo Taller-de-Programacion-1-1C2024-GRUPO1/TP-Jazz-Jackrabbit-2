@@ -24,6 +24,7 @@ void ServerSender::run() {
             break;
         }
     }
+    broadcaster_snapshots.delete_player(this->player_id);
     this->is_alive = false;
 }
 
