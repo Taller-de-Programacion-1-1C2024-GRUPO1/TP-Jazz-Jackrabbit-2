@@ -1,40 +1,25 @@
-#ifndef CLIENTE_H
-#define CLIENTE_H
+#ifndef CLIENT_H
+#define CLIENT_H
 
+#include <QApplication>
 #include <fstream>
 #include <string>
 #include <unordered_map>
 #include <utility>
 
-#include "../common_src/common_socket.h"
-#include "../common_src/constants.h"
-#include "../common_src/protocol.h"
-
-#include "client_parser.h"
-#include "client_receiver.h"
-#include "client_sender.h"
+#include "client_drawer.h"
 
 
 class Client {
 private:
-    Protocol protocol;
-    Parser parser;
-    Queue<Command> q_cmds;
-    Queue<Snapshot> q_snapshots;
-    ClientSender client_sender;
-    Client_Receiver client_receiver;
-
-    bool action_handler(std::pair<uint8_t, int> result);
-    void read_handler(int num_msgs_to_read);
+    ClientDrawer drawer;
 
 public:
     Client(const std::string& host, const std::string& service);
 
-    // Lee de entrada estandar, procesa la linea, envia informacion al servidor y recibe e imprime
-    // la respuesta
-    void run();
+    void run(int argc, char* argv[]);
 
-    ~Client();
+    //~Client();
 };
 
 #endif

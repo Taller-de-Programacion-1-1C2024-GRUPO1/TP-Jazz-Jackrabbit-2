@@ -12,6 +12,7 @@ ShiftingDrawable::ShiftingDrawable(int x, int y, int w, int h, SDL2pp::Renderer&
         w(w),
         h(h),
         texture(renderer, SDL2pp::Surface(path)),
+        currentAnimationName(""),
         angle(0),
         direction(0),
         mixer(mixer) {
