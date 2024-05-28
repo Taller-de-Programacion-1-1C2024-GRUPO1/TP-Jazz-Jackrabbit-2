@@ -17,11 +17,6 @@ void Player::start() {
     server_receiver.start();
 }
 
-void Player::join() {
-    server_sender.join();
-    server_receiver.join();
-}
-
 bool Player::is_dead() {
     if (server_sender.is_dead() && server_receiver.is_dead()) {
         return true;
@@ -34,7 +29,8 @@ void Player::kill() {
     this->client_cmds_queue.close();
     server_sender.kill();
     server_receiver.kill();
-    this->join();
+    server_sender.join();
+    server_receiver.join();
 }
 
 Player::~Player() {}

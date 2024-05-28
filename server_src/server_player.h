@@ -31,7 +31,6 @@ public:
            BroadcasterSnapshots& broadcaster_snapshots,
            Queue<std::shared_ptr<Command>>& client_cmds_queue);
     void start();
-    void join();
     Queue<std::shared_ptr<Snapshot>>& get_snapshots_queue();
     bool is_dead();
     void kill();
