@@ -176,23 +176,29 @@ int main() try {
     // A testing player
     ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey, &mixer);
     jazz.loadAnimations("../external/animations/jazz.yml");
+    SDL2pp::Point playerPosition(10, 10);
+    jazz.setCameraPosition(playerPosition);
 
     // Another testing player
     ShiftingDrawable spaz(10, 100, 64, 64, renderer, SPAZ_IMG, colorKey, &mixer);
     spaz.loadAnimations("../external/animations/spaz.yml");
+    spaz.setCameraPosition(playerPosition);
 
     // A third one
     ShiftingDrawable lori(10, 200, 64, 64, renderer, LORI_IMG, colorKey, &mixer);
     lori.loadAnimations("../external/animations/lori.yml");
+    lori.setCameraPosition(playerPosition);
 
     // A coin and a diamond
     SDL_Color itemsColorKey = {0, 128, 255, 1};
 
     ShiftingDrawable coin(80, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
     coin.loadAnimations("../external/animations/resources.yml");
+    coin.setCameraPosition(playerPosition);
 
     ShiftingDrawable diamond(150, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
     diamond.loadAnimations("../external/animations/resources.yml");
+    diamond.setCameraPosition(playerPosition);
 
     coin.setAnimation("Coin-flip");
     diamond.setAnimation("Diamond-flip");
@@ -207,11 +213,13 @@ int main() try {
     ShiftingDrawable crab(10, 500, 32, 32, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
     crab.loadAnimations("../external/animations/crab.yml");
     crab.setAnimation("Walk");
+    crab.setCameraPosition(playerPosition);
 
     // Tall guy
     ShiftingDrawable lizard(10, 400, 64, 64, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
     lizard.loadAnimations("../external/animations/lizard.yml");
     lizard.setAnimation("Walk");
+    lizard.setCameraPosition(playerPosition);
 
     int enemie_x = 10;
     int multiplier = 1;
@@ -251,22 +259,38 @@ int main() try {
         crab.setPosition(enemie_x, 500);
         lizard.setPosition(enemie_x, 400);
 
-        // UPDATE ENTITIES
-        jazz.update();
-        spaz.update();
-        lori.update();
-
+        playerPosition.x = x_counter;
         projectile.setPosition(enemie_x * 8, 40);
         if (!exploded && enemie_x * 8 > 600) {
             projectile.setAnimation("Explode");
             exploded = true;
         }
+        // std::cout << "Player position: " << playerPosition.x << ", " << playerPosition.y <<
+        // std::endl;
+
+        // UPDATE ENTITIES
+        jazz.updateCameraPosition(playerPosition);
+        jazz.update();
+
+        spaz.updateCameraPosition(playerPosition);
+        spaz.update();
+
+        lori.updateCameraPosition(playerPosition);
+        lori.update();
+
+        projectile.updateCameraPosition(playerPosition);
         projectile.update();
 
+        coin.updateCameraPosition(playerPosition);
         coin.update();
+
+        diamond.updateCameraPosition(playerPosition);
         diamond.update();
 
+        crab.updateCameraPosition(playerPosition);
         crab.update();
+
+        lizard.updateCameraPosition(playerPosition);
         lizard.update();
 
         // Clear screen

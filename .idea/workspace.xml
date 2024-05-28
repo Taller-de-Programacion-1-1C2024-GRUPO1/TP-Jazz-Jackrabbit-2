@@ -29,34 +29,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client_src/client_weapon_data.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/client_weapon_data.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/resources/projectiles/Projectiles.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/resources/sounds/auch.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/resources/sounds/dashing.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/resources/sounds/explosion.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/external/animations/projectiles/blue_ray.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/external/animations/projectiles/regular.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_animation.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_animation.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_animation.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_hearts_banner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_hearts_banner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_hearts_banner.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_hearts_banner.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_number_images.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_number_images.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_number_images.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_number_images.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_weapon_info.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_ammo_left.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_weapon_info.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_ammo_left.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/example_sdl2pp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/example_sdl2pp.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/resources/sounds/shooting.wav" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/resources/sounds/shooting.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.28.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/crab.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/crab.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/jazz.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/jazz.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/lizard.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/lizard.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/lori.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/lori.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/resources.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/resources.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/spaz.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/spaz.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +166,7 @@
       <workItem from="1716741618237" duration="2771000" />
       <workItem from="1716769236851" duration="5784000" />
       <workItem from="1716816411339" duration="30848000" />
-      <workItem from="1716904190569" duration="17411000" />
+      <workItem from="1716904190569" duration="21850000" />
     </task>
     <servers />
   </component>

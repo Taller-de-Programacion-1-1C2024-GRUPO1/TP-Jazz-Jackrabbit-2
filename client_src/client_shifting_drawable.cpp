@@ -44,8 +44,10 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
 }
 
 void ShiftingDrawable::render(SDL2pp::Renderer& renderer) {
-    destRect = SDL2pp::Rect(x, y, w, h);
-    renderer.Copy(texture, srcRect, destRect, angle, SDL2pp::Point(0, 0),
+    SDL2pp::Rect adjustedDestRect = {x, y, w, h};
+    adjustedDestRect.x -= cameraPosition.x;
+    adjustedDestRect.y -= cameraPosition.y;
+    renderer.Copy(texture, srcRect, adjustedDestRect, angle, SDL2pp::Point(0, 0),
                   direction == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
@@ -67,11 +69,40 @@ void ShiftingDrawable::setDirection(int dir) { direction = dir; }
 #include <fstream>
 
 void ShiftingDrawable::setAnimation(const char* name) {
+    if (name == currentAnimationName) {
+        return;
+    }
     currentAnimationName = name;
     std::ifstream file(animations[currentAnimationName].soundPath.c_str());
     if (file.good()) {
         SDL2pp::Chunk soundEffect(animations[currentAnimationName].soundPath.c_str());
         mixer->PlayChannel(-1, soundEffect);
-        SDL_Delay(200);
+        SDL_Delay(500);
+        mixer->HaltChannel(-1);
+    }
+}
+
+void ShiftingDrawable::setCameraPosition(const SDL2pp::Point& position) {
+    cameraPosition = position;
+}
+
+void ShiftingDrawable::updateCameraPosition(const SDL2pp::Point& playerPosition) {
+    cameraPosition = playerPosition;
+
+    // Clamp the camera position to the map boundaries
+    int mapWidth = 1000;
+    int mapHeight = 1000;
+
+    // Ensure the camera doesn't go outside the map boundaries
+    if (cameraPosition.x < 0) {
+        cameraPosition.x = 0;
+    } else if (cameraPosition.x + 800 > mapWidth) {
+        cameraPosition.x = mapWidth - 800;
+    }
+    if (cameraPosition.y < 0) {
+        cameraPosition.y = 0;
+
+    } else if (cameraPosition.y + 600 > mapHeight) {
+        cameraPosition.y = mapHeight - 600;
     }
 }

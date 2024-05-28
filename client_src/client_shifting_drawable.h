@@ -13,6 +13,7 @@ class ShiftingDrawable {
 private:
     int x, y, w, h;
     SDL2pp::Texture texture;
+    SDL2pp::Point cameraPosition;
     std::map<std::string, Animation> animations;  // Change this line
     const char* currentAnimationName;
     SDL2pp::Rect srcRect;
@@ -33,6 +34,9 @@ public:
     void setAngle(int angle);
     void setDirection(int dir);
     void setAnimation(const char* name);
+    void setCameraPosition(const SDL2pp::Point& cameraPosition);
+    void updateCameraPosition(const SDL2pp::Point& cameraPosition);
+
 
     //~ShiftingDrawable();
 };
