@@ -21,6 +21,8 @@ private slots:
 
     void on_btnJoin_clicked();
 
+    void on_btnError_clicked();
+
 private:
     Ui::ClientLobby* ui;
 };

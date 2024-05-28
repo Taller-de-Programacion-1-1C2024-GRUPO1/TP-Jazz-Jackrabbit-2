@@ -13,54 +13,48 @@
   <property name="windowTitle">
    <string>ClientLobby</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="Title">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>70</y>
-      <width>171</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>JAZZ JACK RABBIT 2</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelCreateMatch">
-    <property name="geometry">
-     <rect>
-      <x>100</x>
-      <y>140</y>
-      <width>121</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Create a match</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="labelCreateMatch_2">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>200</y>
-      <width>121</width>
-      <height>41</height>
+      <x>20</x>
+      <y>390</y>
+      <width>331</width>
+      <height>81</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>04b</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 04b;</string>
+    </property>
     <property name="text">
-     <string>Join a match</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Join a &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;match&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="txtCreateMatchCode">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>150</y>
-      <width>111</width>
-      <height>31</height>
+      <x>140</x>
+      <y>280</y>
+      <width>190</width>
+      <height>33</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
     </property>
     <property name="plainText">
      <string>4 digit code</string>
@@ -69,11 +63,19 @@
    <widget class="QPlainTextEdit" name="txtJoinMatchCode">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>200</y>
-      <width>111</width>
-      <height>31</height>
+      <x>140</x>
+      <y>430</y>
+      <width>190</width>
+      <height>33</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
     </property>
     <property name="plainText">
      <string>4 digit code</string>
@@ -82,11 +84,14 @@
    <widget class="QPushButton" name="btnCreate">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>150</y>
-      <width>89</width>
-      <height>25</height>
+      <x>340</x>
+      <y>280</y>
+      <width>90</width>
+      <height>33</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string>Create</string>
@@ -95,37 +100,54 @@
    <widget class="QPushButton" name="btnJoin">
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>200</y>
-      <width>89</width>
-      <height>25</height>
+      <x>340</x>
+      <y>430</y>
+      <width>90</width>
+      <height>33</height>
      </rect>
     </property>
     <property name="text">
      <string>Join</string>
     </property>
    </widget>
-   <widget class="QLabel" name="Title_2">
+   <widget class="QLabel" name="available_matches">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>260</y>
-      <width>171</width>
-      <height>21</height>
+      <x>520</x>
+      <y>200</y>
+      <width>231</width>
+      <height>91</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>04b</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 04b;</string>
+    </property>
     <property name="text">
-     <string>available matches</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;available&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;matches&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="txtAvailableMatches">
     <property name="geometry">
      <rect>
-      <x>200</x>
+      <x>520</x>
       <y>290</y>
-      <width>111</width>
-      <height>31</height>
+      <width>231</width>
+      <height>211</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
     </property>
     <property name="plainText">
      <string/>
@@ -134,6 +156,90 @@
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QLabel" name="labelGameTitle">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>04b</family>
+      <pointsize>45</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 04b;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Jazz Jack rabbit&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnError">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>520</y>
+      <width>89</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ERROR</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelBackGround">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>800</width>
+      <height>600</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/backgrounds/lobby.png)</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelCreateMatch_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>240</y>
+      <width>331</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>04b</family>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 04b;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Create a &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;match&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <zorder>labelBackGround</zorder>
+   <zorder>labelGameTitle</zorder>
+   <zorder>labelCreateMatch_3</zorder>
+   <zorder>labelCreateMatch_2</zorder>
+   <zorder>txtCreateMatchCode</zorder>
+   <zorder>txtJoinMatchCode</zorder>
+   <zorder>btnCreate</zorder>
+   <zorder>btnJoin</zorder>
+   <zorder>available_matches</zorder>
+   <zorder>txtAvailableMatches</zorder>
+   <zorder>btnError</zorder>
   </widget>
  </widget>
  <resources/>

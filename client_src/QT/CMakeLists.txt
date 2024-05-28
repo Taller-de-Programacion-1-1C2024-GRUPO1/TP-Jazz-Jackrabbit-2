@@ -12,11 +12,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+
 set(PROJECT_SOURCES
         main.cpp
         client_lobby.cpp
         client_lobby.h
         client_lobby.ui
+        resources.qrc  
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

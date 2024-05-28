@@ -1,0 +1,11 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/fonts">
+        <file alias="04B_30__.ttf">../resources/fonts/04B_30__.ttf</file>
+        <file alias="Jazz_Jackrabbit_2.ttf">../resources/fonts/Jazz_Jackrabbit_2.ttf</file>
+    </qresource>
+
+    <qresource prefix="/backgrounds">
+        <file alias="lobby.png">../resources/backgrounds/lobby.png</file>
+    </qresource>
+</RCC>
