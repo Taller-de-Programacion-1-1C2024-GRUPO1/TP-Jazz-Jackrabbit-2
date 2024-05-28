@@ -1,5 +1,5 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef RABBIT_H
+#define RABBIT_H
 
 #include <queue>
 
@@ -26,8 +26,9 @@ enum EVENTS {
     EVENT_SPECIAL_ATTACK
 };
 
-class Player: public Character {
+class Rabbit: public Character {
 private:
+    int id;
     int action;
     int direction;
     std::queue<int> events_queue;
@@ -36,7 +37,7 @@ private:
     const int acc_y;
 
 public:
-    Player(int init_pos_x, int init_pos_y, PhysicalMap& map);
+    Rabbit(int id, int init_pos_x, int init_pos_y, PhysicalMap& map);
     void update();
     void update_state();
 
@@ -60,6 +61,9 @@ public:
     void add_run_fast_right();
     void add_run_left();
     void add_run_fast_left();
+
+    // GETTERS
+    int get_id();
 };
 
 #endif

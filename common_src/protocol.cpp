@@ -8,7 +8,7 @@ Protocol::Protocol(const std::string& host, const std::string& service):
 Protocol::Protocol(Socket peer): socket(std::move(peer)), was_closed(false) {}
 
 
-// ----------------------------- SEND BYTES/STRING/CHAR -----------------------------
+// ----------------------------- SEND BYTES/STRING/CHAR/ACK -----------------------------
 
 void Protocol::send_uintEight(uint8_t num) {
     socket.sendall(&num, sizeof(num), &was_closed);
@@ -38,7 +38,13 @@ void Protocol::send_char(char c) {
     check_closed();
 }
 
-// ----------------------------- RECEIVE BYTES/STRINGS/CHAR -----------------------------
+void Protocol::send_user_joined_match(int ACK_JOINED) {
+    check_closed();
+    send_uintEight(ACK_JOINED_SUCCEED);
+    send_uintEight(ACK_JOINED);
+}
+
+// ----------------------------- RECEIVE BYTES/STRINGS/CHAR/ACK -----------------------------
 
 uint8_t Protocol::receive_uintEight() {
     uint8_t num;
@@ -75,6 +81,13 @@ char Protocol::receive_char() {
     check_closed();
     return c;
 }
+
+int Protocol::receive_user_joined_match() {
+    check_closed();
+    uint8_t ACK_JOINED = receive_uintEight();
+    return ACK_JOINED;
+}
+
 
 bool Protocol::is_close() { return this->was_closed; }
 
@@ -285,7 +298,7 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_ammount = receive_uintThirtyTwo();
     uint32_t rabbit_width = receive_uintThirtyTwo();
     uint32_t rabbit_height = receive_uintThirtyTwo();
-    snapshot.set_dimensions(width, height, rabbit_ammount, rabbit_width, rabbit_height);
+    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount);
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {

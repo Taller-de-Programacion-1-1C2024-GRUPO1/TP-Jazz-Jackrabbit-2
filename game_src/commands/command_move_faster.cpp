@@ -3,7 +3,7 @@
 MoveFaster::MoveFaster(int id, int dir): Command(id), playerID(id), dir(dir) {}
 
 bool MoveFaster::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_world.moveFasterPlayer(this->playerID, this->dir);
+    // game_manager.moveFasterPlayer(this->playerID, this->dir);
     return needsMove;
 }
 

@@ -3,7 +3,7 @@
 Shoot::Shoot(int id, int dir): Command(id), playerID(id), dir(dir) {}
 
 bool Shoot::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_world.shootPlayer(this->playerID, this->dir);
+    // game_manager.shoot_player(this->playerID, this->dir);
     return needsMove;
 }
 

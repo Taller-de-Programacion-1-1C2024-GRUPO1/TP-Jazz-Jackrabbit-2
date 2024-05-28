@@ -4,7 +4,7 @@
 #include "../game_src/entities/character.h"
 #include "../game_src/entities/enemy.h"
 #include "../game_src/entities/item.h"
-#include "../game_src/entities/player.h"
+#include "../game_src/entities/rabbit.h"
 #include "SDL2/SDL.h"
 
 #include "physical_map.h"
@@ -16,7 +16,7 @@ FUERA DE ESTA CARPETA, EN LA PRINCIPAL:
 
 bool running = true;
 
-void handleEvents(Player& player) {
+void handleEvents(Rabbit& player) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
@@ -77,7 +77,7 @@ int main() {
 
     };
     PhysicalMap gameMap(map);
-    Player player(70, 2, gameMap);
+    Rabbit rabbit(100, 70, 2, gameMap);
     Enemy enemy(9, 9, gameMap);
 
     const int FPS = 60;
@@ -90,15 +90,15 @@ int main() {
         frameStart = SDL_GetTicks();
 
         // HANDLE EVENTS -> TECLADO
-        handleEvents(player);
+        handleEvents(rabbit);
         // UPDATES -> TODOS LOS UPDATES DE LAS ENTIDADES
-        player.update();
+        rabbit.update();
         // RENDER
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // Limpia la pantalla con color negro
         SDL_RenderClear(renderer);
         // ACA VAN TODOS LOS RENDER DE LAS ENTIDADES
 
-        player.render(renderer);
+        rabbit.render(renderer);
         gameMap.render(renderer);
         enemy.render(renderer), SDL_RenderPresent(renderer);
 

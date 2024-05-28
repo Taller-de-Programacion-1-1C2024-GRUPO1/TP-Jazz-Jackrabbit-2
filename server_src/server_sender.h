@@ -3,33 +3,33 @@
 
 #include <iostream>
 #include <list>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "../common_src/constants.h"
-#include "../common_src/protected_list_of_queues.h"
+#include "../common_src/container_protocol.h"
+#include "../common_src/protocol.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
 
-#include "server_protocol.h"
-
+#include "broadcaster_snapshots.h"
 
 class ServerSender: public Thread {
 private:
-    ServerProtocol& protocol;
-    Queue<Message> q_msgs;
+    Protocol& protocolo;
+    BroadcasterSnapshots& broadcaster_snapshots;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
-    ProtectedListOfQueues& list_of_q_msgs;
+    int player_id;
 
 public:
-    explicit ServerSender(ServerProtocol& protocol, ProtectedListOfQueues& list_of_q_msgs);
+    explicit ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaster_snapshots,
+                          int player_id);
     virtual void run() override;
     bool is_dead();
     void kill();
 };
-
 
 #endif

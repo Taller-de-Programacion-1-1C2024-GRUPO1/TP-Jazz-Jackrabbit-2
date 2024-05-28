@@ -18,7 +18,7 @@
 #include "../game_src/entities/bullet.h"
 #include "../game_src/entities/character.h"
 #include "../game_src/entities/item.h"
-#include "../game_src/entities/player.h"
+#include "../game_src/entities/rabbit.h"
 #include "snapshots/snapshot.h"
 
 #include "common_errors.h"
@@ -120,6 +120,10 @@ public:
     // Envia un char
     void send_char(char c);
     char receive_char();
+
+    // Envia un ACK de que un jugador se unio a un match
+    void send_user_joined_match(int ACK_JOINED);
+    int receive_user_joined_match();
 
     // Chequea si el socket fue cerrado
     bool is_close();

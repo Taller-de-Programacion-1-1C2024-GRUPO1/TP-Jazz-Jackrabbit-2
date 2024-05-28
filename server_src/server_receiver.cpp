@@ -1,20 +1,25 @@
 #include "server_receiver.h"
 
-ServerReceiver::ServerReceiver(ServerProtocol& protocol, Queue<uint8_t>& client_cmds_q):
-        protocol(protocol), client_cmds_q(client_cmds_q), keep_talking(true), is_alive(true) {}
+ServerReceiver::ServerReceiver(Protocol& protocol,
+                               Queue<std::shared_ptr<Command>>& client_cmds_queue):
+        protocol(protocol),
+        client_cmds_queue(client_cmds_queue),
+        keep_talking(true),
+        is_alive(true) {}
 
 
 void ServerReceiver::run() {
     while (keep_talking) {
         try {
-            uint8_t msg = this->protocol.get_byte();
-            this->client_cmds_q.push(msg);
+            std::shared_ptr<Command> cmd = this->protocol.receive_Command();
+            this->client_cmds_queue.push(cmd);
         } catch (const ClosedQueue& e) {
             std::cerr << "The queue client_cmds_q is closed" << std::endl;
-
+            kill();
+            break;
         } catch (const std::exception& e) {
-            // std::cerr << "No pude recibir comando o se cerro el cliente forzadamente" <<
-            // std::endl;
+            std::cerr << "Error not expected: " << e.what() << std::endl;
+            kill();
             break;
         }
     }

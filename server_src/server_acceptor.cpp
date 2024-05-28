@@ -1,36 +1,46 @@
 #include "server_acceptor.h"
 
-ServerAcceptor::ServerAcceptor(const char* servname, Queue<uint8_t>& client_cmds_q,
-                               ProtectedListOfQueues& list_of_q_msgs):
+ServerAcceptor::ServerAcceptor(const char* servname, int number_players,
+                               const std::vector<std::string>& map_routes, bool* playing):
         sk(servname),
         sk_was_closed(false),
-        client_cmds_q(client_cmds_q),
-        list_of_q_msgs(list_of_q_msgs),
-        server_players(),
+        number_players(number_players),
+        server_users(),
+        map_routes(map_routes),
         is_alive(true),
-        keep_talking(true) {}
-
+        keep_talking(true),
+        playing(playing) {}
 
 void ServerAcceptor::run() {
+    MonitorMatches monitor_matches(map_routes);
+
     while (keep_talking && !sk_was_closed) {
         try {
             Socket peer = sk.accept();
-            ServerPlayer* th = new ServerPlayer(std::move(peer), client_cmds_q, list_of_q_msgs);
-            th->run();
+
+            /*
+             * std::shared_ptr maneja automáticamente la memoria y garantiza
+             * que el objeto se destruya cuando ya no haya referencias a él.
+             * Si no usamos std::make_shared, podriamos terminar con un manejo manual de la memoria
+             * que podría llevar a fugas de memoria (memory leaks) o acceso a memoria no válida
+             * (use-after-free).
+             */
+            User* user = new User(std::make_shared<ContainerProtocol>(std::move(peer)),
+                                  monitor_matches, playing);
+            user->run();
             reap_dead();
-            server_players.push_back(th);
+            server_users.push_back(user);
         } catch (const std::exception& e) {
-            // std::cerr << "Error en el accept" << std::endl;
+            monitor_matches.close_matches();
             break;
         }
     }
-    kill_all();
 }
 
-
 void ServerAcceptor::reap_dead() {
-    server_players.remove_if([](ServerPlayer* u) {
-        if (u->is_dead()) {
+    server_users.remove_if([](User* u) {
+        if (!u->is_alive()) {
+            u->join();
             delete u;
             return true;
         }
@@ -38,18 +48,25 @@ void ServerAcceptor::reap_dead() {
     });
 }
 
-
 void ServerAcceptor::kill_all() {
-    for (auto& c: server_players) {
-        c->kill();
+    for (auto& c: server_users) {
+        if (c->is_alive()) {
+            c->kill();
+        }
+        c->join();
         delete c;
     }
-    server_players.clear();
+    server_users.clear();
 }
-
 
 void ServerAcceptor::kill() {
     sk.~Socket();
     this->keep_talking = false;
     this->sk_was_closed = true;
+}
+
+void ServerAcceptor::stop() {
+    sk.shutdown(SHUT_RDWR);
+    sk.close();
+    kill_all();
 }

@@ -5,7 +5,7 @@ Cheats::Cheats(int playerID, int cheatID):
 
 bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
     if (cheatID == ADD_HEALTH) {
-        // game_world.addHealthToPlayer(playerID);
+        // game_manager.addHealthToPlayer(playerID);
     }
     return needsMove;
 }
