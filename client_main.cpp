@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
         }
 
         Client client(std::move(hostname), std::move(servname));
-        client.run();
+        client.run(argc, argv);
         return 0;
 
     } catch (const std::exception& err) {
