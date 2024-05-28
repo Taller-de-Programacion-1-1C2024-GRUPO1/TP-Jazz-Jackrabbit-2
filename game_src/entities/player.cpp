@@ -11,6 +11,8 @@ void Player::update() {
     check_colision_with_map();
 
     handle_events();
+    update_position();
+
     update_state();
 
     printf(action == STAND          ? "STAND\n" :
@@ -24,7 +26,6 @@ void Player::update() {
            action == SPECIAL_ATTACK ? "SPECIAL_ATTACK\n" :
                                       "DIE\n");
 
-    update_position();
 }
 
 
@@ -36,19 +37,18 @@ void Player::update_position() {
     // ACTUALIZA POSICIONES
     pos_x += spe_x;
     pos_y += spe_y;
-    // NO HAY INERCIA EN EJE X
-    spe_x = 0;
+
     // REPOSITION
     check_colision_with_map();
     if (on_floor) {
-        pos_y = pos_y - (pos_y % BLOCK_DIVISION);
+        if (!on_left_slope && !on_right_slope) {
+            pos_y = pos_y - ((pos_y % BLOCK_DIVISION));
+        }
         spe_y = 0;
     }
     if (on_roof) {
         pos_y = pos_y + (BLOCK_DIVISION - (pos_y % BLOCK_DIVISION));
-        if (spe_y < 0) {
-            spe_y = 0;
-        }
+        spe_y = 0;
     }
     if (on_left_wall) {
         pos_x = pos_x + (BLOCK_DIVISION - (pos_x % BLOCK_DIVISION));
@@ -56,18 +56,20 @@ void Player::update_position() {
     if (on_right_wall) {
         pos_x = pos_x - (pos_x % BLOCK_DIVISION);
     }
-    check_colision_with_map();  /////////////////////////////////////////
+
+    check_colision_with_map();
     if (on_right_slope) {
-        int diference = (pos_x % BLOCK_DIVISION) - (pos_y % BLOCK_DIVISION);
-        if (diference > 0) {
-            pos_y = pos_y - diference;
+        if (spe_x > 0) {
+            pos_y -= spe_x;
         }
     } else if (on_left_slope) {
-        int diference = (pos_x % BLOCK_DIVISION) - (pos_y % BLOCK_DIVISION);
-        if (diference > 0) {
-            pos_y = pos_y - diference;
+        if (spe_x < 0) {
+            pos_y += spe_x;
         }
     }
+  
+    // NO HAY INERCIA EN EJE X
+    spe_x = 0;
 }
 
 void Player::update_state() {
@@ -141,7 +143,7 @@ void Player::handle_events() {
 }
 // JUMP
 void Player::jump() {
-    if (on_floor) {
+    if (on_floor || on_left_slope || on_right_slope) {
         spe_y = -JUMPING_INITIAL_SPEED;
     }
 }
@@ -154,7 +156,7 @@ void Player::run_right() {
 
 // RIGHT SPRINT
 void Player::run_fast_right() {
-    if (on_floor && !on_right_wall) {
+    if (!on_right_wall) {
         spe_x = PLAYER_SPEED * 2;
     }
 }
@@ -166,7 +168,7 @@ void Player::run_left() {
 }
 // LEFT SPRINT
 void Player::run_fast_left() {
-    if (on_floor && !on_left_wall) {
+    if (!on_left_wall) {
         spe_x = -(PLAYER_SPEED * 2);
     }
 }

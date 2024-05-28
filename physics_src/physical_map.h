@@ -13,8 +13,9 @@
 class Character;
 /*
 0 = Vacio
-1 = Colisionable
-2 = Diagonal
+1 = Diagonal izquierda
+2 = Diagonal derecha
+4 = Colisionable
 */
 
 class PhysicalMap {
