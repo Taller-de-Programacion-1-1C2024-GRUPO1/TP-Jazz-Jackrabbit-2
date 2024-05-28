@@ -1,6 +1,8 @@
 Idle:
   frames: 5
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 3
       y: 11
@@ -26,6 +28,8 @@ Idle:
 Run:
   frames: 8
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 1
       y: 806

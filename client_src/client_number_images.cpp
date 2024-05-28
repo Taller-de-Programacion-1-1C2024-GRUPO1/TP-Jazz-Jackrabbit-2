@@ -3,7 +3,7 @@
 #define FONT_IMG "../client_src/resources/fonts/Fonts.png"
 
 NumberImages::NumberImages(SDL2pp::Renderer& renderer):
-        renderer(renderer), numberTexture(renderer, SDL2pp::Surface(FONT_IMG)) {
+        x(0), y(0), renderer(renderer), numberTexture(renderer, SDL2pp::Surface(FONT_IMG)) {
 
     SDL2pp::Surface surface(FONT_IMG);
     SDL_Color colorKey = {0, 128, 255, 1};
@@ -26,6 +26,19 @@ void NumberImages::loadNumbers() {
     numberRects.push_back(SDL2pp::Rect(21, 42, 27, 28));   // 9
 }
 
+void NumberImages::setCorner(int mode) {
+    switch (mode) {
+        case 0:  // up left
+            x = 0;
+            y = 0;
+            break;
+        case 1:  // bottom right
+            x = 800 - 32;
+            y = 600 - 32;
+            break;
+    }
+}
+
 void NumberImages::renderNumber(int number, int offset) {
-    renderer.Copy(numberTexture, numberRects[number], SDL2pp::Rect(800 - offset, 600 - 32, 32, 32));
+    renderer.Copy(numberTexture, numberRects[number], SDL2pp::Rect(x + offset, y, 32, 32));
 }

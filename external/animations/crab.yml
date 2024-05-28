@@ -1,6 +1,8 @@
 Walk:
   frames: 8
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 734
       y: 310

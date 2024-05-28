@@ -12,6 +12,7 @@
 #define LORI_IMG "../client_src/resources/characters/Lori.png"
 #define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
 #define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
+#define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
 
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
 #define ITEMS_IMG "../client_src/resources/items/items.png"
@@ -28,10 +29,11 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "../client_src/client_ammo_left.h"
 #include "../client_src/client_animation.h"
 #include "../client_src/client_hearts_banner.h"
 #include "../client_src/client_shifting_drawable.h"
-#include "../client_src/client_weapon_info.h"
+#include "../client_src/client_weapon_data.h"
 
 #include "client_number_images.h"
 
@@ -64,9 +66,15 @@ void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, Shift
     }
     const Uint8* state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-
+        x_counter += 2;
+        jazz.setPosition(x_counter, 10);
+        jazz.setAnimation("Dash");
+        jazz.setDirection(1);
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-
+        x_counter -= 2;
+        jazz.setPosition(x_counter, 10);
+        jazz.setAnimation("Dash");
+        jazz.setDirection(-1);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         score++;
 
@@ -150,48 +158,58 @@ int main() try {
     // Load font, 12pt size
     Font font(FONT, 12);
 
+
+    // Number images
+    NumberImages numberImages(renderer);
+    numberImages.setCorner(0);
+
     // Heart banner
+    WeaponData::initialize();
     HeartsBanner banner(renderer);
-    WeaponInfo weaponInfo(renderer);
-    weaponInfo.setWeapon(0);
+    AmmoLeft ammoLeft(renderer);
+    ammoLeft.setWeapon(5);
 
     // Sound effect
     Chunk soundEffect("../client_src/resources/sounds/shooting.wav");
     soundEffect.SetVolume(128);
 
     // A testing player
-    ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey);
+    ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey, &mixer);
     jazz.loadAnimations("../external/animations/jazz.yml");
 
     // Another testing player
-    ShiftingDrawable spaz(10, 100, 64, 64, renderer, SPAZ_IMG, colorKey);
+    ShiftingDrawable spaz(10, 100, 64, 64, renderer, SPAZ_IMG, colorKey, &mixer);
     spaz.loadAnimations("../external/animations/spaz.yml");
 
     // A third one
-    ShiftingDrawable lori(10, 200, 64, 64, renderer, LORI_IMG, colorKey);
+    ShiftingDrawable lori(10, 200, 64, 64, renderer, LORI_IMG, colorKey, &mixer);
     lori.loadAnimations("../external/animations/lori.yml");
 
     // A coin and a diamond
     SDL_Color itemsColorKey = {0, 128, 255, 1};
 
-    ShiftingDrawable coin(80, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey);
+    ShiftingDrawable coin(80, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
     coin.loadAnimations("../external/animations/resources.yml");
 
-    ShiftingDrawable diamond(150, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey);
+    ShiftingDrawable diamond(150, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
     diamond.loadAnimations("../external/animations/resources.yml");
 
     coin.setAnimation("Coin-flip");
     diamond.setAnimation("Diamond-flip");
 
+    // PROJECTILES
+    ShiftingDrawable projectile(10, 10, 32, 32, renderer, PROJECTILES_IMG, itemsColorKey, &mixer);
+    WeaponData::loadAnimationsToProjectile(1, projectile);
+    bool exploded = false;
     // ENEMIES
 
     // Crab
-    ShiftingDrawable crab(10, 500, 32, 32, renderer, ENEMIES_IMG, itemsColorKey);
+    ShiftingDrawable crab(10, 500, 32, 32, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
     crab.loadAnimations("../external/animations/crab.yml");
     crab.setAnimation("Walk");
 
     // Tall guy
-    ShiftingDrawable lizard(10, 400, 64, 64, renderer, ENEMIES_IMG, itemsColorKey);
+    ShiftingDrawable lizard(10, 400, 64, 64, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
     lizard.loadAnimations("../external/animations/lizard.yml");
     lizard.setAnimation("Walk");
 
@@ -200,17 +218,17 @@ int main() try {
 
     // Game state
     bool running = true;  // whether the game is running
-    int score = 0;        // player score
+    int score = 000000;   // player score
 
 
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
-    Uint32 frameStart;
-    int frameTime;
 
 
     // Main loop
     while (running) {
+        Uint32 frameStart;
+        int frameTime;
         frameStart = SDL_GetTicks();
 
         // Event processing:
@@ -238,6 +256,13 @@ int main() try {
         spaz.update();
         lori.update();
 
+        projectile.setPosition(enemie_x * 8, 40);
+        if (!exploded && enemie_x * 8 > 600) {
+            projectile.setAnimation("Explode");
+            exploded = true;
+        }
+        projectile.update();
+
         coin.update();
         diamond.update();
 
@@ -249,11 +274,11 @@ int main() try {
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         jazz.render(renderer);
-        if (is_shooting) {
+        /*if (is_shooting) {
             mixer.PlayChannel(-1, soundEffect);
             SDL_Delay(200);
             mixer.HaltChannel(-1);
-        }
+        }*/
 
         spaz.render(renderer);
         lori.render(renderer);
@@ -264,12 +289,20 @@ int main() try {
         coin.render(renderer);
         diamond.render(renderer);
 
-        banner.render();
-        weaponInfo.setAmmo(ammo);
-        weaponInfo.render();
+        projectile.render(renderer);
 
-        // Create text string to render
-        std::string text = "Score: " + std::to_string(score);
+        banner.render();
+        ammoLeft.setAmmo(ammo);
+        ammoLeft.render();
+
+        std::string scoreStr = std::to_string(score);
+        int offset = 32;  // Start position
+
+        for (char c: scoreStr) {
+            int number = c - '0';  // Convert char to int
+            numberImages.renderNumber(number, offset);
+            offset += 24;  // Move position to the left for the next digit
+        }
 
         // Show rendered frame
         renderer.Present();

@@ -19,11 +19,12 @@ private:
     SDL2pp::Rect destRect;
     double angle;
     int direction;
+    SDL2pp::Mixer* mixer;
 
 public:
     ShiftingDrawable() = delete;
     ShiftingDrawable(int x, int y, int w, int h, SDL2pp::Renderer& renderer,
-                     const std::string& path, const SDL_Color& colorKey);
+                     const std::string& path, const SDL_Color& colorKey, SDL2pp::Mixer* mixer);
 
     void loadAnimations(const std::string& path);
     void render(SDL2pp::Renderer& renderer);

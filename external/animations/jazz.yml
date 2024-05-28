@@ -1,6 +1,8 @@
 Idle:
   frames: 27
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 1
       y: 12
@@ -114,6 +116,8 @@ Idle:
 Walk:
   frames: 8
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 0
       y: 793
@@ -151,6 +155,8 @@ Walk:
 Run:
   frames: 8
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 1
       y: 856
@@ -188,6 +194,8 @@ Run:
 Jump:
   frames: 17
   speed: 70
+  loop: true
+  sound: ""
   rects:
     - x: 0
       y: 1120
@@ -261,6 +269,8 @@ Jump:
 Dash:
   frames: 4
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 0
       y: 991
@@ -306,6 +316,8 @@ Dash:
 Stop-dashing:
   frames: 4
   speed: 100
+  loop: false
+  sound: ""
   rects:
     - x: 274
       y: 991
@@ -335,6 +347,8 @@ Stop-dashing:
 Intoxicated-Idle:
   frames: 8
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 0
       y: 2165
@@ -372,6 +386,8 @@ Intoxicated-Idle:
 Intoxicated-Run:
   frames: 12
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 1
       y: 2230
@@ -425,6 +441,8 @@ Intoxicated-Run:
 Shoot:
   frames: 6
   speed: 100
+  loop: true
+  sound: "../client_src/resources/sounds/shooting.wav"
   rects:
     - x: 1
       y: 567
@@ -454,6 +472,8 @@ Shoot:
 Hurt:
   frames: 9
   speed: 100
+  loop: false
+  sound: "../client_src/resources/sounds/auch.wav"
   rects:
     - x: 1
       y: 3022
@@ -495,6 +515,8 @@ Hurt:
 Die:
   frames: 10
   speed: 100
+  loop: false
+  sound: ""
   rects:
     - x: 1
       y: 3166

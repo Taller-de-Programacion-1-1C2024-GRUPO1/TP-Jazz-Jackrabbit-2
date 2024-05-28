@@ -2,6 +2,7 @@
 #define HEARTSBANNER_H
 
 #include <vector>
+
 #include <SDL2pp/SDL2pp.hh>
 
 class HeartsBanner {
@@ -10,10 +11,11 @@ private:
     SDL2pp::Texture texture;
     SDL2pp::Rect heartRect;
     int heartCount;
+
 public:
-    HeartsBanner(SDL2pp::Renderer& renderer);
+    explicit HeartsBanner(SDL2pp::Renderer& renderer);
     void setHearts(int heartCount);
     void render();
 };
 
-#endif //HEARTSBANNER_H
+#endif  // HEARTSBANNER_H

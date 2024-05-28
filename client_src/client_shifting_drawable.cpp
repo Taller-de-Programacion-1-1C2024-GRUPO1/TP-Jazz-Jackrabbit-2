@@ -5,8 +5,16 @@
 #include <yaml-cpp/yaml.h>
 
 ShiftingDrawable::ShiftingDrawable(int x, int y, int w, int h, SDL2pp::Renderer& renderer,
-                                   const std::string& path, const SDL_Color& colorKey):
-        x(x), y(y), w(w), h(h), texture(renderer, SDL2pp::Surface(path)), angle(0) {
+                                   const std::string& path, const SDL_Color& colorKey,
+                                   SDL2pp::Mixer* mixer):
+        x(x),
+        y(y),
+        w(w),
+        h(h),
+        texture(renderer, SDL2pp::Surface(path)),
+        angle(0),
+        direction(0),
+        mixer(mixer) {
     SDL2pp::Surface surface(path);
     SDL_SetColorKey(surface.Get(), SDL_TRUE,
                     SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
@@ -20,6 +28,7 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
         Animation animation;
         animation.frames = it->second["frames"].as<int>();
         animation.speed = it->second["speed"].as<int>();
+        animation.soundPath = it->second["sound"].as<std::string>();
 
         for (size_t i = 0; i < it->second["rects"].size(); i++) {
             SDL2pp::Rect rect;
@@ -55,5 +64,14 @@ void ShiftingDrawable::setPosition(int newx, int newy) {
 void ShiftingDrawable::setAngle(int newAngle) { angle = newAngle; }
 
 void ShiftingDrawable::setDirection(int dir) { direction = dir; }
+#include <fstream>
 
-void ShiftingDrawable::setAnimation(const char* name) { currentAnimationName = name; }
+void ShiftingDrawable::setAnimation(const char* name) {
+    currentAnimationName = name;
+    std::ifstream file(animations[currentAnimationName].soundPath.c_str());
+    if (file.good()) {
+        SDL2pp::Chunk soundEffect(animations[currentAnimationName].soundPath.c_str());
+        mixer->PlayChannel(-1, soundEffect);
+        SDL_Delay(200);
+    }
+}

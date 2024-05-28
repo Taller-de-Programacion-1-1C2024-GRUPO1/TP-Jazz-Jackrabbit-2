@@ -1,6 +1,8 @@
 Coin-flip:
   frames: 20
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 481
       y: 1218
@@ -86,6 +88,8 @@ Coin-flip:
 Diamond-flip:
   frames: 8
   speed: 100
+  loop: true
+  sound: ""
   rects:
     - x: 147
       y: 1241
