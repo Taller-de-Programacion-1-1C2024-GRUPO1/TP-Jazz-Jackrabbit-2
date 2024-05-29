@@ -41,6 +41,7 @@ enum /*Senders*/ {
     SEND_COMMAND_SHOOT,
     SEND_COMMAND_MOVE,
     SEND_COMMAND_MOVE_FASTER,
+    ACK_JOINED_SUCCEED,
 };
 
 enum /*Direction*/ {
