@@ -4,8 +4,8 @@ Cheats::Cheats(int playerID, int cheatID):
         Command(playerID), playerID(playerID), cheatID(cheatID) {}
 
 bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
-    if (cheatID == ADD_HEALTH) {
-        // game_world.addHealthToPlayer(playerID);
+    if (cheatID == ADD_HEALTH) { 
+        // game_manager.addHealthToPlayer(playerID);
     }
     return needsMove;
 }
