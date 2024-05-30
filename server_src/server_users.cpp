@@ -70,15 +70,6 @@ void User::refresh() {
 }
 
 /*
-std::vector<Rabbit> User::create_rabbits(std::vector<SpawnPoints> rabbit_spawns){
-    std::vector<Rabbit> rabbits;
-    for (long unsigned int i = 0; i < rabbit_spawns.size(); i++) {
-        rabbits.push_back(Rabbit(rabbit_spawns[i].x, rabbit_spawns[i].y, rabbit_spawns[i].id));
-    }
-    return rabbits;
-}
-*/
-
 // cambiar "Player" a rabbit
 std::unordered_map<int, Player> User::make_players_map(const std::vector<Player>& player) {
     std::unordered_map<int, Player> players_map;
@@ -87,6 +78,7 @@ std::unordered_map<int, Player> User::make_players_map(const std::vector<Player>
     }
     return players_map;
 }
+*/
 
 bool User::is_alive() { return status == ACTIVE; }
 

@@ -28,7 +28,7 @@ private:
 
     bool* playing;
 
-    std::unordered_map<int, Player> make_players_map(const std::vector<Player>& server_player);
+    // std::unordered_map<int, Player> make_players_map(const std::vector<Player>& server_player);
 
 public:
     User(std::shared_ptr<ContainerProtocol> container_protocol, MonitorMatches& monitor_matches,
