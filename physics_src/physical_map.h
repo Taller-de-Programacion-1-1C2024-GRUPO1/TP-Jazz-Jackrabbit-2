@@ -20,7 +20,7 @@ class Character;
 
 class PhysicalMap {
 private:
-    int phisicaMap[MAP_WIDTH][MAP_HEIGHT];
+    int map[MAP_WIDTH][MAP_HEIGHT];
     void load_map(const int* map);
 
 public:

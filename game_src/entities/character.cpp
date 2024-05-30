@@ -18,14 +18,14 @@ void Character::is_on_right_wall() { on_right_wall = true; }
 
 void Character::is_on_left_slope() {
     on_left_slope = true;
-    if (((pos_x % BLOCK_DIVISION) ) <= pos_y % BLOCK_DIVISION){
+    if (((pos_x % BLOCK_DIVISION)) <= pos_y % BLOCK_DIVISION) {
         on_floor = true;
     }
 }
 void Character::is_on_right_slope() {
     on_right_slope = true;
-    if ((pos_x % BLOCK_DIVISION) + (BLOCK_DIVISION * 1.5) >= pos_y % BLOCK_DIVISION){
-            on_floor = true;
+    if ((pos_x % BLOCK_DIVISION) + (BLOCK_DIVISION * 1.5) >= pos_y % BLOCK_DIVISION) {
+        on_floor = true;
     }
 }
 

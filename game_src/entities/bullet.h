@@ -2,13 +2,15 @@
 #define BULLET_H
 
 #include "../../physics_src/physical_objects.h"
+class Rabbit;
 
 class Bullet: public PhysicalObject {
 private:
     const int damage;
+    Rabbit& sender;
 
 public:
-    Bullet(int init_pos_x, int init_pos_y, int bullet_speed, int damage);
+    Bullet(int init_pos_x, int init_pos_y, int bullet_speed, int damage, Rabbit& sender);
 
     void update();
 
@@ -21,7 +23,7 @@ public:
     -->>> aca estarías especificando para cada uno de los objetos que colisiona con el bullet.
     -->>> No es necesario, ya que el objeto base ya tiene la función check_colision (creo)
 
-    void check_colision (Player& player){
+    void check_colision (Rabbit& player){
         player.check_colision_with_bullet(pos_x, pos_y, width, height, damage);
     };
 

@@ -1,13 +1,13 @@
-#include "player.h"
+#include "rabbit.h"
 
 
-Player::Player(int init_pos_x, int init_pos_y, PhysicalMap& map):
+Rabbit::Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map):
         Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
         action(STAND),
         acc_y(GRAVITY),
         direction(LEFT) {}
 
-void Player::update() {
+void Rabbit::update() {
     check_colision_with_map();
 
     handle_events();
@@ -29,7 +29,7 @@ void Player::update() {
 }
 
 
-void Player::update_position() {
+void Rabbit::update_position() {
     // GRAVITY
     if (!on_floor && spe_y < MAX_FALLING_SPEED) {
         spe_y += acc_y;
@@ -72,7 +72,7 @@ void Player::update_position() {
     spe_x = 0;
 }
 
-void Player::update_state() {
+void Rabbit::update_state() {
     // DIRECCION
     if (spe_x > 0) {
         direction = RIGHT;
@@ -102,7 +102,7 @@ void Player::update_state() {
     // action = RUN_FAST;
 }
 
-void Player::render(SDL_Renderer* renderer) {
+void Rabbit::render(SDL_Renderer* renderer) {
     SDL_Rect rect;
     rect.x = pos_x;
     rect.y = pos_y;
@@ -112,12 +112,12 @@ void Player::render(SDL_Renderer* renderer) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
-void Player::imprimir_posicion() { printf("X: %d Y: %d\n", pos_x, pos_y); }
+void Rabbit::imprimir_posicion() { printf("X: %d Y: %d\n", pos_x, pos_y); }
 
 
 // EVENTS
 
-void Player::handle_events() {
+void Rabbit::handle_events() {
     while (!events_queue.empty()) {
         int event = events_queue.front();
         events_queue.pop();
@@ -142,45 +142,46 @@ void Player::handle_events() {
     }
 }
 // JUMP
-void Player::jump() {
+void Rabbit::jump() {
     if (on_floor || on_left_slope || on_right_slope) {
         spe_y = -JUMPING_INITIAL_SPEED;
     }
 }
 // RIGHT
-void Player::run_right() {
+void Rabbit::run_right() {
     if (!on_right_wall) {
         spe_x = PLAYER_SPEED;
     }
 }
 
 // RIGHT SPRINT
-void Player::run_fast_right() {
+void Rabbit::run_fast_right() {
     if (!on_right_wall) {
         spe_x = PLAYER_SPEED * 2;
     }
 }
 // LEFT
-void Player::run_left() {
+void Rabbit::run_left() {
     if (!on_left_wall) {
         spe_x = -PLAYER_SPEED;
     }
 }
 // LEFT SPRINT
-void Player::run_fast_left() {
+void Rabbit::run_fast_left() {
     if (!on_left_wall) {
         spe_x = -(PLAYER_SPEED * 2);
     }
 }
 // SHOOT
-void Player::shoot() { action = SHOOT; }
+void Rabbit::shoot() { action = SHOOT; }
 // SPECIAL ATTACK
-void Player::special_attack() { action = SPECIAL_ATTACK; }
+void Rabbit::special_attack() { action = SPECIAL_ATTACK; }
 
 
 // COLA
-void Player::add_jump() { events_queue.push(EVENT_JUMP); }
-void Player::add_run_right() { events_queue.push(EVENT_RUN_RIGHT); }
-void Player::add_run_fast_right() { events_queue.push(EVENT_RUN_FAST_RIGHT); }
-void Player::add_run_left() { events_queue.push(EVENT_RUN_LEFT); }
-void Player::add_run_fast_left() { events_queue.push(EVENT_RUN_FAST_LEFT); }
+void Rabbit::add_jump() { events_queue.push(EVENT_JUMP); }
+void Rabbit::add_run_right() { events_queue.push(EVENT_RUN_RIGHT); }
+void Rabbit::add_run_fast_right() { events_queue.push(EVENT_RUN_FAST_RIGHT); }
+void Rabbit::add_run_left() { events_queue.push(EVENT_RUN_LEFT); }
+void Rabbit::add_run_fast_left() { events_queue.push(EVENT_RUN_FAST_LEFT); }
+void Rabbit::add_shoot() { events_queue.push(EVENT_SHOOT); }

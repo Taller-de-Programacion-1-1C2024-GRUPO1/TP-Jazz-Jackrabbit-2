@@ -19,6 +19,19 @@ enum SupplyType : uint8_t {
     COIN_SUPPLY,
 };
 
+enum actions {
+    STAND,
+    RUN,
+    RUN_FAST,
+    JUMPING,
+    FALLING,
+    JUMP_FORWARD,
+    FALL_FORWARD,
+    SHOOT,
+    SPECIAL_ATTACK,
+    DIE
+};
+
 enum SupplyState : char {
     UNPICKED,
     PICKED,
@@ -28,10 +41,19 @@ enum /* CHEATS */ {
     ADD_HEALTH = 0,
 };
 
+
+#define WAITING 0
+#define STARTED 1
+#define PLAYING -1
+
 // ----------------- Messurements -----------------
 
-#define RABBIT_WIDTH 0.5
-#define RABBIT_HEIGHT 0.5
+#define ENEMY_INITIAL_HEALTH 100  // Se puede modificar
+
+#define RABBIT_WIDTH_DEFAULT 32   // modificar
+#define RABBIT_HEIGHT_DEFAULT 32  // modificar
+
+#define RABBIT_AMOUNT_DEFAULT 1  // modificar
 
 #define MAP_WIDTH_DEFAULT 100   // modificar
 #define MAP_HEIGHT_DEFAULT 100  // modificar

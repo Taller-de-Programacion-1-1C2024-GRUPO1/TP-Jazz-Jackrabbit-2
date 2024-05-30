@@ -1,11 +1,8 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "../../physics_src/physical_map.h"
 #include "../../physics_src/physical_objects.h"
-
-class PhysicalMap;
-
+#define MAX_FALLING_SPEED 15
 class PhysicalMap;
 
 // FISIC

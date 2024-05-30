@@ -18,7 +18,7 @@ NOTAS:
 */
 /*
 COLISIONES:
-Bullet -> Player
+Bullet -> Rabbit
 Bullet -> Enemy
 */
 class PhysicalObject {
@@ -29,6 +29,7 @@ protected:
     int pos_y;
     int spe_x;
     int spe_y;
+    bool dead;
 
 public:
     PhysicalObject(int width, int height, int init_pos_x, int init_pos_y):
@@ -37,13 +38,18 @@ public:
             pos_x(init_pos_x),
             pos_y(init_pos_y),
             spe_x(0),
-            spe_y(0) {}
+            spe_y(0),
+            dead(false) {}
 
     bool colision_checker(int pos_x_A, int pos_y_A, int width_A, int height_A, int pos_x_B,
                           int pos_y_B, int width_B, int height_B) {
         return pos_x_A < pos_x_B + width_B && pos_x_A + width_A > pos_x_B &&
                pos_y_A < pos_y_B + height_B && pos_y_A + height_A > pos_y_B;
     }
+
+    bool is_dead() { return dead; }
+
+    void kill() { dead = true; }
 
     virtual ~PhysicalObject() {}
 };
