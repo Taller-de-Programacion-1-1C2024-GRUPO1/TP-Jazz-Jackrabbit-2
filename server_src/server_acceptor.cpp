@@ -17,14 +17,6 @@ void ServerAcceptor::run() {
     while (keep_talking && !sk_was_closed) {
         try {
             Socket peer = sk.accept();
-
-            /*
-             * std::shared_ptr maneja automáticamente la memoria y garantiza
-             * que el objeto se destruya cuando ya no haya referencias a él.
-             * Si no usamos std::make_shared, podriamos terminar con un manejo manual de la memoria
-             * que podría llevar a fugas de memoria (memory leaks) o acceso a memoria no válida
-             * (use-after-free).
-             */
             User* user = new User(std::make_shared<ContainerProtocol>(std::move(peer)),
                                   monitor_matches, playing);
             user->run();
