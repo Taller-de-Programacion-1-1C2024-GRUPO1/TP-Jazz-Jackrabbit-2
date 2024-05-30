@@ -1,7 +1,7 @@
 #include "monitor_matches.h"
 
 
-MonitorMatches::MonitorMatches(std::vector<std::string> map_routes) {
+MonitorMatches::MonitorMatches(const std::vector<std::string>& map_routes) {
     // leer los mapas y guardarlos en el {mapa} de maps
 }
 

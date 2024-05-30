@@ -19,7 +19,10 @@ enum SupplyType : uint8_t {
     COIN_SUPPLY,
 };
 
-enum actions {
+// PLAYER CONSTANTS
+enum DIRECTIONS { LEFT, RIGHT };
+
+enum ACTIONS {
     STAND,
     RUN,
     RUN_FAST,

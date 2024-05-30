@@ -5,21 +5,22 @@
 
 #include "../game_src/entities/character.h"
 #include "SDL2/SDL.h"
-#define MAP_HEIGHT 15  // 64
-#define MAP_WIDTH 15   // 128
+#define MAP_HEIGHT 25  // 64
+#define MAP_WIDTH 25   // 128
 
 #define BLOCK_DIVISION 32  // Lado de un bloque mapa
 
 class Character;
 /*
 0 = Vacio
-1 = Colisionable
-2 = Diagonal
+1 = Diagonal izquierda
+2 = Diagonal derecha
+4 = Colisionable
 */
 
 class PhysicalMap {
 private:
-    int phisicaMap[MAP_WIDTH][MAP_HEIGHT];
+    int map[MAP_WIDTH][MAP_HEIGHT];
     void load_map(const int* map);
 
 public:

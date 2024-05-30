@@ -1,1 +1,0 @@
-#define GRAVITY 1

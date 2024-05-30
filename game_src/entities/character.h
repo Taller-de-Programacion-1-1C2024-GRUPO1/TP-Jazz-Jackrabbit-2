@@ -1,10 +1,12 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "../../physics_src/physical_map.h"
 #include "../../physics_src/physical_objects.h"
-
+#define MAX_FALLING_SPEED 15
 class PhysicalMap;
+
+// FISIC
+#define GRAVITY 1
 
 class Character: public PhysicalObject {
 
@@ -16,10 +18,20 @@ protected:
     bool on_roof;
     bool on_left_wall;
     bool on_right_wall;
+    bool on_left_slope;
+    bool on_right_slope;
 
 public:
-    Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health);
-
+    Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health):
+            PhysicalObject(width, height, init_pos_x, init_pos_y),
+            health(health),
+            map(map),
+            on_floor(false),
+            on_roof(false),
+            on_left_wall(false),
+            on_right_wall(false),
+            on_left_slope(false),
+            on_right_slope(false) {}
 
     void receive_damage(int damage) { health -= damage; }
 
@@ -36,7 +48,10 @@ public:
     void is_on_roof();
     void is_on_left_wall();
     void is_on_right_wall();
+    void is_on_left_slope();
+    void is_on_right_slope();
     void reset_map_colision_flags();
 };
+
 
 #endif
