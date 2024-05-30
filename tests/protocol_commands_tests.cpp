@@ -35,7 +35,8 @@ Protocol server_protocol(std::move(peer_test));
 TEST(ProtocolTestMove, SendAndReceiveMoveLeft) {
     Move* move = new Move(player_id, LEFT_DIR);
     client_protocol.send_Command(move);
-    std::shared_ptr<Move> received_move = std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
+    std::shared_ptr<Move> received_move =
+            std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
     EXPECT_EQ(move->get_playerId(), received_move->get_playerId());
     EXPECT_EQ(move->get_dir(), received_move->get_dir());
     EXPECT_EQ(move->get_commandType(), received_move->get_commandType());
@@ -45,7 +46,8 @@ TEST(ProtocolTestMove, SendAndReceiveMoveLeft) {
 TEST(ProtocolTestMove, SendAndReceiveMoveRight) {
     Move* move = new Move(player_id, RIGHT_DIR);
     client_protocol.send_Command(move);
-    std::shared_ptr<Move> received_move = std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
+    std::shared_ptr<Move> received_move =
+            std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
     EXPECT_EQ(move->get_playerId(), received_move->get_playerId());
     EXPECT_EQ(move->get_dir(), received_move->get_dir());
     EXPECT_EQ(move->get_commandType(), received_move->get_commandType());
@@ -55,7 +57,8 @@ TEST(ProtocolTestMove, SendAndReceiveMoveRight) {
 TEST(ProtocolTestMove, SendAndReceiveMoveForward) {
     Move* move = new Move(player_id, FORWARD_DIR);
     client_protocol.send_Command(move);
-    std::shared_ptr<Move> received_move = std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
+    std::shared_ptr<Move> received_move =
+            std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
     EXPECT_EQ(move->get_playerId(), received_move->get_playerId());
     EXPECT_EQ(move->get_dir(), received_move->get_dir());
     EXPECT_EQ(move->get_commandType(), received_move->get_commandType());
@@ -65,7 +68,8 @@ TEST(ProtocolTestMove, SendAndReceiveMoveForward) {
 TEST(ProtocolTestMove, SendAndReceiveMoveBackward) {
     Move* move = new Move(player_id, BACKWARD_DIR);
     client_protocol.send_Command(move);
-    std::shared_ptr<Move> received_move = std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
+    std::shared_ptr<Move> received_move =
+            std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
     EXPECT_EQ(move->get_playerId(), received_move->get_playerId());
     EXPECT_EQ(move->get_dir(), received_move->get_dir());
     EXPECT_EQ(move->get_commandType(), received_move->get_commandType());
@@ -75,7 +79,8 @@ TEST(ProtocolTestMove, SendAndReceiveMoveBackward) {
 TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterRight) {
     MoveFaster* move_faster = new MoveFaster(player_id, RIGHT_DIR);
     client_protocol.send_Command(move_faster);
-    std::shared_ptr<MoveFaster> received_move_faster = std::dynamic_pointer_cast<MoveFaster>(server_protocol.receive_Command());
+    std::shared_ptr<MoveFaster> received_move_faster =
+            std::dynamic_pointer_cast<MoveFaster>(server_protocol.receive_Command());
     EXPECT_EQ(move_faster->get_playerId(), received_move_faster->get_playerId());
     EXPECT_EQ(move_faster->get_dir(), received_move_faster->get_dir());
     EXPECT_EQ(move_faster->get_commandType(), received_move_faster->get_commandType());
@@ -85,7 +90,8 @@ TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterRight) {
 TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterLeft) {
     MoveFaster* move_faster = new MoveFaster(player_id, LEFT_DIR);
     client_protocol.send_Command(move_faster);
-    std::shared_ptr<MoveFaster> received_move_faster = std::dynamic_pointer_cast<MoveFaster>(server_protocol.receive_Command());
+    std::shared_ptr<MoveFaster> received_move_faster =
+            std::dynamic_pointer_cast<MoveFaster>(server_protocol.receive_Command());
     EXPECT_EQ(move_faster->get_playerId(), received_move_faster->get_playerId());
     EXPECT_EQ(move_faster->get_dir(), received_move_faster->get_dir());
     EXPECT_EQ(move_faster->get_commandType(), received_move_faster->get_commandType());
@@ -95,7 +101,8 @@ TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterLeft) {
 TEST(ProtocolTestJump, SendAndReceiveJumpForwardERROR) {
     Jump* jump = new Jump(player_id, FORWARD_DIR);
     client_protocol.send_Command(jump);
-    std::shared_ptr<Jump> received_jump = std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
+    std::shared_ptr<Jump> received_jump =
+            std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
     EXPECT_EQ(jump->get_playerId(), received_jump->get_playerId());
     EXPECT_EQ(jump->get_dir(), received_jump->get_dir());
     EXPECT_EQ(jump->get_commandType(), received_jump->get_commandType());
@@ -106,7 +113,8 @@ TEST(ProtocolTestJump, SendAndReceiveJumpForwardERROR) {
 TEST(ProtocolTestJump, SendAndReceiveJumpBackwardERROR) {
     Jump* jump = new Jump(player_id, BACKWARD_DIR);
     client_protocol.send_Command(jump);
-    std::shared_ptr<Jump> received_jump = std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
+    std::shared_ptr<Jump> received_jump =
+            std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
     EXPECT_EQ(jump->get_playerId(), received_jump->get_playerId());
     EXPECT_EQ(jump->get_commandType(), received_jump->get_commandType());
     EXPECT_ANY_THROW(received_jump->execute_Command(&offCheat, needsMove));
@@ -116,7 +124,8 @@ TEST(ProtocolTestJump, SendAndReceiveJumpBackwardERROR) {
 TEST(ProtocolTestJump, SendAndReceiveJumpRight) {
     Jump* jump = new Jump(player_id, RIGHT_DIR);
     client_protocol.send_Command(jump);
-    std::shared_ptr<Jump> received_jump = std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
+    std::shared_ptr<Jump> received_jump =
+            std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
     EXPECT_EQ(jump->get_playerId(), received_jump->get_playerId());
     EXPECT_EQ(jump->get_dir(), received_jump->get_dir());
     EXPECT_EQ(jump->get_commandType(), received_jump->get_commandType());
@@ -126,7 +135,8 @@ TEST(ProtocolTestJump, SendAndReceiveJumpRight) {
 TEST(ProtocolTestJump, SendAndReceiveJumpLeft) {
     Jump* jump = new Jump(player_id, LEFT_DIR);
     client_protocol.send_Command(jump);
-    std::shared_ptr<Jump> received_jump = std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
+    std::shared_ptr<Jump> received_jump =
+            std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
     EXPECT_EQ(jump->get_playerId(), received_jump->get_playerId());
     EXPECT_EQ(jump->get_dir(), received_jump->get_dir());
     EXPECT_EQ(jump->get_commandType(), received_jump->get_commandType());
@@ -136,7 +146,8 @@ TEST(ProtocolTestJump, SendAndReceiveJumpLeft) {
 TEST(ProtocolTestShoot, SendAndReceiveShoot) {
     Shoot* shoot = new Shoot(player_id);
     client_protocol.send_Command(shoot);
-    std::shared_ptr<Shoot> received_shoot = std::dynamic_pointer_cast<Shoot>(server_protocol.receive_Command());
+    std::shared_ptr<Shoot> received_shoot =
+            std::dynamic_pointer_cast<Shoot>(server_protocol.receive_Command());
     EXPECT_EQ(shoot->get_playerId(), received_shoot->get_playerId());
     EXPECT_EQ(shoot->get_commandType(), received_shoot->get_commandType());
     delete shoot;
@@ -145,7 +156,8 @@ TEST(ProtocolTestShoot, SendAndReceiveShoot) {
 TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriForward) {
     SpecialLori* special_lori = new SpecialLori(player_id, FORWARD_DIR);
     client_protocol.send_Command(special_lori);
-    std::shared_ptr<SpecialLori> received_special_lori = std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialLori> received_special_lori =
+            std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
     EXPECT_EQ(special_lori->get_playerId(), received_special_lori->get_playerId());
     EXPECT_EQ(special_lori->get_dir(), received_special_lori->get_dir());
     EXPECT_EQ(special_lori->get_commandType(), received_special_lori->get_commandType());
@@ -155,7 +167,8 @@ TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriForward) {
 TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriBackward) {
     SpecialLori* special_lori = new SpecialLori(player_id, BACKWARD_DIR);
     client_protocol.send_Command(special_lori);
-    std::shared_ptr<SpecialLori> received_special_lori = std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialLori> received_special_lori =
+            std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
     EXPECT_EQ(special_lori->get_playerId(), received_special_lori->get_playerId());
     EXPECT_EQ(special_lori->get_dir(), received_special_lori->get_dir());
     EXPECT_EQ(special_lori->get_commandType(), received_special_lori->get_commandType());
@@ -165,7 +178,8 @@ TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriBackward) {
 TEST(ProtocolTest, SendAndReceiveSpecialLoriRightERROR) {
     SpecialLori* special_lori = new SpecialLori(player_id, RIGHT_DIR);
     client_protocol.send_Command(special_lori);
-    std::shared_ptr<SpecialLori> received_special_lori = std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialLori> received_special_lori =
+            std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
     EXPECT_EQ(special_lori->get_playerId(), received_special_lori->get_playerId());
     EXPECT_EQ(special_lori->get_dir(), received_special_lori->get_dir());
     EXPECT_EQ(special_lori->get_commandType(), received_special_lori->get_commandType());
@@ -177,7 +191,8 @@ TEST(ProtocolTest, SendAndReceiveSpecialLoriRightERROR) {
 TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriLeftERROR) {
     SpecialLori* special_lori = new SpecialLori(player_id, LEFT_DIR);
     client_protocol.send_Command(special_lori);
-    std::shared_ptr<SpecialLori> received_special_lori = std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialLori> received_special_lori =
+            std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
     EXPECT_EQ(special_lori->get_playerId(), received_special_lori->get_playerId());
     EXPECT_EQ(special_lori->get_dir(), received_special_lori->get_dir());
     EXPECT_EQ(special_lori->get_commandType(), received_special_lori->get_commandType());
@@ -187,7 +202,8 @@ TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriLeftERROR) {
 TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazRight) {
     SpecialSpaz* special_spaz = new SpecialSpaz(player_id, RIGHT_DIR);
     client_protocol.send_Command(special_spaz);
-    std::shared_ptr<SpecialSpaz> received_special_spaz = std::dynamic_pointer_cast<SpecialSpaz>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialSpaz> received_special_spaz =
+            std::dynamic_pointer_cast<SpecialSpaz>(server_protocol.receive_Command());
     EXPECT_EQ(special_spaz->get_playerId(), received_special_spaz->get_playerId());
     EXPECT_EQ(special_spaz->get_dir(), received_special_spaz->get_dir());
     EXPECT_EQ(special_spaz->get_commandType(), received_special_spaz->get_commandType());
@@ -197,7 +213,8 @@ TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazRight) {
 TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazLeft) {
     SpecialSpaz* special_spaz = new SpecialSpaz(player_id, LEFT_DIR);
     client_protocol.send_Command(special_spaz);
-    std::shared_ptr<SpecialSpaz> received_special_spaz = std::dynamic_pointer_cast<SpecialSpaz>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialSpaz> received_special_spaz =
+            std::dynamic_pointer_cast<SpecialSpaz>(server_protocol.receive_Command());
     EXPECT_EQ(special_spaz->get_playerId(), received_special_spaz->get_playerId());
     EXPECT_EQ(special_spaz->get_dir(), received_special_spaz->get_dir());
     EXPECT_EQ(special_spaz->get_commandType(), received_special_spaz->get_commandType());
@@ -207,7 +224,8 @@ TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazLeft) {
 TEST(ProtocolTestSpecialJazz, SendAndReceiveSpecialJazz) {
     SpecialJazz* special_jazz = new SpecialJazz(player_id);
     client_protocol.send_Command(special_jazz);
-    std::shared_ptr<SpecialJazz> received_special_spaz = std::dynamic_pointer_cast<SpecialJazz>(server_protocol.receive_Command());
+    std::shared_ptr<SpecialJazz> received_special_spaz =
+            std::dynamic_pointer_cast<SpecialJazz>(server_protocol.receive_Command());
     EXPECT_EQ(special_jazz->get_playerId(), received_special_spaz->get_playerId());
     EXPECT_EQ(special_jazz->get_commandType(), received_special_spaz->get_commandType());
     delete special_jazz;
@@ -216,7 +234,8 @@ TEST(ProtocolTestSpecialJazz, SendAndReceiveSpecialJazz) {
 TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
     ChangeWeapon* change_weapon = new ChangeWeapon(player_id);
     client_protocol.send_Command(change_weapon);
-    std::shared_ptr<ChangeWeapon> received_change_weapon = std::dynamic_pointer_cast<ChangeWeapon>(server_protocol.receive_Command());
+    std::shared_ptr<ChangeWeapon> received_change_weapon =
+            std::dynamic_pointer_cast<ChangeWeapon>(server_protocol.receive_Command());
     EXPECT_EQ(change_weapon->get_playerId(), received_change_weapon->get_playerId());
     EXPECT_EQ(change_weapon->get_commandType(), received_change_weapon->get_commandType());
     delete change_weapon;
@@ -225,7 +244,8 @@ TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
 TEST(ProtocolTestSelectChampion, SendAndReceiveSelectChampion) {
     SelectChampion* select_champion = new SelectChampion(player_id, Jazz, match_test, map_test);
     client_protocol.send_Command(select_champion);
-    std::shared_ptr<SelectChampion> received_select_champion = std::dynamic_pointer_cast<SelectChampion>(server_protocol.receive_Command());
+    std::shared_ptr<SelectChampion> received_select_champion =
+            std::dynamic_pointer_cast<SelectChampion>(server_protocol.receive_Command());
     EXPECT_EQ(select_champion->get_playerId(), received_select_champion->get_playerId());
     EXPECT_EQ(select_champion->get_commandType(), received_select_champion->get_commandType());
     EXPECT_EQ(select_champion->get_championType(), received_select_champion->get_championType());
@@ -237,7 +257,8 @@ TEST(ProtocolTestSelectChampion, SendAndReceiveSelectChampion) {
 TEST(ProtocolTestMatch, SendAndReceiveMatch) {
     MatchCommand* match = new MatchCommand(player_id, number_players, match_test, map_test);
     client_protocol.send_Command(match);
-    std::shared_ptr<MatchCommand> received_match = std::dynamic_pointer_cast<MatchCommand>(server_protocol.receive_Command());
+    std::shared_ptr<MatchCommand> received_match =
+            std::dynamic_pointer_cast<MatchCommand>(server_protocol.receive_Command());
     EXPECT_EQ(match->get_playerId(), received_match->get_playerId());
     EXPECT_EQ(match->get_commandType(), received_match->get_commandType());
     EXPECT_EQ(match->get_match_name(), received_match->get_match_name());

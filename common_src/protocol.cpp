@@ -179,9 +179,10 @@ void Protocol::send_SpecialSpaz(SpecialSpaz* specialSpaz) {
 
 void Protocol::send_Command(Command* command) {
     switch (command->get_commandType()) {
-        /* 
+        /*
         En cada caso se castea el comando a su tipo correspondiente y se envia.
-        Hay que terminar cada caso con "break" para evitar el "fallthrough" no intencionado en el switch.
+        Hay que terminar cada caso con "break" para evitar el "fallthrough" no intencionado en el
+        switch.
         */
         case COMMAND_CHEAT:
             if (auto* cheat = dynamic_cast<Cheats*>(command)) {
