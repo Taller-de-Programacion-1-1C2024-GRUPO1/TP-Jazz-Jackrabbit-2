@@ -38,6 +38,12 @@ void Protocol::send_char(char c) {
     check_closed();
 }
 
+void Protocol::send_user_created_match(int ACK_CREATED) {
+    check_closed();
+    send_uintEight(ACK_MATCH_CREATED_SUCCEED);
+    send_uintEight(ACK_CREATED);
+}
+
 void Protocol::send_user_joined_match(int ACK_JOINED) {
     check_closed();
     send_uintEight(ACK_JOINED_SUCCEED);
@@ -80,6 +86,12 @@ char Protocol::receive_char() {
     socket.recvall(&c, sizeof(c), &was_closed);
     check_closed();
     return c;
+}
+
+int Protocol::receive_user_created_match() {
+    check_closed();
+    uint8_t ACK_CREATED = receive_uintEight();
+    return ACK_CREATED;
 }
 
 int Protocol::receive_user_joined_match() {

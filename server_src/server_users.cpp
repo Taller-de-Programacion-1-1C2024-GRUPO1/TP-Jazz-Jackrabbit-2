@@ -38,18 +38,23 @@ void User::create_new_match(const std::string& match_name, const std::string& ma
             std::make_shared<Queue<std::shared_ptr<ContainerProtocol>>>();
     protocols_queue->push(this->container_protocol);
 
+    // crear partida con una cantidad de jugadores base? -> esperar a que se unan
     std::shared_ptr<MatchInfo> new_match =
             std::make_shared<MatchInfo>(match_name, map_name, protocols_queue, playing);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
 
-    container_protocol->protocol.send_user_joined_match(ACK);
+    // start_match(match_name);
+
+    container_protocol->protocol.send_user_created_match(ACK);
     if (ACK == ERROR) {
         return;
     }
 }
 
-void User::start_match(const std::string& match_name) { monitor_matches.start_match(match_name); }
+void User::start_match(const std::string& match_name) { 
+    monitor_matches.start_match(match_name); 
+}
 
 void User::join_match(const std::string& match_name) {
     // se fija si el match esta vivo
@@ -70,7 +75,6 @@ void User::refresh() {
 }
 
 /*
-// cambiar "Player" a rabbit
 std::unordered_map<int, Player> User::make_players_map(const std::vector<Player>& player) {
     std::unordered_map<int, Player> players_map;
     for (long unsigned int i = 0; i < player.size(); i++) {
