@@ -1,7 +1,7 @@
 #include "server_users.h"
 
-User::User(std::shared_ptr<ContainerProtocol> conteiner_protocol,
-           MonitorMatches& monitor_matches, bool* playing):
+User::User(std::shared_ptr<ContainerProtocol> conteiner_protocol, MonitorMatches& monitor_matches,
+           bool* playing):
         status(ACTIVE),
         container_protocol(container_protocol),
         monitor_matches(monitor_matches),

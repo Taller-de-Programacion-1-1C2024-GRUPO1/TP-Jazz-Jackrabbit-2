@@ -7,10 +7,15 @@
 #include "common_socket.h"
 #include "protocol.h"
 
-// Clase que contiene un protocolo para poder ser utilizado en el monitor de matches
-// La idea de esto es no hacer al protocolo shared_ptr, ya que el monitor de matches se encarga de
-// liberar la memoria de los protocolos Al no usar shared_ptr sobre el protocolo, se evita el
-// overhead asociado con la contabilidad de referencias y la posible sincronización entre hilos.
+/*
+Teniamos un error con el uso de Queue<Protocol&> en la clase MatchInfo. Por ende, decidimos crear
+esta clase para poder utilizar un contenedor de protocolos en el monitor de matches.
+El error que estabamos viendo se debe a que intentantamos utilizar un objeto que utiliza
+un contenedor estándar de C++ (en este caso, std::queue o std::deque) para almacenar referencias
+(Protocol&). Los contenedores estándar de C++ no soportan referencias directamente; en su lugar,
+deben contener objetos o punteros.
+*/
+
 struct ContainerProtocol {
     Protocol protocol;
     explicit ContainerProtocol(Socket&& socket): protocol(std::move(socket)) {}

@@ -31,8 +31,8 @@ private:
     std::unordered_map<int, Player> make_players_map(const std::vector<Player>& server_player);
 
 public:
-    User(std::shared_ptr<ContainerProtocol> container_protocol,
-         MonitorMatches& monitor_matches, bool* playing);
+    User(std::shared_ptr<ContainerProtocol> container_protocol, MonitorMatches& monitor_matches,
+         bool* playing);
     void run() override;
 
     void create_new_match(int amount_players, const std::string& match_name,
