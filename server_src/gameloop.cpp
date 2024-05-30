@@ -2,17 +2,18 @@
 
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
-Game::Game(Queue<std::shared_ptr<Command>>& client_cmd_queue, BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players, bool* keep_running):
-    height(0),
-    width(0),
-    client_cmd_queue(client_cmd_queue),
-    broadcaster_snapshots(broadcaster_snapshots),
-    players(players),
-    keep_running(keep_running),
-    game_ended(false)
-    {
-        srand(static_cast<unsigned int>(time(nullptr)));
-    }
+Game::Game(Queue<std::shared_ptr<Command>>& client_cmd_queue,
+           BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
+           bool* keep_running):
+        height(0),
+        width(0),
+        client_cmd_queue(client_cmd_queue),
+        broadcaster_snapshots(broadcaster_snapshots),
+        players(players),
+        keep_running(keep_running),
+        game_ended(false) {
+    srand(static_cast<unsigned int>(time(nullptr)));
+}
 
 std::shared_ptr<Snapshot> Game::get_initial_snapshot(const Map& map) {
 
@@ -22,7 +23,7 @@ std::shared_ptr<Snapshot> Game::get_initial_snapshot(const Map& map) {
     height = map.height;
     width = map.width;
 
-    // Se deben crear enemigos y suministros. 
+    // Se deben crear enemigos y suministros.
     // game_manager.add_enemies(snapshot);
     // game_manager.add_supplies(snapshot);
 
@@ -72,9 +73,6 @@ void Game::execute_and_step(int iter) {
 void Game::stop() { *keep_running = false; }
 
 void Game::run() {
-    Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME , *keep_running);
+    Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME, *keep_running);
     clock.tick();
 }
-
-
-

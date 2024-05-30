@@ -5,7 +5,7 @@ MonitorMatches::MonitorMatches(std::vector<std::string> map_routes) {
     // leer los mapas y guardarlos en el {mapa} de maps
 }
 
-int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_struct ) {
+int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_struct) {
     std::lock_guard<std::mutex> lock(mutex);
     kill_dead_matches();
     auto name = matches.find(match_name);
@@ -23,7 +23,7 @@ void MonitorMatches::start_match(std::string matchName) {
 std::map<std::string, std::string> MonitorMatches::show_matches_availables() {
     std::map<std::string, std::string> availableMatches;
     std::lock_guard<std::mutex> lock(mutex);
-    for (auto& match : matches) {
+    for (auto& match: matches) {
         if (match.second->status == MATCH_WAITING) {
             availableMatches[match.first] = match.second->map_name;
         }
@@ -31,13 +31,15 @@ std::map<std::string, std::string> MonitorMatches::show_matches_availables() {
     return availableMatches;
 }
 
-int MonitorMatches::join_match(std::string match_name, std::shared_ptr<ContainerProtocol> cont_protocol) {
+int MonitorMatches::join_match(std::string match_name,
+                               std::shared_ptr<ContainerProtocol> cont_protocol) {
     std::lock_guard<std::mutex> lock(mutex);
     if (matches[match_name]->status == MATCH_ALIVE) {
         return ERROR;
     }
 
-    std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue = matches[match_name]->matches_protocols_queue;
+    std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue =
+            matches[match_name]->matches_protocols_queue;
     matches_protocols_queue->push(cont_protocol);
     return OK;
 }
@@ -49,7 +51,7 @@ Map MonitorMatches::get_map(std::string map_name) {
 
 void MonitorMatches::close_matches() {
     std::lock_guard<std::mutex> lock(mutex);
-    for (auto& match : matches) {
+    for (auto& match: matches) {
         match.second->matches_protocols_queue->close();
         match.second->match_starter->join();
     }
@@ -58,7 +60,7 @@ void MonitorMatches::close_matches() {
 
 void MonitorMatches::kill_dead_matches() {
     std::vector<std::string> delete_matches;
-    for (auto& match : matches) {
+    for (auto& match: matches) {
         if (match.second->status == MATCH_OVER) {
             match.second->matches_protocols_queue->close();
             match.second->match_starter->join();
@@ -71,7 +73,7 @@ void MonitorMatches::kill_dead_matches() {
 }
 
 MonitorMatches::~MonitorMatches() {
-    for (auto& match : matches) {
+    for (auto& match: matches) {
         match.second->match_starter->join();
     }
 }

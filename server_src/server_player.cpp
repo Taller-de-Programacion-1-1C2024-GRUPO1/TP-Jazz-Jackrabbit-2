@@ -17,9 +17,7 @@ void Player::start() {
     server_receiver.start();
 }
 
-Queue<std::shared_ptr<Snapshot>>& Player::get_snapshots_queue() {
-    return snapshots_queue;
-}
+Queue<std::shared_ptr<Snapshot>>& Player::get_snapshots_queue() { return snapshots_queue; }
 
 bool Player::is_dead() {
     if (server_sender.is_dead() && server_receiver.is_dead()) {

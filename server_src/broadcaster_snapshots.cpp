@@ -8,7 +8,7 @@ void BroadcasterSnapshots::add_player(int id, Queue<std::shared_ptr<Snapshot>>* 
 
 void BroadcasterSnapshots::broadcast(std::shared_ptr<Snapshot> game) {
     std::lock_guard<std::mutex> lock(m);
-    for (auto& player_queue : players_queues) {
+    for (auto& player_queue: players_queues) {
         player_queue.second->push(game);
     }
 }
@@ -20,11 +20,8 @@ std::shared_ptr<Snapshot> BroadcasterSnapshots::get_game(int id) {
 void BroadcasterSnapshots::delete_player(int id) {
     std::lock_guard<std::mutex> lock(m);
     players_queues.erase(id);
-
 }
 
-bool BroadcasterSnapshots::is_empty() {
-    return players_queues.size() == 0;
-}
+bool BroadcasterSnapshots::is_empty() { return players_queues.size() == 0; }
 
 BroadcasterSnapshots::~BroadcasterSnapshots() {}

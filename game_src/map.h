@@ -1,6 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <memory>
 #include <string>
 #include <vector>
 

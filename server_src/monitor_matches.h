@@ -10,8 +10,8 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
-#include "constants_server.h"
 
+#include "constants_server.h"
 #include "map.h"
 #include "match.h"
 #include "match_info.h"
@@ -25,13 +25,13 @@ private:
     void kill_dead_matches();
 
 public:
-    explicit MonitorMatches(std::vector<std::string> map_routes);
+    explicit MonitorMatches(const std::vector<std::string>& map_routes);
 
     // Agrega un nuevo match al monitor de matches
     int add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_info);
 
     // Muestra los matches disponibles
-    std::map<std::string, std::string> show_matches_availables(); 
+    std::map<std::string, std::string> show_matches_availables();
 
     // Un determinado usuario se une a un match
     int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo);

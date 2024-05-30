@@ -2,16 +2,16 @@
 
 #define MAX_PLAYERS ConfigSingleton::getInstance().getMaxPlayers()
 
-Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue, 
-        std::string match_name, bool* keep_running, int* status):
-        matches_protocols_queue(matches_protocols_queue), 
-        match_name(match_name), 
-        keep_running(keep_running), 
-        status(status)
-        {
-            // number_of_player = game_map.get_number_of_players();
-            srand(static_cast<unsigned int>(time(nullptr)));
-        }
+Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
+             const std::string& match_name, bool* keep_running, int* status):
+        matches_protocols_queue(matches_protocols_queue),
+        match_name(match_name),
+        keep_running(keep_running),
+        status(status),
+        id_counter(0) {
+    // number_of_player = game_map.get_number_of_players();
+    srand(static_cast<unsigned int>(time(nullptr)));
+}
 
 uint8_t Match::get_number_of_players() { return id_counter; }
 
@@ -42,9 +42,9 @@ void Match::run() {
             // Desencolo el protocolo de los jugadores que se conectaron
             std::shared_ptr<ContainerProtocol> container_protocol = matches_protocols_queue->pop();
 
-
             // game_map.add_player(current_id);
-            Player* player = new Player(container_protocol, current_id, broadcaster_snapshots, clients_cmd_queue);
+            Player* player = new Player(container_protocol, current_id, broadcaster_snapshots,
+                                        clients_cmd_queue);
             player->start();
 
             players.push_back(player);
@@ -64,11 +64,10 @@ void Match::run() {
     } catch (const ClosedQueue& err) {
         std::cerr << "Error: " << err.what() << std::endl;
     }
-
 }
 
 void Match::delete_players() {
-    for (auto& player : players ) {
+    for (auto& player: players) {
         if (!player->is_dead()) {
             player->kill();
         }
