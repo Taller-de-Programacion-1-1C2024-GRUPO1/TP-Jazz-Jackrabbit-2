@@ -6,7 +6,6 @@ Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_
              const std::string& match_name, bool* playing, int* status):
         match_name(match_name),
         matches_protocols_queue(matches_protocols_queue),
-        number_of_players(0),
         playing(playing),
         status(status),
         id_counter(0) {
@@ -67,8 +66,6 @@ void Match::run() {
         std::cerr << "Error: " << err.what() << std::endl;
     }
 }
-
-void Match::add_number_of_player() { number_of_players++; }
 
 void Match::delete_players() {
     for (auto& player: players) {

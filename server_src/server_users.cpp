@@ -14,13 +14,12 @@ void User::run() {
             std::shared_ptr<MatchCommand> new_match =
                     std::dynamic_pointer_cast<MatchCommand>(command);
             if (new_match->get_commandType() == NEW_MATCH) {
-                create_new_match(new_match->get_match_name(), new_match->get_map_name());
+                create_new_match(new_match->get_number_of_players(), new_match->get_match_name(),
+                                 new_match->get_map_name());
             } else if (new_match->getType() == JOIN) {
                 join_match(new_match->get_match_name());
             } else if (new_match->getType() == REFRESH) {
                 refresh();
-            } else if (new_match->getType() == START_MATCH) {
-                start_match(new_match->get_match_name());
             }
         }
     } catch (const LostConnection& e) {
@@ -32,29 +31,33 @@ void User::run() {
     }
 }
 
-void User::create_new_match(const std::string& match_name, const std::string& map_name) {
+void User::create_new_match(int number_of_players, const std::string& match_name,
+                            const std::string& map_name) {
+
+    Map map = monitor_matches.get_map(map_name);
+    // std::vector<Rabbit> rabbits = create_rabbits(map.rabbits);
 
     std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> protocols_queue =
             std::make_shared<Queue<std::shared_ptr<ContainerProtocol>>>();
     protocols_queue->push(this->container_protocol);
+    // std::unordered_map<int, Rabbit> rabbitsMap = make_players_map(rabbits);
+    // std::shared_ptr<GameMap> game_map = std::make_shared<GameMap>(GameMap(numberPlayers,
+    // map_name, map));
 
-    // crear partida con una cantidad de jugadores base? -> esperar a que se unan
+    // agregar el game_map
     std::shared_ptr<MatchInfo> new_match =
             std::make_shared<MatchInfo>(match_name, map_name, protocols_queue, playing);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
-
-    // start_match(match_name);
-
     container_protocol->protocol.send_user_created_match(ACK);
     if (ACK == ERROR) {
         return;
     }
+    monitor_matches.start_match(match_name);
+    this->status = INACTIVE;
 }
 
-void User::start_match(const std::string& match_name) { 
-    monitor_matches.start_match(match_name); 
-}
+void User::start_match(const std::string& match_name) { monitor_matches.start_match(match_name); }
 
 void User::join_match(const std::string& match_name) {
     // se fija si el match esta vivo

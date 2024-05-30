@@ -17,6 +17,7 @@ void ServerAcceptor::run() {
     while (keep_talking && !sk_was_closed) {
         try {
             Socket peer = sk.accept();
+            // se podría hacer un unique_ptr
             User* user = new User(std::make_shared<ContainerProtocol>(std::move(peer)),
                                   monitor_matches, playing);
             user->run();

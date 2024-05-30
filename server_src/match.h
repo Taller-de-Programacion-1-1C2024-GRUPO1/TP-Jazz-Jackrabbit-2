@@ -52,8 +52,6 @@ public:
 
     bool has_started();
 
-    void add_number_of_player();
-
     void delete_players();
 
     uint8_t get_number_of_players();

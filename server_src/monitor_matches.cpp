@@ -17,10 +17,6 @@ int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchI
 }
 
 void MonitorMatches::start_match(std::string match_name) {
-    if (matches[match_name]->status == MATCH_ALIVE || matches[match_name]->status == MATCH_OVER ||
-        matches[match_name]->match_starter->get_number_of_players() == 0) {
-        return;
-    }
     matches[match_name]->match_starter->start();
 }
 
@@ -45,7 +41,6 @@ int MonitorMatches::join_match(std::string match_name,
     std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue =
             matches[match_name]->matches_protocols_queue;
     matches_protocols_queue->push(cont_protocol);
-    matches[match_name]->match_starter->add_number_of_player();
     return OK;
 }
 
