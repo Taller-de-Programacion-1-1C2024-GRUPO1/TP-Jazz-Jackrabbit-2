@@ -57,7 +57,10 @@
      <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
     </property>
     <property name="plainText">
-     <string>4 digit code</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>match name</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="txtJoinMatchCode">
@@ -78,7 +81,10 @@
      <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
     </property>
     <property name="plainText">
-     <string>4 digit code</string>
+     <string/>
+    </property>
+    <property name="placeholderText">
+     <string>match name</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnCreate">
@@ -156,28 +162,6 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="labelGameTitle">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>801</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>04b</family>
-      <pointsize>45</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Jazz Jack rabbit&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnError">
     <property name="geometry">
      <rect>
@@ -230,7 +214,6 @@
     </property>
    </widget>
    <zorder>labelBackGround</zorder>
-   <zorder>labelGameTitle</zorder>
    <zorder>labelCreateMatch_3</zorder>
    <zorder>labelCreateMatch_2</zorder>
    <zorder>txtCreateMatchCode</zorder>
