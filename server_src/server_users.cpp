@@ -19,6 +19,8 @@ void User::run() {
                 join_match(new_match->get_match_name());
             } else if (new_match->getType() == REFRESH) {
                 refresh();
+            } else if (new_match->getType() == START_MATCH) {
+                start_match(new_match->get_match_name());
             }
         }
     } catch (const LostConnection& e) {

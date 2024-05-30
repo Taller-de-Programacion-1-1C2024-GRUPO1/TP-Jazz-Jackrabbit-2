@@ -56,6 +56,7 @@ enum /*Direction*/ {
 enum /*MATCH TYPE*/ {
     NEW_MATCH = 0,
     JOIN,
+    START_MATCH,
     REFRESH,
 };
 
