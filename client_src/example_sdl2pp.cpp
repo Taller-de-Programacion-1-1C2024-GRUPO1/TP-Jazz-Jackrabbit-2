@@ -14,6 +14,8 @@
 #define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
 #define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
 
+#define CASTLE_TILE "../client_src/resources/tiles/castle.png"
+
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
 #define ITEMS_IMG "../client_src/resources/items/items.png"
 #define GAME_TITLE "Juego"
@@ -26,6 +28,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <yaml-cpp/yaml.h>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -54,6 +57,51 @@ using SDL2pp::Window;
 int x_counter = 10;
 int ammo = 1000;
 bool is_shooting = false;
+
+struct Tile {
+    int id;
+    Rect srcRect; // Rectángulo de la textura
+    Rect destRect; // Rectángulo de destino en la pantalla
+};
+
+std::vector<Tile> loadMap(const std::string &filename) {
+    YAML::Node map = YAML::LoadFile(filename);
+    std::vector<Tile> tiles;
+
+    int tilesetWidth = 10; // Ancho del tileset en bloques
+    int tilesetHeight = 66; // Alto del tileset en bloques
+
+    for (const auto &layerNode : map["layers"]) {
+        int x = 0;
+        int y = 0;
+        for (const auto &row : layerNode["data"]) {
+            for (const auto &tile : row) {
+                int id = tile.as<int>();
+                if (id != -1) { // Ignorar tiles vacíos, pero cuentan en la iteración
+                    Tile tile;
+                    tile.id = id;
+                    // Calcular srcRect basado en el id de la textura
+                    tile.srcRect.x = (id % tilesetWidth) * 32;
+                    tile.srcRect.y = (id / tilesetWidth) * 32;
+                    tile.srcRect.w = 32;
+                    tile.srcRect.h = 32;
+                    // Calcular destRect basado en la posición en la capa
+                    tile.destRect.x = x * 32;
+                    tile.destRect.y = y * 32;
+                    tile.destRect.w = 32;
+                    tile.destRect.h = 32;
+                    tiles.push_back(tile);
+                }
+                x++;
+            }
+            x = 0;
+            y++;
+        }
+    }
+
+    return tiles;
+}
+
 
 void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, ShiftingDrawable& spaz,
                    ShiftingDrawable& lori) {
@@ -149,15 +197,22 @@ int main() try {
     // Dibuja la imagen de fondo
     Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
 
+    Texture map_tile(renderer, SDL2pp::Surface(CASTLE_TILE));
+
     // Load sprites image as a new texture; since there's no alpha channel
     // but we need transparency, use helper surface for which set color key
     // to color index 0 -> black background on image will be transparent on our
     // texture
     SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
 
+    //Load map!!
+    //YAML::Node config = loadYAML("../external/maps/map.yml");
+    //const YAML::Node &layers = config["layers"];
+
+    std::vector<Tile> mapComponents = loadMap("../external/maps/map.yml");
+
     // Load font, 12pt size
     Font font(FONT, 12);
-
 
     // Number images
     NumberImages numberImages(renderer);
@@ -296,6 +351,11 @@ int main() try {
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
+
+        // Map render
+        for (const Tile &tile : mapComponents) {
+            renderer.Copy(map_tile, tile.srcRect, tile.destRect);
+        }
 
         jazz.render(renderer);
         /*if (is_shooting) {

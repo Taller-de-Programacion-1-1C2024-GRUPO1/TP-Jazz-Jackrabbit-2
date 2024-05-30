@@ -1,21 +1,124 @@
 #include "client_drawer.h"
+#include "SDL2pp/SDL2pp/SDL2pp.hh"
 
+using SDL2pp::Font;
+using SDL2pp::Mixer;
+using SDL2pp::Music;
+using SDL2pp::NullOpt;
+using SDL2pp::Rect;
+using SDL2pp::Renderer;
+using SDL2pp::SDL;
+using SDL2pp::SDLTTF;
+using SDL2pp::Surface;
+using SDL2pp::Texture;
+using SDL2pp::Window;
 #include <utility>
 
-ClientDrawer::ClientDrawer(const std::string& host, const std::string& service):
-        manager(std::move(host), std::move(service)) {}
+#define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
+#define MUSIC_FILE "../client_src/resources/sounds/music.wav"
+//#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
+#define PLAYER_IMG "../client_src/resources/characters/Jazz.png"
+#define FONT "../client_src/resources/fonts/04B_30__.ttf"
+#define GAME_TITLE "Juego"
+#define MUSIC_VOLUME 5
 
+#include "../game_src/commands/command_jump.h"
+#include "../game_src/commands/command_move.h"
+#include "../game_src/commands/command_move_faster.h"
+#include "../game_src/commands/command_shoot.h"
+#include "../common_src/constants.h"
+
+ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots)
+   : q_cmds(q_cmds), q_snapshots(q_snapshots) {}
+
+void ClientDrawer::process_snapshot(){
+    //entities.clear();
+    Snapshot snapshot = q_snapshots.pop();
+
+    /*for (auto& rabbit : snapshot.rabbits) {
+        entities.push_back(new ShiftingDrawable(rabbit));
+    }
+
+    for (auto& projectile : snapshot.projectiles) {
+        entities.push_back(new ShiftingDrawable(projectile));
+    }
+
+    for (auto& supply : snapshot.supplies) {
+        entities.push_back(new ShiftingDrawable(supply));
+    }*/
+}
+
+void ClientDrawer::handle_keyboard(bool &game_running){
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            game_running = false;
+        }
+    }
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+
+    if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) { //HABILIDAD ESPECIAL JAZZ Y LLORI
+        //q_cmds.push(new UpperHit(client_id, FORWARD_DIR));
+        //q_cmds.push(new ShortRangeKick(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_RIGHT]) {// HABILIDAD ESPECIAL SPAZ
+        //q_cmds.try_push(AsideKick(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) { //HABILIDAD ESPECIAL SPAZ
+        //q_cmds.try_push(AsideKick(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
+        q_cmds.push(new MoveFaster(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
+        q_cmds.push(new MoveFaster(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_RIGHT]) {
+        q_cmds.push(new Move(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_LEFT]) {
+        q_cmds.push(new Move(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
+        q_cmds.push(new Jump(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
+        q_cmds.push(new Jump(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
+        q_cmds.push(new Jump(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_S]) {
+        q_cmds.push(new Shoot(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_W]) {
+        //q_cmds.try_push(ChangeWeapon(client_id));
+    } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
+        game_running = false;
+    } else {
+
+    }
+}
 
 int ClientDrawer::run() {
-    manager.run();
+
+    /* necesito:
+        componentes del mapa en bloquecitos de 32x32
+        personajes
+        enemigos
+        recursos y municion
+        projectiles (balas)
+        puntaje inicial
+        tiempo restante
+     */
+
+    /*try {
+        SDL initialization
+        Receive first snapshot
+        while (true) {
+            Receive keyboard events
+            Send commands
+            Receive snapshot
+            Update entities
+            Draw snapshot
+        }
+    }
+    */
 
     try {
         // Initialize SDL library
         SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
         // Initialize SDL_ttf library
         SDLTTF ttf;
-
-
         // Inicialización de SDL_mixer a través de SDL2pp::Mixer
         Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
         // Cargar música de fondo
@@ -24,18 +127,13 @@ int ClientDrawer::run() {
         mixer.SetMusicVolume(MUSIC_VOLUME);
         // Reproducir música en bucle
         mixer.PlayMusic(backgroundMusic, -1);
-
-
         // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
         Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
                       SDL_WINDOW_SHOWN);
-
-
         // Create accelerated video renderer with default driver
         Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
         // Dibuja la imagen de fondo
         Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
-
 
         // Load sprites image as a new texture; since there's no alpha channel
         // but we need transparency, use helper surface for which set color key
@@ -54,104 +152,37 @@ int ClientDrawer::run() {
         // Load font, 12pt size
         Font font(FONT, 12);
 
+        bool is_running = true;
+
+        //FIRST SNAPSHOT
+
+        //Snapshot first_snapshot = q_snapshots.pop();
+
+
+        client_id = 0; //snapshot me da un id
+
+
         // Game state
-        bool is_running = false;  // whether the character is currently running
-        int run_phase = -1;       // run animation phase
-        float position = 0.0;     // player position
-        int score = 0;            // player score
+        //int score = 0;            // player score
 
         unsigned int prev_ticks = SDL_GetTicks();
         // Main loop
-        while (1) {
+        while (is_running) {
             // Timing: calculate difference between this and previous frame
             // in milliseconds
             unsigned int frame_ticks = SDL_GetTicks();
             unsigned int frame_delta = frame_ticks - prev_ticks;
             prev_ticks = frame_ticks;
 
-            // Event processing:
-            // - If window is closed, or Q or Escape buttons are pressed,
-            //   quit the application
-            // - If Right key is pressed, character would run
-            // - If Right key is released, character would stop
-            SDL_Event event;
-            while (SDL_PollEvent(&event)) {
-                if (event.type == SDL_QUIT) {
-                    return 0;
-                } else if (event.type == SDL_KEYDOWN) {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_ESCAPE:
-                        case SDLK_q:
-                            return 0;
-                        case SDLK_RIGHT:
-                            is_running = true;
-                            break;
-                    }
-                } else if (event.type == SDL_KEYUP) {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_RIGHT:
-                            is_running = false;
-                            score++;
-                            break;
-                    }
-                }
-            }
+            // Event processing
+            handle_keyboard(is_running);
 
-            // Update game state for this frame:
-            // if character is runnung, move it to the right
-            if (is_running) {
-                position += frame_delta * 0.2;
-                run_phase = (frame_ticks / 100) % 8;
-            } else {
-                run_phase = 0;
-            }
-
-            // If player passes past the right side of the window, wrap him
-            // to the left side
-            if (position > renderer.GetOutputWidth())
-                position = -50;
-
-            int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
+            // Read snapshot
+            process_snapshot();
 
             // Clear screen
             renderer.Clear();
             renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
-
-
-            // Pick sprite from sprite atlas based on whether
-            // player is running and run animation phase
-            int src_x = 8, src_y = 11;  // by default, standing sprite
-            if (is_running) {
-                // one of 8 run animation sprites
-                src_x = 8 + 51 * run_phase;
-                src_y = 67;
-            }
-
-            // Draw player sprite
-            sprites.SetAlphaMod(255);  // sprite is fully opaque
-            renderer.Copy(sprites, Rect(src_x, src_y, 25, 50),
-                          Rect((int)position, vcenter - 50, 50, 50));
-
-            // Draw the same sprite, below the first one, 50% transparent and
-            // vertically flipped. It'll look like reflection in the mirror
-            sprites.SetAlphaMod(127);  // 50% transparent
-            renderer.Copy(sprites, Rect(src_x, src_y, 50, 50), Rect((int)position, vcenter, 50, 50),
-                          0.0,                 // don't rotate
-                          NullOpt,             // rotation center - not needed
-                          SDL_FLIP_VERTICAL);  // vertical flip
-
-            // Create text string to render
-            std::string text = "Score: " + std::to_string(score) +
-                               ", running: " + (is_running ? "true" : "false");
-
-            // Render the text into new texture. Note that SDL_ttf render
-            // text into Surface, which is converted into texture on the fly
-            Texture text_sprite(renderer,
-                                font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-
-            // Copy texture into top-left corner of the window
-            renderer.Copy(text_sprite, NullOpt,
-                          Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
 
             // Show rendered frame
             renderer.Present();

@@ -28,7 +28,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="" />
+    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/client_src/client_keyboard_handler.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_src/client_keyboard_handler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_drawer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_drawer.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_manager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_manager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_sender.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_sender.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_sender.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_sender.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/example_sdl2pp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/example_sdl2pp.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,6 +55,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/client_src/client_drawer.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/client_src/client_manager.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/client_src/client_manager.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file:///usr/include/SDL2/SDL_stdinc.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectApplicationVersion">
@@ -68,8 +84,8 @@
     &quot;cf.advertisement.text.overridden&quot;: &quot;true&quot;,
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;QT&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/juampi/Documentos/Taller/Jazz&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;SDL__data__process&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/juampi/Documentos/Taller/Editor de mapas&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -130,14 +146,14 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="CMake Application.example_sdl" />
+      <item itemvalue="CMake Application.SDL2pp" />
+      <item itemvalue="CMake Application.client_lib" />
+      <item itemvalue="CMake Application.common_lib" />
       <item itemvalue="CMake Application.example_sdl2pp" />
+      <item itemvalue="CMake Application.example_sdl" />
+      <item itemvalue="CMake Application.game_lib" />
       <item itemvalue="CMake Application.jazz_client" />
       <item itemvalue="CMake Application.jazz_server" />
-      <item itemvalue="CMake Application.client_lib" />
-      <item itemvalue="CMake Application.SDL2pp" />
-      <item itemvalue="CMake Application.common_lib" />
-      <item itemvalue="CMake Application.game_lib" />
       <item itemvalue="CMake Application.server_lib" />
     </list>
   </component>
@@ -162,7 +178,16 @@
       <workItem from="1716769236851" duration="5784000" />
       <workItem from="1716816411339" duration="30848000" />
       <workItem from="1716904190569" duration="21850000" />
-      <workItem from="1716931617652" duration="1104000" />
+      <workItem from="1716931617652" duration="1593000" />
+      <workItem from="1716933241565" duration="10764000" />
+      <workItem from="1716994977411" duration="2280000" />
+      <workItem from="1716998424956" duration="1832000" />
+      <workItem from="1717000467678" duration="6000" />
+      <workItem from="1717012948015" duration="4368000" />
+      <workItem from="1717021510769" duration="1097000" />
+      <workItem from="1717022636232" duration="8259000" />
+      <workItem from="1717036079793" duration="769000" />
+      <workItem from="1717083362645" duration="3429000" />
     </task>
     <servers />
   </component>

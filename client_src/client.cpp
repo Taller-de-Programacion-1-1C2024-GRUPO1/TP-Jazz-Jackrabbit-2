@@ -4,7 +4,7 @@
 
 
 Client::Client(const std::string& host, const std::string& service):
-        drawer(std::move(host), std::move(service)) {}
+        manager(std::move(host), std::move(service)) {}
 
 
 void Client::run(int argc, char* argv[]) {
@@ -15,5 +15,5 @@ void Client::run(int argc, char* argv[]) {
     a.exec();
 
     // SDL
-    drawer.run();
+    manager.run();
 }

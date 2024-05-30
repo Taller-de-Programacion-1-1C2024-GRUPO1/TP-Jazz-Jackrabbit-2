@@ -7,12 +7,11 @@
 #include <unordered_map>
 #include <utility>
 
-#include "client_drawer.h"
-
+#include "client_manager.h"
 
 class Client {
 private:
-    ClientDrawer drawer;
+    ClientManager manager;
 
 public:
     Client(const std::string& host, const std::string& service);
