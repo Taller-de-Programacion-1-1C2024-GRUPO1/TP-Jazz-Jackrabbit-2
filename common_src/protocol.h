@@ -10,11 +10,17 @@
 #include <arpa/inet.h>
 
 #include "../game_src/commands/cheats.h"
+#include "../game_src/commands/command_change_weapon.h"
 #include "../game_src/commands/command_jump.h"
 #include "../game_src/commands/command_match.h"
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
+#include "../game_src/commands/command_select_champion.h"
 #include "../game_src/commands/command_shoot.h"
+#include "../game_src/commands/command_special_jazz.h"
+#include "../game_src/commands/command_special_lori.h"
+#include "../game_src/commands/command_special_spaz.h"
+#include "../game_src/constants_game.h"
 #include "../game_src/entities/bullet.h"
 #include "../game_src/entities/character.h"
 #include "../game_src/entities/item.h"
@@ -42,9 +48,19 @@ private:
 
     void send_Shoot(Shoot* shoot);
 
-    // void send_Match(Match* match);
+    void send_Match(MatchCommand* match);
 
-    // void send_Cheat(Cheats* cheat);
+    void send_Cheat(Cheats* cheat);
+
+    void send_ChangeWeapon(ChangeWeapon* changeWeapon);
+
+    void send_SelectChampion(SelectChampion* selectChampion);
+
+    void send_SpecialJazz(SpecialJazz* specialJazz);
+
+    void send_SpecialLori(SpecialLori* specialLori);
+
+    void send_SpecialSpaz(SpecialSpaz* specialSpaz);
 
     std::shared_ptr<Move> receive_Move();
 
@@ -54,9 +70,19 @@ private:
 
     std::shared_ptr<Shoot> receive_Shoot();
 
-    // std::shared_ptr<Match> receive_Match();
+    std::shared_ptr<MatchCommand> receive_Match();
 
-    // std::shared_ptr<Cheats> receive_Cheat();
+    std::shared_ptr<Cheats> receive_Cheat();
+
+    std::shared_ptr<ChangeWeapon> receive_ChangeWeapon();
+
+    std::shared_ptr<SelectChampion> receive_SelectChampion();
+
+    std::shared_ptr<SpecialJazz> receive_SpecialJazz();
+
+    std::shared_ptr<SpecialLori> receive_SpecialLori();
+
+    std::shared_ptr<SpecialSpaz> receive_SpecialSpaz();
 
     // ------------------- SEND AND RECEIVE SNAPSHOTS -------------------
 

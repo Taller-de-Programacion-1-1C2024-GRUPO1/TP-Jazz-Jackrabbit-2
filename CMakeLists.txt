@@ -4,6 +4,23 @@ project(Jazz
     VERSION 0.0.1
     DESCRIPTION "Jazz JackRabbit 2 GAME")
 
+include(CTest)
+
+option(TESTING "Enable tests: " ON)
+if (TESTING)
+    add_definitions(-DTESTING)
+endif()
+
+if (TESTING)
+    find_package(GTest REQUIRED)
+    include_directories(${GTEST_INCLUDE_DIRS})
+endif()
+
+if(TESTING)
+    message("Testings enabled!")
+    add_subdirectory(tests)
+endif()
+
 # Buscar paquetes de Qt5
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
@@ -65,12 +82,7 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/common_src
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
         DESTINATION /var/jazz
 )
-#PARA TESTS
 
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/tests
-#        DESTINATION /var/jazz
-#)
-
-#install(DIRECTORY ${CMAKE_SOURCE_DIR}/cmake
-#        DESTINATION /var/jazz
-#)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/tests
+        DESTINATION /var/jazz
+)
