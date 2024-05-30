@@ -123,26 +123,64 @@ void Protocol::send_Shoot(Shoot* shoot) {
     check_closed();
     send_uintEight(SEND_COMMAND_SHOOT);
     send_uintEight(shoot->get_playerId());
-    send_uintEight(shoot->get_dir());
 }
 
-/*
-void Protocol::send_Match() {
+
+void Protocol::send_Match(MatchCommand* match) {
     check_closed();
     send_uintEight(SEND_COMMAND_MATCH);
+    send_uintEight(match->getType());
+    send_uintEight(match->get_number_players());
+    send_string(match->get_map_name());
+    send_string(match->get_match_name());
 }
 
-void Protocol::send_Cheat() {
+void Protocol::send_Cheat(Cheats* cheat) {
     check_closed();
     send_uintEight(SEND_COMMAND_CHEAT);
+    send_uintEight(cheat->get_playerId());
+    send_uintEight(cheat->get_cheatID());
 }
-*/
+
+void Protocol::send_ChangeWeapon(ChangeWeapon* changeWeapon) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_CHANGE_WEAPON);
+    send_uintEight(changeWeapon->get_playerId());
+}
+
+void Protocol::send_SelectChampion(SelectChampion* selectChampion) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_SELECT_CHAMPION);
+    send_uintEight(selectChampion->get_playerId());
+    send_uintEight(selectChampion->get_championType());
+    send_string(selectChampion->get_match_name());
+    send_string(selectChampion->get_map_name());
+}
+
+void Protocol::send_SpecialJazz(SpecialJazz* specialJazz) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_JUMP_PUNCH_ATTACK_JAZZ);
+    send_uintEight(specialJazz->get_playerId());
+}
+
+void Protocol::send_SpecialLori(SpecialLori* specialLori) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_SHORT_RANGE_JUMP_KICK_LORI);
+    send_uintEight(specialLori->get_playerId());
+    send_uintEight(specialLori->get_dir());
+}
+
+void Protocol::send_SpecialSpaz(SpecialSpaz* specialSpaz) {
+    check_closed();
+    send_uintEight(SEND_COMMAND_SIDE_KICK_SPAZ);
+    send_uintEight(specialSpaz->get_playerId());
+    send_uintEight(specialSpaz->get_dir());
+}
 
 void Protocol::send_Command(Command* command) {
     switch (command->get_commandType()) {
         case COMMAND_CHEAT:
-            // send_Cheat();
-            std::cout << "Cheat not implemented yet" << std::endl;
+            send_Cheat(dynamic_cast<Cheats*>(command));
         case COMMAND_JUMP:
             send_Jump(dynamic_cast<Jump*>(command));
         case COMMAND_MOVE:
@@ -152,8 +190,17 @@ void Protocol::send_Command(Command* command) {
         case COMMAND_SHOOT:
             send_Shoot(dynamic_cast<Shoot*>(command));
         case COMMAND_MATCH:
-            // send_Match();
-            std::cout << "Match not implemented yet" << std::endl;
+            send_Match(dynamic_cast<MatchCommand*>(command));
+        case COMMAND_SELECT_CHAMPION:
+            send_SelectChampion(dynamic_cast<SelectChampion*>(command));
+        case COMMAND_CHANGE_WEAPON:
+            send_ChangeWeapon(dynamic_cast<ChangeWeapon*>(command));
+        case COMMAND_JUMP_PUNCH_ATTACK_JAZZ:
+            send_SpecialJazz(dynamic_cast<SpecialJazz*>(command));
+        case COMMANDS_SHORT_RANGE_JUMP_KICK_LORI:
+            send_SpecialLori(dynamic_cast<SpecialLori*>(command));
+        case COMMANDS_SIDE_KICK_SPAZ:
+            send_SpecialSpaz(dynamic_cast<SpecialSpaz*>(command));
         default:
             break;
     }
@@ -181,13 +228,52 @@ std::shared_ptr<Jump> Protocol::receive_Jump() {
 
 std::shared_ptr<Shoot> Protocol::receive_Shoot() {
     uint8_t player_id = receive_uintEight();
-    uint8_t dir = receive_uintEight();
-    return std::make_shared<Shoot>(player_id, dir);
+    return std::make_shared<Shoot>(player_id);
 }
 
-// std::shared_ptr<Match> Protocol::receive_Match() { return std::make_shared<Match>(); }
+std::shared_ptr<MatchCommand> Protocol::receive_Match() {
+    uint8_t type = receive_uintEight();
+    uint8_t number_players = receive_uintEight();
+    std::string map_name = receive_string();
+    std::string match_name = receive_string();
+    return std::make_shared<MatchCommand>(type, number_players, map_name, match_name);
+}
 
-// std::shared_ptr<Cheats> Protocol::receive_Cheat() { return std::make_shared<Cheats>(); }
+std::shared_ptr<Cheats> Protocol::receive_Cheat() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t cheat_id = receive_uintEight();
+    return std::make_shared<Cheats>(player_id, cheat_id);
+}
+
+std::shared_ptr<ChangeWeapon> Protocol::receive_ChangeWeapon() {
+    uint8_t player_id = receive_uintEight();
+    return std::make_shared<ChangeWeapon>(player_id);
+}
+
+std::shared_ptr<SelectChampion> Protocol::receive_SelectChampion() {
+    uint8_t player_id = receive_uintEight();
+    ChampionType champion_type = static_cast<ChampionType>(receive_uintEight());
+    std::string match_name = receive_string();
+    std::string map_name = receive_string();
+    return std::make_shared<SelectChampion>(player_id, champion_type, match_name, map_name);
+}
+
+std::shared_ptr<SpecialJazz> Protocol::receive_SpecialJazz() {
+    uint8_t player_id = receive_uintEight();
+    return std::make_shared<SpecialJazz>(player_id);
+}
+
+std::shared_ptr<SpecialLori> Protocol::receive_SpecialLori() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_shared<SpecialLori>(player_id, dir);
+}
+
+std::shared_ptr<SpecialSpaz> Protocol::receive_SpecialSpaz() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_shared<SpecialSpaz>(player_id, dir);
+}
 
 std::shared_ptr<Command> Protocol::receive_Command() {
     uint8_t command = receive_uintEight();
@@ -201,9 +287,19 @@ std::shared_ptr<Command> Protocol::receive_Command() {
         case SEND_COMMAND_SHOOT:
             return receive_Shoot();
         case SEND_COMMAND_MATCH:
-            // return receive_Match();
+            return receive_Match();
         case SEND_COMMAND_CHEAT:
-            // return receive_Cheat();
+            return receive_Cheat();
+        case SEND_COMMAND_CHANGE_WEAPON:
+            return receive_ChangeWeapon();
+        case SEND_COMMAND_SELECT_CHAMPION:
+            return receive_SelectChampion();
+        case SEND_COMMAND_JUMP_PUNCH_ATTACK_JAZZ:
+            return receive_SpecialJazz();
+        case SEND_COMMAND_SHORT_RANGE_JUMP_KICK_LORI:
+            return receive_SpecialLori();
+        case SEND_COMMAND_SIDE_KICK_SPAZ:
+            return receive_SpecialSpaz();
         default:
             throw InvalidCommand();
     }
