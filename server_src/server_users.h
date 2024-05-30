@@ -35,8 +35,8 @@ public:
          bool* playing);
     void run() override;
 
-    void create_new_match(int amount_players, const std::string& match_name,
-                          const std::string& map_name);
+    void create_new_match(const std::string& match_name, const std::string& map_name);
+    void start_match(const std::string& match_name);
     void join_match(const std::string& match_name);
     void refresh();
 

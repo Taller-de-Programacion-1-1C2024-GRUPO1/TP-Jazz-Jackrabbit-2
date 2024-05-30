@@ -38,7 +38,7 @@ private:
     int number_of_players;
     std::list<Player*> players;
     // game_map
-    bool* keep_running;
+    bool* playing;
     int* status;
     int id_counter;
 
@@ -47,10 +47,12 @@ private:
 public:
     // falta agregar el game_map
     Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
-          const std::string& match_name, bool* keep_running, int* status);
+          const std::string& match_name, bool* playing, int* status);
     ~Match();
 
     bool has_started();
+
+    void add_number_of_player();
 
     void delete_players();
 

@@ -30,7 +30,7 @@ private:
     BroadcasterSnapshots& broadcaster_snapshots;
     std::list<Player*>& players;
 
-    bool* keep_running;
+    bool* playing;
 
     // GameWorld game_world; -> contiene el game_map
 
@@ -54,8 +54,7 @@ private:
 
 public:
     Game(Queue<std::shared_ptr<Command>>& client_cmd_queue,
-         BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players,
-         bool* keep_playing);
+         BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players, bool* playing);
 
     std::shared_ptr<Snapshot> get_initial_snapshot(const Map& map);
 
@@ -67,7 +66,7 @@ public:
 
     void stop();
 
-    ~Game();
+    // ~Game();
 };
 
 #endif

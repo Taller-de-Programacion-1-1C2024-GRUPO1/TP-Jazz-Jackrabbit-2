@@ -3,14 +3,13 @@
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
 Game::Game(Queue<std::shared_ptr<Command>>& client_cmd_queue,
-           BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
-           bool* keep_running):
+           BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players, bool* playing):
         height(0),
         width(0),
         client_cmd_queue(client_cmd_queue),
         broadcaster_snapshots(broadcaster_snapshots),
         players(players),
-        keep_running(keep_running),
+        playing(playing),
         game_ended(false) {
     srand(static_cast<unsigned int>(time(nullptr)));
 }
@@ -63,16 +62,16 @@ void Game::execute_and_step(int iter) {
         }
         */
     } catch (const ClosedQueue& err) {
-        if (!keep_running)
+        if (!playing)
             return;
         std::cerr << "Error: " << err.what() << std::endl;
-        *keep_running = false;
+        *playing = false;
     }
 }
 
-void Game::stop() { *keep_running = false; }
+void Game::stop() { *playing = false; }
 
 void Game::run() {
-    Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME, *keep_running);
+    Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME, *playing);
     clock.tick();
 }

@@ -10,14 +10,12 @@
 class MatchCommand: public Command {
 private:
     int type;
-    int number_players;
     std::string match_name;
     std::string map_name;
     int commandType = COMMAND_MATCH;
 
 public:
-    MatchCommand(int type, int number_players, const std::string& match_name,
-                 const std::string& map_name);
+    MatchCommand(int type, const std::string& match_name, const std::string& map_name);
     int get_playerId() override;
     int getType();
     int get_number_players();

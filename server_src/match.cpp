@@ -3,10 +3,11 @@
 #define MAX_PLAYERS ConfigSingleton::getInstance().getMaxPlayers()
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
-             const std::string& match_name, bool* keep_running, int* status):
-        matches_protocols_queue(matches_protocols_queue),
+             const std::string& match_name, bool* playing, int* status):
         match_name(match_name),
-        keep_running(keep_running),
+        matches_protocols_queue(matches_protocols_queue),
+        number_of_players(0),
+        playing(playing),
         status(status),
         id_counter(0) {
     // number_of_player = game_map.get_number_of_players();
@@ -50,9 +51,10 @@ void Match::run() {
             players.push_back(player);
             id_counter++;
         }
+        // crear el mapa
 
         // hay que agregar el game_map
-        Game game = Game(clients_cmd_queue, broadcaster_snapshots, players, keep_running);
+        Game game = Game(clients_cmd_queue, broadcaster_snapshots, players, playing);
         *status = MATCH_ALIVE;
         send_game_initial(game);
         game.run();
@@ -65,6 +67,8 @@ void Match::run() {
         std::cerr << "Error: " << err.what() << std::endl;
     }
 }
+
+void Match::add_number_of_player() { number_of_players++; }
 
 void Match::delete_players() {
     for (auto& player: players) {

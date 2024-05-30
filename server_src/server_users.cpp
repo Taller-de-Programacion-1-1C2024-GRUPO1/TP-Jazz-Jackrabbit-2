@@ -1,6 +1,6 @@
 #include "server_users.h"
 
-User::User(std::shared_ptr<ContainerProtocol> conteiner_protocol, MonitorMatches& monitor_matches,
+User::User(std::shared_ptr<ContainerProtocol> container_protocol, MonitorMatches& monitor_matches,
            bool* playing):
         status(ACTIVE),
         container_protocol(container_protocol),
@@ -14,8 +14,7 @@ void User::run() {
             std::shared_ptr<MatchCommand> new_match =
                     std::dynamic_pointer_cast<MatchCommand>(command);
             if (new_match->get_commandType() == NEW_MATCH) {
-                create_new_match(new_match->get_number_players(), new_match->get_match_name(),
-                                 new_match->get_map_name());
+                create_new_match(new_match->get_match_name(), new_match->get_map_name());
             } else if (new_match->getType() == JOIN) {
                 join_match(new_match->get_match_name());
             } else if (new_match->getType() == REFRESH) {
@@ -31,42 +30,24 @@ void User::run() {
     }
 }
 
-void User::create_new_match(int number_players, const std::string& match_name,
-                            const std::string& map_name) {
-    /*
-    ---- Primero, se obtiene el mapa que se quiere jugar y se crea una lista de conejos que van a
-    jugar en el mapa. ----
-
-    Map map = monitor_matches.get_map(map_name);
-    std::vector<Rabbit> rabbits = create_rabbits(map.rabbits);
-
-    ---- Luego, se crea un nuevo match con: ----
-    - el nombre del match,
-    - el mapa,
-    - la lista de conejos,
-    - el puntero a playing
-    - el puntero a la cola de protocolos.
+void User::create_new_match(const std::string& match_name, const std::string& map_name) {
 
     std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> protocols_queue =
-    std::make_shared<Queue<std::shared_ptr<ContainerProtocol>>>();
+            std::make_shared<Queue<std::shared_ptr<ContainerProtocol>>>();
     protocols_queue->push(this->container_protocol);
-    std::unordered_map<int, Rabbit> rabbitsMap = make_players_map(rabbits);
-    std::shared_ptr<GameMap> game_map = std::make_shared<GameMap>(GameMap(numberPlayers, map_name,
-    map)); std::shared_ptr<MatchInfo> new_match = std::make_shared<MatchInfo>(match_name, game_map,
-    playing, protocols_queue);
 
-    ---- Por ultimo, se agrega el match al monitor de matches y se inicia el match. ----
+    std::shared_ptr<MatchInfo> new_match =
+            std::make_shared<MatchInfo>(match_name, map_name, protocols_queue, playing);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
-    container_protocolo->protocol.send_user_joined_match(ACK);
+
+    container_protocol->protocol.send_user_joined_match(ACK);
     if (ACK == ERROR) {
         return;
     }
-    monitor_matches.start_match(match_name);
-    this->status = INACTIVE;
-
-    */
 }
+
+void User::start_match(const std::string& match_name) { monitor_matches.start_match(match_name); }
 
 void User::join_match(const std::string& match_name) {
     // se fija si el match esta vivo
