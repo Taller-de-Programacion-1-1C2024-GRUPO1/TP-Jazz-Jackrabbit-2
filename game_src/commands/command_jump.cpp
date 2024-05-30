@@ -10,6 +10,7 @@ bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {
     } else {
         throw std::runtime_error("Invalid direction!");
     }
+    return needsMove;
 }
 int Jump::get_playerId() { return this->playerID; }
 
