@@ -526,10 +526,9 @@
                         GMOCK_INTERNAL_LIST_##value_params)){})                \
             GMOCK_ACTION_CLASS_(name, value_params)(const GMOCK_ACTION_CLASS_( \
                 name, value_params) &) noexcept GMOCK_INTERNAL_DEFN_COPY_      \
-        ##value_params                                                         \
-        GMOCK_ACTION_CLASS_(name, value_params)(GMOCK_ACTION_CLASS_(           \
-            name, value_params) &&) noexcept GMOCK_INTERNAL_DEFN_COPY_         \
-        ##value_params template <typename F>                                   \
+        ##value_params GMOCK_ACTION_CLASS_(name, value_params)(                \
+            GMOCK_ACTION_CLASS_(name, value_params) &&) noexcept               \
+        GMOCK_INTERNAL_DEFN_COPY_##value_params template <typename F>          \
         operator ::testing::Action<F>() const {                                \
       return GMOCK_PP_IF(                                                      \
           GMOCK_PP_IS_EMPTY(GMOCK_INTERNAL_COUNT_##value_params),              \

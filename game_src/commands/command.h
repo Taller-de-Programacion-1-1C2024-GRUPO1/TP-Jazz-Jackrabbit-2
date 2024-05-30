@@ -17,6 +17,13 @@
     - Jump
     - Shoot
     - MoveFaster
+    - MatchCommand
+    - Cheats
+    - ChangeWeapon
+    - SelectChampion
+    - SpecialJazz
+    - SpecialLori
+    - SpecialSpaz
 */
 class Command {
 private:
@@ -30,7 +37,6 @@ public:
     virtual void execute_Command() { return; }
 
     virtual int get_playerId() = 0;
-    int get_dir() { return 0; }
     virtual int get_commandType() = 0;
     virtual ~Command() {}
 };

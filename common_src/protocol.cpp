@@ -131,8 +131,8 @@ void Protocol::send_Match(MatchCommand* match) {
     send_uintEight(SEND_COMMAND_MATCH);
     send_uintEight(match->getType());
     send_uintEight(match->get_number_players());
-    send_string(match->get_map_name());
     send_string(match->get_match_name());
+    send_string(match->get_map_name());
 }
 
 void Protocol::send_Cheat(Cheats* cheat) {
@@ -179,32 +179,70 @@ void Protocol::send_SpecialSpaz(SpecialSpaz* specialSpaz) {
 
 void Protocol::send_Command(Command* command) {
     switch (command->get_commandType()) {
+        /* 
+        En cada caso se castea el comando a su tipo correspondiente y se envia.
+        Hay que terminar cada caso con "break" para evitar el "fallthrough" no intencionado en el switch.
+        */
         case COMMAND_CHEAT:
-            send_Cheat(dynamic_cast<Cheats*>(command));
+            if (auto* cheat = dynamic_cast<Cheats*>(command)) {
+                send_Cheat(cheat);
+            }
+            break;
         case COMMAND_JUMP:
-            send_Jump(dynamic_cast<Jump*>(command));
+            if (auto* jump = dynamic_cast<Jump*>(command)) {
+                send_Jump(jump);
+            }
+            break;
         case COMMAND_MOVE:
-            send_Move(dynamic_cast<Move*>(command));
+            if (auto* move = dynamic_cast<Move*>(command)) {
+                send_Move(move);
+            }
+            break;
         case COMMAND_MOVE_FASTER:
-            send_MoveFaster(dynamic_cast<MoveFaster*>(command));
+            if (auto* moveFaster = dynamic_cast<MoveFaster*>(command)) {
+                send_MoveFaster(moveFaster);
+            }
+            break;
         case COMMAND_SHOOT:
-            send_Shoot(dynamic_cast<Shoot*>(command));
+            if (auto* shoot = dynamic_cast<Shoot*>(command)) {
+                send_Shoot(shoot);
+            }
+            break;
         case COMMAND_MATCH:
-            send_Match(dynamic_cast<MatchCommand*>(command));
+            if (auto* match = dynamic_cast<MatchCommand*>(command)) {
+                send_Match(match);
+            }
+            break;
         case COMMAND_SELECT_CHAMPION:
-            send_SelectChampion(dynamic_cast<SelectChampion*>(command));
+            if (auto* selectChampion = dynamic_cast<SelectChampion*>(command)) {
+                send_SelectChampion(selectChampion);
+            }
+            break;
         case COMMAND_CHANGE_WEAPON:
-            send_ChangeWeapon(dynamic_cast<ChangeWeapon*>(command));
+            if (auto* changeWeapon = dynamic_cast<ChangeWeapon*>(command)) {
+                send_ChangeWeapon(changeWeapon);
+            }
+            break;
         case COMMAND_JUMP_PUNCH_ATTACK_JAZZ:
-            send_SpecialJazz(dynamic_cast<SpecialJazz*>(command));
+            if (auto* specialJazz = dynamic_cast<SpecialJazz*>(command)) {
+                send_SpecialJazz(specialJazz);
+            }
+            break;
         case COMMANDS_SHORT_RANGE_JUMP_KICK_LORI:
-            send_SpecialLori(dynamic_cast<SpecialLori*>(command));
+            if (auto* specialLori = dynamic_cast<SpecialLori*>(command)) {
+                send_SpecialLori(specialLori);
+            }
+            break;
         case COMMANDS_SIDE_KICK_SPAZ:
-            send_SpecialSpaz(dynamic_cast<SpecialSpaz*>(command));
+            if (auto* specialSpaz = dynamic_cast<SpecialSpaz*>(command)) {
+                send_SpecialSpaz(specialSpaz);
+            }
+            break;
         default:
             break;
     }
 }
+
 
 // ----------------------------- RECEIVE COMMANDS -----------------------------
 
@@ -234,9 +272,9 @@ std::shared_ptr<Shoot> Protocol::receive_Shoot() {
 std::shared_ptr<MatchCommand> Protocol::receive_Match() {
     uint8_t type = receive_uintEight();
     uint8_t number_players = receive_uintEight();
-    std::string map_name = receive_string();
     std::string match_name = receive_string();
-    return std::make_shared<MatchCommand>(type, number_players, map_name, match_name);
+    std::string map_name = receive_string();
+    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name);
 }
 
 std::shared_ptr<Cheats> Protocol::receive_Cheat() {

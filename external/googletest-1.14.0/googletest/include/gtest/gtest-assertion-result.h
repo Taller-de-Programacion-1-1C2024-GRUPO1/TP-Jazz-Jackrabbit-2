@@ -217,7 +217,7 @@ class GTEST_API_ AssertionResult {
   // construct is not satisfied with the predicate's outcome.
   // Referenced via a pointer to avoid taking too much stack frame space
   // with test assertions.
-  std::unique_ptr< ::std::string> message_;
+  std::unique_ptr<::std::string> message_;
 };
 
 // Makes a successful assertion result.
