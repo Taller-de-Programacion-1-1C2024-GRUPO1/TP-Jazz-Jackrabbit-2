@@ -37,12 +37,15 @@ void Match::run() {
                 throw MatchAlreadyStarted();
             if (number_of_players >= MAX_PLAYERS)
                 throw MatchFull();
+            int current_id = id_counter;
+
+            // Desencolo el protocolo de los jugadores que se conectaron
             std::shared_ptr<ContainerProtocol> container_protocol = matches_protocols_queue->pop();
 
-            int current_id = id_counter;
 
             // game_map.add_player(current_id);
             Player* player = new Player(container_protocol, current_id, broadcaster_snapshots, clients_cmd_queue);
+            player->start();
 
             players.push_back(player);
             id_counter++;
@@ -69,7 +72,6 @@ void Match::delete_players() {
         if (!player->is_dead()) {
             player->kill();
         }
-        player->join();
         delete player;
     }
     players.clear();
