@@ -6,8 +6,8 @@
 #include <vector>
 
 #include "../constants.h"
-#include "../game_src/constants_game.h"
-#include "../server_src/config.h"
+#include "../../game_src/constants_game.h"
+#include "../../server_src/config.h"
 
 // #include "snapshot_map.h" ???
 #include "snapshot_projectile.h"
