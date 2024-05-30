@@ -32,7 +32,7 @@ Protocol server_protocol(std::move(peer_test));
 
 // ------------------- TESTS -------------------
 
-TEST(ProtocolTest, SendAndReceiveMoveLeft) {
+TEST(ProtocolTestMove, SendAndReceiveMoveLeft) {
     Move* move = new Move(player_id, LEFT_DIR);
     client_protocol.send_Command(move);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -42,7 +42,7 @@ TEST(ProtocolTest, SendAndReceiveMoveLeft) {
     delete move;
 }
 
-TEST(ProtocolTest, SendAndReceiveMoveRight) {
+TEST(ProtocolTestMove, SendAndReceiveMoveRight) {
     Move* move = new Move(player_id, RIGHT_DIR);
     client_protocol.send_Command(move);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -52,7 +52,7 @@ TEST(ProtocolTest, SendAndReceiveMoveRight) {
     delete move;
 }
 
-TEST(ProtocolTest, SendAndReceiveMoveForward) {
+TEST(ProtocolTestMove, SendAndReceiveMoveForward) {
     Move* move = new Move(player_id, FORWARD_DIR);
     client_protocol.send_Command(move);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -62,7 +62,7 @@ TEST(ProtocolTest, SendAndReceiveMoveForward) {
     delete move;
 }
 
-TEST(ProtocolTest, SendAndReceiveMoveBackward) {
+TEST(ProtocolTestMove, SendAndReceiveMoveBackward) {
     Move* move = new Move(player_id, BACKWARD_DIR);
     client_protocol.send_Command(move);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -72,7 +72,7 @@ TEST(ProtocolTest, SendAndReceiveMoveBackward) {
     delete move;
 }
 
-TEST(ProtocolTest, SendAndReceiveMoveFasterRight) {
+TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterRight) {
     MoveFaster* move_faster = new MoveFaster(player_id, RIGHT_DIR);
     client_protocol.send_Command(move_faster);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -82,7 +82,7 @@ TEST(ProtocolTest, SendAndReceiveMoveFasterRight) {
     delete move_faster;
 }
 
-TEST(ProtocolTest, SendAndReceiveMoveFasterLeft) {
+TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterLeft) {
     MoveFaster* move_faster = new MoveFaster(player_id, LEFT_DIR);
     client_protocol.send_Command(move_faster);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -92,7 +92,7 @@ TEST(ProtocolTest, SendAndReceiveMoveFasterLeft) {
     delete move_faster;
 }
 
-TEST(ProtocolTest, SendAndReceiveJumpForwardERROR) {
+TEST(ProtocolTestJump, SendAndReceiveJumpForwardERROR) {
     Jump* jump = new Jump(player_id, FORWARD_DIR);
     client_protocol.send_Command(jump);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -103,7 +103,7 @@ TEST(ProtocolTest, SendAndReceiveJumpForwardERROR) {
     delete jump;
 }
 
-TEST(ProtocolTest, SendAndReceiveJumpBackwardERROR) {
+TEST(ProtocolTestJump, SendAndReceiveJumpBackwardERROR) {
     Jump* jump = new Jump(player_id, BACKWARD_DIR);
     client_protocol.send_Command(jump);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -113,7 +113,7 @@ TEST(ProtocolTest, SendAndReceiveJumpBackwardERROR) {
     delete jump;
 }
 
-TEST(ProtocolTest, SendAndReceiveJumpRight) {
+TEST(ProtocolTestJump, SendAndReceiveJumpRight) {
     Jump* jump = new Jump(player_id, RIGHT_DIR);
     client_protocol.send_Command(jump);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -123,7 +123,7 @@ TEST(ProtocolTest, SendAndReceiveJumpRight) {
     delete jump;
 }
 
-TEST(ProtocolTest, SendAndReceiveJumpLeft) {
+TEST(ProtocolTestJump, SendAndReceiveJumpLeft) {
     Jump* jump = new Jump(player_id, LEFT_DIR);
     client_protocol.send_Command(jump);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -133,7 +133,7 @@ TEST(ProtocolTest, SendAndReceiveJumpLeft) {
     delete jump;
 }
 
-TEST(ProtocolTest, SendAndReceiveShoot) {
+TEST(ProtocolTestShoot, SendAndReceiveShoot) {
     Shoot* shoot = new Shoot(player_id);
     client_protocol.send_Command(shoot);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -142,7 +142,7 @@ TEST(ProtocolTest, SendAndReceiveShoot) {
     delete shoot;
 }
 
-TEST(ProtocolTest, SendAndReceiveSpecialLoriForwardERROR) {
+TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriForwardERROR) {
     SpecialLori* special_lori = new SpecialLori(player_id, FORWARD_DIR);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -153,7 +153,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialLoriForwardERROR) {
     delete special_lori;
 }
 
-TEST(ProtocolTest, SendAndReceiveSpecialLoriBackwardERROR) {
+TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriBackwardERROR) {
     SpecialLori* special_lori = new SpecialLori(player_id, BACKWARD_DIR);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -174,7 +174,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialLoriRight) {
     delete special_lori;
 }
 
-TEST(ProtocolTest, SendAndReceiveSpecialLoriLeft) {
+TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriLeft) {
     SpecialLori* special_lori = new SpecialLori(player_id, LEFT_DIR);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -184,7 +184,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialLoriLeft) {
     delete special_lori;
 }
 
-TEST(ProtocolTest, SendAndReceiveSpecialSpazRight) {
+TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazRight) {
     SpecialSpaz* special_spaz = new SpecialSpaz(player_id, RIGHT_DIR);
     client_protocol.send_Command(special_spaz);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -194,7 +194,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialSpazRight) {
     delete special_spaz;
 }
 
-TEST(ProtocolTest, SendAndReceiveSpecialSpazLeft) {
+TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazLeft) {
     SpecialSpaz* special_spaz = new SpecialSpaz(player_id, LEFT_DIR);
     client_protocol.send_Command(special_spaz);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -204,7 +204,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialSpazLeft) {
     delete special_spaz;
 }
 
-TEST(ProtocolTest, SendAndReceiveSpecialJazz) {
+TEST(ProtocolTestSpecialJazz, SendAndReceiveSpecialJazz) {
     SpecialJazz* special_jazz = new SpecialJazz(player_id);
     client_protocol.send_Command(special_jazz);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -213,7 +213,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialJazz) {
     delete special_jazz;
 }
 
-TEST(ProtocolTest, SendAndReceiveChangeWeapon) {
+TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
     ChangeWeapon* change_weapon = new ChangeWeapon(player_id);
     client_protocol.send_Command(change_weapon);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -222,7 +222,7 @@ TEST(ProtocolTest, SendAndReceiveChangeWeapon) {
     delete change_weapon;
 }
 
-TEST(ProtocolTest, SendAndReceiveSelectChampion) {
+TEST(ProtocolTestSelectChampion, SendAndReceiveSelectChampion) {
     SelectChampion* select_champion = new SelectChampion(player_id, Jazz, map_test, match_test);
     client_protocol.send_Command(select_champion);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
@@ -235,7 +235,7 @@ TEST(ProtocolTest, SendAndReceiveSelectChampion) {
     delete select_champion;
 }
 
-TEST(ProtocolTest, SendAndReceiveMatch) {
+TEST(ProtocolTestMatch, SendAndReceiveMatch) {
     MatchCommand* match = new MatchCommand(player_id, number_players, map_test, match_test);
     client_protocol.send_Command(match);
     std::shared_ptr<Command> received_command = server_protocol.receive_Command();
