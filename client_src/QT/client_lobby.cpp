@@ -1,15 +1,10 @@
 #include "client_lobby.h"
 
-#include <QApplication>
-#include <QDebug>
-#include <QFontDatabase>
-#include <QMessageBox>
-
 #include "./ui_client_lobby.h"
 
-//ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent) ,ui(new Ui::ClientLobby) {
+// ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent) ,ui(new Ui::ClientLobby) {
 
-ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol) ,ui(new Ui::ClientLobby) {
+ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol), ui(new Ui::ClientLobby) {
     ui->setupUi(this);
 
     // Cargar la fuente desde los recursos
@@ -34,24 +29,24 @@ ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol) ,ui(new Ui::Cli
 ClientLobby::~ClientLobby() { delete ui; }
 
 int match_code;
-//std::string map;
+// std::string map;
 void ClientLobby::on_btnCreateMatch_clicked() {
     match_code = ui->txtCreateMatch->toPlainText().toInt();
-    //map = "mapa1";
-    //Match match(NEW_MATCH, std::to_string(match_code), map);
-    //protocol.send(match);
+    // map = "mapa1";
+    // Match match(NEW_MATCH, std::to_string(match_code), map);
+    // protocol.send(match);
 
-    if (match_code==0) {
-         QMessageBox::critical(this, "ERROR", "nombre de partida invalido");
+    if (match_code == 0) {
+        QMessageBox::critical(this, "ERROR", "nombre de partida invalido");
         return;
     }
 
     hide();
-    MatchLobby match_lobby;
-    match_lobby.setModal(true);
-    match_lobby.exec();
+    MapSelector map_selector;
+    map_selector.setModal(true);
+    map_selector.exec();
 
-    ui->txtAvailableMatches->setPlainText(QString::number(match_code));
+    // ui->txtAvailableMatches->setPlainText(QString::number(match_code));
 }
 
 int join_match_code;

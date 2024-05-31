@@ -25,6 +25,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QT
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        map_selector.h map_selector.cpp map_selector.ui
         match_lobby.h match_lobby.cpp match_lobby.ui
     )
 # Define target properties for Android with Qt 6 as:
