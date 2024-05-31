@@ -1,12 +1,11 @@
 #include "client_drawer.h"
 
 
-ClientDrawer::ClientDrawer(const std::string& host, const std::string& service):
-        manager(std::move(host), std::move(service)) {}
-
+ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots)
+   : q_cmds(q_cmds), q_snapshots(q_snapshots) {}
 
 int ClientDrawer::run() {
-    manager.run();
+   
 
     try {
         // Initialize SDL library

@@ -15,6 +15,7 @@ class ClientLobby: public QMainWindow {
 public:
     ClientLobby(QWidget* parent = nullptr);
     ~ClientLobby();
+    //void run(int argc, char* argv[]);
 
 private slots:
     void on_btnCreateMatch_clicked();
@@ -22,6 +23,8 @@ private slots:
     void on_btnJoinMatch_clicked();
 
     void on_btnError_clicked();
+
+
 
 private:
     Ui::ClientLobby* ui;

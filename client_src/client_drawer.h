@@ -1,7 +1,6 @@
 #ifndef CLIENT_DRAWER_H
 #define CLIENT_DRAWER_H
 
-#include "client_manager.h"
 
 
 
@@ -26,7 +25,9 @@
 #include <exception>
 #include <iostream>
 #include <string>
-
+#include "../common_src/queue.h"
+#include "../common_src/snapshots/snapshot.h"
+#include "../game_src/commands/command.h"
 #include <SDL2pp/SDL2pp.hh>
 
 using SDL2pp::Font;
@@ -43,13 +44,18 @@ using SDL2pp::Window;
 
 
 
+// pre-commit run --hook-stage manual --all-files
+
+
+
+
 class ClientDrawer {
 private:
-    ClientManager manager;
-
+    Queue<Command*> &q_cmds;
+    Queue<Snapshot> &q_snapshots;
 
 public:
-    ClientDrawer(const std::string& host, const std::string& service);
+    ClientDrawer(Queue <Command*> &q_cmds, Queue <Snapshot> &q_snapshots);
 
     int run();
 

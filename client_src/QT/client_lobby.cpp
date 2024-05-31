@@ -50,3 +50,14 @@ void ClientLobby::on_btnError_clicked()
     QMessageBox::critical(this, "ERROR", "Ingrese un numero valido");
 }
 
+ /*
+ void ClientLobby::run(int argc, char* argv[])
+{
+    QApplication a(argc, argv);
+    Q_INIT_RESOURCE(resources);
+    ClientLobby w;
+    w.show();
+    a.exec();
+}
+ */  
+
