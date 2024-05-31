@@ -2,8 +2,28 @@
 
 #include "./ui_client_lobby.h"
 #include <QMessageBox>
+#include <QDebug>
+#include <QFontDatabase>
+#include <QApplication>
 ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent), ui(new Ui::ClientLobby) {
     ui->setupUi(this);
+
+    // Cargar la fuente desde los recursos
+    int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
+    if (fontId != -1) {
+        QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
+        QFont font(fontFamily);
+        QApplication::setFont(font);
+    } else {
+        qWarning() << "No se pudo cargar la fuente 04B_30__";
+    }
+
+    // Establecer el fondo
+    //background-image: url(:/backgrounds/lobby.png)
+    QPixmap pixmap(":/backgrounds/lobby.png");
+    QPalette palette;
+    palette.setBrush(QPalette::Window, pixmap);  // Usar QPalette::Window en lugar de QPalette::Background
+    this->setPalette(palette);
 }
 
 ClientLobby::~ClientLobby() { delete ui; }
