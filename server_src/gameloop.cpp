@@ -48,15 +48,15 @@ void Game::execute_and_step(int iter) {
         while (client_cmd_queue.try_pop(game_command)) {
             // game_command->execute_Command();
         }
-        // game_world.step(iter);
 
-        // Snapshot snapshot = gameWorld.get_game_snapshot();
+        // game_world.step();
+
+        // Snapshot snapshot = game_world.get_game_snapshot();
         // push_all_players(snapshot);
-        // gameWorld.game_post_cleanup();
-        // If the game has ended, we should stop the match
+
         /*
-        if (gameWorld.check_end_game()) {
-            Snapshot ending_snapshot = game.get_end_game_snapshot();
+        if (game_world.check_end_game()) {
+            Snapshot ending_snapshot = game.get_end_game_info_snapshot();
             push_all_players(ending_snapshot);
             stop();
         }
