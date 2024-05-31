@@ -12,13 +12,12 @@
 
 #include "physical_map.h"
 
-static const int FPS = 60;
-static const int FRAME_DELAY = (1000 / FPS);
+#define FPS 60
+#define FRAME_DELAY (1000 / FPS)
 
 /*
 FUERA DE ESTA CARPETA, EN LA PRINCIPAL:
-    g++ -g -std=c++17 game_src/entities/*.cpp game_src/*.cpp physics_src/*.cpp -I. -o prog.o -lSDL2
--ldl
+    g++ -g -std=c++17 game_src/entities/*.cpp game_src/*.cpp physics_src/*.cpp -I. -o prog.o -lSDL2 -ldl
 */
 bool running = true;
 
@@ -52,6 +51,8 @@ void handleEvents(Rabbit& player) {
         player.add_shoot();
     }
 }
+
+
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -105,10 +106,11 @@ int main() {
     Enemy enemy(70, 9, gameMap);
     manager.add_enemy(&enemy);
 
-
     Uint32 frameStart;
 
-
+    // GameloopTests gameloop(manager, gameMap, renderer, player, &running);
+    // gameloop.run();
+    
     while (running) {
         auto start = std::chrono::high_resolution_clock::now();
 
@@ -130,7 +132,8 @@ int main() {
         if (FRAME_DELAY > duration.count()) {
             std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_DELAY - duration.count()));
         }
-    }
+    }  
+    
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
