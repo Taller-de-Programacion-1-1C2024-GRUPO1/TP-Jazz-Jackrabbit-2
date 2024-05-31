@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MatchLobby</class>
+ <widget class="QDialog" name="MatchLobby">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="txtSelectMap">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>90</y>
+     <width>801</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;Select a map&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMap1">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>330</y>
+     <width>200</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/maps/castle.png);
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+color: white;
+font: 20pt;</string>
+   </property>
+   <property name="text">
+    <string>castle</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMap2">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>330</y>
+     <width>200</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/maps/carrotus.png);
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+color: white;
+font: 20pt;</string>
+   </property>
+   <property name="text">
+    <string>carrotus</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnMapCreate">
+   <property name="geometry">
+    <rect>
+     <x>510</x>
+     <y>330</y>
+     <width>200</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/maps/create_a_map.png);
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+color: white;
+font: 20pt;</string>
+   </property>
+   <property name="text">
+    <string>create 
+a 
+map</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnContinue">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>500</y>
+     <width>171</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 20pt;</string>
+   </property>
+   <property name="text">
+    <string>continue</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

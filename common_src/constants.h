@@ -48,7 +48,7 @@ enum /*Direction*/ {
     BACKWARD_DIR,
 };
 
-enum /*MATCH TYPE*/ {
+enum match_type {
     NEW_MATCH = 0,
     JOIN,
     REFRESH,

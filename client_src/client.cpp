@@ -18,7 +18,7 @@ void Client::run(int argc, char* argv[]) {
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w;
+    ClientLobby w(protocol);
     w.show();
     a.exec();
 

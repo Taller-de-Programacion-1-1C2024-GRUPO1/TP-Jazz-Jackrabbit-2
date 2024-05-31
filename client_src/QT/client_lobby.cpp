@@ -7,7 +7,9 @@
 
 #include "./ui_client_lobby.h"
 
-ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent), ui(new Ui::ClientLobby) {
+//ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent) ,ui(new Ui::ClientLobby) {
+
+ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol) ,ui(new Ui::ClientLobby) {
     ui->setupUi(this);
 
     // Cargar la fuente desde los recursos
@@ -31,11 +33,25 @@ ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent), ui(new Ui::Clien
 
 ClientLobby::~ClientLobby() { delete ui; }
 
-int create_match_code;
+int match_code;
+//std::string map;
 void ClientLobby::on_btnCreateMatch_clicked() {
-    create_match_code = ui->txtCreateMatch->toPlainText().toInt();
+    match_code = ui->txtCreateMatch->toPlainText().toInt();
+    //map = "mapa1";
+    //Match match(NEW_MATCH, std::to_string(match_code), map);
+    //protocol.send(match);
 
-    ui->txtAvailableMatches->setPlainText(QString::number(create_match_code));
+    if (match_code==0) {
+         QMessageBox::critical(this, "ERROR", "nombre de partida invalido");
+        return;
+    }
+
+    hide();
+    MatchLobby match_lobby;
+    match_lobby.setModal(true);
+    match_lobby.exec();
+
+    ui->txtAvailableMatches->setPlainText(QString::number(match_code));
 }
 
 int join_match_code;
