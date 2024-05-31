@@ -13,216 +13,152 @@
   <property name="windowTitle">
    <string>ClientLobby</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="labelCreateMatch_2">
+   <widget class="QLabel" name="LabelCreateMatch">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>390</y>
-      <width>331</width>
+      <y>330</y>
+      <width>191</width>
       <height>81</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <family>04b</family>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
-    </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Join a &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;match&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#ffffff;&quot;&gt;Create &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#ffffff;&quot;&gt;match:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="txtCreateMatchCode">
+   <widget class="QLabel" name="LabelJoinMatch">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>280</y>
-      <width>190</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
-    </property>
-    <property name="plainText">
-     <string/>
-    </property>
-    <property name="placeholderText">
-     <string>match name</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="txtJoinMatchCode">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>430</y>
-      <width>190</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
-    </property>
-    <property name="plainText">
-     <string/>
-    </property>
-    <property name="placeholderText">
-     <string>match name</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnCreate">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>280</y>
-      <width>90</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>Create</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnJoin">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>430</y>
-      <width>90</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Join</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="available_matches">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>200</y>
-      <width>231</width>
+      <x>20</x>
+      <y>410</y>
+      <width>191</width>
       <height>91</height>
      </rect>
     </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#ffffff;&quot;&gt;Join&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#ffffff;&quot;&gt;match:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="txtCreateMatch">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>380</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
     <property name="font">
      <font>
-      <family>04b</family>
-      <pointsize>20</pointsize>
+      <family>Ubuntu</family>
+      <pointsize>11</pointsize>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
+     <string notr="true">font: 11pt &quot;Ubuntu&quot;;
+background-color: rgba(0, 0, 0, 128); color: white;</string>
+    </property>
+    <property name="placeholderText">
+     <string>match name</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="txtJoinMatch">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>460</y>
+      <width>141</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 11pt &quot;Ubuntu&quot;;
+background-color: rgba(0, 0, 0, 128); color: white;</string>
+    </property>
+    <property name="placeholderText">
+     <string>match name</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnCreateMatch">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>380</y>
+      <width>89</width>
+      <height>31</height>
+     </rect>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;available&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;matches&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>create</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnJoinMatch">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>460</y>
+      <width>89</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>join</string>
     </property>
    </widget>
    <widget class="QPlainTextEdit" name="txtAvailableMatches">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>290</y>
-      <width>231</width>
-      <height>211</height>
+      <x>550</x>
+      <y>380</y>
+      <width>241</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>Ubuntu</family>
+      <pointsize>11</pointsize>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
+     <string notr="true">font: 11pt &quot;Ubuntu&quot;;
+background-color: rgba(0, 0, 0, 128); color: white;</string>
     </property>
-    <property name="plainText">
+    <property name="placeholderText">
      <string/>
     </property>
-    <property name="overwriteMode">
-     <bool>false</bool>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>290</y>
+      <width>231</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#ffffff;&quot;&gt;Available&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt; color:#ffffff;&quot;&gt;Matches:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnError">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>520</y>
+      <x>300</x>
+      <y>540</y>
       <width>89</width>
-      <height>25</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>ERROR</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelBackGround">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>800</width>
-      <height>600</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/backgrounds/lobby.png)</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelCreateMatch_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>331</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>04b</family>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Create a &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;match&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <zorder>labelBackGround</zorder>
-   <zorder>labelCreateMatch_3</zorder>
-   <zorder>labelCreateMatch_2</zorder>
-   <zorder>txtCreateMatchCode</zorder>
-   <zorder>txtJoinMatchCode</zorder>
-   <zorder>btnCreate</zorder>
-   <zorder>btnJoin</zorder>
-   <zorder>available_matches</zorder>
-   <zorder>txtAvailableMatches</zorder>
-   <zorder>btnError</zorder>
   </widget>
  </widget>
  <resources/>

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFontDatabase>
 #include <QApplication>
+
 ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent), ui(new Ui::ClientLobby) {
     ui->setupUi(this);
 
@@ -28,26 +29,24 @@ ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent), ui(new Ui::Clien
 
 ClientLobby::~ClientLobby() { delete ui; }
 
-int first_number, seccond_number, result;
-
-
 int create_match_code;
-void ClientLobby::on_btnCreate_clicked()
+void ClientLobby::on_btnCreateMatch_clicked()
 {
-    create_match_code = ui->txtCreateMatchCode->toPlainText().toInt();
+    create_match_code = ui->txtCreateMatch->toPlainText().toInt();
 
     ui->txtAvailableMatches->setPlainText(QString::number(create_match_code));
 }
 
 int join_match_code;
-void ClientLobby::on_btnJoin_clicked()
+void ClientLobby::on_btnJoinMatch_clicked()
 {
-    join_match_code = ui->txtJoinMatchCode->toPlainText().toInt();
+    join_match_code = ui->txtJoinMatch->toPlainText().toInt();
 }
+
 
 void ClientLobby::on_btnError_clicked()
 {
-   // QMessageBox::about(this, "ERROR", "Ingrese un numero valido");
+    // QMessageBox::about(this, "ERROR", "Ingrese un numero valido");
     QMessageBox::critical(this, "ERROR", "Ingrese un numero valido");
 }
 

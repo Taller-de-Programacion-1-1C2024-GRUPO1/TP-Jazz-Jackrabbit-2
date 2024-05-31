@@ -13,13 +13,13 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(QWidget* parent = nullptr);
+    ClientLobby(QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
-    void on_btnCreate_clicked();
+    void on_btnCreateMatch_clicked();
 
-    void on_btnJoin_clicked();
+    void on_btnJoinMatch_clicked();
 
     void on_btnError_clicked();
 
