@@ -7,22 +7,41 @@
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
-#define PLAYER_IMG "../client_src/resources/characters/Jazz.png"
+
+#define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
+#define LORI_IMG "../client_src/resources/characters/Lori.png"
+#define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
+#define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
+#define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
+
+#define CASTLE_TILE "../client_src/resources/tiles/castle.png"
+
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
+#define ITEMS_IMG "../client_src/resources/items/items.png"
 #define GAME_TITLE "Juego"
 #define MUSIC_VOLUME 5
 
-
 // pre-commit run --hook-stage manual --all-files
-
 
 #include <algorithm>
 #include <exception>
 #include <iostream>
+#include <map>
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>
+#include <yaml-cpp/yaml.h>
 
+#include "../client_src/client_ammo_left.h"
+#include "../client_src/client_animation.h"
+#include "../client_src/client_hearts_banner.h"
+#include "../client_src/client_shifting_drawable.h"
+#include "../client_src/client_weapon_data.h"
+
+#include "client_number_images.h"
+
+
+using SDL2pp::Chunk;
 using SDL2pp::Font;
 using SDL2pp::Mixer;
 using SDL2pp::Music;
@@ -35,12 +54,130 @@ using SDL2pp::Surface;
 using SDL2pp::Texture;
 using SDL2pp::Window;
 
-int main() try {
+int x_counter = 10;
+int ammo = 1000;
+bool is_shooting = false;
+
+struct Tile {
+    int id;
+    Rect srcRect;   // Rectángulo de la textura
+    Rect destRect;  // Rectángulo de destino en la pantalla
+};
+
+std::vector<Tile> loadMap(const std::string& filename) {
+    YAML::Node map = YAML::LoadFile(filename);
+    std::vector<Tile> tiles;
+
+    int tilesetWidth = 10;  // Ancho del tileset en bloques
+
+
+    for (const auto& layerNode: map["layers"]) {
+        int x = 0;
+        int y = 0;
+        for (const auto& row: layerNode["data"]) {
+            for (const auto& block: row) {
+                int id = block.as<int>();
+                if (id != -1) {  // Ignorar tiles vacíos, pero cuentan en la iteración
+                    Tile tile;
+                    tile.id = id;
+                    // Calcular srcRect basado en el id de la textura
+                    tile.srcRect.x = (id % tilesetWidth) * 32;
+                    tile.srcRect.y = (id / tilesetWidth) * 32;
+                    tile.srcRect.w = 32;
+                    tile.srcRect.h = 32;
+                    // Calcular destRect basado en la posición en la capa
+                    tile.destRect.x = x * 32;
+                    tile.destRect.y = y * 32;
+                    tile.destRect.w = 32;
+                    tile.destRect.h = 32;
+                    tiles.push_back(tile);
+                }
+                x++;
+            }
+            x = 0;
+            y++;
+        }
+    }
+
+    return tiles;
+}
+
+
+void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, ShiftingDrawable& spaz,
+                   ShiftingDrawable& lori) {
+    SDL_Event event;
+    is_shooting = false;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            game_running = false;
+        }
+    }
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
+        x_counter += 2;
+        jazz.setPosition(x_counter, 10);
+        jazz.setAnimation("Dash");
+        jazz.setDirection(1);
+    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
+        x_counter -= 2;
+        jazz.setPosition(x_counter, 10);
+        jazz.setAnimation("Dash");
+        jazz.setDirection(-1);
+    } else if (state[SDL_SCANCODE_RIGHT]) {
+        score++;
+
+        jazz.setPosition(++x_counter, 10);
+        jazz.setAnimation("Run");
+        jazz.setDirection(1);
+
+        spaz.setPosition(++x_counter, 100);
+        spaz.setAnimation("Run");
+        spaz.setDirection(1);
+
+        lori.setPosition(++x_counter, 200);
+        lori.setAnimation("Run");
+        lori.setDirection(1);
+
+    } else if (state[SDL_SCANCODE_LEFT]) {
+        score--;
+
+        jazz.setPosition(--x_counter, 10);
+        jazz.setAnimation("Run");
+        jazz.setDirection(-1);
+
+        spaz.setPosition(--x_counter, 100);
+        spaz.setAnimation("Run");
+        spaz.setDirection(-1);
+
+        lori.setPosition(--x_counter, 200);
+        lori.setAnimation("Run");
+        lori.setDirection(-1);
+
+    } else if (state[SDL_SCANCODE_UP]) {
+
+    } else if (state[SDL_SCANCODE_DOWN]) {
+        jazz.setAnimation("Hurt");
+
+    } else if (state[SDL_SCANCODE_ESCAPE]) {
+        game_running = false;
+    } else if (state[SDL_SCANCODE_S]) {
+        jazz.setAnimation("Shoot");
+        ammo--;
+        is_shooting = true;
+    } else if (state[SDL_SCANCODE_D]) {
+        jazz.setAnimation("Die");
+    } else {
+        jazz.setAnimation("Idle");
+        spaz.setAnimation("Idle");
+        lori.setAnimation("Idle");
+    }
+}
+
+int example_run() try {
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
     SDLTTF ttf;
-
 
     // Inicialización de SDL_mixer a través de SDL2pp::Mixer
     Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
@@ -51,138 +188,215 @@ int main() try {
     // Reproducir música en bucle
     mixer.PlayMusic(backgroundMusic, -1);
 
-
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
                   SDL_WINDOW_SHOWN);
-
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Dibuja la imagen de fondo
     Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
 
+    Texture map_tile(renderer, SDL2pp::Surface(CASTLE_TILE));
 
     // Load sprites image as a new texture; since there's no alpha channel
     // but we need transparency, use helper surface for which set color key
     // to color index 0 -> black background on image will be transparent on our
     // texture
     SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
-    Surface surface(PLAYER_IMG);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE,
-                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
-    Texture sprites(renderer, surface);
 
+    // Load map!!
+    // YAML::Node config = loadYAML("../external/maps/map.yml");
+    // const YAML::Node &layers = config["layers"];
 
-    // Enable alpha blending for the sprites
-    sprites.SetBlendMode(SDL_BLENDMODE_BLEND);
+    std::vector<Tile> mapComponents = loadMap("../external/maps/map.yml");
 
     // Load font, 12pt size
     Font font(FONT, 12);
 
-    // Game state
-    bool is_running = false;  // whether the character is currently running
-    int run_phase = -1;       // run animation phase
-    float position = 0.0;     // player position
-    int score = 0;            // player score
+    // Number images
+    NumberImages numberImages(renderer);
+    numberImages.setCorner(0);
 
-    unsigned int prev_ticks = SDL_GetTicks();
+    // Heart banner
+    WeaponData::initialize();
+    HeartsBanner banner(renderer);
+    AmmoLeft ammoLeft(renderer);
+    ammoLeft.setWeapon(5);
+
+    // Sound effect
+    Chunk soundEffect("../client_src/resources/sounds/shooting.wav");
+    soundEffect.SetVolume(128);
+
+    // A testing player
+    ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey, &mixer);
+    jazz.loadAnimations("../external/animations/jazz.yml");
+    SDL2pp::Point playerPosition(10, 10);
+    jazz.setCameraPosition(playerPosition);
+
+    // Another testing player
+    ShiftingDrawable spaz(10, 100, 64, 64, renderer, SPAZ_IMG, colorKey, &mixer);
+    spaz.loadAnimations("../external/animations/spaz.yml");
+    spaz.setCameraPosition(playerPosition);
+
+    // A third one
+    ShiftingDrawable lori(10, 200, 64, 64, renderer, LORI_IMG, colorKey, &mixer);
+    lori.loadAnimations("../external/animations/lori.yml");
+    lori.setCameraPosition(playerPosition);
+
+    // A coin and a diamond
+    SDL_Color itemsColorKey = {0, 128, 255, 1};
+
+    ShiftingDrawable coin(80, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
+    coin.loadAnimations("../external/animations/resources.yml");
+    coin.setCameraPosition(playerPosition);
+
+    ShiftingDrawable diamond(150, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
+    diamond.loadAnimations("../external/animations/resources.yml");
+    diamond.setCameraPosition(playerPosition);
+
+    coin.setAnimation("Coin-flip");
+    diamond.setAnimation("Diamond-flip");
+
+    // PROJECTILES
+    ShiftingDrawable projectile(10, 10, 32, 32, renderer, PROJECTILES_IMG, itemsColorKey, &mixer);
+    WeaponData::loadAnimationsToProjectile(1, projectile);
+    bool exploded = false;
+    // ENEMIES
+
+    // Crab
+    ShiftingDrawable crab(10, 500, 32, 32, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
+    crab.loadAnimations("../external/animations/crab.yml");
+    crab.setAnimation("Walk");
+    crab.setCameraPosition(playerPosition);
+
+    // Tall guy
+    ShiftingDrawable lizard(10, 400, 64, 64, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
+    lizard.loadAnimations("../external/animations/lizard.yml");
+    lizard.setAnimation("Walk");
+    lizard.setCameraPosition(playerPosition);
+
+    int enemie_x = 10;
+    int multiplier = 1;
+
+    // Game state
+    bool running = true;  // whether the game is running
+    int score = 000000;   // player score
+
+
+    const int FPS = 60;
+    const int frameDelay = 1000 / FPS;
+
+
     // Main loop
-    while (1) {
-        // Timing: calculate difference between this and previous frame
-        // in milliseconds
-        unsigned int frame_ticks = SDL_GetTicks();
-        unsigned int frame_delta = frame_ticks - prev_ticks;
-        prev_ticks = frame_ticks;
+    while (running) {
+        Uint32 frameStart;
+        int frameTime;
+        frameStart = SDL_GetTicks();
 
         // Event processing:
         // - If window is closed, or Q or Escape buttons are pressed,
         //   quit the application
         // - If Right key is pressed, character would run
         // - If Right key is released, character would stop
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                return 0;
-            } else if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.sym) {
-                    case SDLK_ESCAPE:
-                    case SDLK_q:
-                        return 0;
-                    case SDLK_RIGHT:
-                        is_running = true;
-                        break;
-                }
-            } else if (event.type == SDL_KEYUP) {
-                switch (event.key.keysym.sym) {
-                    case SDLK_RIGHT:
-                        is_running = false;
-                        score++;
-                        break;
-                }
-            }
+        handle_events(running, score, jazz, spaz, lori);
+        if (enemie_x > 700) {
+            crab.setDirection(-1);
+            lizard.setDirection(-1);
+            multiplier = -1;
         }
-
-        // Update game state for this frame:
-        // if character is runnung, move it to the right
-        if (is_running) {
-            position += frame_delta * 0.2;
-            run_phase = (frame_ticks / 100) % 8;
-        } else {
-            run_phase = 0;
+        if (enemie_x < 10) {
+            crab.setDirection(1);
+            lizard.setDirection(1);
+            multiplier = 1;
         }
+        enemie_x += 1 * multiplier;
+        crab.setPosition(enemie_x, 500);
+        lizard.setPosition(enemie_x, 400);
 
-        // If player passes past the right side of the window, wrap him
-        // to the left side
-        if (position > renderer.GetOutputWidth())
-            position = -50;
+        playerPosition.x = x_counter;
+        projectile.setPosition(enemie_x * 8, 40);
+        if (!exploded && enemie_x * 8 > 600) {
+            projectile.setAnimation("Explode");
+            exploded = true;
+        }
+        // std::cout << "Player position: " << playerPosition.x << ", " << playerPosition.y <<
+        // std::endl;
 
-        int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
+        // UPDATE ENTITIES
+        jazz.updateCameraPosition(playerPosition);
+        jazz.update();
+
+        spaz.updateCameraPosition(playerPosition);
+        spaz.update();
+
+        lori.updateCameraPosition(playerPosition);
+        lori.update();
+
+        projectile.updateCameraPosition(playerPosition);
+        projectile.update();
+
+        coin.updateCameraPosition(playerPosition);
+        coin.update();
+
+        diamond.updateCameraPosition(playerPosition);
+        diamond.update();
+
+        crab.updateCameraPosition(playerPosition);
+        crab.update();
+
+        lizard.updateCameraPosition(playerPosition);
+        lizard.update();
 
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
-
-        // Pick sprite from sprite atlas based on whether
-        // player is running and run animation phase
-        int src_x = 8, src_y = 11;  // by default, standing sprite
-        if (is_running) {
-            // one of 8 run animation sprites
-            src_x = 8 + 51 * run_phase;
-            src_y = 67;
+        // Map render
+        for (const Tile& tile: mapComponents) {
+            renderer.Copy(map_tile, tile.srcRect, tile.destRect);
         }
 
-        // Draw player sprite
-        sprites.SetAlphaMod(255);  // sprite is fully opaque
-        renderer.Copy(sprites, Rect(src_x, src_y, 25, 50),
-                      Rect((int)position, vcenter - 50, 50, 50));
+        jazz.render(renderer);
+        /*if (is_shooting) {
+            mixer.PlayChannel(-1, soundEffect);
+            SDL_Delay(200);
+            mixer.HaltChannel(-1);
+        }*/
 
-        // Draw the same sprite, below the first one, 50% transparent and
-        // vertically flipped. It'll look like reflection in the mirror
-        sprites.SetAlphaMod(127);  // 50% transparent
-        renderer.Copy(sprites, Rect(src_x, src_y, 50, 50), Rect((int)position, vcenter, 50, 50),
-                      0.0,                 // don't rotate
-                      NullOpt,             // rotation center - not needed
-                      SDL_FLIP_VERTICAL);  // vertical flip
+        spaz.render(renderer);
+        lori.render(renderer);
 
-        // Create text string to render
-        std::string text =
-                "Score: " + std::to_string(score) + ", running: " + (is_running ? "true" : "false");
+        crab.render(renderer);
+        lizard.render(renderer);
 
-        // Render the text into new texture. Note that SDL_ttf render
-        // text into Surface, which is converted into texture on the fly
-        Texture text_sprite(renderer, font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
+        coin.render(renderer);
+        diamond.render(renderer);
 
-        // Copy texture into top-left corner of the window
-        renderer.Copy(text_sprite, NullOpt,
-                      Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
+        projectile.render(renderer);
+
+        banner.render();
+        ammoLeft.setAmmo(ammo);
+        ammoLeft.render();
+
+        std::string scoreStr = std::to_string(score);
+        int offset = 32;  // Start position
+
+        for (char c: scoreStr) {
+            int number = c - '0';  // Convert char to int
+            numberImages.renderNumber(number, offset);
+            offset += 24;  // Move position to the left for the next digit
+        }
 
         // Show rendered frame
         renderer.Present();
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        SDL_Delay(1);
+        frameTime = SDL_GetTicks() - frameStart;
+
+        if (frameDelay > frameTime) {
+            SDL_Delay(frameDelay - frameTime);
+        }
     }
 
     // Here all resources are automatically released and libraries deinitialized

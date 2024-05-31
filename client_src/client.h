@@ -1,6 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <QApplication>
 #include <fstream>
 #include <string>
 #include <unordered_map>
@@ -10,13 +11,13 @@
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/queue.h"
-#include "../game_src/commands/command.h"
 #include "../common_src/snapshots/snapshot.h"
-#include <QApplication>
+#include "../game_src/commands/command.h"
+#include "QT/client_lobby.h"
+
+#include "client_drawer.h"
 #include "client_receiver.h"
 #include "client_sender.h"
-#include "client_drawer.h"
-#include "QT/client_lobby.h"
 
 
 class Client {
@@ -26,7 +27,7 @@ private:
     Queue<Snapshot> q_snapshots;
     ClientSender client_sender;
     Client_Receiver client_receiver;
-    //ClientLobby lobby;
+    // ClientLobby lobby;
     ClientDrawer drawer;
 
 

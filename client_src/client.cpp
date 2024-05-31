@@ -3,13 +3,13 @@
 
 Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)),
-        q_cmds(15), // ESE 15 HAY QUE SACARLO ////////////////////////////////// ACA HAY QUE USAR PUNTEROS INTELIGENTES
+        q_cmds(15),  // ESE 15 HAY QUE SACARLO ////////////////////////////////// ACA HAY QUE USAR
+                     // PUNTEROS INTELIGENTES
         q_snapshots(),
         client_sender(protocol, q_cmds),
         client_receiver(protocol, q_snapshots),
         drawer(q_cmds, q_snapshots) {}
 
-    
 
 void Client::run(int argc, char* argv[]) {
     client_sender.start();
@@ -22,7 +22,7 @@ void Client::run(int argc, char* argv[]) {
     w.show();
     a.exec();
 
-    //SDL
+    // SDL
     drawer.run();
 }
 
