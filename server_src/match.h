@@ -42,7 +42,7 @@ private:
     int* status;
     int id_counter;
 
-    void send_game_initial(Game game);
+    void send_game_initial(Gameloop game);
 
 public:
     // falta agregar el game_map

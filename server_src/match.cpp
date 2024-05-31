@@ -15,7 +15,7 @@ Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_
 
 uint8_t Match::get_number_of_players() { return id_counter; }
 
-void Match::send_game_initial(Game game) {
+void Match::send_game_initial(Gameloop game) {
     std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot(map);
     // Enviar a cada jugador su snapshot inicial
     for (auto& player: players) {
@@ -53,10 +53,10 @@ void Match::run() {
         // crear el mapa
 
         // hay que agregar el game_map
-        Game game = Game(clients_cmd_queue, broadcaster_snapshots, players, playing);
+        Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, playing);
         *status = MATCH_ALIVE;
-        send_game_initial(game);
-        game.run();
+        send_game_initial(gameloop);
+        gameloop.run();
 
         clients_cmd_queue.close();
         delete_players();

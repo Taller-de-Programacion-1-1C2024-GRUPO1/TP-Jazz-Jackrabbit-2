@@ -21,7 +21,7 @@
 #include "server_player.h"
 
 
-class Game {
+class Gameloop {
 private:
     int height;
     int width;
@@ -29,44 +29,25 @@ private:
     Queue<std::shared_ptr<Command>>& client_cmd_queue;
     BroadcasterSnapshots& broadcaster_snapshots;
     std::list<Player*>& players;
-
+    
     bool* playing;
-
-    // GameWorld game_world; -> contiene el game_map
-
-    // int rabbit_playing_id;
-    // int rabbit_playing_health;
-    // int rabbit_playing_score;
-
     bool still_waiting = false;
-
     bool game_ended = false;
     bool playing_done = false;
 
-    // GameManager game_manager;
-
-    // EN GAME MANAGER SE INCLUIRAN LOS SIGUIENTES MANAGERS
-    // PlayerManager player_manager;
-    // SupplyManager box_manager;
-    // ProjectileManager projectile_manager;
-
-    // GameBuilder builder;
-
 public:
-    Game(Queue<std::shared_ptr<Command>>& client_cmd_queue,
+    Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
          BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players, bool* playing);
 
     std::shared_ptr<Snapshot> get_initial_snapshot(const Map& map);
 
     void run();
 
-    void execute_and_step(int iter);
-
     void push_all_players(const Snapshot& snapshot);
 
     void stop();
 
-    // ~Game();
+    // ~Gameloop();
 };
 
 #endif
