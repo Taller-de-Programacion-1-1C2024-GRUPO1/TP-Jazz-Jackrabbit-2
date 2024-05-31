@@ -1,0 +1,8 @@
+if(BUILD_TESTING)
+    add_executable(tests protocol_commands_tests.cpp)
+    target_link_libraries(tests PRIVATE GTest::gtest GTest::gtest_main common_lib)
+    include(GoogleTest)
+    include_directories("${CMAKE_SOURCE_DIR}/common_src")
+    include_directories("${CMAKE_SOURCE_DIR}/game_src")
+    gtest_discover_tests(tests)
+endif()

@@ -12,7 +12,7 @@ bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
 
 int Cheats::get_playerId() { return this->playerID; }
 
-int Cheats::getCheatID() { return this->cheatID; }
+int Cheats::get_cheatID() { return this->cheatID; }
 
 int Cheats::get_commandType() { return this->commandType; }
 
