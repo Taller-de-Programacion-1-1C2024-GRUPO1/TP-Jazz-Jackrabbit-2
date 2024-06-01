@@ -18,7 +18,7 @@
 #define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
 #define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
 
-#define CASTLE_TILE "../client_src/resources/tiles/castle.png"
+#define CASTLE_TILE "../client_src/resources/tiles/carrotus.png"
 
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
 #define ITEMS_IMG "../client_src/resources/items/items.png"
@@ -62,6 +62,7 @@ using SDL2pp::NullOpt;
 using SDL2pp::Rect;
 using SDL2pp::Renderer;
 using SDL2pp::SDL;
+using SDL2pp::Point;
 using SDL2pp::SDLTTF;
 using SDL2pp::Surface;
 using SDL2pp::Texture;

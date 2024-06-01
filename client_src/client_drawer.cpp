@@ -1,5 +1,5 @@
 #include "client_drawer.h"
-
+#include "client_drawable.h"
 
 ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds), q_snapshots(q_snapshots), client_id(0) {}
@@ -49,18 +49,13 @@ int x_counter = 10;
 int ammo = 1000;
 bool is_shooting = false;
 
-struct Tile {
-    int id;
-    Rect srcRect;   // Rectángulo de la textura
-    Rect destRect;  // Rectángulo de destino en la pantalla
-};
 
-std::vector<Tile> loadMap(const std::string& filename) {
+std::vector<std::unique_ptr<Drawable>> loadMap(const std::string& filename, Renderer& renderer,
+                                               SDL2pp::Point& cameraPosition) {
     YAML::Node map = YAML::LoadFile(filename);
-    std::vector<Tile> tiles;
+    std::vector<std::unique_ptr<Drawable>> tiles;
 
     int tilesetWidth = 10;  // Ancho del tileset en bloques
-
 
     for (const auto& layerNode: map["layers"]) {
         int x = 0;
@@ -68,20 +63,23 @@ std::vector<Tile> loadMap(const std::string& filename) {
         for (const auto& row: layerNode["data"]) {
             for (const auto& block: row) {
                 int id = block.as<int>();
-                if (id != -1) {  // Ignorar tiles vacíos, pero cuentan en la iteración
-                    Tile tile;
-                    tile.id = id;
-                    // Calcular srcRect basado en el id de la textura
-                    tile.srcRect.x = (id % tilesetWidth) * 32;
-                    tile.srcRect.y = (id / tilesetWidth) * 32;
-                    tile.srcRect.w = 32;
-                    tile.srcRect.h = 32;
-                    // Calcular destRect basado en la posición en la capa
-                    tile.destRect.x = x * 32;
-                    tile.destRect.y = y * 32;
-                    tile.destRect.w = 32;
-                    tile.destRect.h = 32;
-                    tiles.push_back(tile);
+                if (id != -1) {  // Ignore empty tiles, but they count in the iteration
+
+                    // Calculate srcRect based on the texture id
+                    SDL2pp::Rect srcRect;
+                    srcRect.x = (id % tilesetWidth) * 32;
+                    srcRect.y = (id / tilesetWidth) * 32;
+                    srcRect.w = 32;
+                    srcRect.h = 32;
+
+                    // Calculate destRect based on the position in the layer
+                    SDL2pp::Rect destRect;
+                    destRect.x = x * 32;
+                    destRect.y = y * 32;
+                    destRect.w = 32;
+                    destRect.h = 32;
+
+                    tiles.push_back(std::move(std::unique_ptr<Drawable>(new Drawable(renderer, CASTLE_TILE, cameraPosition, srcRect, destRect))));
                 }
                 x++;
             }
@@ -94,8 +92,7 @@ std::vector<Tile> loadMap(const std::string& filename) {
 }
 
 
-void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, ShiftingDrawable& spaz,
-                   ShiftingDrawable& lori) {
+void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz) {
     SDL_Event event;
     is_shooting = false;
     while (SDL_PollEvent(&event)) {
@@ -105,45 +102,29 @@ void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, Shift
     }
     const Uint8* state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-        x_counter += 2;
+        x_counter += 10;
         jazz.setPosition(x_counter, 10);
         jazz.setAnimation("Dash");
         jazz.setDirection(1);
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-        x_counter -= 2;
+        x_counter -= 10;
         jazz.setPosition(x_counter, 10);
         jazz.setAnimation("Dash");
         jazz.setDirection(-1);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         score++;
+        x_counter += 5;
 
-        jazz.setPosition(++x_counter, 10);
+        jazz.setPosition(x_counter, 10);
         jazz.setAnimation("Run");
         jazz.setDirection(1);
 
-        spaz.setPosition(++x_counter, 100);
-        spaz.setAnimation("Run");
-        spaz.setDirection(1);
-
-        lori.setPosition(++x_counter, 200);
-        lori.setAnimation("Run");
-        lori.setDirection(1);
-
     } else if (state[SDL_SCANCODE_LEFT]) {
         score--;
-
-        jazz.setPosition(--x_counter, 10);
+        x_counter -= 5;
+        jazz.setPosition(x_counter, 10);
         jazz.setAnimation("Run");
         jazz.setDirection(-1);
-
-        spaz.setPosition(--x_counter, 100);
-        spaz.setAnimation("Run");
-        spaz.setDirection(-1);
-
-        lori.setPosition(--x_counter, 200);
-        lori.setAnimation("Run");
-        lori.setDirection(-1);
-
     } else if (state[SDL_SCANCODE_UP]) {
 
     } else if (state[SDL_SCANCODE_DOWN]) {
@@ -159,8 +140,6 @@ void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, Shift
         jazz.setAnimation("Die");
     } else {
         jazz.setAnimation("Idle");
-        spaz.setAnimation("Idle");
-        lori.setAnimation("Idle");
     }
 }
 
@@ -197,11 +176,13 @@ int ClientDrawer::run() try {
     // texture
     SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
 
-    // Load map!!
-    // YAML::Node config = loadYAML("../external/maps/map.yml");
-    // const YAML::Node &layers = config["layers"];
+    SDL2pp::Point playerPosition(10, 10);
+    SDL2pp::Point cameraPosition(0, 0);
+    SDL2pp::Point desiredCameraPosition(0, 0);
+    float lerpFactor = 0.1f;  // Ajusta este valor para cambiar la suavidad
 
-    std::vector<Tile> mapComponents = loadMap("../external/maps/map.yml");
+    //Load map
+    std::vector<std::unique_ptr<Drawable>> mapComponents = loadMap("../external/maps/carrotus.yml", renderer, cameraPosition);
 
     // Load font, 12pt size
     Font font(FONT, 12);
@@ -221,29 +202,31 @@ int ClientDrawer::run() try {
     soundEffect.SetVolume(128);
 
     // A testing player
-    ShiftingDrawable jazz(10, 10, 64, 64, renderer, JAZZ_IMG, colorKey, &mixer);
+    SDL2pp::Rect textureRect(0, 0, 32, 32); // Asume que quieres dibujar una textura de 32x32 desde el punto (0,0)
+    SDL2pp::Rect onMapRect(10, 10, 64, 64); // Asume que quieres dibujar la textura en el punto (10,10) en el mapa con un tamaño de 32x32
+
+    ShiftingDrawable jazz(renderer, JAZZ_IMG, colorKey, cameraPosition, textureRect, onMapRect, mixer);
+    jazz.setAnimation("Idle");
     jazz.loadAnimations("../external/animations/jazz.yml");
-    SDL2pp::Point playerPosition(10, 10);
-    jazz.setCameraPosition(playerPosition);
 
     // Another testing player
-    ShiftingDrawable spaz(10, 100, 64, 64, renderer, SPAZ_IMG, colorKey, &mixer);
+   /* ShiftingDrawable spaz(renderer, SPAZ_IMG, playerPosition, colorKey, &mixer);
     spaz.loadAnimations("../external/animations/spaz.yml");
     spaz.setCameraPosition(playerPosition);
 
     // A third one
-    ShiftingDrawable lori(10, 200, 64, 64, renderer, LORI_IMG, colorKey, &mixer);
+    ShiftingDrawable lori(renderer, LORI_IMG, playerPosition, colorKey, &mixer);
     lori.loadAnimations("../external/animations/lori.yml");
     lori.setCameraPosition(playerPosition);
 
     // A coin and a diamond
     SDL_Color itemsColorKey = {0, 128, 255, 1};
 
-    ShiftingDrawable coin(80, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
+    ShiftingDrawable coin(renderer, ITEMS_IMG, playerPosition, itemsColorKey, &mixer);
     coin.loadAnimations("../external/animations/resources.yml");
     coin.setCameraPosition(playerPosition);
 
-    ShiftingDrawable diamond(150, 15, 32, 32, renderer, ITEMS_IMG, itemsColorKey, &mixer);
+    ShiftingDrawable diamond(renderer, ITEMS_IMG, playerPosition, itemsColorKey, &mixer);
     diamond.loadAnimations("../external/animations/resources.yml");
     diamond.setCameraPosition(playerPosition);
 
@@ -251,22 +234,22 @@ int ClientDrawer::run() try {
     diamond.setAnimation("Diamond-flip");
 
     // PROJECTILES
-    ShiftingDrawable projectile(10, 10, 32, 32, renderer, PROJECTILES_IMG, itemsColorKey, &mixer);
+    ShiftingDrawable projectile(renderer, PROJECTILES_IMG, playerPosition, itemsColorKey, &mixer);
     WeaponData::loadAnimationsToProjectile(1, projectile);
     bool exploded = false;
     // ENEMIES
 
     // Crab
-    ShiftingDrawable crab(10, 500, 32, 32, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
+    ShiftingDrawable crab(renderer, ENEMIES_IMG, playerPosition, itemsColorKey, &mixer);
     crab.loadAnimations("../external/animations/crab.yml");
     crab.setAnimation("Walk");
     crab.setCameraPosition(playerPosition);
 
     // Tall guy
-    ShiftingDrawable lizard(10, 400, 64, 64, renderer, ENEMIES_IMG, itemsColorKey, &mixer);
+    ShiftingDrawable lizard(renderer, ENEMIES_IMG, playerPosition, itemsColorKey, &mixer);
     lizard.loadAnimations("../external/animations/lizard.yml");
     lizard.setAnimation("Walk");
-    lizard.setCameraPosition(playerPosition);
+    lizard.setCameraPosition(playerPosition);*/
 
     int enemie_x = 10;
     int multiplier = 1;
@@ -275,10 +258,8 @@ int ClientDrawer::run() try {
     bool running = true;  // whether the game is running
     int score = 000000;   // player score
 
-
     const int FPS = 60;
     const int frameDelay = 1000 / FPS;
-
 
     // Main loop
     while (running) {
@@ -292,9 +273,9 @@ int ClientDrawer::run() try {
         // - If Right key is pressed, character would run
         // - If Right key is released, character would stop
 
-        // handle_keyboard(running);///////////////////////////////////////////////////////////////////////////////////////////
+        //handle_keyboard(running);///////////////////////////////////////////////////////////////////////////////////////////
 
-        handle_events(running, score, jazz, spaz, lori);
+        handle_events(running, score, jazz);/*
         if (enemie_x > 700) {
             crab.setDirection(-1);
             lizard.setDirection(-1);
@@ -307,69 +288,56 @@ int ClientDrawer::run() try {
         }
         enemie_x += 1 * multiplier;
         crab.setPosition(enemie_x, 500);
-        lizard.setPosition(enemie_x, 400);
+        lizard.setPosition(enemie_x, 400);*/
 
         playerPosition.x = x_counter;
-        projectile.setPosition(enemie_x * 8, 40);
+        // En tu bucle principal o función de actualización de cámara
+        desiredCameraPosition.x = x_counter - (window.GetWidth() / 2);
+        desiredCameraPosition.y = playerPosition.y - (window.GetHeight() / 2);
+
+        // Interpolación lineal para suavizar el movimiento
+        cameraPosition.x += (desiredCameraPosition.x - cameraPosition.x) * lerpFactor;
+        cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
+        /*projectile.setPosition(enemie_x * 8, 40);
         if (!exploded && enemie_x * 8 > 600) {
             projectile.setAnimation("Explode");
             exploded = true;
         }
         // std::cout << "Player position: " << playerPosition.x << ", " << playerPosition.y <<
         // std::endl;
-
+*/
         // UPDATE ENTITIES
-        jazz.updateCameraPosition(playerPosition);
         jazz.update();
-
-        spaz.updateCameraPosition(playerPosition);
-        spaz.update();
-
-        lori.updateCameraPosition(playerPosition);
+       /* spaz.update();
         lori.update();
-
-        projectile.updateCameraPosition(playerPosition);
         projectile.update();
-
-        coin.updateCameraPosition(playerPosition);
         coin.update();
-
-        diamond.updateCameraPosition(playerPosition);
         diamond.update();
-
-        crab.updateCameraPosition(playerPosition);
         crab.update();
-
-        lizard.updateCameraPosition(playerPosition);
         lizard.update();
+*/
+        for (auto& tilePtr : mapComponents) {
+            tilePtr->update();
+        }
 
         // Clear screen
         renderer.Clear();
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         // Map render
-        for (const Tile& tile: mapComponents) {
-            renderer.Copy(map_tile, tile.srcRect, tile.destRect);
+        for (auto& tilePtr : mapComponents) {
+            tilePtr->render();
         }
 
         jazz.render(renderer);
-        /*if (is_shooting) {
-            mixer.PlayChannel(-1, soundEffect);
-            SDL_Delay(200);
-            mixer.HaltChannel(-1);
-        }*/
-
-        spaz.render(renderer);
+  /*      spaz.render(renderer);
         lori.render(renderer);
-
         crab.render(renderer);
         lizard.render(renderer);
-
         coin.render(renderer);
         diamond.render(renderer);
-
         projectile.render(renderer);
-
+*/
         banner.render();
         ammoLeft.setAmmo(ammo);
         ammoLeft.render();

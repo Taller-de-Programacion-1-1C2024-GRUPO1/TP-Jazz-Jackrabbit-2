@@ -3,7 +3,7 @@
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png"
 //#define FONT FONTS_PATH "/04B_30__.ttf"
 //#define GAME_TITLE "Juego"
-
+/*
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
@@ -363,7 +363,7 @@ int example_run() try {
             SDL_Delay(200);
             mixer.HaltChannel(-1);
         }*/
-
+/*
         spaz.render(renderer);
         lori.render(renderer);
 
@@ -406,3 +406,4 @@ int example_run() try {
     std::cerr << e.what() << std::endl;
     return 1;
 }
+*/

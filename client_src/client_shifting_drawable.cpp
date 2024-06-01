@@ -4,14 +4,11 @@
 
 #include <yaml-cpp/yaml.h>
 
-ShiftingDrawable::ShiftingDrawable(int x, int y, int w, int h, SDL2pp::Renderer& renderer,
-                                   const std::string& path, const SDL_Color& colorKey,
-                                   SDL2pp::Mixer* mixer):
-        x(x),
-        y(y),
-        w(w),
-        h(h),
-        texture(renderer, SDL2pp::Surface(path)),
+ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer,
+                    const std::string& path, const SDL_Color& colorKey,
+                    SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
+                    SDL2pp::Mixer& mixer):
+        Drawable(renderer, path, cp, textureRect, onMapRect),
         currentAnimationName(""),
         angle(0),
         direction(0),
@@ -45,29 +42,21 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
 }
 
 void ShiftingDrawable::render(SDL2pp::Renderer& renderer) {
-    SDL2pp::Rect adjustedDestRect = {x, y, w, h};
-    adjustedDestRect.x -= cameraPosition.x;
-    adjustedDestRect.y -= cameraPosition.y;
-    renderer.Copy(texture, srcRect, adjustedDestRect, angle, SDL2pp::Point(0, 0),
+    renderer.Copy(texture, textureRect, adjustPosition(), angle, SDL2pp::Point(0, 0),
                   direction == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
 void ShiftingDrawable::update() {
+    Drawable::update();
     Animation* currentAnimation = &animations[currentAnimationName];
     int frame =
             static_cast<int>((SDL_GetTicks() / currentAnimation->speed) % currentAnimation->frames);
-    srcRect = currentAnimation->frameRects[frame];
-}
-
-void ShiftingDrawable::setPosition(int newx, int newy) {
-    x = newx;
-    y = newy;
+    textureRect = currentAnimation->frameRects[frame];
 }
 
 void ShiftingDrawable::setAngle(int newAngle) { angle = newAngle; }
 
 void ShiftingDrawable::setDirection(int dir) { direction = dir; }
-#include <fstream>
 
 void ShiftingDrawable::setAnimation(const char* name) {
     if (name == currentAnimationName) {
@@ -77,33 +66,9 @@ void ShiftingDrawable::setAnimation(const char* name) {
     std::ifstream file(animations[currentAnimationName].soundPath.c_str());
     if (file.good()) {
         SDL2pp::Chunk soundEffect(animations[currentAnimationName].soundPath.c_str());
-        mixer->PlayChannel(-1, soundEffect);
+        mixer.PlayChannel(-1, soundEffect);
         SDL_Delay(500);
-        mixer->HaltChannel(-1);
+        mixer.HaltChannel(-1);
     }
 }
 
-void ShiftingDrawable::setCameraPosition(const SDL2pp::Point& position) {
-    cameraPosition = position;
-}
-
-void ShiftingDrawable::updateCameraPosition(const SDL2pp::Point& playerPosition) {
-    cameraPosition = playerPosition;
-
-    // Clamp the camera position to the map boundaries
-    int mapWidth = 1000;
-    int mapHeight = 1000;
-
-    // Ensure the camera doesn't go outside the map boundaries
-    if (cameraPosition.x < 0) {
-        cameraPosition.x = 0;
-    } else if (cameraPosition.x + 800 > mapWidth) {
-        cameraPosition.x = mapWidth - 800;
-    }
-    if (cameraPosition.y < 0) {
-        cameraPosition.y = 0;
-
-    } else if (cameraPosition.y + 600 > mapHeight) {
-        cameraPosition.y = mapHeight - 600;
-    }
-}
