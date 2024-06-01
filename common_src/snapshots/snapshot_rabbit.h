@@ -4,8 +4,8 @@
 class RabbitSnapshot {
 public:
     char id;
-    float pos_x;
-    float pos_y;
+    int pos_x;
+    int pos_y;
     int angle;
     int max_health;
     int health;
@@ -14,7 +14,7 @@ public:
     int state;
     int current_ammo;
 
-    RabbitSnapshot(char id, float pos_x, float pos_y, int angle, int max_health, int health,
+    RabbitSnapshot(char id, int pos_x, int pos_y, int angle, int max_health, int health,
                    char direction, int weapon, int state, int current_ammo):
             id(id),
             pos_x(pos_x),

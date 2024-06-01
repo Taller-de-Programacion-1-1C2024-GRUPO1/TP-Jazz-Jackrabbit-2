@@ -3,26 +3,28 @@
 
 #include <string>
 
+#include "../constants_game.h"
+
 #include "command.h"
 
-// Comando que crea partidas (se usaría en un futuro probablemente)
-class Match: public Command {
+class MatchCommand: public Command {
 private:
     int type;
-    // int nrPlayers;
-    std::string match;
-    std::string map;
+    int number_players;
+    std::string match_name;
+    std::string map_name;
     int commandType = COMMAND_MATCH;
 
 public:
-    Match(int type, std::string match, std::string map);
-    ~Match();
+    MatchCommand(int type, int number_players, const std::string& match_name,
+                 const std::string& map_name);
     int get_playerId() override;
     int getType();
-    // int getNrPlayers();
-    std::string getMatchName();
-    std::string getMapName();
+    int get_number_players();
+    std::string get_match_name();
+    std::string get_map_name();
     int get_commandType() override;
+    ~MatchCommand();
 };
 
 #endif

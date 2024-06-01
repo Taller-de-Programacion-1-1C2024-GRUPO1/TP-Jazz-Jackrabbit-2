@@ -1,15 +1,13 @@
 #include "command_shoot.h"
 
-Shoot::Shoot(int id, int dir): Command(id), playerID(id), dir(dir) {}
+Shoot::Shoot(int id): Command(id), playerID(id) {}
 
 bool Shoot::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_world.shootPlayer(this->playerID, this->dir);
+    // game_manager.shoot_player(this->playerID);
     return needsMove;
 }
 
 int Shoot::get_playerId() { return this->playerID; }
-
-int Shoot::get_dir() { return this->dir; }
 
 int Shoot::get_commandType() { return this->commandType; }
 

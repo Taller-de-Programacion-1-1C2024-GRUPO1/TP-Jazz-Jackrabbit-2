@@ -15,7 +15,7 @@ public:
     Cheats(int playerID, int cheatID);
     bool execute_Command(bool* cheatON, bool& needsMove) override;
     int get_playerId() override;
-    int getCheatID();
+    int get_cheatID();
     int get_commandType() override;
     ~Cheats();
 };

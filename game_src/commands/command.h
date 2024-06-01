@@ -17,6 +17,13 @@
     - Jump
     - Shoot
     - MoveFaster
+    - MatchCommand
+    - Cheats
+    - ChangeWeapon
+    - SelectChampion
+    - SpecialJazz
+    - SpecialLori
+    - SpecialSpaz
 */
 class Command {
 private:

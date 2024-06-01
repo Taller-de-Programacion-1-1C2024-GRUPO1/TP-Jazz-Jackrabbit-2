@@ -3,10 +3,10 @@
 Jump::Jump(int id, int dir): Command(id), playerID(id), dir(dir) {}
 
 bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {
-    if (dir == FORWARD_DIR) {
-        // game_world.jumpForwardPlayer(playerID);
-    } else if (dir == BACKWARD_DIR) {
-        // game_world.jumpBackwardsPlayer(playerID);
+    if (dir == RIGHT_DIR) {
+        // game_manager.jumpForwardPlayer(playerID);
+    } else if (dir == LEFT_DIR) {
+        // game_manager.jumpBackwardsPlayer(playerID);
     } else {
         throw std::runtime_error("Invalid direction!");
     }
