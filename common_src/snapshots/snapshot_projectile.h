@@ -4,18 +4,18 @@
 class ProjectileSnapshot {
 public:
     char type;
-    float pos_x;
-    float pos_y;
-    float angle;
+    int pos_x;
+    int pos_y;
+    int angle;
     int direction;
     int state;
     char id;
     int explosion_radius;
-    float radius;
+    int radius;
     int width;
     int height;
 
-    ProjectileSnapshot(int type, float pos_x, float pos_y, float angle, int direction, float radius,
+    ProjectileSnapshot(int type, int pos_x, int pos_y, int angle, int direction, int radius,
                        int state, char id, int explosion_radius, int width = 0, int height = 0):
             type(type),
             pos_x(pos_x),

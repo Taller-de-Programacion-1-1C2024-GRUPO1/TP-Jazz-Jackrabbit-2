@@ -28,9 +28,9 @@
 #include <iostream>
 #include <map>
 #include <string>
-#include <yaml-cpp/yaml.h>
 
 #include <SDL2pp/SDL2pp.hh>
+#include <yaml-cpp/yaml.h>
 
 #include "../client_src/client_ammo_left.h"
 #include "../client_src/client_animation.h"
@@ -60,24 +60,24 @@ bool is_shooting = false;
 
 struct Tile {
     int id;
-    Rect srcRect; // Rectángulo de la textura
-    Rect destRect; // Rectángulo de destino en la pantalla
+    Rect srcRect;   // Rectángulo de la textura
+    Rect destRect;  // Rectángulo de destino en la pantalla
 };
 
-std::vector<Tile> loadMap(const std::string &filename) {
+std::vector<Tile> loadMap(const std::string& filename) {
     YAML::Node map = YAML::LoadFile(filename);
     std::vector<Tile> tiles;
 
-    int tilesetWidth = 10; // Ancho del tileset en bloques
-    int tilesetHeight = 66; // Alto del tileset en bloques
+    int tilesetWidth = 10;  // Ancho del tileset en bloques
 
-    for (const auto &layerNode : map["layers"]) {
+
+    for (const auto& layerNode: map["layers"]) {
         int x = 0;
         int y = 0;
-        for (const auto &row : layerNode["data"]) {
-            for (const auto &tile : row) {
-                int id = tile.as<int>();
-                if (id != -1) { // Ignorar tiles vacíos, pero cuentan en la iteración
+        for (const auto& row: layerNode["data"]) {
+            for (const auto& block: row) {
+                int id = block.as<int>();
+                if (id != -1) {  // Ignorar tiles vacíos, pero cuentan en la iteración
                     Tile tile;
                     tile.id = id;
                     // Calcular srcRect basado en el id de la textura
@@ -173,7 +173,7 @@ void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, Shift
     }
 }
 
-int main() try {
+int example_run() try {
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
@@ -205,9 +205,9 @@ int main() try {
     // texture
     SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
 
-    //Load map!!
-    //YAML::Node config = loadYAML("../external/maps/map.yml");
-    //const YAML::Node &layers = config["layers"];
+    // Load map!!
+    // YAML::Node config = loadYAML("../external/maps/map.yml");
+    // const YAML::Node &layers = config["layers"];
 
     std::vector<Tile> mapComponents = loadMap("../external/maps/map.yml");
 
@@ -353,7 +353,7 @@ int main() try {
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         // Map render
-        for (const Tile &tile : mapComponents) {
+        for (const Tile& tile: mapComponents) {
             renderer.Copy(map_tile, tile.srcRect, tile.destRect);
         }
 

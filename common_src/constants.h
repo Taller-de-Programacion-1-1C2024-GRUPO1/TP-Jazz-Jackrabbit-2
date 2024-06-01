@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <cstdint>
+
 #define LOOP_TIME 200
 #define NUM_OF_ENEMIES 5
 
@@ -39,6 +41,12 @@ enum /*Senders*/ {
     SEND_COMMAND_SHOOT,
     SEND_COMMAND_MOVE,
     SEND_COMMAND_MOVE_FASTER,
+    SEND_COMMAND_CHANGE_WEAPON,
+    SEND_COMMAND_JUMP_PUNCH_ATTACK_JAZZ,
+    SEND_COMMAND_SIDE_KICK_SPAZ,
+    SEND_COMMAND_SHORT_RANGE_JUMP_KICK_LORI,
+    SEND_COMMAND_SELECT_CHAMPION,
+    ACK_JOINED_SUCCEED,
 };
 
 enum /*Direction*/ {
@@ -48,16 +56,10 @@ enum /*Direction*/ {
     BACKWARD_DIR,
 };
 
-enum /*MATCH TYPE*/ {
+enum match_type {
     NEW_MATCH = 0,
     JOIN,
     REFRESH,
-};
-
-enum action {
-    STANDING,  // 0
-    MOVING,    // 1
-    JUMPING,   // 2
 };
 
 enum /*GAME TYPE*/ {
