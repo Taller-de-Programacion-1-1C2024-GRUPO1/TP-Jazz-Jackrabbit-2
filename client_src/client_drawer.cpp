@@ -266,7 +266,6 @@ int ClientDrawer::run() try {
 
         // Show rendered frame
         renderer.Present();
-        SDL_Delay(100);
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
         Uint32 realFrameTime = SDL_GetTicks() - frameStart;

@@ -28,16 +28,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="feat: one loop animations&#10;-reajuste en el struct de animation">
-      <change afterPath="$PROJECT_DIR$/client_src/client_sound_manager.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/client_sound_manager.h" afterDir="false" />
+    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_animation.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_animation.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/client_drawer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/jazz.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/jazz.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/external/animations/projectiles/blue_ray.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/projectiles/blue_ray.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +203,8 @@
       <workItem from="1717345018103" duration="347000" />
       <workItem from="1717345415051" duration="3300000" />
       <workItem from="1717349503966" duration="2012000" />
-      <workItem from="1717351568578" duration="2627000" />
+      <workItem from="1717351568578" duration="2758000" />
+      <workItem from="1717354988694" duration="12000" />
     </task>
     <task id="LOCAL-00001" summary="refactor: herencia en clases dibujables&#10;-se crea una clase Drawer padre&#10;-ShiftingDrawable hereda de Drawer&#10;-los componentes del mapa son objetos Drawer&#10;-se arreglan los movimientos de camara">
       <option name="closed" value="true" />
@@ -244,7 +238,23 @@
       <option name="project" value="LOCAL" />
       <updated>1717299324807</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido">
+      <option name="closed" value="true" />
+      <created>1717354865737</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717354865737</updated>
+    </task>
+    <task id="LOCAL-00006" summary="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido">
+      <option name="closed" value="true" />
+      <created>1717354871340</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1717354871340</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,6 +270,7 @@
     <MESSAGE value="refactor: herencia en clases dibujables&#10;-se crea una clase Drawer padre&#10;-ShiftingDrawable hereda de Drawer&#10;-los componentes del mapa son objetos Drawer&#10;-se arreglan los movimientos de camara" />
     <MESSAGE value="refactor: control de frames" />
     <MESSAGE value="feat: one loop animations&#10;-reajuste en el struct de animation" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: one loop animations&#10;-reajuste en el struct de animation" />
+    <MESSAGE value="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido" />
   </component>
 </project>
