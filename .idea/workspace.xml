@@ -28,19 +28,17 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client_src/client_keyboard_handler.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_src/client_keyboard_handler.h" afterDir="false" />
+    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="refactor: control de frames">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_animation.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_animation.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_drawable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawable.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_drawable.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawable.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/client_drawer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/client_drawer.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_manager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_manager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_manager.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_manager.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_sender.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_sender.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_sender.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_sender.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.h" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_src/example_sdl2pp.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/example_sdl2pp.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/external/animations/jazz.yml" beforeDir="false" afterPath="$PROJECT_DIR$/external/animations/jazz.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,8 +50,25 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="QT" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;JuampiAmboage&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Taller-de-Programacion-1-1C2024-GRUPO1/TP-Jazz-Jackrabbit-2.git&quot;,
+    &quot;accountId&quot;: &quot;ef597a42-dcde-40d1-99b2-373077eeea25&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/client_src/client_drawer.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/client_src/client_manager.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -188,7 +203,35 @@
       <workItem from="1717022636232" duration="8259000" />
       <workItem from="1717036079793" duration="769000" />
       <workItem from="1717083362645" duration="3429000" />
+      <workItem from="1717279134230" duration="2908000" />
+      <workItem from="1717298583508" duration="478000" />
+      <workItem from="1717299138972" duration="130000" />
     </task>
+    <task id="LOCAL-00001" summary="refactor: herencia en clases dibujables&#10;-se crea una clase Drawer padre&#10;-ShiftingDrawable hereda de Drawer&#10;-los componentes del mapa son objetos Drawer&#10;-se arreglan los movimientos de camara">
+      <option name="closed" value="true" />
+      <created>1717284748640</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1717284748640</updated>
+    </task>
+    <task id="LOCAL-00002" summary="refactor: herencia en clases dibujables&#10;-se crea una clase Drawer padre&#10;-ShiftingDrawable hereda de Drawer&#10;-los componentes del mapa son objetos Drawer&#10;-se arreglan los movimientos de camara">
+      <option name="closed" value="true" />
+      <created>1717284898069</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1717284898069</updated>
+    </task>
+    <task id="LOCAL-00003" summary="refactor: control de frames">
+      <option name="closed" value="true" />
+      <created>1717295712660</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1717295712660</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -198,5 +241,11 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge branch 'SDL_data_process' of https://github.com/Taller-de-Programacion-1-1C2024-GRUPO1/TP-Jazz-Jackrabbit-2 into SDL_data_process" />
+    <MESSAGE value="refactor: herencia en clases dibujables&#10;-se crea una clase Drawer padre&#10;-ShiftingDrawable hereda de Drawer&#10;-los componentes del mapa son objetos Drawer&#10;-se arreglan los movimientos de camara" />
+    <MESSAGE value="refactor: control de frames" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: control de frames" />
   </component>
 </project>

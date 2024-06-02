@@ -1,4 +1,8 @@
 #include "client_drawer.h"
+
+#include <memory>
+#include <utility>
+
 #include "client_drawable.h"
 
 ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots):
@@ -79,7 +83,8 @@ std::vector<std::unique_ptr<Drawable>> loadMap(const std::string& filename, Rend
                     destRect.w = 32;
                     destRect.h = 32;
 
-                    tiles.push_back(std::move(std::unique_ptr<Drawable>(new Drawable(renderer, CASTLE_TILE, cameraPosition, srcRect, destRect))));
+                    tiles.push_back(std::move(std::unique_ptr<Drawable>(new Drawable(
+                            renderer, CASTLE_TILE, cameraPosition, srcRect, destRect))));
                 }
                 x++;
             }
@@ -181,8 +186,9 @@ int ClientDrawer::run() try {
     SDL2pp::Point desiredCameraPosition(0, 0);
     float lerpFactor = 0.1f;  // Ajusta este valor para cambiar la suavidad
 
-    //Load map
-    std::vector<std::unique_ptr<Drawable>> mapComponents = loadMap("../external/maps/carrotus.yml", renderer, cameraPosition);
+    // Load map
+    std::vector<std::unique_ptr<Drawable>> mapComponents =
+            loadMap("../external/maps/carrotus.yml", renderer, cameraPosition);
 
     // Load font, 12pt size
     Font font(FONT, 12);
@@ -197,15 +203,14 @@ int ClientDrawer::run() try {
     AmmoLeft ammoLeft(renderer);
     ammoLeft.setWeapon(5);
 
-    // Sound effect
-    Chunk soundEffect("../client_src/resources/sounds/shooting.wav");
-    soundEffect.SetVolume(128);
-
     // A testing player
-    SDL2pp::Rect textureRect(0, 0, 32, 32); // Asume que quieres dibujar una textura de 32x32 desde el punto (0,0)
-    SDL2pp::Rect onMapRect(10, 10, 64, 64); // Asume que quieres dibujar la textura en el punto (10,10) en el mapa con un tamaño de 32x32
+    SDL2pp::Rect textureRect(
+            0, 0, 32, 32);  // Asume que quieres dibujar una textura de 32x32 desde el punto (0,0)
+    SDL2pp::Rect onMapRect(10, 10, 64, 64);  // Asume que quieres dibujar la textura en el punto
+                                             // (10,10) en el mapa con un tamaño de 32x32
 
-    ShiftingDrawable jazz(renderer, JAZZ_IMG, colorKey, cameraPosition, textureRect, onMapRect, mixer);
+    ShiftingDrawable jazz(renderer, JAZZ_IMG, colorKey, cameraPosition, textureRect, onMapRect,
+                          mixer);
     jazz.setAnimation("Idle");
     jazz.loadAnimations("../external/animations/jazz.yml");
 
@@ -216,16 +221,15 @@ int ClientDrawer::run() try {
     bool running = true;  // whether the game is running
     int score = 000000;   // player score
 
-    const int FPS = 60;
+    const int FPS = 30;
     const int expectedFrameTime = 1000 / FPS;
     Uint32 frameStart = SDL_GetTicks();
+    Uint32 accumulatedTime = 0;
 
     // Main loop
     while (running) {
 
-        //EVENTS HANDLER
-        //handle_keyboard(running);///////////////////////////////////////////////////////////////////////////////////////////
-
+        // EVENTS HANDLER
         handle_events(running, score, jazz);
 
         playerPosition.x = x_counter;
@@ -240,7 +244,7 @@ int ClientDrawer::run() try {
         // UPDATE ENTITIES
         jazz.update();
 
-        for (auto& tilePtr : mapComponents) {
+        for (auto& tilePtr: mapComponents) {
             tilePtr->update();
         }
 
@@ -249,7 +253,7 @@ int ClientDrawer::run() try {
         renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         // Map render
-        for (auto& tilePtr : mapComponents) {
+        for (auto& tilePtr: mapComponents) {
             tilePtr->render();
         }
 
@@ -272,20 +276,24 @@ int ClientDrawer::run() try {
         renderer.Present();
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        Uint32 realFrameTime = SDL_GetTicks() - frameStart;
-        int rest = expectedFrameTime - realFrameTime;
+        Uint32 frameEnd = SDL_GetTicks();
+        Uint32 realFrameTime = frameEnd - frameStart;
 
-        if (rest < 0) {
-           int behind = -rest;
-           int lost = behind - behind % expectedFrameTime;
-           frameStart += lost;
+        if (realFrameTime < expectedFrameTime) {
+            SDL_Delay(expectedFrameTime - realFrameTime);
+            accumulatedTime = 0;  // Reset accumulated time if we're within our frame budget
+        } else {
+            accumulatedTime += realFrameTime - expectedFrameTime;
+            // If accumulated time exceeds frame delay, we skip the frame
+            if (accumulatedTime > expectedFrameTime) {
+                accumulatedTime %=
+                        expectedFrameTime;  // Adjust accumulated time to not skip too many frames
+                jazz.reajustFrame(accumulatedTime / expectedFrameTime);
+            }
         }
-        else {
-           SDL_Delay(rest);
-        }
-        frameStart += expectedFrameTime;
+
+        frameStart = SDL_GetTicks();  // Update frameStart for the next iteration
     }
-
 
     // Here all resources are automatically released and libraries deinitialized
     return 0;

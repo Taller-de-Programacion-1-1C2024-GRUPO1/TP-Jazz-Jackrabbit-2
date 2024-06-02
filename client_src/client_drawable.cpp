@@ -1,16 +1,18 @@
 #include "client_drawable.h"
 
-#include "client_shifting_drawable.h"
-
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
 
-Drawable::Drawable(SDL2pp::Renderer& renderer, const std::string& path,
-                    SDL2pp::Point& cp,
-                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect) :
-        renderer(renderer), texture(renderer, SDL2pp::Surface(path)),
-        cameraPosition(cp), textureRect(textureRect), onMapRect(onMapRect){}
+#include "client_shifting_drawable.h"
+
+Drawable::Drawable(SDL2pp::Renderer& renderer, const std::string& path, SDL2pp::Point& cp,
+                   SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect):
+        renderer(renderer),
+        texture(renderer, SDL2pp::Surface(path)),
+        cameraPosition(cp),
+        textureRect(textureRect),
+        onMapRect(onMapRect) {}
 
 SDL2pp::Rect Drawable::adjustPosition() {
     SDL2pp::Rect adjustedOnMapRect = onMapRect;
@@ -19,9 +21,7 @@ SDL2pp::Rect Drawable::adjustPosition() {
     return adjustedOnMapRect;
 }
 
-void Drawable::render() {
-    renderer.Copy(texture, textureRect, adjustPosition());
-}
+void Drawable::render() { renderer.Copy(texture, textureRect, adjustPosition()); }
 
 void Drawable::update() {
     int mapWidth = 1120;
@@ -45,7 +45,4 @@ void Drawable::setPosition(int x, int y) {
     onMapRect.y = y;
 }
 
-void Drawable::setCameraPosition(const SDL2pp::Point& position) {
-    cameraPosition = position;
-}
-
+void Drawable::setCameraPosition(const SDL2pp::Point& position) { cameraPosition = position; }

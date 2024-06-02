@@ -441,7 +441,7 @@ Intoxicated-Run:
 Shoot:
   frames: 6
   speed: 100
-  loop: true
+  loop: false
   sound: "../client_src/resources/sounds/shooting.wav"
   rects:
     - x: 1

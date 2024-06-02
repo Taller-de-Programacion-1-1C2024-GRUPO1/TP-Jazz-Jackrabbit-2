@@ -4,15 +4,11 @@
 
 #include <yaml-cpp/yaml.h>
 
-ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer,
-                    const std::string& path, const SDL_Color& colorKey,
-                    SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
-                    SDL2pp::Mixer& mixer):
-        Drawable(renderer, path, cp, textureRect, onMapRect),
-        currentAnimationName(""),
-        angle(0),
-        direction(0),
-        mixer(mixer) {
+ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, const std::string& path,
+                                   const SDL_Color& colorKey, SDL2pp::Point& cp,
+                                   SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
+                                   SDL2pp::Mixer& mixer):
+        Drawable(renderer, path, cp, textureRect, onMapRect), angle(0), direction(0), mixer(mixer) {
     SDL2pp::Surface surface(path);
     SDL_SetColorKey(surface.Get(), SDL_TRUE,
                     SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
@@ -24,8 +20,9 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
     YAML::Node config = YAML::LoadFile(path);
     for (YAML::const_iterator it = config.begin(); it != config.end(); ++it) {
         Animation animation;
+        animation.name = it->first.as<std::string>();
         animation.frames = it->second["frames"].as<int>();
-        animation.speed = it->second["speed"].as<int>();
+        animation.justOneLoop = !it->second["loop"].as<bool>();
         animation.soundPath = it->second["sound"].as<std::string>();
 
         for (size_t i = 0; i < it->second["rects"].size(); i++) {
@@ -38,7 +35,6 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
         }
         animations[it->first.as<std::string>()] = animation;
     }
-    currentAnimationName = animations.begin()->first.c_str();
 }
 
 void ShiftingDrawable::render(SDL2pp::Renderer& renderer) {
@@ -48,10 +44,13 @@ void ShiftingDrawable::render(SDL2pp::Renderer& renderer) {
 
 void ShiftingDrawable::update() {
     Drawable::update();
-    Animation* currentAnimation = &animations[currentAnimationName];
-    int frame =
-            static_cast<int>((SDL_GetTicks() / currentAnimation->speed) % currentAnimation->frames);
-    textureRect = currentAnimation->frameRects[frame];
+    textureRect =
+            currentAnimation.frameRects[currentAnimation.currentFrame % currentAnimation.frames];
+    if (currentAnimation.justOneLoop &&
+        currentAnimation.currentFrame == currentAnimation.frames - 1) {
+        return;
+    }
+    currentAnimation.currentFrame++;
 }
 
 void ShiftingDrawable::setAngle(int newAngle) { angle = newAngle; }
@@ -59,16 +58,23 @@ void ShiftingDrawable::setAngle(int newAngle) { angle = newAngle; }
 void ShiftingDrawable::setDirection(int dir) { direction = dir; }
 
 void ShiftingDrawable::setAnimation(const char* name) {
-    if (name == currentAnimationName) {
+    if (name == currentAnimation.name) {
         return;
     }
-    currentAnimationName = name;
-    std::ifstream file(animations[currentAnimationName].soundPath.c_str());
-    if (file.good()) {
+    currentAnimation = animations[name];
+    std::ifstream file(currentAnimation.soundPath.c_str());
+    /*if (file.good()) {
         SDL2pp::Chunk soundEffect(animations[currentAnimationName].soundPath.c_str());
         mixer.PlayChannel(-1, soundEffect);
         SDL_Delay(500);
         mixer.HaltChannel(-1);
-    }
+    }*/
 }
 
+void ShiftingDrawable::reajustFrame(int advancedFrame) {
+    if (currentAnimation.justOneLoop &&
+        currentAnimation.currentFrame == currentAnimation.frames - 1) {
+        return;
+    }
+    currentAnimation.currentFrame = advancedFrame;
+}
