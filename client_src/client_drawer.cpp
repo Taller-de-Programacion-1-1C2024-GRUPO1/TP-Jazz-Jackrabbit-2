@@ -209,48 +209,6 @@ int ClientDrawer::run() try {
     jazz.setAnimation("Idle");
     jazz.loadAnimations("../external/animations/jazz.yml");
 
-    // Another testing player
-   /* ShiftingDrawable spaz(renderer, SPAZ_IMG, playerPosition, colorKey, &mixer);
-    spaz.loadAnimations("../external/animations/spaz.yml");
-    spaz.setCameraPosition(playerPosition);
-
-    // A third one
-    ShiftingDrawable lori(renderer, LORI_IMG, playerPosition, colorKey, &mixer);
-    lori.loadAnimations("../external/animations/lori.yml");
-    lori.setCameraPosition(playerPosition);
-
-    // A coin and a diamond
-    SDL_Color itemsColorKey = {0, 128, 255, 1};
-
-    ShiftingDrawable coin(renderer, ITEMS_IMG, playerPosition, itemsColorKey, &mixer);
-    coin.loadAnimations("../external/animations/resources.yml");
-    coin.setCameraPosition(playerPosition);
-
-    ShiftingDrawable diamond(renderer, ITEMS_IMG, playerPosition, itemsColorKey, &mixer);
-    diamond.loadAnimations("../external/animations/resources.yml");
-    diamond.setCameraPosition(playerPosition);
-
-    coin.setAnimation("Coin-flip");
-    diamond.setAnimation("Diamond-flip");
-
-    // PROJECTILES
-    ShiftingDrawable projectile(renderer, PROJECTILES_IMG, playerPosition, itemsColorKey, &mixer);
-    WeaponData::loadAnimationsToProjectile(1, projectile);
-    bool exploded = false;
-    // ENEMIES
-
-    // Crab
-    ShiftingDrawable crab(renderer, ENEMIES_IMG, playerPosition, itemsColorKey, &mixer);
-    crab.loadAnimations("../external/animations/crab.yml");
-    crab.setAnimation("Walk");
-    crab.setCameraPosition(playerPosition);
-
-    // Tall guy
-    ShiftingDrawable lizard(renderer, ENEMIES_IMG, playerPosition, itemsColorKey, &mixer);
-    lizard.loadAnimations("../external/animations/lizard.yml");
-    lizard.setAnimation("Walk");
-    lizard.setCameraPosition(playerPosition);*/
-
     int enemie_x = 10;
     int multiplier = 1;
 
@@ -259,36 +217,16 @@ int ClientDrawer::run() try {
     int score = 000000;   // player score
 
     const int FPS = 60;
-    const int frameDelay = 1000 / FPS;
+    const int expectedFrameTime = 1000 / FPS;
+    Uint32 frameStart = SDL_GetTicks();
 
     // Main loop
     while (running) {
-        Uint32 frameStart;
-        int frameTime;
-        frameStart = SDL_GetTicks();
 
-        // Event processing:
-        // - If window is closed, or Q or Escape buttons are pressed,
-        //   quit the application
-        // - If Right key is pressed, character would run
-        // - If Right key is released, character would stop
-
+        //EVENTS HANDLER
         //handle_keyboard(running);///////////////////////////////////////////////////////////////////////////////////////////
 
-        handle_events(running, score, jazz);/*
-        if (enemie_x > 700) {
-            crab.setDirection(-1);
-            lizard.setDirection(-1);
-            multiplier = -1;
-        }
-        if (enemie_x < 10) {
-            crab.setDirection(1);
-            lizard.setDirection(1);
-            multiplier = 1;
-        }
-        enemie_x += 1 * multiplier;
-        crab.setPosition(enemie_x, 500);
-        lizard.setPosition(enemie_x, 400);*/
+        handle_events(running, score, jazz);
 
         playerPosition.x = x_counter;
         // En tu bucle principal o función de actualización de cámara
@@ -298,24 +236,10 @@ int ClientDrawer::run() try {
         // Interpolación lineal para suavizar el movimiento
         cameraPosition.x += (desiredCameraPosition.x - cameraPosition.x) * lerpFactor;
         cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
-        /*projectile.setPosition(enemie_x * 8, 40);
-        if (!exploded && enemie_x * 8 > 600) {
-            projectile.setAnimation("Explode");
-            exploded = true;
-        }
-        // std::cout << "Player position: " << playerPosition.x << ", " << playerPosition.y <<
-        // std::endl;
-*/
+
         // UPDATE ENTITIES
         jazz.update();
-       /* spaz.update();
-        lori.update();
-        projectile.update();
-        coin.update();
-        diamond.update();
-        crab.update();
-        lizard.update();
-*/
+
         for (auto& tilePtr : mapComponents) {
             tilePtr->update();
         }
@@ -330,14 +254,7 @@ int ClientDrawer::run() try {
         }
 
         jazz.render(renderer);
-  /*      spaz.render(renderer);
-        lori.render(renderer);
-        crab.render(renderer);
-        lizard.render(renderer);
-        coin.render(renderer);
-        diamond.render(renderer);
-        projectile.render(renderer);
-*/
+
         banner.render();
         ammoLeft.setAmmo(ammo);
         ammoLeft.render();
@@ -355,12 +272,20 @@ int ClientDrawer::run() try {
         renderer.Present();
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        frameTime = SDL_GetTicks() - frameStart;
+        Uint32 realFrameTime = SDL_GetTicks() - frameStart;
+        int rest = expectedFrameTime - realFrameTime;
 
-        if (frameDelay > frameTime) {
-            SDL_Delay(frameDelay - frameTime);
+        if (rest < 0) {
+           int behind = -rest;
+           int lost = behind - behind % expectedFrameTime;
+           frameStart += lost;
         }
+        else {
+           SDL_Delay(rest);
+        }
+        frameStart += expectedFrameTime;
     }
+
 
     // Here all resources are automatically released and libraries deinitialized
     return 0;
