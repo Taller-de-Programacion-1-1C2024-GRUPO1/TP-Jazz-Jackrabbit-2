@@ -9,7 +9,7 @@ ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, const std::string
                                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
                                    SoundManager& soundManager):
         Drawable(renderer, path, cp, textureRect, onMapRect),
-        currentAnimation(nullptr),
+        currentAnimation(Animation()),
         angle(0),
         direction(0),
         soundManager(soundManager) {
@@ -69,10 +69,8 @@ void ShiftingDrawable::setDirection(int dir) { direction = dir; }
 
 void ShiftingDrawable::setAnimation(const char* name) {
     if (name == currentAnimation->name) {
-        std::cout << "Already playing this animation" << std::endl;
         return;
     }
-    std::cout << "Playing new animation: " << name << std::endl;
     currentAnimation->currentFrame = 0;
     currentAnimation = &animations[name];
     if (!currentAnimation->sound.empty()) {

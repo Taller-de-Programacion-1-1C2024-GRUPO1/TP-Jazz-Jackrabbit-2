@@ -28,9 +28,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido">
+    <list default="true" id="9dc2d0ac-c24f-4e9c-9c03-fcc0ed8849ef" name="Changes" comment="fix: delay de prueba olvidado">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_src/client_drawer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_drawer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/client_src/client_shifting_drawable.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,7 +204,7 @@
       <workItem from="1717345415051" duration="3300000" />
       <workItem from="1717349503966" duration="2012000" />
       <workItem from="1717351568578" duration="2758000" />
-      <workItem from="1717354988694" duration="12000" />
+      <workItem from="1717354988694" duration="1021000" />
     </task>
     <task id="LOCAL-00001" summary="refactor: herencia en clases dibujables&#10;-se crea una clase Drawer padre&#10;-ShiftingDrawable hereda de Drawer&#10;-los componentes del mapa son objetos Drawer&#10;-se arreglan los movimientos de camara">
       <option name="closed" value="true" />
@@ -254,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717354871340</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix: delay de prueba olvidado">
+      <option name="closed" value="true" />
+      <created>1717355016833</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1717355016833</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,6 +279,7 @@
     <MESSAGE value="refactor: control de frames" />
     <MESSAGE value="feat: one loop animations&#10;-reajuste en el struct de animation" />
     <MESSAGE value="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: dropeo de frames&#10;feat: nueva clase SoundManager&#10;-se corrige el método de cálculo de frames a dropear&#10;-se incorpora clase que controla la emisión de música y efectos de sonido" />
+    <MESSAGE value="fix: delay de prueba olvidado" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: delay de prueba olvidado" />
   </component>
 </project>
