@@ -442,7 +442,7 @@ Shoot:
   frames: 6
   speed: 100
   loop: false
-  sound: "../client_src/resources/sounds/shooting.wav"
+  sound: "Shooting"
   rects:
     - x: 1
       y: 567
@@ -473,7 +473,7 @@ Hurt:
   frames: 9
   speed: 100
   loop: false
-  sound: "../client_src/resources/sounds/auch.wav"
+  sound: "Jazz-Auch"
   rects:
     - x: 1
       y: 3022

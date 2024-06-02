@@ -33,7 +33,7 @@ Explode:
   frames: 7
   speed: 100
   loop: false
-  sound: "../client_src/resources/sounds/explosion.wav"
+  sound: "Explosion"
   rects:
   - x: 102
     y: 248

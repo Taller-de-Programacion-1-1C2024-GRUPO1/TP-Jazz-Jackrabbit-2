@@ -10,19 +10,19 @@ struct Animation {
     int frames;
     bool justOneLoop;
     std::vector<SDL2pp::Rect> frameRects;
-    int currentFrame;
-    std::string soundPath;
+    int currentFrame = 0;
+    std::string sound;
 
     Animation() = default;
 
     Animation(const char* name, int f, bool oneLoop, const std::vector<SDL2pp::Rect>& rects,
-              const char* sp):
+              const char* sound):
             name(name),
             frames(f),
             justOneLoop(oneLoop),
             frameRects(rects),
             currentFrame(0),
-            soundPath(sp) {}
+            sound(sound) {}
 };
 
 #endif  // ANIMATION_H

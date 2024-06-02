@@ -1,9 +1,11 @@
 #include "client_drawer.h"
 
+#include <algorithm>
 #include <memory>
 #include <utility>
 
 #include "client_drawable.h"
+#include "client_sound_manager.h"
 
 ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds), q_snapshots(q_snapshots), client_id(0) {}
@@ -155,14 +157,7 @@ int ClientDrawer::run() try {
     // Initialize SDL_ttf library
     SDLTTF ttf;
 
-    // Inicialización de SDL_mixer a través de SDL2pp::Mixer
-    Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
-    // Cargar música de fondo
-    Music backgroundMusic(MUSIC_FILE);
-    // Set music volume
-    mixer.SetMusicVolume(MUSIC_VOLUME);
-    // Reproducir música en bucle
-    mixer.PlayMusic(backgroundMusic, -1);
+    SoundManager soundManager;  // pasarle parametros??
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
     Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
@@ -210,12 +205,10 @@ int ClientDrawer::run() try {
                                              // (10,10) en el mapa con un tamaño de 32x32
 
     ShiftingDrawable jazz(renderer, JAZZ_IMG, colorKey, cameraPosition, textureRect, onMapRect,
-                          mixer);
-    jazz.setAnimation("Idle");
+                          soundManager);
     jazz.loadAnimations("../external/animations/jazz.yml");
+    jazz.setAnimation("Idle");
 
-    int enemie_x = 10;
-    int multiplier = 1;
 
     // Game state
     bool running = true;  // whether the game is running
@@ -224,7 +217,6 @@ int ClientDrawer::run() try {
     const int FPS = 30;
     const int expectedFrameTime = 1000 / FPS;
     Uint32 frameStart = SDL_GetTicks();
-    Uint32 accumulatedTime = 0;
 
     // Main loop
     while (running) {
@@ -274,25 +266,33 @@ int ClientDrawer::run() try {
 
         // Show rendered frame
         renderer.Present();
+        SDL_Delay(100);
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
-        Uint32 frameEnd = SDL_GetTicks();
-        Uint32 realFrameTime = frameEnd - frameStart;
+        Uint32 realFrameTime = SDL_GetTicks() - frameStart;
+        std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
+        std::cout << "Frame time: " << realFrameTime << std::endl;
 
-        if (realFrameTime < expectedFrameTime) {
-            SDL_Delay(expectedFrameTime - realFrameTime);
-            accumulatedTime = 0;  // Reset accumulated time if we're within our frame budget
-        } else {
-            accumulatedTime += realFrameTime - expectedFrameTime;
-            // If accumulated time exceeds frame delay, we skip the frame
-            if (accumulatedTime > expectedFrameTime) {
-                accumulatedTime %=
-                        expectedFrameTime;  // Adjust accumulated time to not skip too many frames
-                jazz.reajustFrame(accumulatedTime / expectedFrameTime);
+        if (realFrameTime > expectedFrameTime) {
+            // Calculate how many frames we are behind
+            int framesBehind = realFrameTime / expectedFrameTime;
+            // Adjust the current frame
+            jazz.reajustFrame(framesBehind);
+            // Calculate the next frame start time
+            frameStart += framesBehind * expectedFrameTime;
+            Uint32 newFrameStart = frameStart + expectedFrameTime;
+
+            // Wait until the start of the next frame
+            Uint32 delayTime = newFrameStart - SDL_GetTicks();
+            if (delayTime > 0) {
+                SDL_Delay(delayTime);
             }
+            frameStart = newFrameStart;  // Set new frame start time
+        } else {
+            Uint32 restTime = expectedFrameTime - realFrameTime;
+            SDL_Delay(restTime);
+            frameStart += expectedFrameTime;
         }
-
-        frameStart = SDL_GetTicks();  // Update frameStart for the next iteration
     }
 
     // Here all resources are automatically released and libraries deinitialized
