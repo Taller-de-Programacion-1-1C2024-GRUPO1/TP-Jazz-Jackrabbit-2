@@ -16,9 +16,9 @@ enum /*COMMAND TYPE*/ {
 };
 
 enum ChampionType : uint8_t {
-    Jazz = 0,
-    Spaz,
-    Lori,
+    JAZZ = 0,
+    SPAZ,
+    LORI,
 };
 
 enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, RAT };

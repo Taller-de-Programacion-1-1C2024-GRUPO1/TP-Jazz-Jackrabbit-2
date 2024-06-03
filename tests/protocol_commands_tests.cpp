@@ -11,11 +11,13 @@
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/snapshots/snapshot.h"
+#include "../game_src/constants_game.h"
 
 const char* server_port = "8080";
 const char* ip = "localhost";
 const std::string& map_test = "MAP_TEST";
 const std::string& match_test = "MATCH_TEST";
+const ChampionType jazz = JAZZ;
 const int player_id = 1;
 const int number_players = 3;
 bool offCheat = false;
@@ -241,21 +243,10 @@ TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
     delete change_weapon;
 }
 
-TEST(ProtocolTestSelectChampion, SendAndReceiveSelectChampion) {
-    SelectChampion* select_champion = new SelectChampion(player_id, Jazz, match_test, map_test);
-    client_protocol.send_Command(select_champion);
-    std::shared_ptr<SelectChampion> received_select_champion =
-            std::dynamic_pointer_cast<SelectChampion>(server_protocol.receive_Command());
-    EXPECT_EQ(select_champion->get_playerId(), received_select_champion->get_playerId());
-    EXPECT_EQ(select_champion->get_commandType(), received_select_champion->get_commandType());
-    EXPECT_EQ(select_champion->get_championType(), received_select_champion->get_championType());
-    EXPECT_EQ(select_champion->get_match_name(), received_select_champion->get_match_name());
-    EXPECT_EQ(select_champion->get_map_name(), received_select_champion->get_map_name());
-    delete select_champion;
-}
+
 
 TEST(ProtocolTestMatch, SendAndReceiveMatch) {
-    MatchCommand* match = new MatchCommand(player_id, number_players, match_test, map_test);
+    MatchCommand* match = new MatchCommand(player_id, number_players, match_test, map_test, jazz);
     client_protocol.send_Command(match);
     std::shared_ptr<MatchCommand> received_match =
             std::dynamic_pointer_cast<MatchCommand>(server_protocol.receive_Command());
