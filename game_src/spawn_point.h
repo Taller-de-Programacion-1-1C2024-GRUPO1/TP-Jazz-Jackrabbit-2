@@ -8,14 +8,13 @@ private:
     int y;
 
 public:
-    SpawnPoint(int x, int y) : x(x), y(y) {}
+    SpawnPoint(int x, int y): x(x), y(y) {}
     ~SpawnPoint() = default;
 
     void set_x(int x) { this->x = x; }
     void set_y(int y) { this->y = y; }
     int get_x() const { return x; }
     int get_y() const { return y; }
-    
 };
 
 #endif

@@ -1,3 +1,4 @@
+name: "carrotus"
 max_players: 5
 layers: 
   - id: 0

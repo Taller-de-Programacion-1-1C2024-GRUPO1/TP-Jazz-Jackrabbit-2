@@ -71,8 +71,8 @@ enum /* CHEATS */ {
 
 #define RABBIT_AMOUNT_DEFAULT 1  // modificar
 
-#define MAP_WIDTH_DEFAULT 100   // modificar
-#define MAP_HEIGHT_DEFAULT 100  // modificar
+#define MAP_WIDTH_DEFAULT 35   // modificar
+#define MAP_HEIGHT_DEFAULT 19  // modificar
 
 enum /*MAP LAYERS*/ {
     BACKGROUND_LAYER = 0,

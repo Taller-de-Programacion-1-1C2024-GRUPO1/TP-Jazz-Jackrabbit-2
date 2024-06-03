@@ -43,11 +43,17 @@ public:
 
     Map() = default;
 
+    void set_name(const std::string& name);
+
     void set_physical_map(const PhysicalMap& physical_map);
 
     void set_dynamic_map(const DynamicMap& dynamic_map);
 
     void set_max_players(int max_players);
+
+    DynamicMap get_dynamic_map() const;
+
+    PhysicalMap get_physical_map() const;
 
     std::shared_ptr<Snapshot> get_snapshot() const;
 

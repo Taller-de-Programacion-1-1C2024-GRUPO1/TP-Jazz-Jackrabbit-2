@@ -2,13 +2,15 @@
 #define MAP_PARSER_H
 
 #include <iostream>
-#include <vector>
+#include <map>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
-#include "map.h"
 #include "../physics_src/physical_map.h"
+
 #include "constants_game.h"
+#include "map.h"
 
 class MapParser {
 
@@ -16,8 +18,9 @@ public:
     MapParser() = default;
     ~MapParser() = default;
 
-    void parse_physical_map(std::unordered_map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data, PhysicalMap& physic_map) {
-        for (const auto& [current_layer, layer_data] : map_data) {
+    void parse_physical_map(std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data,
+                            PhysicalMap& physic_map) {
+        for (const auto& [current_layer, layer_data]: map_data) {
             if (current_layer == DIAG_LEFT_LAYER) {
                 for (int x = 0; x < MAP_WIDTH_DEFAULT; x++) {
                     for (int y = 0; y < MAP_HEIGHT_DEFAULT; y++) {
@@ -58,7 +61,7 @@ public:
                 }
             }
         }
-    };
+    }
 };
 
 #endif
