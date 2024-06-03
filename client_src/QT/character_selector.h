@@ -12,6 +12,7 @@
 #include <string>
 
 #include "../../common_src/constants.h"
+#include "../../game_src/constants_game.h"
 #include "../client_sender.h"
 #include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
@@ -30,7 +31,7 @@ public:
 
 signals:
     void windowClosed();
-    void characterSelected(const std::string& character);
+    void characterSelected(ChampionType character);
 
 private slots:
 

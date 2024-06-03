@@ -3,7 +3,7 @@
 #include "ui_map_selector.h"
 
 
-MapSelector::MapSelector(ClientSender& sender,  ClientReceiver& receiver, const std::string& selected_character,
+MapSelector::MapSelector(ClientSender& sender,  ClientReceiver& receiver, ChampionType selected_character,
                          QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
@@ -48,9 +48,10 @@ void MapSelector::start_match() {
         return;
     }
 
-
-    // MatchCommand(int type, int number_players, const std::string& match_name,
-    //                        const std::string& map_name):
+    /*
+    MatchCommand(int type, int number_players, const std::string& match_name,
+                 const std::string& map_name, ChampionType character_name);
+    */
 
     // enum match_type {
     //     NEW_MATCH = 0,
@@ -62,7 +63,7 @@ void MapSelector::start_match() {
     // ENVIO COMANDO preguntando por existencia de nombre de partida.
     // Si no existe acepto para que inicie la partida
 
-    MatchCommand cmd = MatchCommand(NEW_MATCH, number_of_players, selected_character, selected_map);
+    MatchCommand cmd = MatchCommand(NEW_MATCH, number_of_players, match_name, selected_map, selected_character);
 
     //sender.sendCommand(&cmd);
 

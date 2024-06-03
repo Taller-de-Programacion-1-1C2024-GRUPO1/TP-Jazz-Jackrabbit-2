@@ -71,7 +71,7 @@ void ClientLobby::on_btnJoinMatch_clicked() {
 void ClientLobby::on_btnQuit_clicked() { QApplication::exit(1); }
 
 
-void ClientLobby::handleCharacterSelected(const std::string& character) {
+void ClientLobby::handleCharacterSelected(ChampionType character) {
     selected_character = character;
 }
 

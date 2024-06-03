@@ -20,21 +20,19 @@ CharacterSelector::~CharacterSelector() { delete ui; }
 
 
 void CharacterSelector::on_btnCharacterJazz_clicked() {
-    emit characterSelected("Jazz");
+    emit characterSelected(JAZZ);
     accept();
-    // selected_character = "Jazz";
-    // accept();
 }
 
 
 void CharacterSelector::on_btnCharacterLori_clicked() {
-    emit characterSelected("Lori");
+    emit characterSelected(LORI);
     accept();
 }
 
 
 void CharacterSelector::on_btnCharacterSpaz_clicked() {
-    emit characterSelected("Spaz");
+    emit characterSelected(SPAZ);
     accept();
 }
 

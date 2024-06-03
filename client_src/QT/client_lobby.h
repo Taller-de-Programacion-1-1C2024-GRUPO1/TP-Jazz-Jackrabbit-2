@@ -10,6 +10,7 @@
 #include <string>
 
 #include "../../common_src/constants.h"
+#include "../../game_src/constants_game.h"
 #include "../client_sender.h"
 #include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
@@ -35,14 +36,14 @@ private slots:
     void on_btnJoinMatch_clicked();
     void on_btnQuit_clicked();
     void handleWindowClosed();
-    void handleCharacterSelected(const std::string& character);
+    void handleCharacterSelected(ChampionType character);
 
 
 private:
     Ui::ClientLobby* ui;
     ClientSender& sender;
     ClientReceiver& receiver;
-    std::string selected_character;
+    ChampionType selected_character;
 };
 
 #endif  // CLIENT_LOBBY_H

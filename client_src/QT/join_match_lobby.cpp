@@ -3,7 +3,7 @@
 #include "ui_join_match_lobby.h"
 
 
-JoinMatchLobby::JoinMatchLobby(ClientSender& sender,  ClientReceiver& receiver, const std::string& selected_character,
+JoinMatchLobby::JoinMatchLobby(ClientSender& sender,  ClientReceiver& receiver, ChampionType selected_character,
                                QWidget* parent):
         QDialog(parent),
         ui(new Ui::JoinMatchLobby),
@@ -33,7 +33,7 @@ void JoinMatchLobby::on_btnJoin_clicked() {
     std::string match_name = ui->txtMatchName->toPlainText().toStdString();
 
 
-    // MatchCommand(int type, int number_players, const std::string& match_name,
+    //MatchCommand(int type, int number_players, const std::string& match_name,
     //                        const std::string& map_name):
 
     // enum match_type {
@@ -46,7 +46,9 @@ void JoinMatchLobby::on_btnJoin_clicked() {
     // ENVIO COMANDO preguntando por existencia de partida. Si existe acepto para que inicie la
     // partida
 
-    MatchCommand cmd = MatchCommand(JOIN, 0, match_name, "");  // selected_character
+
+    MatchCommand cmd = MatchCommand(JOIN, 0, match_name, "", selected_character);
+
     
     //sender.send_Command(&cmd);
 

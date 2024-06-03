@@ -26,7 +26,7 @@ class MapSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit MapSelector(ClientSender& sender,  ClientReceiver& receiver, const std::string& selected_character,
+    explicit MapSelector(ClientSender& sender,  ClientReceiver& receiver, ChampionType selected_character,
                          QWidget* parent = nullptr);
     ~MapSelector();
 
@@ -50,7 +50,7 @@ private:
     Ui::MapSelector* ui;
     ClientSender& sender;
     ClientReceiver& receiver;
-    const std::string selected_character;
+    ChampionType selected_character;
     std::string selected_map;
     std::string match_name;
 };

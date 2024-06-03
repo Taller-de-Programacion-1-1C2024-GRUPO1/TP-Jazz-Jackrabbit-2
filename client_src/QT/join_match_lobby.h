@@ -11,7 +11,7 @@
 
 #include "../client_sender.h"
 #include "../client_receiver.h"
-
+#include "../../game_src/constants_game.h"
 #include "waiting_room.h"
 
 namespace Ui {
@@ -22,7 +22,7 @@ class JoinMatchLobby: public QDialog {
     Q_OBJECT
 
 public:
-    explicit JoinMatchLobby(ClientSender& sender, ClientReceiver& receiver, const std::string& selected_character,
+    explicit JoinMatchLobby(ClientSender& sender, ClientReceiver& receiver, ChampionType selected_character,
                             QWidget* parent = nullptr);
     ~JoinMatchLobby();
 
@@ -40,7 +40,7 @@ private:
     Ui::JoinMatchLobby* ui;
     ClientSender& sender;
     ClientReceiver& receiver;
-    std::string selected_character;
+    ChampionType selected_character;
 };
 
 #endif  // JOIN_MATCH_LOBBY_H
