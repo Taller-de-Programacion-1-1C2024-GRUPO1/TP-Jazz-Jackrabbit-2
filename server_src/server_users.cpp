@@ -14,7 +14,7 @@ void User::run() {
             std::shared_ptr<MatchCommand> new_match =
                     std::dynamic_pointer_cast<MatchCommand>(command);
             if (new_match->get_commandType() == NEW_MATCH) {
-                create_new_match(new_match->get_number_of_players(), new_match->get_match_name(),
+                create_new_match(new_match->get_number_players(), new_match->get_match_name(),
                                  new_match->get_map_name());
             } else if (new_match->getType() == JOIN) {
                 join_match(new_match->get_match_name());
@@ -49,7 +49,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
             std::make_shared<MatchInfo>(match_name, map_name, protocols_queue, playing);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
-    container_protocol->protocol.send_user_created_match(ACK);
+    // container_protocol->protocol.send_user_created_match(ACK);
     if (ACK == ERROR) {
         return;
     }

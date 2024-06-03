@@ -12,21 +12,25 @@
 #include "entities/item.h"
 #include "entities/rabbit.h"
 
+#include "dynamic_map.h"
+
 class Map {
 private:
     std::string map_name;
-    // PhysicalMap physical_map;
+    PhysicalMap physical_map;
+    DynamicMap dynamic_map;
     int width;
     int height;
+    int max_players;
     int amount_players;
 
-    //Vectores de Entidades
+    // Vectores de Entidades
     std::vector<Rabbit*> players;
     std::vector<Enemy*> enemies;
     std::vector<Bullet*> bullets;
     std::vector<Item*> items;
 
-public: 
+public:
     void check_colision();
     void reap_dead();
     void update();
@@ -38,8 +42,12 @@ public:
     Map(int width, int height, int amount_players, const std::string& map_name);
 
     Map() = default;
-    
+
     void set_physical_map(const PhysicalMap& physical_map);
+
+    void set_dynamic_map(const DynamicMap& dynamic_map);
+
+    void set_max_players(int max_players);
 
     std::shared_ptr<Snapshot> get_snapshot() const;
 

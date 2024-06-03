@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 
         std::string config_file = "/etc/jazz/config.yml";
         ConfigSingleton::getInstance(config_file);
-        std::vector<std::string> map_routes;
+        std::string map_routes = "/etc/jazz/maps.txt";
         bool playing = true;
         ServerAcceptor server_acceptor(servname, PLAYER_BASE, map_routes, &playing);
         server_acceptor.run();

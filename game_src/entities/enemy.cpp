@@ -50,15 +50,3 @@ void Enemy::update() {
     // NO HAY INERCIA EN EJE X
     spe_x = 0;
 }
-
-
-// RENDER
-void Enemy::render(SDL_Renderer* renderer) {
-    SDL_Rect rect;
-    rect.x = pos_x;
-    rect.y = pos_y;
-    rect.w = width;
-    rect.h = height;
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);  // Color verde
-    SDL_RenderFillRect(renderer, &rect);
-}

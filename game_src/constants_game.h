@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_GAME_H
 #define CONSTANTS_GAME_H
 
+#include <cstdint>
+
 enum /*COMMAND TYPE*/ {
     COMMAND_MOVE,
     COMMAND_MOVE_FASTER,
@@ -71,5 +73,23 @@ enum /* CHEATS */ {
 
 #define MAP_WIDTH_DEFAULT 100   // modificar
 #define MAP_HEIGHT_DEFAULT 100  // modificar
+
+enum /*MAP LAYERS*/ {
+    BACKGROUND_LAYER = 0,
+    DIAG_LEFT_LAYER,
+    DIAG_RIGHT_LAYER,
+    COLLIDER_LAYER,
+    DECORATION_LAYER,
+    SPAWN_POINTS_LAYER,
+};
+
+enum /*MAP OBJECTS*/ {
+    NULL_OBJ = 0,
+    DIAG_LEFT_OBJ,
+    DIAG_RIGHT_OBJ,
+    COLLIDER_OBJ,
+};
+
+#define UNDEFINED -1
 
 #endif

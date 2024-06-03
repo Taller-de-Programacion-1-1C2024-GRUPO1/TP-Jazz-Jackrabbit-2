@@ -52,7 +52,6 @@ public:
 
     // TESTING
     // RENDER
-    void render(SDL_Renderer* renderer);
     void imprimir_posicion();
 
     // COLA

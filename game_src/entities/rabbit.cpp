@@ -101,18 +101,7 @@ void Rabbit::update_state() {
     // action = RUN_FAST;
 }
 
-void Rabbit::render(SDL_Renderer* renderer) {
-    SDL_Rect rect;
-    rect.x = pos_x;
-    rect.y = pos_y;
-    rect.w = width;
-    rect.h = height;
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);  // Color rojo
-    SDL_RenderFillRect(renderer, &rect);
-}
-
 void Rabbit::imprimir_posicion() { printf("X: %d Y: %d\n", pos_x, pos_y); }
-
 
 // EVENTS
 

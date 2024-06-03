@@ -3,7 +3,8 @@
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
 Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
-           BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players, bool* playing):
+                   BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
+                   bool* playing):
         height(0),
         width(0),
         client_cmd_queue(client_cmd_queue),
@@ -49,9 +50,7 @@ void Gameloop::run() {
             game_command->execute_Command();
         }
 
-    } catch (ClosedQueue& err){
-
-    }
+    } catch (ClosedQueue& err) {}
 }
 
 void Gameloop::stop() { *playing = false; }

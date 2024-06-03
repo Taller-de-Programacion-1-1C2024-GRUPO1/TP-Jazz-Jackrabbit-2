@@ -24,15 +24,15 @@ private:
     int number_players;
     std::list<User*> server_users;
 
-    std::vector<std::string> map_routes;
+    std::string map_routes;
 
     std::atomic<bool> is_alive;
     std::atomic<bool> keep_talking;
     bool* playing;
 
 public:
-    explicit ServerAcceptor(const char* servname, int number_players,
-                            const std::vector<std::string>& map_routes, bool* playing);
+    explicit ServerAcceptor(const char* servname, int number_players, const std::string& map_routes,
+                            bool* playing);
     virtual void run() override;
     void stop() override;
     void reap_dead();

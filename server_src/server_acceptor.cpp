@@ -1,7 +1,7 @@
 #include "server_acceptor.h"
 
 ServerAcceptor::ServerAcceptor(const char* servname, int number_players,
-                               const std::vector<std::string>& map_routes, bool* playing):
+                               const std::string& map_routes, bool* playing):
         sk(servname),
         sk_was_closed(false),
         number_players(number_players),

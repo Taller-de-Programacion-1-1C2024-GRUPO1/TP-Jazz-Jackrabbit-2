@@ -32,9 +32,9 @@ private:
 public:
     explicit Command(int playerID): playerID(playerID) {}
 
-    virtual bool execute_Command(bool* cheatON, bool& needsMovement) = 0;
+    virtual bool execute_Command(bool* cheatON, bool& needsMovement) { return true; }
 
-    virtual void execute_Command() = 0;
+    virtual void execute_Command() { return; }
 
     virtual int get_playerId() = 0;
     virtual int get_commandType() = 0;

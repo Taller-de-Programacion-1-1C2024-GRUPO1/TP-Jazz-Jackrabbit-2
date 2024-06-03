@@ -1,37 +1,11 @@
 #include "physical_map.h"
 
-
-PhysicalMap::PhysicalMap(const int* map) { load_map(map); }
+PhysicalMap::PhysicalMap(): map() {}
 
 void PhysicalMap::load_map(const int* map_array) {
-    for (int j = 0; j < MAP_HEIGHT; j++) {
-        for (int i = 0; i < MAP_WIDTH; i++) {
-            map[i][j] = map_array[j * MAP_WIDTH + i];
-        }
-    }
-}
-
-void PhysicalMap::render(SDL_Renderer* renderer) {
-    for (int j = 0; j < MAP_HEIGHT; j++) {
-        for (int i = 0; i < MAP_WIDTH; i++) {
-            if (map[i][j] == 1) {
-                SDL_Rect blockRect = {i * BLOCK_DIVISION, j * BLOCK_DIVISION, BLOCK_DIVISION,
-                                      BLOCK_DIVISION};
-                SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-                SDL_RenderFillRect(renderer, &blockRect);
-            }
-            if (map[i][j] == 2) {
-                SDL_Rect blockRect = {i * BLOCK_DIVISION, j * BLOCK_DIVISION, BLOCK_DIVISION,
-                                      BLOCK_DIVISION};
-                SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                SDL_RenderFillRect(renderer, &blockRect);
-            }
-            if (map[i][j] == 4) {
-                SDL_Rect blockRect = {i * BLOCK_DIVISION, j * BLOCK_DIVISION, BLOCK_DIVISION,
-                                      BLOCK_DIVISION};
-                SDL_SetRenderDrawColor(renderer, 0, 255, 255, 255);
-                SDL_RenderFillRect(renderer, &blockRect);
-            }
+    for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
+        for (int i = 0; i < MAP_WIDTH_DEFAULT; i++) {
+            map[i][j] = map_array[j * MAP_WIDTH_DEFAULT + i];
         }
     }
 }

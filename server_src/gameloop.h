@@ -29,7 +29,7 @@ private:
     Queue<std::shared_ptr<Command>>& client_cmd_queue;
     BroadcasterSnapshots& broadcaster_snapshots;
     std::list<Player*>& players;
-    
+
     bool* playing;
     bool still_waiting = false;
     bool game_ended = false;
@@ -37,7 +37,8 @@ private:
 
 public:
     Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
-         BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players, bool* playing);
+             BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players,
+             bool* playing);
 
     std::shared_ptr<Snapshot> get_initial_snapshot(const Map& map);
 

@@ -10,8 +10,6 @@ private:
 
 public:
     Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map);
-    // RENDER
-    void render(SDL_Renderer* renderer);
     void update();
 };
 

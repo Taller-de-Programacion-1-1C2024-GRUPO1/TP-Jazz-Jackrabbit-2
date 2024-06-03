@@ -45,10 +45,9 @@ void Map::reap_dead() {
 }
 
 
-
 void Map::add_player(int PlayerID) {
-    //players.insert(players.begin()+PlayerID, new Rabbit(0/*SPAWN X*/,0/*SPAWN Y*/,/*MAP*/));
-    }
+    // players.insert(players.begin()+PlayerID, new Rabbit(0/*SPAWN X*/,0/*SPAWN Y*/,/*MAP*/));
+}
 
 void Map::add_enemy(Enemy* enemy) { enemies.push_back(enemy); }
 
@@ -56,6 +55,11 @@ void Map::add_bullet(Bullet* bullet) { bullets.push_back(bullet); }
 
 void Map::add_item(Item* item) { items.push_back(item); }
 
+void Map::set_physical_map(const PhysicalMap& physical_map) { this->physical_map = physical_map; }
+
+void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = dynamic_map; }
+
+void Map::set_max_players(int max_players) { this->max_players = max_players; }
 
 std::shared_ptr<Snapshot> Map::get_snapshot() const {
     Snapshot snapshot({}, {}, {});

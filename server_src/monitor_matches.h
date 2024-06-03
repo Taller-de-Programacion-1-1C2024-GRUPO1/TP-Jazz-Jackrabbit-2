@@ -10,6 +10,7 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
+#include "../game_src/map_reader.h"
 
 #include "constants_server.h"
 #include "map.h"
@@ -18,6 +19,7 @@
 
 class MonitorMatches {
 private:
+    MapReader map_reader;
     std::map<std::string, std::shared_ptr<MatchInfo>> matches;
     std::map<std::string, Map> maps;
     std::mutex mutex;
@@ -25,7 +27,7 @@ private:
     void kill_dead_matches();
 
 public:
-    explicit MonitorMatches(const std::vector<std::string>& map_routes);
+    explicit MonitorMatches(const std::string& map_routes);
 
     // Agrega un nuevo match al monitor de matches
     int add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_info);
