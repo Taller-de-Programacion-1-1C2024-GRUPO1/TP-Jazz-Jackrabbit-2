@@ -26,7 +26,7 @@ class CharacterSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit CharacterSelector(ClientSender& sender,  ClientReceiver& receiver,  QWidget* parent = nullptr);
+    explicit CharacterSelector(QWidget* parent = nullptr);
     ~CharacterSelector();
 
 signals:
@@ -48,8 +48,6 @@ protected:
 
 private:
     Ui::CharacterSelector* ui;
-    ClientSender& sender;
-    ClientReceiver& receiver;
 };
 
 #endif  // CHARACTER_SELECTOR_H

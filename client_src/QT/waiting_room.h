@@ -25,7 +25,7 @@ class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom(ClientSender& sender,  ClientReceiver& receiver, QWidget* parent = nullptr);
+    explicit WaitingRoom(Queue<Command*>& q_cmds, QWidget* parent = nullptr);
     ~WaitingRoom();
 
 private slots:
@@ -33,8 +33,7 @@ private slots:
 
 private:
     Ui::WaitingRoom* ui;
-    ClientSender& sender;
-    ClientReceiver& receiver;
+    Queue<Command*>& q_cmds;
 };
 
 #endif  // WAITING_ROOM_H

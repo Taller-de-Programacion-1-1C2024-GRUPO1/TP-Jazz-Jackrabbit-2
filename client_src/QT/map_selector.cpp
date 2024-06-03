@@ -3,12 +3,11 @@
 #include "ui_map_selector.h"
 
 
-MapSelector::MapSelector(ClientSender& sender,  ClientReceiver& receiver, ChampionType selected_character,
+MapSelector::MapSelector(Queue<Command*>& q_cmds, ChampionType selected_character,
                          QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
-        sender(sender),
-        receiver(receiver),
+        q_cmds(q_cmds),
         selected_character(selected_character) {
     ui->setupUi(this);
 
@@ -64,15 +63,15 @@ void MapSelector::start_match() {
     // Si no existe acepto para que inicie la partida
 
     MatchCommand cmd = MatchCommand(NEW_MATCH, number_of_players, match_name, selected_map, selected_character);
-
-    //sender.sendCommand(&cmd);
+    q_cmds.push(&cmd);
+   
 
     //receiver.receiveCommand(); 
     
 
 
     hide();
-    WaitingRoom waiting_room(sender, receiver);
+    WaitingRoom waiting_room(q_cmds);
     if (waiting_room.exec() == QDialog::Accepted) {
         accept();
     } else {

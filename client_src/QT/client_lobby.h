@@ -28,7 +28,7 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(ClientSender& sender,  ClientReceiver& receiver, QWidget* parent = nullptr);
+    explicit ClientLobby(Queue<Command*>& q_cmds, QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
@@ -41,8 +41,7 @@ private slots:
 
 private:
     Ui::ClientLobby* ui;
-    ClientSender& sender;
-    ClientReceiver& receiver;
+    Queue<Command*>& q_cmds;
     ChampionType selected_character;
 };
 

@@ -3,12 +3,11 @@
 #include "ui_join_match_lobby.h"
 
 
-JoinMatchLobby::JoinMatchLobby(ClientSender& sender,  ClientReceiver& receiver, ChampionType selected_character,
+JoinMatchLobby::JoinMatchLobby(Queue<Command*>& q_cmds, ChampionType selected_character,
                                QWidget* parent):
         QDialog(parent),
         ui(new Ui::JoinMatchLobby),
-        sender(sender),
-        receiver(receiver),
+        q_cmds(q_cmds),
         selected_character(selected_character) {
     ui->setupUi(this);
 
@@ -48,14 +47,12 @@ void JoinMatchLobby::on_btnJoin_clicked() {
 
 
     MatchCommand cmd = MatchCommand(JOIN, 0, match_name, "", selected_character);
-
-    
-    //sender.send_Command(&cmd);
+    q_cmds.push(&cmd);
 
     //receiver.receive_Command();
 
     hide();
-    WaitingRoom waiting_room(sender, receiver);
+    WaitingRoom waiting_room(q_cmds);
     if (waiting_room.exec() == QDialog::Accepted) {
         accept();
     } else {

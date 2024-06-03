@@ -6,8 +6,8 @@
 #include <thread>
 #include <chrono>
 
-WaitingRoom::WaitingRoom(ClientSender& sender, ClientReceiver& receiver, QWidget* parent): 
-    QDialog(parent), ui(new Ui::WaitingRoom), sender(sender), receiver(receiver) {
+WaitingRoom::WaitingRoom(Queue<Command*>& q_cmds, QWidget* parent): 
+    QDialog(parent), ui(new Ui::WaitingRoom), q_cmds(q_cmds) {
     ui->setupUi(this);
 
 

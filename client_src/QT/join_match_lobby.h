@@ -22,7 +22,7 @@ class JoinMatchLobby: public QDialog {
     Q_OBJECT
 
 public:
-    explicit JoinMatchLobby(ClientSender& sender, ClientReceiver& receiver, ChampionType selected_character,
+    explicit JoinMatchLobby(Queue<Command*>& q_cmds, ChampionType selected_character,
                             QWidget* parent = nullptr);
     ~JoinMatchLobby();
 
@@ -38,8 +38,7 @@ private slots:
 
 private:
     Ui::JoinMatchLobby* ui;
-    ClientSender& sender;
-    ClientReceiver& receiver;
+    Queue<Command*>& q_cmds;
     ChampionType selected_character;
 };
 

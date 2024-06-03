@@ -3,8 +3,8 @@
 #include "ui_character_selector.h"
 
 
-CharacterSelector::CharacterSelector(ClientSender& sender,  ClientReceiver& receiver, QWidget* parent):
-        QDialog(parent), ui(new Ui::CharacterSelector), sender(sender), receiver(receiver){
+CharacterSelector::CharacterSelector(QWidget* parent):
+        QDialog(parent), ui(new Ui::CharacterSelector){
     ui->setupUi(this);
 
     // Establecer el fondo
