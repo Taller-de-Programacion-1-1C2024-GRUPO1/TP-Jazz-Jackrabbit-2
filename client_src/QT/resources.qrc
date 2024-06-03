@@ -16,4 +16,10 @@
         <file alias="create_a_map.png">../resources/maps/create_a_map.png</file>
     </qresource>
 
+    <qresource prefix="/characters">
+        <file alias="jazz_character.png">../resources/characters/jazz_character.png</file>
+        <file alias="lori_character.png">../resources/characters/lori_character.png</file>
+        <file alias="spaz_character.png">../resources/characters/spaz_character.png</file>
+    </qresource>
+
 </RCC>

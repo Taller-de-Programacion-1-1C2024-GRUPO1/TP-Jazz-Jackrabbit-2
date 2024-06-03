@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <string>
 
-#include "match_lobby.h"
+#include "character_selector.h"
 
 namespace Ui {
 class MapSelector;
@@ -16,12 +16,13 @@ class MapSelector;
 
 class MapSelector: public QDialog {
     Q_OBJECT
-private:
-    std::string map;
+
 
 public:
     explicit MapSelector(QWidget* parent = nullptr);
     ~MapSelector();
+
+    QString get_selected_map() const;
 
 private slots:
     void on_btnMap1_clicked();
@@ -30,10 +31,11 @@ private slots:
 
     void on_btnMapCreate_clicked();
 
-    void on_btnContinue_clicked();
+
 
 private:
     Ui::MapSelector* ui;
+    QString selected_map;
 };
 
 #endif  // MAP_SELECTOR_H
