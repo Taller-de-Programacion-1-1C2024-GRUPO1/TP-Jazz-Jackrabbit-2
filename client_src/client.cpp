@@ -20,10 +20,14 @@ void Client::run(int argc, char* argv[]) {
     Q_INIT_RESOURCE(resources);
     ClientLobby w(protocol);
     w.show();
-    a.exec();
+    int result = a.exec();
 
-    // SDL
-    drawer.run();
+    if (result == 0) {
+        // SDL
+        drawer.run();
+    } else {
+        // error
+    }
 }
 
 Client::~Client() {

@@ -29,6 +29,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         character_selector.h character_selector.cpp
         character_selector.ui
         join_match_lobby.h join_match_lobby.cpp join_match_lobby.ui
+        waiting_room.h waiting_room.cpp waiting_room.ui
+        waiting_room.h waiting_room.cpp waiting_room.ui
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET QT APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

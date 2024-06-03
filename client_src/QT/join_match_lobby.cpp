@@ -2,7 +2,13 @@
 
 #include "ui_join_match_lobby.h"
 
-JoinMatchLobby::JoinMatchLobby(QWidget* parent): QDialog(parent), ui(new Ui::JoinMatchLobby) {
+
+JoinMatchLobby::JoinMatchLobby(Protocol& protocol, const std::string& selected_character,
+                               QWidget* parent):
+        QDialog(parent),
+        ui(new Ui::JoinMatchLobby),
+        protocol(protocol),
+        selected_character(selected_character) {
     ui->setupUi(this);
 
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
@@ -15,24 +21,47 @@ JoinMatchLobby::JoinMatchLobby(QWidget* parent): QDialog(parent), ui(new Ui::Joi
     }
     QPixmap pixmap(":/backgrounds/match_lobby.png");
     QPalette palette;
-    palette.setBrush(QPalette::Window,
-                     pixmap);  
+    palette.setBrush(QPalette::Window, pixmap);
     this->setPalette(palette);
-
 }
 
 JoinMatchLobby::~JoinMatchLobby() { delete ui; }
 
 
+void JoinMatchLobby::on_btnJoin_clicked() {
+    std::string match_name = ui->txtMatchName->toPlainText().toStdString();
 
-QString JoinMatchLobby::get_match_name() const {
-    return match_name;
+
+    // MatchCommand(int type, int number_players, const std::string& match_name,
+    //                        const std::string& map_name):
+
+    // enum match_type {
+    //     NEW_MATCH = 0,
+    //     JOIN,
+    //     REFRESH,
+    // };
+
+
+    // ENVIO COMANDO preguntando por existencia de partida. Si existe acepto para que inicie la
+    // partida
+
+    MatchCommand cmd = MatchCommand(JOIN, 0, match_name, "");  // selected_character
+    protocol.send_Command(&cmd);
+
+
+    // protocol.receive_Command();
+
+
+    hide();
+    WaitingRoom waiting_room(protocol);
+    if (waiting_room.exec() == QDialog::Accepted) {
+        accept();
+    } else {
+        // error ?
+    }
 }
 
-
-void JoinMatchLobby::on_btnJoin_clicked()
-{
-    match_name = ui->txtMatchName->toPlainText();
-    accept();
+void JoinMatchLobby::closeEvent(QCloseEvent* event) {
+    emit windowClosed();
+    QDialog::closeEvent(event);
 }
-

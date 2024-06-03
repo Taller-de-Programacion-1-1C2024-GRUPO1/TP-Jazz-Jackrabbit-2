@@ -93,34 +93,6 @@ padding: 5px; </string>
      <string>Quit</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnCreateMatch_2">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>500</y>
-      <width>190</width>
-      <height>100</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>24</pointsize>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: white; 
-background-color: rgba(0, 0, 0, 128); 
-border: 2px solid white; 
-border-radius: 15px;
-padding: 5px; </string>
-    </property>
-    <property name="text">
-     <string>Create 
-match</string>
-    </property>
-   </widget>
   </widget>
  </widget>
  <resources/>

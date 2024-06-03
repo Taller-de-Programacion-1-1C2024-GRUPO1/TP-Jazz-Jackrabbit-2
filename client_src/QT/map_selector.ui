@@ -94,8 +94,8 @@ map</string>
   <widget class="QSpinBox" name="spinNumberOfPlayers">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>310</y>
+     <x>290</x>
+     <y>300</y>
      <width>71</width>
      <height>61</height>
     </rect>
@@ -120,7 +120,7 @@ background-color: rgba(255, 255, 255, 100);
   <widget class="QLabel" name="labelNumberOfPlayers">
    <property name="geometry">
     <rect>
-     <x>180</x>
+     <x>140</x>
      <y>300</y>
      <width>171</width>
      <height>61</height>
@@ -128,6 +128,32 @@ background-color: rgba(255, 255, 255, 100);
    </property>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Number &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;of players:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelMatchName">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>290</y>
+     <width>171</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Match&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;name:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="txtMatchName">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>300</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>match name</string>
    </property>
   </widget>
  </widget>

@@ -2,8 +2,11 @@
 
 #include "ui_character_selector.h"
 
-CharacterSelector::CharacterSelector(QWidget* parent): QDialog(parent), ui(new Ui::CharacterSelector) {
+
+CharacterSelector::CharacterSelector(Protocol& protocol, QWidget* parent):
+        QDialog(parent), ui(new Ui::CharacterSelector), protocol(protocol) {
     ui->setupUi(this);
+
     // Establecer el fondo
     QPixmap originalPixmap(":/backgrounds/match_lobby.png");
     QSize windowSize = this->size();
@@ -16,28 +19,27 @@ CharacterSelector::CharacterSelector(QWidget* parent): QDialog(parent), ui(new U
 CharacterSelector::~CharacterSelector() { delete ui; }
 
 
-QString CharacterSelector::get_selected_character() const {
-    return selected_character;
+void CharacterSelector::on_btnCharacterJazz_clicked() {
+    emit characterSelected("Jazz");
+    accept();
+    // selected_character = "Jazz";
+    // accept();
 }
 
 
-void CharacterSelector::on_btnCharacterJazz_clicked()
-{
-    selected_character = "Jazz";
+void CharacterSelector::on_btnCharacterLori_clicked() {
+    emit characterSelected("Lori");
     accept();
 }
 
 
-void CharacterSelector::on_btnCharacterLori_clicked()
-{
-    selected_character = "Lori";
-    accept(); 
-}
-
-
-void CharacterSelector::on_btnCharacterSpaz_clicked()
-{
-    selected_character = "Spaz";
+void CharacterSelector::on_btnCharacterSpaz_clicked() {
+    emit characterSelected("Spaz");
     accept();
 }
 
+
+void CharacterSelector::closeEvent(QCloseEvent* event) {
+    emit windowClosed();
+    QDialog::closeEvent(event);
+}

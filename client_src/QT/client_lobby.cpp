@@ -1,19 +1,18 @@
 #include "client_lobby.h"
 
-#include <QMessageBox>
-
 #include "./ui_client_lobby.h"
 
-// ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent) ,ui(new Ui::ClientLobby) {
 
-ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol), ui(std::make_unique<Ui::ClientLobby>()) {
+ClientLobby::ClientLobby(Protocol& protocol, QWidget* parent):
+        QMainWindow(parent), ui(new Ui::ClientLobby), protocol(protocol) {
     ui->setupUi(this);
+
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
     if (fontId != -1) {
         QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
         QFont font(fontFamily);
         QApplication::setFont(font);
-        QFont buttonFont(fontFamily, 24);  
+        QFont buttonFont(fontFamily, 24);
         ui->btnCreateMatch->setFont(buttonFont);
         ui->btnJoinMatch->setFont(buttonFont);
         ui->btnQuit->setFont(buttonFont);
@@ -22,60 +21,59 @@ ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol), ui(std::make_u
     }
     QPixmap pixmap(":/backgrounds/lobby.png");
     QPalette palette;
-    palette.setBrush(QPalette::Window,
-                     pixmap);  
+    palette.setBrush(QPalette::Window, pixmap);
     this->setPalette(palette);
 }
 
-ClientLobby::~ClientLobby() {
-    // No es necesario llamar delete ui; aquí, ya que std::unique_ptr se encargará automáticamente de liberar la memoria
-}
+ClientLobby::~ClientLobby() { delete ui; }
 
 void ClientLobby::on_btnCreateMatch_clicked() {
     hide();
-    
-    // Selección de personaje
-    CharacterSelector character_selector;
-    character_selector.setModal(true);
+    CharacterSelector characterSelector(protocol);
+    connect(&characterSelector, &CharacterSelector::windowClosed, this,
+            &ClientLobby::handleWindowClosed);
+    connect(&characterSelector, &CharacterSelector::characterSelected, this,
+            &ClientLobby::handleCharacterSelected);
 
-    if (character_selector.exec() == QDialog::Accepted) {
-        selected_character = character_selector.get_selected_character();
-        
-        // Selección de mapa
-        MapSelector map_selector;
-        map_selector.setModal(true);
-
+    if (characterSelector.exec() == QDialog::Accepted) {
+        MapSelector map_selector(protocol, selected_character);
+        connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         if (map_selector.exec() == QDialog::Accepted) {
-            selected_map = map_selector.get_selected_map();
-            
-
+            // ENVIO COMANDO E INICIO PARTIDA
+            QApplication::exit(0);
         }
     }
-    QApplication::quit();
 }
 
 void ClientLobby::on_btnJoinMatch_clicked() {
     hide();
-    
-    // Selección de personaje
-    CharacterSelector character_selector;
-    character_selector.setModal(true);
+    CharacterSelector characterSelector(protocol);
+    connect(&characterSelector, &CharacterSelector::characterSelected, this,
+            &ClientLobby::handleCharacterSelected);
+    connect(&characterSelector, &CharacterSelector::windowClosed, this,
+            &ClientLobby::handleWindowClosed);
 
-    if (character_selector.exec() == QDialog::Accepted) {
-        selected_character = character_selector.get_selected_character();    
+    if (characterSelector.exec() == QDialog::Accepted) {
+        JoinMatchLobby joinMatchLobby(protocol, selected_character);
+        connect(&joinMatchLobby, &JoinMatchLobby::windowClosed, this,
+                &ClientLobby::handleWindowClosed);
 
-        // seleccione una partida para unirse
-        JoinMatchLobby join_match_lobby;
-        join_match_lobby.setModal(true);
-        if (join_match_lobby.exec() == QDialog::Accepted) {
-            //selected_match = join_match_lobby.get_match_name();
+        if (joinMatchLobby.exec() == QDialog::Accepted) {
+
+            // ESpero a que se conecten todos los jugadores y se inicie la partida
+
+
+            QApplication::exit(0);
         }
-       
     }
-    QApplication::quit();
 }
 
-void ClientLobby::on_btnQuit_clicked() {
-    close();
-    QApplication::quit();
+void ClientLobby::on_btnQuit_clicked() { QApplication::exit(1); }
+
+
+void ClientLobby::handleCharacterSelected(const std::string& character) {
+    selected_character = character;
 }
+
+
+void ClientLobby::handleWindowClosed() { QApplication::exit(1); }
