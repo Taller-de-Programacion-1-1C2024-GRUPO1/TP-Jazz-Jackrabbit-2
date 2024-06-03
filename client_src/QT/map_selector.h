@@ -10,7 +10,8 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../../common_src/protocol.h"
+#include "../client_sender.h"
+#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
 
@@ -25,7 +26,7 @@ class MapSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit MapSelector(Protocol& protocol, const std::string& selected_character,
+    explicit MapSelector(ClientSender& sender,  ClientReceiver& receiver, const std::string& selected_character,
                          QWidget* parent = nullptr);
     ~MapSelector();
 
@@ -47,7 +48,8 @@ protected:
 
 private:
     Ui::MapSelector* ui;
-    Protocol& protocol;
+    ClientSender& sender;
+    ClientReceiver& receiver;
     const std::string selected_character;
     std::string selected_map;
     std::string match_name;

@@ -10,7 +10,8 @@
 #include <QWidget>
 
 #include "../../common_src/constants.h"
-#include "../../common_src/protocol.h"
+#include "../client_sender.h"
+#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
 #include <memory> 
@@ -24,7 +25,7 @@ class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom(Protocol& protocol, QWidget* parent = nullptr);
+    explicit WaitingRoom(ClientSender& sender,  ClientReceiver& receiver, QWidget* parent = nullptr);
     ~WaitingRoom();
 
 private slots:
@@ -32,7 +33,8 @@ private slots:
 
 private:
     Ui::WaitingRoom* ui;
-    Protocol& protocol;
+    ClientSender& sender;
+    ClientReceiver& receiver;
 };
 
 #endif  // WAITING_ROOM_H

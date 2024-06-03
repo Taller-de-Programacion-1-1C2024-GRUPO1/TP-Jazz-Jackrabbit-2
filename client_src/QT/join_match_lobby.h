@@ -9,7 +9,8 @@
 #include <QMessageBox>
 #include <string>
 
-#include "../../common_src/protocol.h"
+#include "../client_sender.h"
+#include "../client_receiver.h"
 
 #include "waiting_room.h"
 
@@ -21,7 +22,7 @@ class JoinMatchLobby: public QDialog {
     Q_OBJECT
 
 public:
-    explicit JoinMatchLobby(Protocol& protocol, const std::string& selected_character,
+    explicit JoinMatchLobby(ClientSender& sender, ClientReceiver& receiver, const std::string& selected_character,
                             QWidget* parent = nullptr);
     ~JoinMatchLobby();
 
@@ -37,7 +38,8 @@ private slots:
 
 private:
     Ui::JoinMatchLobby* ui;
-    Protocol& protocol;
+    ClientSender& sender;
+    ClientReceiver& receiver;
     std::string selected_character;
 };
 

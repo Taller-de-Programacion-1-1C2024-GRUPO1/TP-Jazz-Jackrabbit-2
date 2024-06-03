@@ -26,7 +26,7 @@ private:
     Queue<Command*> q_cmds;
     Queue<Snapshot> q_snapshots;
     ClientSender client_sender;
-    Client_Receiver client_receiver;
+    ClientReceiver client_receiver;
     // ClientLobby lobby;
     ClientDrawer drawer;
 

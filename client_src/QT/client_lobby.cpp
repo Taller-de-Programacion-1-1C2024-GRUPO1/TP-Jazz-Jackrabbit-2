@@ -3,8 +3,8 @@
 #include "./ui_client_lobby.h"
 
 
-ClientLobby::ClientLobby(Protocol& protocol, QWidget* parent):
-        QMainWindow(parent), ui(new Ui::ClientLobby), protocol(protocol) {
+ClientLobby::ClientLobby(ClientSender& sender,  ClientReceiver& receiver, QWidget* parent):
+        QMainWindow(parent), ui(new Ui::ClientLobby), sender(sender), receiver(receiver) {
     ui->setupUi(this);
 
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
@@ -29,14 +29,14 @@ ClientLobby::~ClientLobby() { delete ui; }
 
 void ClientLobby::on_btnCreateMatch_clicked() {
     hide();
-    CharacterSelector characterSelector(protocol);
+    CharacterSelector characterSelector(sender, receiver);
     connect(&characterSelector, &CharacterSelector::windowClosed, this,
             &ClientLobby::handleWindowClosed);
     connect(&characterSelector, &CharacterSelector::characterSelected, this,
             &ClientLobby::handleCharacterSelected);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        MapSelector map_selector(protocol, selected_character);
+        MapSelector map_selector(sender, receiver, selected_character);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         if (map_selector.exec() == QDialog::Accepted) {
             // ENVIO COMANDO E INICIO PARTIDA
@@ -47,14 +47,14 @@ void ClientLobby::on_btnCreateMatch_clicked() {
 
 void ClientLobby::on_btnJoinMatch_clicked() {
     hide();
-    CharacterSelector characterSelector(protocol);
+    CharacterSelector characterSelector(sender, receiver);
     connect(&characterSelector, &CharacterSelector::characterSelected, this,
             &ClientLobby::handleCharacterSelected);
     connect(&characterSelector, &CharacterSelector::windowClosed, this,
             &ClientLobby::handleWindowClosed);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        JoinMatchLobby joinMatchLobby(protocol, selected_character);
+        JoinMatchLobby joinMatchLobby(sender, receiver, selected_character);
         connect(&joinMatchLobby, &JoinMatchLobby::windowClosed, this,
                 &ClientLobby::handleWindowClosed);
 

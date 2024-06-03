@@ -12,7 +12,8 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../../common_src/protocol.h"
+#include "../client_sender.h"
+#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
 
@@ -24,7 +25,7 @@ class CharacterSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit CharacterSelector(Protocol& protocol, QWidget* parent = nullptr);
+    explicit CharacterSelector(ClientSender& sender,  ClientReceiver& receiver,  QWidget* parent = nullptr);
     ~CharacterSelector();
 
 signals:
@@ -46,7 +47,8 @@ protected:
 
 private:
     Ui::CharacterSelector* ui;
-    Protocol& protocol;
+    ClientSender& sender;
+    ClientReceiver& receiver;
 };
 
 #endif  // CHARACTER_SELECTOR_H

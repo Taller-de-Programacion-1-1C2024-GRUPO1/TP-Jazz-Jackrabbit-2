@@ -2,11 +2,11 @@
 
 #include <chrono>
 
-Client_Receiver::Client_Receiver(Protocol& protocol, Queue<Snapshot>& q_snapshots):
+ClientReceiver::ClientReceiver(Protocol& protocol, Queue<Snapshot>& q_snapshots):
         protocol(protocol), q_snapshots(q_snapshots), keep_talking(true), is_alive(true) {}
 
 
-void Client_Receiver::run() {
+void ClientReceiver::run() {
     while (keep_talking) {
         try {
             // Snapshot snap;
@@ -29,10 +29,10 @@ void Client_Receiver::run() {
 }
 
 
-bool Client_Receiver::is_dead() { return !this->is_alive; }
+bool ClientReceiver::is_dead() { return !this->is_alive; }
 
 
-void Client_Receiver::kill() {
+void ClientReceiver::kill() {
     this->keep_talking = false;
     q_snapshots.close();
 }

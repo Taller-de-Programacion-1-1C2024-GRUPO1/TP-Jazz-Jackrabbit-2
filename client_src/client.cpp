@@ -14,11 +14,11 @@ Client::Client(const std::string& host, const std::string& service):
 void Client::run(int argc, char* argv[]) {
     client_sender.start();
     client_receiver.start();
-
+    
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w(protocol);
+    ClientLobby w(client_sender, client_receiver);
     w.show();
     int result = a.exec();
 
@@ -28,6 +28,8 @@ void Client::run(int argc, char* argv[]) {
     } else {
         // error
     }
+    
+    
 }
 
 Client::~Client() {

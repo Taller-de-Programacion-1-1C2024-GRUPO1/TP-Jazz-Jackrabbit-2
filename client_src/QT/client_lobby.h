@@ -10,7 +10,8 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../../common_src/protocol.h"
+#include "../client_sender.h"
+#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
 
@@ -26,7 +27,7 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(Protocol& protocol, QWidget* parent = nullptr);
+    explicit ClientLobby(ClientSender& sender,  ClientReceiver& receiver, QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
@@ -39,7 +40,8 @@ private slots:
 
 private:
     Ui::ClientLobby* ui;
-    Protocol& protocol;
+    ClientSender& sender;
+    ClientReceiver& receiver;
     std::string selected_character;
 };
 
