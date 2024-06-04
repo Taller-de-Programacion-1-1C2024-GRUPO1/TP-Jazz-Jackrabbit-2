@@ -1,5 +1,20 @@
 #include "protocol.h"
 
+#include "../game_src/commands/cheats.h"
+#include "../game_src/commands/command.h"
+#include "../game_src/commands/command_change_weapon.h"
+#include "../game_src/commands/command_jump.h"
+#include "../game_src/commands/command_match.h"
+#include "../game_src/commands/command_move.h"
+#include "../game_src/commands/command_move_faster.h"
+#include "../game_src/commands/command_select_champion.h"
+#include "../game_src/commands/command_shoot.h"
+#include "../game_src/commands/command_special_jazz.h"
+#include "../game_src/commands/command_special_lori.h"
+#include "../game_src/commands/command_special_spaz.h"
+#include "../game_src/game_info.h"
+#include "../game_src/information.h"
+
 // Protocol
 Protocol::Protocol(const std::string& host, const std::string& service):
         hostname(host), servname(service), socket(host.c_str(), service.c_str()) {}
@@ -8,7 +23,7 @@ Protocol::Protocol(const std::string& host, const std::string& service):
 Protocol::Protocol(Socket peer): socket(std::move(peer)), was_closed(false) {}
 
 
-// ----------------------------- SEND BYTES/STRING/CHAR -----------------------------
+// ----------------------------- SEND BYTES/STRING/CHAR/ACK -----------------------------
 
 void Protocol::send_uintEight(uint8_t num) {
     socket.sendall(&num, sizeof(num), &was_closed);
@@ -186,65 +201,42 @@ void Protocol::send_Command(Command* command) {
         switch.
         */
         case COMMAND_CHEAT:
-            if (auto* cheat = dynamic_cast<Cheats*>(command)) {
-                send_Cheat(cheat);
-            }
+            send_Cheat(dynamic_cast<Cheats*>(command));
             break;
         case COMMAND_JUMP:
-            if (auto* jump = dynamic_cast<Jump*>(command)) {
-                send_Jump(jump);
-            }
+            send_Jump(dynamic_cast<Jump*>(command));
             break;
         case COMMAND_MOVE:
-            if (auto* move = dynamic_cast<Move*>(command)) {
-                send_Move(move);
-            }
+            send_Move(dynamic_cast<Move*>(command));
             break;
         case COMMAND_MOVE_FASTER:
-            if (auto* moveFaster = dynamic_cast<MoveFaster*>(command)) {
-                send_MoveFaster(moveFaster);
-            }
+            send_MoveFaster(dynamic_cast<MoveFaster*>(command));
             break;
         case COMMAND_SHOOT:
-            if (auto* shoot = dynamic_cast<Shoot*>(command)) {
-                send_Shoot(shoot);
-            }
+            send_Shoot(dynamic_cast<Shoot*>(command));
             break;
         case COMMAND_MATCH:
-            if (auto* match = dynamic_cast<MatchCommand*>(command)) {
-                send_Match(match);
-            }
+            send_Match(dynamic_cast<MatchCommand*>(command));
             break;
         case COMMAND_SELECT_CHAMPION:
-            if (auto* selectChampion = dynamic_cast<SelectChampion*>(command)) {
-                send_SelectChampion(selectChampion);
-            }
+            send_SelectChampion(dynamic_cast<SelectChampion*>(command));
             break;
         case COMMAND_CHANGE_WEAPON:
-            if (auto* changeWeapon = dynamic_cast<ChangeWeapon*>(command)) {
-                send_ChangeWeapon(changeWeapon);
-            }
+            send_ChangeWeapon(dynamic_cast<ChangeWeapon*>(command));
             break;
         case COMMAND_JUMP_PUNCH_ATTACK_JAZZ:
-            if (auto* specialJazz = dynamic_cast<SpecialJazz*>(command)) {
-                send_SpecialJazz(specialJazz);
-            }
+            send_SpecialJazz(dynamic_cast<SpecialJazz*>(command));
             break;
         case COMMANDS_SHORT_RANGE_JUMP_KICK_LORI:
-            if (auto* specialLori = dynamic_cast<SpecialLori*>(command)) {
-                send_SpecialLori(specialLori);
-            }
+            send_SpecialLori(dynamic_cast<SpecialLori*>(command));
             break;
         case COMMANDS_SIDE_KICK_SPAZ:
-            if (auto* specialSpaz = dynamic_cast<SpecialSpaz*>(command)) {
-                send_SpecialSpaz(specialSpaz);
-            }
+            send_SpecialSpaz(dynamic_cast<SpecialSpaz*>(command));
             break;
         default:
             break;
     }
 }
-
 
 // ----------------------------- RECEIVE COMMANDS -----------------------------
 
@@ -347,8 +339,59 @@ std::shared_ptr<Command> Protocol::receive_Command() {
     }
 }
 
-// ----------------------------- SEND SNAPSHOTS -----------------------------
+// ----------------------------- SEND INFO -----------------------------
 
+void Protocol::send_GameInfo(GameInfo* gameInfo) {
+    check_closed();
+    send_uintEight(SEND_GAME_INFO);
+    std::map<std::string, std::string> matchesAvailable = gameInfo->getMatchesAvailable();
+    send_uintEight(matchesAvailable.size());
+    for (auto& match: matchesAvailable) {
+        send_string(match.first);
+        send_string(match.second);
+    }
+}
+
+void Protocol::send_Info(Information* info) {
+    check_closed();
+    int type = info->get_infoType();
+    if (type == SELECT_CHARACTER_INFO) {
+        // sendDynamic(dynamic_cast<DynamicMap*>(info));
+    } else if (type == GAME_INFO) {
+        send_GameInfo(dynamic_cast<GameInfo*>(info));
+    } else if (type == GAME_MAP_INFO) {
+        // sendMap(dynamic_cast<Map*>(info));
+    }
+}
+
+// ----------------------------- RECEIVE INFO -----------------------------
+
+GameInfo* Protocol::receive_GameInfo() {
+    check_closed();
+    std::map<std::string, std::string> matches_available;
+    int size_map = receive_uintEight();
+    for (int i = 0; i < size_map; i++) {
+        std::string matchName = receive_string();
+        std::string mapName = receive_string();
+        matches_available[matchName] = mapName;
+    }
+    return new GameInfo(matches_available);
+}
+
+std::shared_ptr<Information> Protocol::receive_Info() {
+    check_closed();
+    int type = receive_uintEight();
+    if (type == SELECT_CHARACTER_INFO) {
+        // return receiveDynamic();
+    } else if (type == GAME_INFO) {
+        return std::shared_ptr<Information>(receive_GameInfo());
+    } else if (type == GAME_MAP_INFO) {
+        // return receiveMap();
+    }
+    throw std::runtime_error("Invalid information");
+}
+
+// ----------------------------- SEND SNAPSHOTS -----------------------------
 
 void Protocol::send_dimensions(const Snapshot& snapshot) {
     std::cout << "Sending dimensions" << std::endl;
@@ -369,7 +412,6 @@ void Protocol::send_rabbits(Snapshot& snapshot) {
         send_char(rabbit.id);
         send_uintThirtyTwo(rabbit.pos_x);
         send_uintThirtyTwo(rabbit.pos_y);
-        send_uintThirtyTwo(rabbit.angle);
         send_uintThirtyTwo(rabbit.max_health);
         send_uintThirtyTwo(rabbit.health);
         send_char(rabbit.direction);
@@ -435,7 +477,7 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_ammount = receive_uintThirtyTwo();
     uint32_t rabbit_width = receive_uintThirtyTwo();
     uint32_t rabbit_height = receive_uintThirtyTwo();
-    snapshot.set_dimensions(width, height, rabbit_ammount, rabbit_width, rabbit_height);
+    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount);
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {
@@ -449,7 +491,6 @@ void Protocol::receive_rabbits(Snapshot& snapshot) {
         char id = receive_char();
         uint32_t pos_x = receive_uintThirtyTwo();
         uint32_t pos_y = receive_uintThirtyTwo();
-        uint32_t angle = receive_uintThirtyTwo();
         uint32_t max_health = receive_uintThirtyTwo();
         uint32_t health = receive_uintThirtyTwo();
         char direction = receive_char();
@@ -457,8 +498,8 @@ void Protocol::receive_rabbits(Snapshot& snapshot) {
         uint32_t state = receive_uintThirtyTwo();
         uint32_t current_ammo = receive_uintThirtyTwo();
         // crear un RabbitSnapshot y agregarlo al vector de rabbits del snapshot
-        RabbitSnapshot rabbit = RabbitSnapshot(id, pos_x, pos_y, angle, max_health, health,
-                                               direction, weapon, state, current_ammo);
+        RabbitSnapshot rabbit = RabbitSnapshot(id, pos_x, pos_y, max_health, health, direction,
+                                               weapon, state, current_ammo);
         snapshot.rabbits.push_back(rabbit);
     }
 }

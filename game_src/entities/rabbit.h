@@ -4,16 +4,14 @@
 #include <queue>
 
 #include "../../common_src/constants.h"
-#include "../../physics_src/constants_physics.h"
 #include "../constants_game.h"
 
 #include "character.h"
 
-#define MAX_FALLING_SPEED 10
 #define PLAYER_SIDE BLOCK_DIVISION * 2
 #define PLAYER_INITIAL_HEALTH 100
 #define PLAYER_SPEED 5
-#define JUMPING_INITIAL_SPEED 10
+#define JUMPING_INITIAL_SPEED 20
 
 // TESTING
 enum EVENTS {
@@ -26,7 +24,7 @@ enum EVENTS {
     EVENT_SPECIAL_ATTACK
 };
 
-class Player: public Character {
+class Rabbit: public Character {
 private:
     int action;
     int direction;
@@ -36,11 +34,14 @@ private:
     const int acc_y;
 
 public:
-    Player(int init_pos_x, int init_pos_y, PhysicalMap& map);
+    Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map);
     void update();
     void update_state();
+    void update_position();
 
     // EVENTS
+    void handle_events();
+
     void jump();
     void run_right();
     void run_fast_right();
@@ -51,7 +52,6 @@ public:
 
     // TESTING
     // RENDER
-    void render(SDL_Renderer* renderer);
     void imprimir_posicion();
 
     // COLA
@@ -60,6 +60,7 @@ public:
     void add_run_fast_right();
     void add_run_left();
     void add_run_fast_left();
+    void add_shoot();
 };
 
 #endif

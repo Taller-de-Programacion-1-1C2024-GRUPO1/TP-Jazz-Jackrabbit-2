@@ -1,34 +1,41 @@
 #ifndef SERVERUSER_H
 #define SERVERUSER_H
+
 #include <list>
+#include <memory>
 #include <string>
 #include <utility>
 
-#include "../common_src/common_socket.h"
-#include "../common_src/protected_list_of_queues.h"
-#include "../common_src/queue.h"
+#include "../common_src/container_protocol.h"
 
-#include "server_protocol.h"
 #include "server_receiver.h"
 #include "server_sender.h"
 
-class ServerPlayer {
+class Player {
 private:
-    ServerProtocol protocol;
-    ProtectedListOfQueues& list_of_q_msgs;
+    std::shared_ptr<ContainerProtocol> container_protocol;
+    int player_id;
+
+    Queue<std::shared_ptr<Snapshot>> snapshots_queue;
+    BroadcasterSnapshots& broadcaster_snapshots;
     ServerSender server_sender;
-    Queue<uint8_t>& client_cmds_q;
+
+    Queue<std::shared_ptr<Command>> client_cmds_queue;
     ServerReceiver server_receiver;
+
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
 
 public:
-    ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q,
-                 ProtectedListOfQueues& list_of_q_msgs);
-    void run();
+    Player(std::shared_ptr<ContainerProtocol> container_protocol, int player_id,
+           BroadcasterSnapshots& broadcaster_snapshots,
+           Queue<std::shared_ptr<Command>>& client_cmds_queue);
+    void start();
+    Queue<std::shared_ptr<Snapshot>>& get_snapshots_queue();
+    int get_id();
     bool is_dead();
     void kill();
-    ~ServerPlayer();
+    ~Player();
 };
 
 #endif

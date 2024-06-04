@@ -1,20 +1,20 @@
 #include "server_sender.h"
 
-ServerSender::ServerSender(ServerProtocol& protocol, ProtectedListOfQueues& list_of_q_msgs):
-        protocol(protocol),
-        q_msgs(),
+ServerSender::ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaster_snapshots,
+                           int player_id):
+        protocolo(protocolo),
+        broadcaster_snapshots(broadcaster_snapshots),
         keep_talking(true),
         is_alive(true),
-        list_of_q_msgs(list_of_q_msgs) {}
+        player_id(player_id) {}
 
 
 void ServerSender::run() {
-    list_of_q_msgs.emplace_front(&q_msgs);
-
     while (keep_talking) {
         try {
-            Message msg = q_msgs.pop();
-            this->protocol.send_server_enemy_status_count(msg);
+            std::shared_ptr<Snapshot> game_snapshot =
+                    this->broadcaster_snapshots.get_game(this->player_id);
+            protocolo.send_Snapshot(*game_snapshot);
         } catch (const ClosedQueue& e) {
             // std::cerr << "Se cerró la queue" << std::endl;
             break;
@@ -24,15 +24,10 @@ void ServerSender::run() {
             break;
         }
     }
-    list_of_q_msgs.remove(&q_msgs);
+    broadcaster_snapshots.delete_player(this->player_id);
     this->is_alive = false;
 }
 
-
 bool ServerSender::is_dead() { return !this->is_alive; }
 
-
-void ServerSender::kill() {
-    this->keep_talking = false;
-    q_msgs.close();
-}
+void ServerSender::kill() { this->keep_talking = false; }

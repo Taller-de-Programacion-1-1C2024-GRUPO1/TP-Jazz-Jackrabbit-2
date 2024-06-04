@@ -1,3 +1,0 @@
-En esta carpeta irán los distintos mapas que se presenten en el juego. 
-
-De base, además de añadir los default, se sumarán los que se agreguen con el editor de niveles.

@@ -3,6 +3,8 @@
 
 #include "command.h"
 
+class Protocol;
+
 // Clase que representa el comando de salto
 class Jump: public Command {
 private:
@@ -13,6 +15,7 @@ private:
 public:
     Jump(int playerID, int dir);
     bool execute_Command(bool* cheatON, bool& needsMove) override;
+    void send(Protocol& protocol) override;
     int get_playerId() override;
     int get_dir();
     int get_commandType() override;

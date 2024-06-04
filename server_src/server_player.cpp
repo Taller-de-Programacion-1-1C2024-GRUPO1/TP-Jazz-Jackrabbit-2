@@ -1,32 +1,40 @@
 #include "server_player.h"
 
-ServerPlayer::ServerPlayer(Socket&& peer, Queue<uint8_t>& client_cmds_q,
-                           ProtectedListOfQueues& list_of_q_msgs):
-        protocol(std::move(peer)),
-        list_of_q_msgs(list_of_q_msgs),
-        server_sender(protocol, list_of_q_msgs),
-        client_cmds_q(client_cmds_q),
-        server_receiver(protocol, client_cmds_q) {}
+Player::Player(std::shared_ptr<ContainerProtocol> cont_protocol, int player_id,
+               BroadcasterSnapshots& broadcaster_snapshots,
+               Queue<std::shared_ptr<Command>>& client_cmds_queue):
+        container_protocol(cont_protocol),
+        player_id(player_id),
+        snapshots_queue(QUEUE_MAX_SIZE),
+        broadcaster_snapshots(broadcaster_snapshots),
+        server_sender(container_protocol->protocol, broadcaster_snapshots, player_id),
+        server_receiver(container_protocol->protocol, client_cmds_queue) {
+    broadcaster_snapshots.add_player(player_id, &snapshots_queue);
+}
 
-void ServerPlayer::run() {
+void Player::start() {
     server_sender.start();
     server_receiver.start();
 }
 
-bool ServerPlayer::is_dead() {
+Queue<std::shared_ptr<Snapshot>>& Player::get_snapshots_queue() { return snapshots_queue; }
+
+int Player::get_id() { return player_id; }
+
+bool Player::is_dead() {
     if (server_sender.is_dead() && server_receiver.is_dead()) {
         return true;
     }
     return false;
 }
 
-void ServerPlayer::kill() {
-    this->protocol.~ServerProtocol();
+void Player::kill() {
+    this->container_protocol->protocol.~Protocol();
+    this->client_cmds_queue.close();
     server_sender.kill();
     server_receiver.kill();
-    server_receiver.join();
     server_sender.join();
+    server_receiver.join();
 }
 
-
-ServerPlayer::~ServerPlayer() {}
+Player::~Player() {}

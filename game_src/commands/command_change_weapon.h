@@ -3,6 +3,8 @@
 
 #include "command.h"
 
+class Protocol;
+
 // Clase que representa el comando de cambiar de arma/municion
 class ChangeWeapon: public Command {
 private:
@@ -12,6 +14,7 @@ private:
 public:
     explicit ChangeWeapon(int playerID);
     bool execute_Command(bool* cheatON, bool& needsMove) override;
+    void send(Protocol& protocol) override;
     int get_playerId() override;
     int get_commandType() override;
     ~ChangeWeapon();

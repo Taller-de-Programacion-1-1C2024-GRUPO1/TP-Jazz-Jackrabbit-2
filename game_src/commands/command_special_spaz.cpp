@@ -13,6 +13,8 @@ bool SpecialSpaz::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
+void SpecialSpaz::send(Protocol& protocol) { protocol.send_Command(this); }
+
 int SpecialSpaz::get_playerId() { return this->playerID; }
 
 int SpecialSpaz::get_dir() { return this->dir; }

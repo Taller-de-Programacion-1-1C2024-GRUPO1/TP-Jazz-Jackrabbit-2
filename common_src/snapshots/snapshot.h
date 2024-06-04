@@ -51,8 +51,8 @@ public:
      * para que pueda renderizarlo correctamente en su pantalla
      */
     void set_dimensions(int height = 0, int width = 0, int rabbit_width = RABBIT_WIDTH_DEFAULT,
-                        int rabbit_ammount = RABBIT_AMOUNT_DEFAULT,
-                        int rabbit_height = RABBIT_HEIGHT_DEFAULT) {
+                        int rabbit_height = RABBIT_HEIGHT_DEFAULT,
+                        int rabbit_ammount = RABBIT_AMOUNT_DEFAULT) {
         map_dimensions.height = height;
         map_dimensions.width = width;
         map_dimensions.rabbit_amount = rabbit_ammount;

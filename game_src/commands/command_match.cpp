@@ -9,6 +9,8 @@ MatchCommand::MatchCommand(int type, int number_players, const std::string& matc
         map_name(map_name),
         character_name(character_name) {}
 
+void MatchCommand::send(Protocol& protocol) { protocol.send_Command(this); }
+
 int MatchCommand::get_playerId() { return 0; }
 
 int MatchCommand::get_number_players() { return this->number_players; }

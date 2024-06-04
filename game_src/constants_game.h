@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_GAME_H
 #define CONSTANTS_GAME_H
 
+#include <cstdint>
+
 enum /*COMMAND TYPE*/ {
     COMMAND_MOVE,
     COMMAND_MOVE_FASTER,
@@ -21,7 +23,7 @@ enum ChampionType : uint8_t {
     LORI,
 };
 
-enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, RAT };
+enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, TURTLE };
 
 enum SupplyType : uint8_t {
     HEALTH_CARROT,
@@ -30,7 +32,10 @@ enum SupplyType : uint8_t {
     COIN_SUPPLY,
 };
 
-enum actions {
+// PLAYER CONSTANTS
+enum DIRECTIONS { LEFT, RIGHT };
+
+enum ACTIONS {
     STAND,
     RUN,
     RUN_FAST,
@@ -52,6 +57,10 @@ enum /* CHEATS */ {
     ADD_HEALTH = 0,
 };
 
+#define WAITING 0
+#define STARTED 1
+#define PLAYING -1
+
 // ----------------- Messurements -----------------
 
 #define ENEMY_INITIAL_HEALTH 100  // Se puede modificar
@@ -61,7 +70,34 @@ enum /* CHEATS */ {
 
 #define RABBIT_AMOUNT_DEFAULT 1  // modificar
 
-#define MAP_WIDTH_DEFAULT 100   // modificar
-#define MAP_HEIGHT_DEFAULT 100  // modificar
+#define MAP_WIDTH_DEFAULT 35   // modificar
+#define MAP_HEIGHT_DEFAULT 19  // modificar
+
+enum /*MAP LAYERS*/ {
+    BACKGROUND_LAYER = 0,
+    DIAG_LEFT_LAYER,
+    DIAG_RIGHT_LAYER,
+    COLLIDER_LAYER,
+    DECORATION_LAYER,
+    SPAWN_POINTS_LAYER,
+};
+
+enum /*MAP OBJECTS*/ {
+    NULL_OBJ = 0,
+    DIAG_LEFT_OBJ,
+    DIAG_RIGHT_OBJ,
+    COLLIDER_OBJ = 4,
+};
+
+enum /*SPAWN POINTS*/ {
+    RABBIT_SPAWN = 0,
+    LIZARD_SPAWN,
+    CRAB_SPAWN,
+    TURTLE_SPAWN,
+    COIN_SPAWN,
+    GEM_SPAWN,
+};
+
+#define UNDEFINED -1
 
 #endif

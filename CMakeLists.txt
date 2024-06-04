@@ -63,6 +63,10 @@ install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yml
         DESTINATION /etc/jazz
 )
 
+install(FILES ${CMAKE_SOURCE_DIR}/external/maps/maps.txt
+        DESTINATION /etc/jazz
+)
+
 install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
         DESTINATION /etc/jazz
 )
@@ -95,6 +99,10 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/common_src
 )
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
+        DESTINATION /var/jazz
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/external/maps
         DESTINATION /var/jazz
 )
 

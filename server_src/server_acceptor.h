@@ -1,33 +1,43 @@
 #ifndef SERVERACCEPTOR_H
 #define SERVERACCEPTOR_H
+
 #include <iostream>
 #include <list>
+#include <memory>
 #include <sstream>
+#include <string>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
-#include "../common_src/protected_list_of_queues.h"
 #include "../common_src/thread.h"
 
-#include "server_player.h"
+#include "monitor_matches.h"
+#include "server_users.h"
 
 class ServerAcceptor: public Thread {
 
 private:
     Socket sk;
     bool sk_was_closed;
-    Queue<uint8_t>& client_cmds_q;
-    ProtectedListOfQueues& list_of_q_msgs;
-    std::list<ServerPlayer*> server_players;
+
+    int number_players;
+    std::list<User*> server_users;
+
+    std::string map_routes;
+
     std::atomic<bool> is_alive;
     std::atomic<bool> keep_talking;
+    bool* playing;
 
 public:
-    explicit ServerAcceptor(const char* servname, Queue<uint8_t>& client_cmds_q,
-                            ProtectedListOfQueues& list_of_q_msgs);
+    explicit ServerAcceptor(const char* servname, int number_players, const std::string& map_routes,
+                            bool* playing);
     virtual void run() override;
+    void stop() override;
     void reap_dead();
     void kill();
     void kill_all();
 };
+
 #endif

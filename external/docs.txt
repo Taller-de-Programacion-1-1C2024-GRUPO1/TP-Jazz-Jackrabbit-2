@@ -1,1 +1,0 @@
-Carpeta donde iran códigos de tests, configs con YAML, etc.

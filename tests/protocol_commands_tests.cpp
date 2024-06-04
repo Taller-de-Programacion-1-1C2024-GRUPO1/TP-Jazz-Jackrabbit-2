@@ -11,7 +11,18 @@
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/snapshots/snapshot.h"
-#include "../game_src/constants_game.h"
+#include "../game_src/commands/cheats.h"
+#include "../game_src/commands/command.h"
+#include "../game_src/commands/command_change_weapon.h"
+#include "../game_src/commands/command_jump.h"
+#include "../game_src/commands/command_match.h"
+#include "../game_src/commands/command_move.h"
+#include "../game_src/commands/command_move_faster.h"
+#include "../game_src/commands/command_select_champion.h"
+#include "../game_src/commands/command_shoot.h"
+#include "../game_src/commands/command_special_jazz.h"
+#include "../game_src/commands/command_special_lori.h"
+#include "../game_src/commands/command_special_spaz.h"
 
 const char* server_port = "8080";
 const char* ip = "localhost";
