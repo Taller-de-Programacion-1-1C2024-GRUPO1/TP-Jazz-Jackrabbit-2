@@ -23,8 +23,6 @@
 
 class Gameloop {
 private:
-    int height;
-    int width;
 
     Queue<std::shared_ptr<Command>>& client_cmd_queue;
     BroadcasterSnapshots& broadcaster_snapshots;

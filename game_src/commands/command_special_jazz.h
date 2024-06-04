@@ -3,6 +3,8 @@
 
 #include "command.h"
 
+class Protocol;
+
 // Clase que representa el comando de puñetazo y salto unicamente vertical en el aire
 class SpecialJazz: public Command {
 private:
@@ -12,6 +14,7 @@ private:
 public:
     explicit SpecialJazz(int playerID);
     bool execute_Command(bool* cheatON, bool& needsMove) override;
+    void send(Protocol& protocol);
     int get_playerId() override;
     int get_dir();
     int get_commandType() override;

@@ -7,6 +7,10 @@ bool ChangeWeapon::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
+void ChangeWeapon::send(Protocol& protocol) {
+    protocol.send_Command(this);
+}
+
 int ChangeWeapon::get_playerId() { return this->playerID; }
 
 int ChangeWeapon::get_commandType() { return this->commandType; }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 
+#include "../../common_src/protocol.h"
 #include "../../common_src/constants.h"
 #include "../constants_game.h"
 
@@ -25,6 +26,9 @@
     - SpecialLori
     - SpecialSpaz
 */
+
+class Protocol;
+
 class Command {
 private:
     int playerID;
@@ -35,7 +39,7 @@ public:
     virtual bool execute_Command(bool* cheatON, bool& needsMovement) { return true; }
 
     virtual void execute_Command() { return; }
-
+    virtual void send(Protocol& protocol) = 0;
     virtual int get_playerId() = 0;
     virtual int get_commandType() = 0;
     virtual ~Command() {}

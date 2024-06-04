@@ -7,6 +7,10 @@ bool MoveFaster::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
+void MoveFaster::send(Protocol& protocol) {
+    protocol.send_Command(this);
+}
+
 int MoveFaster::get_playerId() { return this->playerID; }
 
 int MoveFaster::get_dir() { return this->dir; }

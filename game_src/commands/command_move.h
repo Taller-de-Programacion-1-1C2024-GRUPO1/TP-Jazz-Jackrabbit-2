@@ -3,6 +3,8 @@
 
 #include "command.h"
 
+class Protocol;
+
 // Clase que representa el comando de moverse
 class Move: public Command {
 
@@ -14,6 +16,7 @@ private:
 public:
     Move(int playerID, int dir);
     bool execute_Command(bool* cheatON, bool& needsMove) override;
+    void send(Protocol& protocol);
     int get_playerId() override;
     int get_dir();
     int get_commandType() override;

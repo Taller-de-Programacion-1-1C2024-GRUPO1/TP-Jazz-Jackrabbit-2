@@ -9,17 +9,6 @@
 
 #include <arpa/inet.h>
 
-#include "../game_src/commands/cheats.h"
-#include "../game_src/commands/command_change_weapon.h"
-#include "../game_src/commands/command_jump.h"
-#include "../game_src/commands/command_match.h"
-#include "../game_src/commands/command_move.h"
-#include "../game_src/commands/command_move_faster.h"
-#include "../game_src/commands/command_select_champion.h"
-#include "../game_src/commands/command_shoot.h"
-#include "../game_src/commands/command_special_jazz.h"
-#include "../game_src/commands/command_special_lori.h"
-#include "../game_src/commands/command_special_spaz.h"
 #include "../game_src/constants_game.h"
 #include "../game_src/entities/bullet.h"
 #include "../game_src/entities/character.h"
@@ -30,6 +19,19 @@
 #include "common_errors.h"
 #include "common_socket.h"
 #include "constants.h"
+
+class Command; 
+class Move;
+class MoveFaster;
+class Jump;
+class Shoot;
+class MatchCommand;
+class Cheats;
+class ChangeWeapon;
+class SelectChampion;
+class SpecialJazz;
+class SpecialLori;
+class SpecialSpaz;
 
 class Protocol {
 protected:

@@ -32,6 +32,12 @@ private:
     std::vector<Bullet*> bullets;
     std::vector<Item*> items;
 
+    std::vector<RabbitSnapshot> get_rabbit_snapshot();
+
+    std::vector<ProjectileSnapshot> get_projectile_snapshot();
+
+    std::vector<SupplySnapshot> get_supply_snapshot();
+
 public:
     void check_colision();
     void reap_dead();

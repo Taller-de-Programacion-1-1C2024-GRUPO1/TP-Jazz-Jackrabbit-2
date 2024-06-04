@@ -15,6 +15,7 @@
 
 const char map_routes[] = "/etc/jazz/maps.txt";
 const char map_nameTEST[] = "carrotus";
+MapReader map_reader(map_routes);
 
 const std::vector<std::vector<int>> map_data_TEST = {
         {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -37,8 +38,6 @@ TEST(MapReaderTest, LoadMapsFilesMapNameTest) {
 }
 
 TEST(MapReaderTest, LoadMapsFilesDynamicMapTest) {
-    MapReader map_reader(map_routes);
-
     std::map<std::string, Map> maps = map_reader.get_maps();
 
     std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data =
@@ -55,8 +54,6 @@ TEST(MapReaderTest, LoadMapsFilesDynamicMapTest) {
 }
 
 TEST(MapReaderTest, LoadMapsFilesSpawnPointsTest) {
-    MapReader map_reader(map_routes);
-
     std::map<std::string, Map> maps = map_reader.get_maps();
 
     std::vector<SpawnPoint> spawn_points_vector =

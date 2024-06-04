@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "../constants_game.h"
-
 #include "command.h"
+
+class Protocol;
 
 class MatchCommand: public Command {
 private:
@@ -18,6 +18,7 @@ private:
 public:
     MatchCommand(int type, int number_players, const std::string& match_name,
                  const std::string& map_name);
+    void send(Protocol& protocol);
     int get_playerId() override;
     int getType();
     int get_number_players();
