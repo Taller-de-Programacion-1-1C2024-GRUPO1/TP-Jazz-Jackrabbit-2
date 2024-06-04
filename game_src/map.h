@@ -39,6 +39,8 @@ private:
 
     std::vector<SupplySnapshot> get_supply_snapshot();
 
+    std::vector<EnemySnapshot> get_enemy_snapshot();
+
 public:
     void check_colision();
     void reap_dead();

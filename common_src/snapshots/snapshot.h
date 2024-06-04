@@ -10,6 +10,7 @@
 #include "../constants.h"
 
 // #include "snapshot_map.h" ???
+#include "snapshot_enemy.h"
 #include "snapshot_projectile.h"
 #include "snapshot_rabbit.h"
 #include "snapshot_supply.h"

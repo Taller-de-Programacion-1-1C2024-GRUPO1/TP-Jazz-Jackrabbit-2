@@ -20,6 +20,8 @@ void Gun::update() {
     }
 }
 
+int Gun::get_ammo() { return ammo; }
+
 bool Gun::can_fire() { return fire_cooldown == 0 && has_ammo(); }
 
 void Gun::add_ammo(int amount_ammo) {

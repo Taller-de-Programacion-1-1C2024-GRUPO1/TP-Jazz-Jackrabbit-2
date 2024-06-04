@@ -4,6 +4,8 @@
 #include <queue>
 #include <vector>
 
+#include "../../common_src/snapshots/snapshot_rabbit.h"
+
 #include "character.h"
 
 
@@ -27,6 +29,8 @@ enum EVENTS {
 
 class Rabbit: public Character {
 private:
+    int id;
+    int champion_type;
     int points;
     int action;
     const int spawn_x;
@@ -42,7 +46,8 @@ private:
     const int acc_y;
 
 public:
-    Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager);
+    Rabbit(int id, int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map,
+           Map& manager);
     void update();
     void update_action();
     void update_position();
@@ -95,6 +100,9 @@ public:
     void execute_run_fast_left();
     void execute_shoot();
     void execute_special_attack();
+
+    // SNAPSHOTS
+    RabbitSnapshot get_snapshot();
 
     Rabbit(const Rabbit&) = delete;
     Rabbit& operator=(const Rabbit&) = delete;

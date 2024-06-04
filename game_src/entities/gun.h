@@ -25,7 +25,7 @@ public:
     virtual void fire(int pos_x, int pos_y, int direction) = 0;
 
     void update();
-
+    int get_ammo();
     bool can_fire();
 
     void add_ammo(int amount_ammo);

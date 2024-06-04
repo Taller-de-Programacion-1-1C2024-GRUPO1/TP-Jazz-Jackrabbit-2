@@ -7,12 +7,17 @@
 #define RABBIT_DEINTOXICATE_TIME 0.5
 #define RABBIT_COOLDOWN_TAKE_DAMAGE 3
 
+enum RABBIT_STATES { ALIVE, DEAD, RECIEVED_DAMAGE, INTOXICATED };
+
 class State {
 protected:
     Rabbit& rabbit;
+    int type;
 
 public:
-    explicit State(Rabbit& rabbit): rabbit(rabbit) {}
+    State(int type, Rabbit& rabbit): type(type), rabbit(rabbit) {}
+
+    int get_type() { return type; }
 
     virtual void update() = 0;
 
@@ -31,7 +36,8 @@ public:
 
 class Alive: public State {
 public:
-    explicit Alive(Rabbit& rabbit): State(rabbit) {}
+    explicit Alive(Rabbit& rabbit): State(ALIVE, rabbit) {}
+
     void update() override {}
     void jump() override { rabbit.execute_jump(); }
     void run_right() override { rabbit.execute_run_right(); }
@@ -48,7 +54,8 @@ private:
     int time_to_revive;
 
 public:
-    explicit Dead(Rabbit& rabbit): State(rabbit), time_to_revive(0) {}
+    explicit Dead(Rabbit& rabbit): State(DEAD, rabbit), time_to_revive(0) {}
+
     void update() override {
         time_to_revive++;
         printf("DEAD\n");
@@ -73,7 +80,9 @@ private:
     int cooldown_take_damage;
 
 public:
-    explicit RecievedDamage(Rabbit& rabbit): State(rabbit), cooldown_take_damage(0) {}
+    explicit RecievedDamage(Rabbit& rabbit):
+            State(RECIEVED_DAMAGE, rabbit), cooldown_take_damage(0) {}
+
     void update() override {
         cooldown_take_damage++;
         printf("Time to DeDamage: %d\n", cooldown_take_damage);
@@ -97,7 +106,8 @@ private:
     int time_to_deintoxicate;
 
 public:
-    explicit Intoxicated(Rabbit& rabbit): State(rabbit), time_to_deintoxicate(0) {}
+    explicit Intoxicated(Rabbit& rabbit): State(INTOXICATED, rabbit), time_to_deintoxicate(0) {}
+
     void update() override {
         time_to_deintoxicate++;
         printf("Time to revive: %d\n", time_to_deintoxicate);

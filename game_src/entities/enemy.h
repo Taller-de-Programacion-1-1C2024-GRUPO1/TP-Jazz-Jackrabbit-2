@@ -1,16 +1,21 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "character.h"
+#include "../../common_src/snapshots/snapshot_enemy.h"
 
+#include "character.h"
 class Enemy: public Character {
 private:
     // MODIFICACION DE POSICION
     int acc_y;
     int damage;
+    int id;
+    int direction;
+    int enemy_type;
 
 public:
-    Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map);
+    Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map);
+
 
     void receive_damage(int damage) override;
     // COLISIONES CON ENTIDADES
@@ -20,6 +25,7 @@ public:
     void hit_by_bullet(Bullet* bullet, int damage);
     bool is_killed_by_taking_damage(int damage);
     void update();
+    EnemySnapshot get_snapshot();
 };
 
 #endif

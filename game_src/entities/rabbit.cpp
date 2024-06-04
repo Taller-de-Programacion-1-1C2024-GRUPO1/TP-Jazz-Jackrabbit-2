@@ -7,8 +7,11 @@
 #include "gun.h"
 #include "item.h"
 #include "state.h"
-Rabbit::Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager):
+Rabbit::Rabbit(int id, int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map,
+               Map& manager):
         Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
+        id(id),
+        champion_type(champion_type),
         spawn_x(init_pos_x),
         spawn_y(init_pos_y),
         action(STAND),
@@ -260,6 +263,11 @@ void Rabbit::add_shoot() { events_queue.push(EVENT_SHOOT); }
 void Rabbit::set_state(State* new_state) {
     delete state;
     state = new_state;
+}
+
+RabbitSnapshot Rabbit::get_snapshot() {
+    return RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, points, health, current_gun,
+                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action);
 }
 
 Rabbit::~Rabbit() { delete state; }

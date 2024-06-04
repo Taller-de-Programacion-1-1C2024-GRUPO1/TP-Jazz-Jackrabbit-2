@@ -115,39 +115,37 @@ std::shared_ptr<Snapshot> Map::get_snapshot() const {
 }
 
 std::vector<RabbitSnapshot> Map::get_rabbit_snapshot() {
-    /*
     std::vector<RabbitSnapshot> rabbit_snapshots;
     for (auto player: players) {
-        RabbitSnapshot rabbit_snapshot(player->get_id(), player->get_x(), player->get_y(),
-                                       player->get_health(), player->get_max_health,
-    player->get_direction(), player->get_weapon(), player->get_state(), player->get_current_ammo());
-        rabbit_snapshots.push_back(rabbit_snapshot);
+        rabbit_snapshots.push_back(player->get_snapshot());
     }
     return rabbit_snapshots;
-    */
 }
 
 std::vector<ProjectileSnapshot> Map::get_projectile_snapshot() {
-    /*
+
     std::vector<ProjectileSnapshot> projectile_snapshots;
     for (auto bullet: bullets) {
-        ProjectileSnapshot projectile_snapshot(bullet->get_id(), bullet->get_x(), bullet->get_y(),
-                                               bullet->get_angle(), bullet->get_speed(),
-    bullet->get_damage()); projectile_snapshots.push_back(projectile_snapshot);
+        projectile_snapshots.push_back(bullet->get_snapshot());
     }
     return projectile_snapshots;
-    */
 }
 
 std::vector<SupplySnapshot> Map::get_supply_snapshot() {
-    /*
+
     std::vector<SupplySnapshot> supply_snapshots;
     for (auto item: items) {
-        SupplySnapshot supply_snapshot(item->get_id(), item->get_x(), item->get_y());
-        supply_snapshots.push_back(supply_snapshot);
+        supply_snapshots.push_back(item->get_snapshot());
     }
     return supply_snapshots;
-    */
+}
+std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
+
+    std::vector<EnemySnapshot> enemy_snapshots;
+    for (auto enemy: enemies) {
+        enemy_snapshots.push_back(enemy->get_snapshot());
+    }
+    return enemy_snapshots;
 }
 
 

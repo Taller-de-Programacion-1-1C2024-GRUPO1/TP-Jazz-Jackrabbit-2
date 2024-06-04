@@ -1,11 +1,16 @@
 #include "enemy.h"
 
+#include "../constants_game.h"
+
 #include "bullet.h"
 #include "rabbit.h"
 #define ENEMY_INITIAL_HEALTH 3
 #define POINTS_KILLING_ENEMY 300
 
-Enemy::Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map):
+Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map):
+        id(id),
+        direction(LEFT),
+        enemy_type(type),
         Character(/*ANCHO ENEMIGO*/ BLOCK_DIVISION * 2, /*ALTO ENEMIGO*/ BLOCK_DIVISION, init_pos_x,
                   init_pos_y, map, /*VIDA ENEMIGO*/ ENEMY_INITIAL_HEALTH),
         acc_y(GRAVITY),
@@ -76,4 +81,8 @@ void Enemy::update() {
 
     // NO HAY INERCIA EN EJE X
     spe_x = 0;
+}
+
+EnemySnapshot Enemy::get_snapshot() {
+    return EnemySnapshot(id, direction, enemy_type, pos_x, pos_y);
 }

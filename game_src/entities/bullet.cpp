@@ -5,7 +5,11 @@
 #include "enemy.h"
 #include "rabbit.h"
 
-Bullet::Bullet(int init_pos_x, int init_pos_y, int bullet_speed, int damage, Rabbit& sender):
+
+Bullet::Bullet(int id, int type, int init_pos_x, int init_pos_y, int bullet_speed, int damage,
+               Rabbit& sender):
+        id(id),
+        type(type),
         PhysicalObject(BLOCK_DIVISION / 4, BLOCK_DIVISION / 16, init_pos_x, init_pos_y),
         damage(damage),
         sender(sender) {
@@ -37,3 +41,5 @@ void Bullet::bullet_killed_target(int amount_points) { sender.add_points(amount_
 int Bullet::get_damage() { return damage; }
 
 void Bullet::update() { pos_x += spe_x; }
+
+ProjectileSnapshot Bullet::get_snapshot() { return ProjectileSnapshot(id, type, pos_x, pos_y, 0); }

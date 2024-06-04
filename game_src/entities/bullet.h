@@ -1,17 +1,22 @@
 #ifndef BULLET_H
 #define BULLET_H
 
+#include "../../common_src/snapshots/snapshot_projectile.h"
 #include "../../physics_src/physical_objects.h"
 class Rabbit;
 class PhysicalMap;
 
 class Bullet: public PhysicalObject {
 private:
+    int id;
+    int type;
     const int damage;
     Rabbit& sender;
 
 public:
-    Bullet(int init_pos_x, int init_pos_y, int bullet_speed, int damage, Rabbit& sender);
+    Bullet(int id, int type, int init_pos_x, int init_pos_y, int bullet_speed, int damage,
+           Rabbit& sender);
+
 
     void update();
 
@@ -24,6 +29,8 @@ public:
 
     void bullet_killed_target(int amount_points);
     int get_damage();
+
+    ProjectileSnapshot get_snapshot();
 };
 
 #endif
