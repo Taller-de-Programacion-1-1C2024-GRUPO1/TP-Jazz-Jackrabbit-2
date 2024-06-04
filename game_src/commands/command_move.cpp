@@ -7,9 +7,7 @@ bool Move::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void Move::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void Move::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Move::get_playerId() { return this->playerID; }
 

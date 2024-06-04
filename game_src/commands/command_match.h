@@ -18,7 +18,7 @@ private:
 public:
     MatchCommand(int type, int number_players, const std::string& match_name,
                  const std::string& map_name);
-    void send(Protocol& protocol);
+    void send(Protocol& protocol) override;
     int get_playerId() override;
     int getType();
     int get_number_players();

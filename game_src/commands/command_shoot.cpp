@@ -7,9 +7,7 @@ bool Shoot::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void Shoot::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void Shoot::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Shoot::get_playerId() { return this->playerID; }
 

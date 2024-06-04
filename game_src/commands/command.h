@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-#include "../../common_src/protocol.h"
 #include "../../common_src/constants.h"
+#include "../../common_src/protocol.h"
 #include "../constants_game.h"
 
 /*

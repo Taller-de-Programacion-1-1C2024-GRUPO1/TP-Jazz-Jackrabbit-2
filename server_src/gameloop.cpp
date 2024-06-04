@@ -17,7 +17,7 @@ std::shared_ptr<Snapshot> Gameloop::get_initial_snapshot(const Map& map) {
 
     // Se debe leer el mapa elegido por el usuario y crearlo
     std::shared_ptr<Snapshot> snapshot = map.get_snapshot();
-    
+
     // Enviar el snapshot inicial
     return snapshot;
 }

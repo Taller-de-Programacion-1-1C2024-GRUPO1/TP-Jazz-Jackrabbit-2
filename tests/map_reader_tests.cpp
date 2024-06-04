@@ -30,7 +30,6 @@ const std::vector<std::vector<int>> map_data_TEST = {
          -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}};
 
 TEST(MapReaderTest, LoadMapsFilesMapNameTest) {
-    MapReader map_reader(map_routes);
 
     std::map<std::string, Map> maps = map_reader.get_maps();
 

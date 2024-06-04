@@ -23,7 +23,6 @@
 
 class Gameloop {
 private:
-
     Queue<std::shared_ptr<Command>>& client_cmd_queue;
     BroadcasterSnapshots& broadcaster_snapshots;
     std::list<Player*>& players;

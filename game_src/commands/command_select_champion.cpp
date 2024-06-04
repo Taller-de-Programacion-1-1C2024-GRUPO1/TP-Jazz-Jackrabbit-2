@@ -8,9 +8,7 @@ SelectChampion::SelectChampion(int playerID, ChampionType champion_type,
         match_name(match_name),
         map_name(map_name) {}
 
-void SelectChampion::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void SelectChampion::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int SelectChampion::get_playerId() { return playerID; }
 

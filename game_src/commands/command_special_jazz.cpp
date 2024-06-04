@@ -7,9 +7,7 @@ bool SpecialJazz::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void SpecialJazz::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void SpecialJazz::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int SpecialJazz::get_playerId() { return this->playerID; }
 

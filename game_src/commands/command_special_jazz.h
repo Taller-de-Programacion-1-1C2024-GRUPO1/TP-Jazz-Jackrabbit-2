@@ -14,7 +14,7 @@ private:
 public:
     explicit SpecialJazz(int playerID);
     bool execute_Command(bool* cheatON, bool& needsMove) override;
-    void send(Protocol& protocol);
+    void send(Protocol& protocol) override;
     int get_playerId() override;
     int get_dir();
     int get_commandType() override;

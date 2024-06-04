@@ -1,14 +1,14 @@
 #include "protocol.h"
 
+#include "../game_src/commands/cheats.h"
 #include "../game_src/commands/command.h"
 #include "../game_src/commands/command_change_weapon.h"
-#include "../game_src/commands/cheats.h"
 #include "../game_src/commands/command_jump.h"
+#include "../game_src/commands/command_match.h"
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
-#include "../game_src/commands/command_shoot.h"
-#include "../game_src/commands/command_match.h"
 #include "../game_src/commands/command_select_champion.h"
+#include "../game_src/commands/command_shoot.h"
 #include "../game_src/commands/command_special_jazz.h"
 #include "../game_src/commands/command_special_lori.h"
 #include "../game_src/commands/command_special_spaz.h"
@@ -443,8 +443,8 @@ void Protocol::receive_rabbits(Snapshot& snapshot) {
         uint32_t state = receive_uintThirtyTwo();
         uint32_t current_ammo = receive_uintThirtyTwo();
         // crear un RabbitSnapshot y agregarlo al vector de rabbits del snapshot
-        RabbitSnapshot rabbit = RabbitSnapshot(id, pos_x, pos_y, max_health, health,
-                                               direction, weapon, state, current_ammo);
+        RabbitSnapshot rabbit = RabbitSnapshot(id, pos_x, pos_y, max_health, health, direction,
+                                               weapon, state, current_ammo);
         snapshot.rabbits.push_back(rabbit);
     }
 }

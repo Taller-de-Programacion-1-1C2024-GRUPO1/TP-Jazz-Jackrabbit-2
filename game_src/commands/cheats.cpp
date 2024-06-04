@@ -10,9 +10,7 @@ bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void Cheats::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void Cheats::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Cheats::get_playerId() { return this->playerID; }
 

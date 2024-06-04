@@ -20,7 +20,7 @@
 #include "common_socket.h"
 #include "constants.h"
 
-class Command; 
+class Command;
 class Move;
 class MoveFaster;
 class Jump;

@@ -13,9 +13,7 @@ bool SpecialLori::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void SpecialLori::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void SpecialLori::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int SpecialLori::get_playerId() { return this->playerID; }
 

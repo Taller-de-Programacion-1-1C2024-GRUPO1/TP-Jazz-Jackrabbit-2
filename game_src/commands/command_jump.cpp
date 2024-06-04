@@ -13,9 +13,7 @@ bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void Jump::send(Protocol& protocol) {
-    protocol.send_Command(this);
-}
+void Jump::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Jump::get_playerId() { return this->playerID; }
 
