@@ -8,9 +8,13 @@
 //#define FONT FONTS_PATH "/04B_30__.ttf"
 //#define GAME_TITLE "Juego"
 
+//#include "client_config.h"
+//#define CHARACTERS_PATH ClientConfigSingleton::getInstance().getCharactersPath()
+
+
+
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
-//#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
 
 #define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
 #define LORI_IMG "../client_src/resources/characters/Lori.png"
@@ -52,6 +56,7 @@
 #include "../game_src/commands/command_shoot.h"
 
 #include "client_number_images.h"
+
 
 
 using SDL2pp::Chunk;
