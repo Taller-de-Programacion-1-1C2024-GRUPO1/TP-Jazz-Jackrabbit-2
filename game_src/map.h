@@ -19,6 +19,7 @@ private:
     std::string map_name;
     PhysicalMap physical_map;
     DynamicMap dynamic_map;
+    std::map<int, std::vector<SpawnPoint>> spawn_points;
     int width;
     int height;
     int max_players;
@@ -49,11 +50,15 @@ public:
 
     void set_dynamic_map(const DynamicMap& dynamic_map);
 
+    void set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points);
+
     void set_max_players(int max_players);
 
     DynamicMap get_dynamic_map() const;
 
     PhysicalMap get_physical_map() const;
+
+    std::map<int, std::vector<SpawnPoint>> get_spawn_points() const;
 
     std::shared_ptr<Snapshot> get_snapshot() const;
 

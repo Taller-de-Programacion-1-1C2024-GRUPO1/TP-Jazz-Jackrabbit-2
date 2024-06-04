@@ -95,6 +95,9 @@ private:
             map_parser.parse_physical_map(map_data, physical_map);
             game_map.set_physical_map(physical_map);
 
+            // cargo los spawn points
+            game_map.set_spawn_points(map_parser.parse_spawn_points(map_data));
+
             // cargo el mapa dinamico
             DynamicMap dynamic_map = DynamicMap(map_data);
             game_map.set_dynamic_map(dynamic_map);

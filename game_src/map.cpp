@@ -61,9 +61,15 @@ DynamicMap Map::get_dynamic_map() const { return dynamic_map; }
 
 PhysicalMap Map::get_physical_map() const { return physical_map; }
 
+std::map<int, std::vector<SpawnPoint>> Map::get_spawn_points() const { return spawn_points; }
+
 void Map::set_physical_map(const PhysicalMap& physical_map) { this->physical_map = physical_map; }
 
 void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = dynamic_map; }
+
+void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
+    this->spawn_points = spawn_points;
+}
 
 void Map::set_max_players(int max_players) { this->max_players = max_players; }
 

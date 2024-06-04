@@ -54,7 +54,7 @@ TEST(MapReaderTest, LoadMapsFilesSpawnPointsTest) {
     
     std::map<std::string, Map> maps = map_reader.get_maps();
 
-    std::vector<SpawnPoint> spawn_points_vector = maps[map_nameTEST].get_physical_map().spawn_points;
+    std::vector<SpawnPoint> spawn_points_vector = maps[map_nameTEST].get_spawn_points()[RABBIT_SPAWN];
     
     // si se leen {x} cantidad de lineas y todas estan correctas, el resto de la matriz estará correcto por construcción.
     // se hace una adaptacion de matriz - vector de vectores para comparar

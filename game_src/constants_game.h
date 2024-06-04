@@ -23,7 +23,7 @@ enum ChampionType : uint8_t {
     Lori,
 };
 
-enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, RAT };
+enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, TURTLE };
 
 enum SupplyType : uint8_t {
     HEALTH_CARROT,
@@ -88,6 +88,15 @@ enum /*MAP OBJECTS*/ {
     DIAG_LEFT_OBJ,
     DIAG_RIGHT_OBJ,
     COLLIDER_OBJ = 4,
+};
+
+enum /*SPAWN POINTS*/ {
+    RABBIT_SPAWN = 0,
+    LIZARD_SPAWN,
+    CRAB_SPAWN,
+    TURTLE_SPAWN,
+    COIN_SPAWN,
+    GEM_SPAWN,
 };
 
 #define UNDEFINED -1
