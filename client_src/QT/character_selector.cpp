@@ -4,7 +4,7 @@
 
 
 CharacterSelector::CharacterSelector(QWidget* parent):
-        QDialog(parent), ui(new Ui::CharacterSelector){
+        QDialog(parent), ui(new Ui::CharacterSelector) {
     ui->setupUi(this);
 
     // Establecer el fondo

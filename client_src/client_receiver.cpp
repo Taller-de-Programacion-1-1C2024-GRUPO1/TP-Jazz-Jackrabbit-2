@@ -2,17 +2,26 @@
 
 #include <chrono>
 
-ClientReceiver::ClientReceiver(Protocol& protocol, Queue<Snapshot>& q_snapshots):
-        protocol(protocol), q_snapshots(q_snapshots), keep_talking(true), is_alive(true) {}
+ClientReceiver::ClientReceiver(Protocol& protocol, Queue<int>& q_responses,
+                               std::atomic<bool>& game_started, Queue<Snapshot>& q_snapshots):
+        protocol(protocol),
+        q_responses(q_responses),
+        game_started(game_started),
+        q_snapshots(q_snapshots),
+        keep_talking(true),
+        is_alive(true) {}
 
 
 void ClientReceiver::run() {
     while (keep_talking) {
         try {
-            // Snapshot snap;
-            // this->protocol.recive(snap);
-            // q_snapshots.push(snap);
-
+            if (!game_started) {
+                int response = this->protocol.receive_user_joined_match();
+                q_responses.push(response);
+            } else {
+                Snapshot snap = this->protocol.receive_Snapshot();
+                q_snapshots.push(snap);
+            }
             std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));
         } catch (const ClosedQueue& e) {

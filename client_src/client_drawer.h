@@ -12,7 +12,6 @@
 //#define CHARACTERS_PATH ClientConfigSingleton::getInstance().getCharactersPath()
 
 
-
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
 
@@ -56,7 +55,6 @@
 #include "../game_src/commands/command_shoot.h"
 
 #include "client_number_images.h"
-
 
 
 using SDL2pp::Chunk;

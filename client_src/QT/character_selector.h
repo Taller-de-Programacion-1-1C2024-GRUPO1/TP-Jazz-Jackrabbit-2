@@ -12,11 +12,11 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../../game_src/constants_game.h"
-#include "../client_sender.h"
-#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
+#include "../../game_src/constants_game.h"
+#include "../client_receiver.h"
+#include "../client_sender.h"
 
 namespace Ui {
 class CharacterSelector;

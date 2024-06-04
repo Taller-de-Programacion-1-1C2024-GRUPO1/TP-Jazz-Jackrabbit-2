@@ -255,7 +255,6 @@ TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
 }
 
 
-
 TEST(ProtocolTestMatch, SendAndReceiveMatch) {
     MatchCommand* match = new MatchCommand(player_id, number_players, match_test, map_test, jazz);
     client_protocol.send_Command(match);

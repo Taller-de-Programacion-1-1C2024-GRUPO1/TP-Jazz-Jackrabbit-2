@@ -9,9 +9,9 @@
 
 class Protocol;
 
-class GameInfo : public Information {
+class GameInfo: public Information {
 private:
-    std::map<std::string,std::string> matchesAvailable;
+    std::map<std::string, std::string> matchesAvailable;
     int InfoType = GAME_INFO;
 
 public:

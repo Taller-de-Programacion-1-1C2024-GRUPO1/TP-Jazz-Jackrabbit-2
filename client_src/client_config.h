@@ -52,7 +52,6 @@ private:
     }
     // Game
     std::string characters_path;
-
 };
 
 #endif

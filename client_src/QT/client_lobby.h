@@ -10,11 +10,11 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../../game_src/constants_game.h"
-#include "../client_sender.h"
-#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
+#include "../../game_src/constants_game.h"
+#include "../client_receiver.h"
+#include "../client_sender.h"
 
 #include "character_selector.h"
 #include "join_match_lobby.h"
@@ -28,7 +28,9 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(Queue<Command*>& q_cmds, QWidget* parent = nullptr);
+    explicit ClientLobby(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+                         std::atomic<bool>& game_started, int& player_id,
+                         QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
@@ -42,6 +44,9 @@ private slots:
 private:
     Ui::ClientLobby* ui;
     Queue<Command*>& q_cmds;
+    Queue<int>& q_responses;
+    int& player_id;
+    std::atomic<bool>& game_started;
     ChampionType selected_character;
 };
 

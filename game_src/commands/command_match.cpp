@@ -23,8 +23,6 @@ std::string MatchCommand::get_match_name() { return this->match_name; }
 
 int MatchCommand::get_commandType() { return this->commandType; }
 
-ChampionType MatchCommand::get_character_name() {
-        return this->character_name;
-}
+ChampionType MatchCommand::get_character_name() { return this->character_name; }
 
 MatchCommand::~MatchCommand() {}

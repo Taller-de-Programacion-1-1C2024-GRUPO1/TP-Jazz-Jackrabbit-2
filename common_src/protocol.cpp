@@ -97,6 +97,12 @@ char Protocol::receive_char() {
     return c;
 }
 
+
+// Primer Response:
+// recibe un ACK 0 en caso de haberse unido/creado un match
+// recibe un ACK negativo (-1) en caso de no poder unirse/crear un match
+// Segundo response:
+// recibe un ACK positivo (player_id) justo antes de iniciar la match
 int Protocol::receive_user_joined_match() {
     check_closed();
     uint8_t ACK_JOINED = receive_uintEight();
@@ -270,7 +276,8 @@ std::shared_ptr<MatchCommand> Protocol::receive_Match() {
     std::string map_name = receive_string();
     uint8_t character = receive_uintEight();
     ChampionType character_type = static_cast<ChampionType>(character);
-    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name, character_type);
+    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name,
+                                          character_type);
 }
 
 std::shared_ptr<Cheats> Protocol::receive_Cheat() {

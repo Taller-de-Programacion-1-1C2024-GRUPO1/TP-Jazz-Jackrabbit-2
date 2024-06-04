@@ -10,10 +10,10 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../client_sender.h"
-#include "../client_receiver.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
+#include "../client_receiver.h"
+#include "../client_sender.h"
 
 #include "character_selector.h"
 #include "waiting_room.h"
@@ -26,8 +26,9 @@ class MapSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit MapSelector(Queue<Command*>& q_cmds, ChampionType selected_character,
-                         QWidget* parent = nullptr);
+    explicit MapSelector(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+                         std::atomic<bool>& game_started, ChampionType selected_character,
+                         int& player_id, QWidget* parent = nullptr);
     ~MapSelector();
 
 signals:
@@ -49,6 +50,9 @@ protected:
 private:
     Ui::MapSelector* ui;
     Queue<Command*>& q_cmds;
+    Queue<int>& q_responses;
+    int& player_id;
+    std::atomic<bool>& game_started;
     ChampionType selected_character;
     std::string selected_map;
     std::string match_name;

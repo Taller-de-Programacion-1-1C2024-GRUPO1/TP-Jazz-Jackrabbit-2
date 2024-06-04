@@ -3,11 +3,15 @@
 #include "ui_map_selector.h"
 
 
-MapSelector::MapSelector(Queue<Command*>& q_cmds, ChampionType selected_character,
-                         QWidget* parent):
+MapSelector::MapSelector(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+                         std::atomic<bool>& game_started, ChampionType selected_character,
+                         int& player_id, QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
         q_cmds(q_cmds),
+        q_responses(q_responses),
+        player_id(player_id),
+        game_started(game_started),
         selected_character(selected_character) {
     ui->setupUi(this);
 
@@ -62,16 +66,25 @@ void MapSelector::start_match() {
     // ENVIO COMANDO preguntando por existencia de nombre de partida.
     // Si no existe acepto para que inicie la partida
 
-    MatchCommand cmd = MatchCommand(NEW_MATCH, number_of_players, match_name, selected_map, selected_character);
+    MatchCommand cmd = MatchCommand(NEW_MATCH, number_of_players, match_name, selected_map,
+                                    selected_character);
     q_cmds.push(&cmd);
-   
 
-    //receiver.receiveCommand(); 
-    
+    int response;
+    bool could_pop = false;
+    while (!could_pop) {
+        could_pop = q_responses.try_pop(response);
+        QMessageBox::warning(this, "Error", "trying to connect:");
+        std::this_thread::sleep_for(std::chrono::seconds(4));
+    }
+    if (response == 0) {
+        QMessageBox::warning(this, "Error", "Match name already exists.");
+        return;
+    }
 
 
     hide();
-    WaitingRoom waiting_room(q_cmds);
+    WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
     if (waiting_room.exec() == QDialog::Accepted) {
         accept();
     } else {
