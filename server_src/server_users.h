@@ -28,8 +28,6 @@ private:
 
     bool* playing;
 
-    // std::unordered_map<int, Player> make_players_map(const std::vector<Player>& server_player);
-
 public:
     User(std::shared_ptr<ContainerProtocol> container_protocol, MonitorMatches& monitor_matches,
          bool* playing);
@@ -37,7 +35,6 @@ public:
 
     void create_new_match(int number_of_players, const std::string& match_name,
                           const std::string& map_name);
-    void start_match(const std::string& match_name);
     void join_match(const std::string& match_name);
     void refresh();
 

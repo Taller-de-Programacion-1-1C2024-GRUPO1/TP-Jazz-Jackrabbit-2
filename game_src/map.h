@@ -53,6 +53,8 @@ public:
 
     void set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points);
 
+    void set_amount_players(int amount_players);
+
     void set_max_players(int max_players);
 
     DynamicMap get_dynamic_map() const;
@@ -60,6 +62,10 @@ public:
     PhysicalMap get_physical_map() const;
 
     std::map<int, std::vector<SpawnPoint>> get_spawn_points() const;
+
+    int get_max_players();
+
+    void create_entities();
 
     std::shared_ptr<Snapshot> get_snapshot() const;
 

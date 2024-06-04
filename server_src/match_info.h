@@ -24,10 +24,10 @@ struct MatchInfo {
     std::unique_ptr<Match> match_starter;
     std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue;
 
-    MatchInfo(const std::string& match_name, const std::string& map_name,
+    MatchInfo(const std::string& match_name, const Map& map,
               std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
               bool* playing):
-            map_name(map_name),
+            map_name(map.get_name()),
             /*
                 Se inicializa el match_starter con un puntero a un objeto Match
                 que se inicializa con:
@@ -36,8 +36,8 @@ struct MatchInfo {
                 - el puntero al booleano playing y
                 - el puntero a status
             */
-            match_starter(
-                    std::make_unique<Match>(matches_protocols_queue, match_name, playing, &status)),
+            match_starter(std::make_unique<Match>(matches_protocols_queue, map, match_name, playing,
+                                                  &status)),
 
             matches_protocols_queue(matches_protocols_queue) {}
 

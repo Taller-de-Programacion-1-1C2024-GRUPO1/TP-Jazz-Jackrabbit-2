@@ -37,17 +37,21 @@ private:
 
     int number_of_players;
     std::list<Player*> players;
-    // game_map
+
     bool* playing;
     int* status;
     int id_counter;
+
+    void send_players_ids();
+
+    void wait_for_players_to_choose_champion();
 
     void send_game_initial(Gameloop game);
 
 public:
     // falta agregar el game_map
     Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
-          const std::string& match_name, bool* playing, int* status);
+          const Map& map, const std::string& match_name, bool* playing, int* status);
     ~Match();
 
     bool has_started();

@@ -71,13 +71,44 @@ void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_p
     this->spawn_points = spawn_points;
 }
 
+void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }
+
 void Map::set_max_players(int max_players) { this->max_players = max_players; }
+
+int Map::get_max_players() { return this->max_players; }
 
 std::shared_ptr<Snapshot> Map::get_snapshot() const {
     Snapshot snapshot({}, {}, {});
     snapshot.set_dimensions(height, width, RABBIT_HEIGHT_DEFAULT, RABBIT_WIDTH_DEFAULT,
                             amount_players);
     return std::make_shared<Snapshot>(snapshot);
+}
+
+void Map::create_entities() {
+    for (int i = 0; i < amount_players; i++) {
+        players.push_back(new Rabbit(spawn_points[RABBIT_SPAWN].at(i).get_x(),
+                                     spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map));
+    }
+    for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
+        enemies.push_back(new Enemy(spawn_points[CRAB_SPAWN].at(i).get_x(),
+                                    spawn_points[CRAB_SPAWN].at(i).get_y(), physical_map));
+    }
+    for (int i = 0; i < spawn_points[LIZARD_SPAWN].size(); i++) {
+        enemies.push_back(new Enemy(spawn_points[LIZARD_SPAWN].at(i).get_x(),
+                                    spawn_points[LIZARD_SPAWN].at(i).get_y(), physical_map));
+    }
+    for (int i = 0; i < spawn_points[TURTLE_SPAWN].size(); i++) {
+        enemies.push_back(new Enemy(spawn_points[TURTLE_SPAWN].at(i).get_x(),
+                                    spawn_points[TURTLE_SPAWN].at(i).get_y(), physical_map));
+    }
+    for (int i = 0; i < spawn_points[COIN_SPAWN].size(); i++) {
+        items.push_back(new Item(spawn_points[COIN_SPAWN].at(i).get_x(),
+                                 spawn_points[COIN_SPAWN].at(i).get_y()));
+    }
+    for (int i = 0; i < spawn_points[GEM_SPAWN].size(); i++) {
+        items.push_back(new Item(spawn_points[GEM_SPAWN].at(i).get_x(),
+                                 spawn_points[GEM_SPAWN].at(i).get_y()));
+    }
 }
 
 std::string Map::get_name() const { return map_name; }

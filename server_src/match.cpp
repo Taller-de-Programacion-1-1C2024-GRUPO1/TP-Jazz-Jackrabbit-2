@@ -1,15 +1,13 @@
 #include "match.h"
 
-#define MAX_PLAYERS ConfigSingleton::getInstance().getMaxPlayers()
-
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
-             const std::string& match_name, bool* playing, int* status):
+             const Map& map, const std::string& match_name, bool* playing, int* status):
+        map(map),
         match_name(match_name),
         matches_protocols_queue(matches_protocols_queue),
         playing(playing),
         status(status),
         id_counter(0) {
-    // number_of_player = game_map.get_number_of_players();
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
@@ -35,7 +33,7 @@ void Match::run() {
         for (int cont = 0; cont < number_of_players; cont++) {
             if (has_started())
                 throw MatchAlreadyStarted();
-            if (number_of_players >= MAX_PLAYERS)
+            if (number_of_players >= map.get_max_players())
                 throw MatchFull();
             int current_id = id_counter;
 
@@ -50,7 +48,11 @@ void Match::run() {
             players.push_back(player);
             id_counter++;
         }
-        // crear el mapa
+        // enviar a cada jugador su id
+        send_players_ids();
+
+        // esperar a que todos los jugadores elijan su personaje
+        wait_for_players_to_choose_champion();
 
         // hay que agregar el game_map
         Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, playing);
@@ -65,6 +67,23 @@ void Match::run() {
     } catch (const ClosedQueue& err) {
         std::cerr << "Error: " << err.what() << std::endl;
     }
+}
+
+void Match::send_players_ids() {
+    /*
+    for (auto& player: players) {
+        player->send_id();
+    }
+    */
+}
+
+
+void Match::wait_for_players_to_choose_champion() {
+    /*
+    for (auto& player: players) {
+        player->wait_for_character();
+    }
+    */
 }
 
 void Match::delete_players() {
