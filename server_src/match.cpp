@@ -40,7 +40,9 @@ void Match::run() {
             // Desencolo el protocolo de los jugadores que se conectaron
             std::shared_ptr<ContainerProtocol> container_protocol = matches_protocols_queue->pop();
 
-            // game_map.add_player(current_id);
+            // struct{id, champion} , ContainerProtocol
+
+            // game.set_player(id, champion);
             Player* player = new Player(container_protocol, current_id, broadcaster_snapshots,
                                         clients_cmd_queue);
             player->start();
@@ -48,11 +50,6 @@ void Match::run() {
             players.push_back(player);
             id_counter++;
         }
-        // enviar a cada jugador su id
-        send_players_ids();
-
-        // esperar a que todos los jugadores elijan su personaje
-        wait_for_players_to_choose_champion();
 
         // hay que agregar el game_map
         Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, playing);

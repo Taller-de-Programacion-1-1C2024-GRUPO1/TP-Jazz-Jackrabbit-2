@@ -148,6 +148,7 @@ void Protocol::send_Match(MatchCommand* match) {
     send_uintEight(match->get_number_players());
     send_string(match->get_match_name());
     send_string(match->get_map_name());
+    send_uintEight(match->get_character_name());
 }
 
 void Protocol::send_Cheat(Cheats* cheat) {
@@ -267,7 +268,8 @@ std::shared_ptr<MatchCommand> Protocol::receive_Match() {
     uint8_t number_players = receive_uintEight();
     std::string match_name = receive_string();
     std::string map_name = receive_string();
-    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name);
+    ChampionType character_name = static_cast<ChampionType>(receive_uintEight());
+    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name, character_name);
 }
 
 std::shared_ptr<Cheats> Protocol::receive_Cheat() {
