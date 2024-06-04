@@ -78,7 +78,9 @@ public:
 
     void create_entities();
 
-    std::shared_ptr<Snapshot> get_snapshot() const;
+    std::shared_ptr<Snapshot> get_snapshot();
+
+    std::shared_ptr<Snapshot> get_init_snapshot();
 
     std::string get_name() const;
 

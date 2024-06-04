@@ -53,6 +53,11 @@ void Protocol::send_char(char c) {
     check_closed();
 }
 
+void Protocol::send_map(DynamicMap map) {
+    socket.sendall(&map, sizeof(map), &was_closed);
+    check_closed();
+}
+
 void Protocol::send_response(int ACK) {
     check_closed();
     send_uintEight(ACK);
@@ -94,6 +99,13 @@ char Protocol::receive_char() {
     socket.recvall(&c, sizeof(c), &was_closed);
     check_closed();
     return c;
+}
+
+DynamicMap Protocol::receive_map() {
+    DynamicMap map;
+    socket.recvall(&map, sizeof(map), &was_closed);
+    check_closed();
+    return map;
 }
 
 // Primer Response:
@@ -404,6 +416,7 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_amount);
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_width);
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_height);
+    send_map(snapshot.map_dimensions.map_data);
 }
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
@@ -489,7 +502,8 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_ammount = receive_uintThirtyTwo();
     uint32_t rabbit_width = receive_uintThirtyTwo();
     uint32_t rabbit_height = receive_uintThirtyTwo();
-    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount);
+    DynamicMap map_data = receive_map();
+    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {

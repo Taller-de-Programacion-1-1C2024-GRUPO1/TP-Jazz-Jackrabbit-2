@@ -35,6 +35,7 @@ class SpecialLori;
 class SpecialSpaz;
 class Information;
 class GameInfo;
+class DynamicMap;
 
 class Protocol {
 protected:
@@ -165,6 +166,10 @@ public:
     // Envia un char
     void send_char(char c);
     char receive_char();
+
+    // Envia un DynamicMap
+    void send_map(DynamicMap map);
+    DynamicMap receive_map();
 
     // Envia un ACK de que un jugador se unio a un match
     void send_response(int id);

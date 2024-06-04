@@ -4,22 +4,23 @@
 
 Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
                    BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
-                   bool* playing):
+                   Map& map, bool* playing):
         client_cmd_queue(client_cmd_queue),
         broadcaster_snapshots(broadcaster_snapshots),
         players(players),
+        map(map),
         playing(playing),
         game_ended(false) {
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
-std::shared_ptr<Snapshot> Gameloop::get_initial_snapshot(const Map& map) {
+void Gameloop::send_initial_snapshots() {
 
     // Se debe leer el mapa elegido por el usuario y crearlo
-    std::shared_ptr<Snapshot> snapshot = map.get_snapshot();
+    std::shared_ptr<Snapshot> snapshot = map.get_init_snapshot();
 
     // Enviar el snapshot inicial
-    return snapshot;
+    push_all_players(*snapshot);
 }
 
 void Gameloop::push_all_players(const Snapshot& snapshot) {
@@ -40,6 +41,7 @@ void Gameloop::run() {
         while (client_cmd_queue.try_pop(game_command)) {
             game_command->execute_Command();
         }
+
 
     } catch (ClosedQueue& err) {}
 }

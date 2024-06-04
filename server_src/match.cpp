@@ -13,8 +13,9 @@ Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protoco
 
 uint8_t Match::get_number_of_players() { return this->number_of_players; }
 
+/*
 void Match::send_game_initial(Gameloop game) {
-    std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot(map);
+    std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot();
     // Enviar a cada jugador su snapshot inicial
     for (auto& player: players) {
         Queue<std::shared_ptr<Snapshot>>& player_snapshot_queue = player->get_snapshots_queue();
@@ -25,6 +26,7 @@ void Match::send_game_initial(Gameloop game) {
         }
     }
 }
+*/
 
 void Match::run() {
     Queue<std::shared_ptr<Command>> clients_cmd_queue(QUEUE_MAX_SIZE);
@@ -51,10 +53,10 @@ void Match::run() {
         // Ya se conectaron todos los jugadores, se envian los ids de cada uno
         send_players_ids();
 
-        // hay que agregar el game_map
-        Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, playing);
+        Gameloop gameloop =
+                Gameloop(clients_cmd_queue, broadcaster_snapshots, players, map, playing);
         *status = MATCH_ALIVE;
-        send_game_initial(gameloop);
+        gameloop.send_initial_snapshots();
         gameloop.run();
 
         clients_cmd_queue.close();

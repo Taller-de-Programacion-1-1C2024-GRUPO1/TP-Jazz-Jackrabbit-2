@@ -113,10 +113,27 @@ int Map::get_max_players() { return this->max_players; }
 
 int Map::get_amount_players() { return this->amount_players; }
 
-std::shared_ptr<Snapshot> Map::get_snapshot() const {
-    Snapshot snapshot({}, {}, {}, {});
-    snapshot.set_dimensions(height, width, RABBIT_HEIGHT_DEFAULT, RABBIT_WIDTH_DEFAULT,
-                            amount_players);
+std::shared_ptr<Snapshot> Map::get_snapshot() {
+    // obtengo las snapshots de cada entidad
+    std::vector<RabbitSnapshot> rabbit_snapshots = get_rabbit_snapshot();
+    std::vector<ProjectileSnapshot> projectile_snapshots = get_projectile_snapshot();
+    std::vector<SupplySnapshot> supply_snapshots = get_supply_snapshot();
+    std::vector<EnemySnapshot> enemy_snapshots = get_enemy_snapshot();
+    // creo el snapshot
+    Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
+    return std::make_shared<Snapshot>(snapshot);
+}
+
+std::shared_ptr<Snapshot> Map::get_init_snapshot() {
+    // obtengo las snapshots de cada entidad
+    std::vector<RabbitSnapshot> rabbit_snapshots = get_rabbit_snapshot();
+    std::vector<ProjectileSnapshot> projectile_snapshots = get_projectile_snapshot();
+    std::vector<SupplySnapshot> supply_snapshots = get_supply_snapshot();
+    std::vector<EnemySnapshot> enemy_snapshots = get_enemy_snapshot();
+    // creo el snapshot
+    Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
+    snapshot.set_dimensions(height, width, RABBIT_WIDTH_DEFAULT, RABBIT_HEIGHT_DEFAULT,
+                            RABBIT_AMOUNT_DEFAULT, dynamic_map);
     return std::make_shared<Snapshot>(snapshot);
 }
 
@@ -153,7 +170,6 @@ std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
     }
     return enemy_snapshots;
 }
-
 
 void Map::create_entities() {
     int id_counter_enemy = 0;
