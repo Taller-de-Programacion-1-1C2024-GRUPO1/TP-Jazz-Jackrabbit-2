@@ -57,7 +57,6 @@ enum /* CHEATS */ {
     ADD_HEALTH = 0,
 };
 
-
 #define WAITING 0
 #define STARTED 1
 #define PLAYING -1

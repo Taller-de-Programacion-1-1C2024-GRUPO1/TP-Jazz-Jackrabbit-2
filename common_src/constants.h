@@ -49,6 +49,7 @@ enum /*Senders*/ {
     SEND_COMMAND_SIDE_KICK_SPAZ,
     SEND_COMMAND_SHORT_RANGE_JUMP_KICK_LORI,
     SEND_COMMAND_SELECT_CHAMPION,
+    SEND_GAME_INFO,
     ACK_JOINED_SUCCEED,
 };
 
@@ -65,9 +66,10 @@ enum /*MATCH TYPE*/ {
     REFRESH,
 };
 
-enum /*GAME TYPE*/ {
-    GAME_MAP = 0,
-    GAME_INFO,
+enum /*INFO TYPE*/ {
+    GAME_INFO = 1,
+    SELECT_CHARACTER_INFO,
+    GAME_MAP_INFO,
 };
 
 

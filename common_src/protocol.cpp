@@ -12,6 +12,8 @@
 #include "../game_src/commands/command_special_jazz.h"
 #include "../game_src/commands/command_special_lori.h"
 #include "../game_src/commands/command_special_spaz.h"
+#include "../game_src/game_info.h"
+#include "../game_src/information.h"
 
 // Protocol
 Protocol::Protocol(const std::string& host, const std::string& service):
@@ -235,7 +237,6 @@ void Protocol::send_Command(Command* command) {
     }
 }
 
-
 // ----------------------------- RECEIVE COMMANDS -----------------------------
 
 std::shared_ptr<Move> Protocol::receive_Move() {
@@ -335,8 +336,59 @@ std::shared_ptr<Command> Protocol::receive_Command() {
     }
 }
 
-// ----------------------------- SEND SNAPSHOTS -----------------------------
+// ----------------------------- SEND INFO -----------------------------
 
+void Protocol::send_GameInfo(GameInfo* gameInfo) {
+    check_closed();
+    send_uintEight(SEND_GAME_INFO);
+    std::map<std::string, std::string> matchesAvailable = gameInfo->getMatchesAvailable();
+    send_uintEight(matchesAvailable.size());
+    for (auto& match: matchesAvailable) {
+        send_string(match.first);
+        send_string(match.second);
+    }
+}
+
+void Protocol::send_Info(Information* info) {
+    check_closed();
+    int type = info->get_infoType();
+    if (type == SELECT_CHARACTER_INFO) {
+        // sendDynamic(dynamic_cast<DynamicMap*>(info));
+    } else if (type == GAME_INFO) {
+        send_GameInfo(dynamic_cast<GameInfo*>(info));
+    } else if (type == GAME_MAP_INFO) {
+        // sendMap(dynamic_cast<Map*>(info));
+    }
+}
+
+// ----------------------------- RECEIVE INFO -----------------------------
+
+GameInfo* Protocol::receive_GameInfo() {
+    check_closed();
+    std::map<std::string, std::string> matches_available;
+    int size_map = receive_uintEight();
+    for (int i = 0; i < size_map; i++) {
+        std::string matchName = receive_string();
+        std::string mapName = receive_string();
+        matches_available[matchName] = mapName;
+    }
+    return new GameInfo(matches_available);
+}
+
+std::shared_ptr<Information> Protocol::receive_Info() {
+    check_closed();
+    int type = receive_uintEight();
+    if (type == SELECT_CHARACTER_INFO) {
+        // return receiveDynamic();
+    } else if (type == GAME_INFO) {
+        return std::shared_ptr<Information>(receive_GameInfo());
+    } else if (type == GAME_MAP_INFO) {
+        // return receiveMap();
+    }
+    throw std::runtime_error("Invalid information");
+}
+
+// ----------------------------- SEND SNAPSHOTS -----------------------------
 
 void Protocol::send_dimensions(const Snapshot& snapshot) {
     std::cout << "Sending dimensions" << std::endl;

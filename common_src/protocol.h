@@ -2,6 +2,7 @@
 #define COMMON_PROTOCOLO_H
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
 #include <utility>
@@ -32,6 +33,8 @@ class SelectChampion;
 class SpecialJazz;
 class SpecialLori;
 class SpecialSpaz;
+class Information;
+class GameInfo;
 
 class Protocol {
 protected:
@@ -86,6 +89,12 @@ private:
 
     std::shared_ptr<SpecialSpaz> receive_SpecialSpaz();
 
+    // ------------------- SEND AND RECEIVE INFO -------------------
+
+    void send_GameInfo(GameInfo* gameInfo);
+
+    GameInfo* receive_GameInfo();
+
     // ------------------- SEND AND RECEIVE SNAPSHOTS -------------------
 
     void send_dimensions(const Snapshot& snapshot);
@@ -119,6 +128,8 @@ public:
     // Envia un Snapshot
     void send_Snapshot(Snapshot& snapshot);
 
+    void send_Info(Information* info);
+
     // ------------------- Funciones para Client -------------------
 
     // Envia un comando
@@ -126,6 +137,8 @@ public:
 
     // Recibe un Snapshot
     Snapshot receive_Snapshot();
+
+    std::shared_ptr<Information> receive_Info();
 
     // ------------------- Funciones para Client y Server -------------------
 

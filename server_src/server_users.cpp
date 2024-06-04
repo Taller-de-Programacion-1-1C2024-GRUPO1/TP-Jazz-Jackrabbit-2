@@ -66,10 +66,8 @@ void User::join_match(const std::string& match_name) {
 }
 
 void User::refresh() {
-    /*
-    GameInfo information(matches_monitor.show_matches_available());
-    container_protocol->protocol.send_info_matches(&info);
-    */
+    GameInfo info = GameInfo(monitor_matches.show_matches_availables());
+    info.send(container_protocol->protocol);
 }
 
 bool User::is_alive() { return status == ACTIVE; }

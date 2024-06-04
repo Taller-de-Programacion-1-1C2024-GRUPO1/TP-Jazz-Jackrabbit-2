@@ -10,6 +10,7 @@
 #include "../common_src/protocol.h"
 #include "../common_src/thread.h"
 #include "../game_src/commands/command_match.h"
+#include "../game_src/game_info.h"
 
 #include "constants_server.h"
 
@@ -17,6 +18,7 @@
 // #include "match_struct.h"
 #include "monitor_matches.h"
 #include "server_player.h"
+
 
 class User: public Thread {
 
