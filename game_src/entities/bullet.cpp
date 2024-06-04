@@ -1,47 +1,39 @@
 #include "bullet.h"
 
-#include "rabbit.h"
-#include "enemy.h"
-
 #include "../../physics_src/physical_map.h"
 
+#include "enemy.h"
+#include "rabbit.h"
+
 Bullet::Bullet(int init_pos_x, int init_pos_y, int bullet_speed, int damage, Rabbit& sender):
-        PhysicalObject(BLOCK_DIVISION/4, BLOCK_DIVISION/16, init_pos_x, init_pos_y),
+        PhysicalObject(BLOCK_DIVISION / 4, BLOCK_DIVISION / 16, init_pos_x, init_pos_y),
         damage(damage),
         sender(sender) {
     spe_x = bullet_speed;
 }
 
-void Bullet::check_colision_with(PhysicalMap& map){
+void Bullet::check_colision_with(PhysicalMap& map) {
     map.check_colision_with_map(pos_x, pos_y, width, height, this);
 }
 
-void Bullet::on_colision_with_map(){
-    kill();
-}
+void Bullet::on_colision_with_map() { kill(); }
 
-void Bullet::on_colision_with(PhysicalObject* object) {
-    object->on_colision_with_bullet(this);
-}
+void Bullet::on_colision_with(PhysicalObject* object) { object->on_colision_with_bullet(this); }
 
-void Bullet::on_colision_with_rabbit(Rabbit* rabbit){
-    if (rabbit != &sender){
-        rabbit->hit_by_bullet(this,damage);
+void Bullet::on_colision_with_rabbit(Rabbit* rabbit) {
+    if (rabbit != &sender) {
+        rabbit->hit_by_bullet(this, damage);
         kill();
     }
 }
 
-void Bullet::on_colision_with_enemy(Enemy* enemy){
-    enemy->hit_by_bullet(this,damage);
+void Bullet::on_colision_with_enemy(Enemy* enemy) {
+    enemy->hit_by_bullet(this, damage);
     kill();
 }
 
-void Bullet::bullet_killed_target(int amount_points){
-    sender.add_points(amount_points);
-}
+void Bullet::bullet_killed_target(int amount_points) { sender.add_points(amount_points); }
 
- int Bullet::get_damage() { 
-    return damage; 
-}
+int Bullet::get_damage() { return damage; }
 
 void Bullet::update() { pos_x += spe_x; }

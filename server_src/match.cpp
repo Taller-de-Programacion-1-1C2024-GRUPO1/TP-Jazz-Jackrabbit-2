@@ -1,17 +1,16 @@
 #include "match.h"
 
-Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
+Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
              const Map& map, const std::string& match_name, bool* playing, int* status):
         map(map),
         match_name(match_name),
-        matches_protocols_queue(matches_protocols_queue),
+        matches_protocols_players_queue(matches_protocols_players_queue),
         playing(playing),
-        status(status),
-        id_counter(0) {
+        status(status) {
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
-uint8_t Match::get_number_of_players() { return id_counter; }
+uint8_t Match::get_number_of_players() { return this->number_of_players; }
 
 void Match::send_game_initial(Gameloop game) {
     std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot(map);
@@ -35,20 +34,17 @@ void Match::run() {
                 throw MatchAlreadyStarted();
             if (number_of_players >= map.get_max_players())
                 throw MatchFull();
-            int current_id = id_counter;
 
             // Desencolo el protocolo de los jugadores que se conectaron
-            std::shared_ptr<ContainerProtocol> container_protocol = matches_protocols_queue->pop();
+            std::shared_ptr<PlayerInfo> player_info = matches_protocols_players_queue->pop();
 
-            // struct{id, champion} , ContainerProtocol
+            map.add_player(player_info->get_player_id(), player_info->get_character_name());
+            Player* player =
+                    new Player(player_info->get_container_protocol(), player_info->get_player_id(),
+                               broadcaster_snapshots, clients_cmd_queue);
 
-            // game.set_player(id, champion);
-            Player* player = new Player(container_protocol, current_id, broadcaster_snapshots,
-                                        clients_cmd_queue);
             player->start();
-
             players.push_back(player);
-            id_counter++;
         }
 
         // hay que agregar el game_map

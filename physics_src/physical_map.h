@@ -6,8 +6,8 @@
 #include <math.h>
 
 #include "../game_src/constants_game.h"
-#include "../game_src/entities/character.h"
 #include "../game_src/entities/bullet.h"
+#include "../game_src/entities/character.h"
 #include "../game_src/spawn_point.h"
 #include "SDL2/SDL.h"
 

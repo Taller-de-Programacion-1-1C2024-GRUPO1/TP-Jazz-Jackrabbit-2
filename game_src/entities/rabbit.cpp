@@ -1,28 +1,28 @@
 #include "rabbit.h"
 
+#include "../map.h"
+
 #include "bullet.h"
 #include "enemy.h"
+#include "gun.h"
 #include "item.h"
 #include "state.h"
-
-#include "../map.h"
-#include "gun.h"
 Rabbit::Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager):
-    Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
-    spawn_x(init_pos_x),
-    spawn_y(init_pos_y),
-    action(STAND),
-    acc_y(GRAVITY),
-    direction(LEFT),
-    manager(manager),
-    points(0),
-    current_gun(0) {
-        state = new Alive(*this);
-        gun_inventory.push_back(new BasicGun(*this, manager));
-    }
+        Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
+        spawn_x(init_pos_x),
+        spawn_y(init_pos_y),
+        action(STAND),
+        acc_y(GRAVITY),
+        direction(LEFT),
+        manager(manager),
+        points(0),
+        current_gun(0) {
+    state = new Alive(*this);
+    gun_inventory.push_back(new BasicGun(*this, manager));
+}
 
 void Rabbit::receive_damage(int damage) {
-    if (state->can_receive_damage()){
+    if (state->can_receive_damage()) {
         health -= damage;
         if (health <= 0) {
             set_state(new Dead(*this));
@@ -32,17 +32,15 @@ void Rabbit::receive_damage(int damage) {
     }
 }
 
-void Rabbit::add_points(int amount_of_points) { 
-    points += amount_of_points; 
+void Rabbit::add_points(int amount_of_points) {
+    points += amount_of_points;
     printf("Points: %d\n", points);
-    }
-
-void Rabbit::on_colision_with(PhysicalObject* object) {
-    object->on_colision_with_rabbit(this);
 }
 
+void Rabbit::on_colision_with(PhysicalObject* object) { object->on_colision_with_rabbit(this); }
 
-bool Rabbit::is_killed_by_taking_damage(int damage){
+
+bool Rabbit::is_killed_by_taking_damage(int damage) {
     bool killed = false;
     if (state->can_receive_damage()) {
         health -= damage;
@@ -58,8 +56,8 @@ bool Rabbit::is_killed_by_taking_damage(int damage){
 }
 
 
-void Rabbit::hit_by_bullet(Bullet* bullet,int damage) {
-    if (is_killed_by_taking_damage(damage)){
+void Rabbit::hit_by_bullet(Bullet* bullet, int damage) {
+    if (is_killed_by_taking_damage(damage)) {
         bullet->bullet_killed_target(POINTS_KILLING_RABBIT);
     }
 }
@@ -136,10 +134,10 @@ void Rabbit::update_action() {
 
     // CAMBIO DE ACCION
 
-    if(!on_floor){
+    if (!on_floor) {
         if (spe_y > 0) {
             action = FALLING;
-        } else  if (spe_y < 0){
+        } else if (spe_y < 0) {
             action = JUMPING;
         }
     } else if (spe_x == 0) {
@@ -190,7 +188,7 @@ void Rabbit::handle_events() {
                 shoot();
                 break;
             default:
-                break; 
+                break;
         }
     }
 }
@@ -233,28 +231,23 @@ void Rabbit::execute_run_fast_left() {
 // SHOOT
 void Rabbit::execute_shoot() {
     action = SHOOT;
-    if (direction == LEFT){
-        gun_inventory[current_gun]->fire(pos_x, pos_y+(height/2), direction);
+    if (direction == LEFT) {
+        gun_inventory[current_gun]->fire(pos_x, pos_y + (height / 2), direction);
     } else {
-        gun_inventory[current_gun]->fire(pos_x+width, pos_y+(height/2), direction);
+        gun_inventory[current_gun]->fire(pos_x + width, pos_y + (height / 2), direction);
     }
-    
 }
 // SPECIAL ATTACK
-void Rabbit::execute_special_attack() {
-    action = SPECIAL_ATTACK;
-}
+void Rabbit::execute_special_attack() { action = SPECIAL_ATTACK; }
 
 
-void Rabbit::jump(){state->jump();};
-void Rabbit::run_right(){state->run_right();};
-void Rabbit::run_fast_right(){state->run_fast_right();};
-void Rabbit::run_left(){state->run_left();};
-void Rabbit::run_fast_left(){state->run_fast_left();};
-void Rabbit::shoot(){
-    state->shoot();
-    };
-void Rabbit::special_attack(){state->special_attack();};
+void Rabbit::jump() { state->jump(); }
+void Rabbit::run_right() { state->run_right(); }
+void Rabbit::run_fast_right() { state->run_fast_right(); }
+void Rabbit::run_left() { state->run_left(); }
+void Rabbit::run_fast_left() { state->run_fast_left(); }
+void Rabbit::shoot() { state->shoot(); }
+void Rabbit::special_attack() { state->special_attack(); }
 
 // COLA
 void Rabbit::add_jump() { events_queue.push(EVENT_JUMP); }
@@ -264,12 +257,9 @@ void Rabbit::add_run_left() { events_queue.push(EVENT_RUN_LEFT); }
 void Rabbit::add_run_fast_left() { events_queue.push(EVENT_RUN_FAST_LEFT); }
 void Rabbit::add_shoot() { events_queue.push(EVENT_SHOOT); }
 
-void Rabbit::set_state(State* new_state){
+void Rabbit::set_state(State* new_state) {
     delete state;
     state = new_state;
-
 }
 
-Rabbit::~Rabbit() {
-    delete state;
-}
+Rabbit::~Rabbit() { delete state; }

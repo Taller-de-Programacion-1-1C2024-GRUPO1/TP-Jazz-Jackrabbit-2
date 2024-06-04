@@ -43,13 +43,13 @@ public:
         }
     }
 
-    //COLISONES CON ENTIDADES
-    virtual void on_colision_with(PhysicalObject* object) = 0;
+    // COLISONES CON ENTIDADES
+    virtual void on_colision_with(PhysicalObject* object) override {}
 
-    virtual void on_colision_with_enemy(Enemy* object){};
-    virtual void on_colision_with_rabbit(Rabbit* object){};
-    virtual void on_colision_with_item(Item* object){};
-    virtual void on_colision_with_bullet(Bullet* object){};
+    virtual void on_colision_with_enemy(Enemy* object) override {}
+    virtual void on_colision_with_rabbit(Rabbit* object) override {}
+    virtual void on_colision_with_item(Item* object) override {}
+    virtual void on_colision_with_bullet(Bullet* object) override {}
 
     // COLISIONES CON MAPA
     void check_colision_with_map();
@@ -60,8 +60,7 @@ public:
     void is_on_left_slope();
     void is_on_right_slope();
     void reset_map_colision_flags();
-    virtual ~Character(){};
+    virtual ~Character() {}
 };
-
 
 #endif

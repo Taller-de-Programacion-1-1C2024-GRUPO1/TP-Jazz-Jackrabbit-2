@@ -16,7 +16,7 @@ void Coin::on_colision_with_rabbit(Rabbit* rabbit) {
     kill();
 }
 
-void Gem::on_colision_with_rabbit(Rabbit* rabbit){
+void Gem::on_colision_with_rabbit(Rabbit* rabbit) {
     rabbit->add_points(GEM_POINTS);
     kill();
 }

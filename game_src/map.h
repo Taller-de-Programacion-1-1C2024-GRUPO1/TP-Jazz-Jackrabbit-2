@@ -43,7 +43,7 @@ public:
     void check_colision();
     void reap_dead();
     void update();
-    void add_player(int PlayerID);
+    void add_player(int PlayerID, ChampionType champion);
     void add_enemy(Enemy* enemy);
     void add_bullet(Bullet* bullet);
     void add_item(Item* item);

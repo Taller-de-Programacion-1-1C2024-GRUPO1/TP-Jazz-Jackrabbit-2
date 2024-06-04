@@ -24,6 +24,7 @@
 #include "config.h"
 #include "constants_server.h"
 #include "gameloop.h"
+#include "player_info.h"
 #include "server_player.h"
 
 
@@ -33,14 +34,13 @@ private:
     Map map;
 
     std::string match_name;
-    std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue;
+    std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue;
 
     int number_of_players;
     std::list<Player*> players;
 
     bool* playing;
     int* status;
-    int id_counter;
 
     void send_players_ids();
 
@@ -50,7 +50,7 @@ private:
 
 public:
     // falta agregar el game_map
-    Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
+    Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
           const Map& map, const std::string& match_name, bool* playing, int* status);
     ~Match();
 

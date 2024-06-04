@@ -22,6 +22,7 @@ private:
     bool sk_was_closed;
 
     int number_players;
+    int id_counter;
     std::list<User*> server_users;
 
     std::string map_routes;

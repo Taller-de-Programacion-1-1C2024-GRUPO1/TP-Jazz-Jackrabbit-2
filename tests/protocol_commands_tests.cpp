@@ -11,7 +11,6 @@
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/snapshots/snapshot.h"
-#include "../game_src/constants_game.h"
 #include "../game_src/commands/cheats.h"
 #include "../game_src/commands/command.h"
 #include "../game_src/commands/command_change_weapon.h"
@@ -24,6 +23,7 @@
 #include "../game_src/commands/command_special_jazz.h"
 #include "../game_src/commands/command_special_lori.h"
 #include "../game_src/commands/command_special_spaz.h"
+#include "../game_src/constants_game.h"
 
 const char* server_port = "8080";
 const char* ip = "localhost";
@@ -254,7 +254,6 @@ TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
     EXPECT_EQ(change_weapon->get_commandType(), received_change_weapon->get_commandType());
     delete change_weapon;
 }
-
 
 
 TEST(ProtocolTestMatch, SendAndReceiveMatch) {

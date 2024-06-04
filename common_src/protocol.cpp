@@ -55,7 +55,6 @@ void Protocol::send_char(char c) {
 
 void Protocol::send_user_joined_match(int ACK_JOINED) {
     check_closed();
-    send_uintEight(ACK_JOINED_SUCCEED);
     send_uintEight(ACK_JOINED);
 }
 
@@ -269,7 +268,8 @@ std::shared_ptr<MatchCommand> Protocol::receive_Match() {
     std::string match_name = receive_string();
     std::string map_name = receive_string();
     ChampionType character_name = static_cast<ChampionType>(receive_uintEight());
-    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name, character_name);
+    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name,
+                                          character_name);
 }
 
 std::shared_ptr<Cheats> Protocol::receive_Cheat() {

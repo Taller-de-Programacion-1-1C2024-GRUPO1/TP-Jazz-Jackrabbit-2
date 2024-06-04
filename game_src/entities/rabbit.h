@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <queue>
+#include <vector>
 
 #include "character.h"
 
@@ -58,18 +59,18 @@ public:
     void shoot();
     void special_attack();
 
-    //SHOOT
+    // SHOOT
 
 
     // COLISION
-    void on_colision_with(PhysicalObject* object);
-    //void on_colision_with_bullet(Bullet* bullet);
-    //void on_colision_with_enemy(Enemy* object);
-    //void on_colision_with_item(Item* object);
-    void hit_by_bullet(Bullet* bullet,int damage) ;
+    void on_colision_with(PhysicalObject* object) override;
+    // void on_colision_with_bullet(Bullet* bullet);
+    // void on_colision_with_enemy(Enemy* object);
+    // void on_colision_with_item(Item* object);
+    void hit_by_bullet(Bullet* bullet, int damage);
 
     bool is_killed_by_taking_damage(int damage);
-    void receive_damage(int damage);
+    void receive_damage(int damage) override;
     void add_points(int amount_of_points);
 
     // TESTING
@@ -84,7 +85,7 @@ public:
     void add_run_fast_left();
     void add_shoot();
 
-    //ESTADOS
+    // ESTADOS
     void set_state(State* state);
 
     void execute_jump();
@@ -95,6 +96,8 @@ public:
     void execute_shoot();
     void execute_special_attack();
 
+    Rabbit(const Rabbit&) = delete;
+    Rabbit& operator=(const Rabbit&) = delete;
     ~Rabbit();
 };
 

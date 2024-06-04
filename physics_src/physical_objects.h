@@ -48,10 +48,8 @@ public:
 
     bool colision_checker(int pos_x_A, int pos_y_A, int width_A, int height_A, int pos_x_B,
                           int pos_y_B, int width_B, int height_B) {
-        return  pos_x_A < pos_x_B + width_B &&
-                pos_x_A + width_A > pos_x_B &&
-                pos_y_A < pos_y_B + height_B && 
-                pos_y_A + height_A > pos_y_B;
+        return pos_x_A < pos_x_B + width_B && pos_x_A + width_A > pos_x_B &&
+               pos_y_A < pos_y_B + height_B && pos_y_A + height_A > pos_y_B;
     }
 
     void check_colision_with(PhysicalObject* second_object) {
@@ -65,13 +63,13 @@ public:
             first_object->on_colision_with(this);
         }
     }
-    
+
     virtual void on_colision_with(PhysicalObject* first_object) = 0;
 
-    virtual void on_colision_with_enemy(Enemy* second_object){};
-    virtual void on_colision_with_rabbit(Rabbit* second_object){};
-    virtual void on_colision_with_item(Item* second_object){};
-    virtual void on_colision_with_bullet(Bullet* second_object){};
+    virtual void on_colision_with_enemy(Enemy* second_object) {}
+    virtual void on_colision_with_rabbit(Rabbit* second_object) {}
+    virtual void on_colision_with_item(Item* second_object) {}
+    virtual void on_colision_with_bullet(Bullet* second_object) {}
 
 
     bool is_dead() { return dead; }

@@ -10,16 +10,17 @@ void PhysicalMap::load_map(const int* map_array) {
     }
 }
 
-void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int height, Bullet* bullet){
+void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int height,
+                                          Bullet* bullet) {
     int x0 = trunc((pos_x) / BLOCK_DIVISION);
     int y0 = trunc((pos_y) / BLOCK_DIVISION);
     int x2 = trunc((pos_x + width) / BLOCK_DIVISION);
     int y2 = trunc((pos_y + height) / BLOCK_DIVISION);
 
-    if (map[x0][y0]!=0 || map[x2][y2]!=0 || map[x0][y2]!=0 || map[x2][y0]!=0){
+    if (map[x0][y0] != 0 || map[x2][y2] != 0 || map[x0][y2] != 0 || map[x2][y0] != 0) {
         bullet->on_colision_with_map();
     }
-};
+}
 
 void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int height,
                                           Character* character) {

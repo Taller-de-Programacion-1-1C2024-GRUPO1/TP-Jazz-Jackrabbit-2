@@ -36,7 +36,8 @@ public:
     std::map<std::string, std::string> show_matches_availables();
 
     // Un determinado usuario se une a un match
-    int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo);
+    int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo,
+                   int id, ChampionType character_name);
 
     // Cierra los matches
     void close_matches();

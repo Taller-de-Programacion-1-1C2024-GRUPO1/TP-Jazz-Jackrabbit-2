@@ -70,8 +70,13 @@ void Map::reap_dead() {
 }
 
 
-void Map::add_player(int PlayerID) {
-    // players.insert(players.begin()+PlayerID, new Rabbit(0/*SPAWN X*/,0/*SPAWN Y*/,/*MAP*/));
+void Map::add_player(int PlayerID, ChampionType champion) {
+    /*
+    for (auto rabbit: players) {
+        // rabbit->set_id(PlayerID);
+        // rabbit->set_champion(champion);
+    }
+    */
 }
 
 void Map::add_enemy(Enemy* enemy) { enemies.push_back(enemy); }
@@ -149,7 +154,8 @@ std::vector<SupplySnapshot> Map::get_supply_snapshot() {
 void Map::create_entities() {
     for (int i = 0; i < amount_players; i++) {
         players.push_back(new Rabbit(spawn_points[RABBIT_SPAWN].at(i).get_x(),
-                                     spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,*this));
+                                     spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,
+                                     *this));
     }
     for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
         enemies.push_back(new Enemy(spawn_points[CRAB_SPAWN].at(i).get_x(),
