@@ -53,9 +53,14 @@ void Protocol::send_char(char c) {
     check_closed();
 }
 
-void Protocol::send_user_joined_match(int ACK_JOINED) {
+
+// Primer Response:
+// envia un ACK 0 en caso de haberse unido/creado un match
+// envia un ACK negativo (-1) en caso de no poder unirse/crear un match
+// Segundo response:
+// envia un ACK positivo (player_id) justo antes de iniciar la match
+void Protocol::send_response(int ACK_JOINED) {
     check_closed();
-    send_uintEight(ACK_JOINED_SUCCEED);
     send_uintEight(ACK_JOINED);
 }
 
@@ -103,7 +108,7 @@ char Protocol::receive_char() {
 // recibe un ACK negativo (-1) en caso de no poder unirse/crear un match
 // Segundo response:
 // recibe un ACK positivo (player_id) justo antes de iniciar la match
-int Protocol::receive_user_joined_match() {
+int Protocol::receive_response() {
     check_closed();
     uint8_t ACK_JOINED = receive_uintEight();
     return ACK_JOINED;

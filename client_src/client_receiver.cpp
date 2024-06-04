@@ -16,7 +16,7 @@ void ClientReceiver::run() {
     while (keep_talking) {
         try {
             if (!game_started) {
-                int response = this->protocol.receive_user_joined_match();
+                int response = this->protocol.receive_response();
                 q_responses.push(response);
             } else {
                 Snapshot snap = this->protocol.receive_Snapshot();

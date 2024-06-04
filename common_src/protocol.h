@@ -163,8 +163,8 @@ public:
     char receive_char();
 
     // Envia un ACK de que un jugador se unio a un match
-    void send_user_joined_match(int ACK_JOINED);
-    int receive_user_joined_match();
+    void send_response(int ACK_JOINED);
+    int receive_response();
 
     // Chequea si el socket fue cerrado
     bool is_close();
