@@ -101,6 +101,8 @@ private:
 
     void send_rabbits(Snapshot& snapshot);
 
+    void send_enemies(Snapshot& snapshot);
+
     void send_projectiles(Snapshot& snapshot);
 
     void send_supplies(Snapshot& snapshot);
@@ -108,6 +110,8 @@ private:
     void receive_dimensions(Snapshot& snapshot);
 
     void receive_rabbits(Snapshot& snapshot);
+
+    void receive_enemies(Snapshot& snapshot);
 
     void receive_projectiles(Snapshot& snapshot);
 
@@ -163,8 +167,8 @@ public:
     char receive_char();
 
     // Envia un ACK de que un jugador se unio a un match
-    void send_user_joined_match(int ACK_JOINED);
-    int receive_user_joined_match();
+    void send_response(int id);
+    int receive_response();
 
     // Chequea si el socket fue cerrado
     bool is_close();

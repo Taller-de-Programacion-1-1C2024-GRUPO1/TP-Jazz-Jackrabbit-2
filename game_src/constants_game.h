@@ -27,9 +27,9 @@ enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, TURTLE };
 
 enum SupplyType : uint8_t {
     HEALTH_CARROT,
-    AMMO_SUPPLY,
-    GEM_SUPPLY,
-    COIN_SUPPLY,
+    AMMO,
+    GEM,
+    COIN,
 };
 
 // PLAYER CONSTANTS
@@ -69,12 +69,17 @@ enum /* CHEATS */ {
 #define STARTED 1
 #define PLAYING -1
 
+#define NULL_ID -1
+#define NULL_CHAMPION -1
+
 // ----------------- Messurements -----------------
 
-#define ENEMY_INITIAL_HEALTH 100  // Se puede modificar
+#define ENEMY_INITIAL_HEALTH 3  // Se puede modificar
 
-#define RABBIT_WIDTH_DEFAULT 32   // modificar
-#define RABBIT_HEIGHT_DEFAULT 32  // modificar
+#define BLOCK_DIVISION 32
+
+#define RABBIT_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
+#define RABBIT_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
 
 #define RABBIT_AMOUNT_DEFAULT 1  // modificar
 

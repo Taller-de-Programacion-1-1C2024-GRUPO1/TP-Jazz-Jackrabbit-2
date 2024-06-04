@@ -32,6 +32,8 @@ void User::run() {
     }
 }
 
+// J1, crea la partida -> "joinea"
+
 void User::create_new_match(int number_of_players, const std::string& match_name,
                             const std::string& map_name, ChampionType character_name) {
 
@@ -51,7 +53,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
             std::make_shared<MatchInfo>(match_name, map, protocols_queue, playing);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
-    container_protocol->protocol.send_user_joined_match(ACK);
+    container_protocol->protocol.send_response(ACK);
     if (ACK == ERROR) {
         return;
     }
@@ -66,7 +68,7 @@ void User::join_match(const std::string& match_name, ChampionType character_name
         return;
     }
     // enviar mensaje de que se unio correctamente
-    container_protocol->protocol.send_user_joined_match(ACK);
+    container_protocol->protocol.send_response(ACK);
     this->status = INACTIVE;
 }
 

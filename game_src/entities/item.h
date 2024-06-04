@@ -8,8 +8,6 @@ class Rabbit;
 #define COIN_POINTS 100
 #define GEM_POINTS 200
 
-enum ItemType { COIN, GEM, AMMO };
-
 class Item: public PhysicalObject {
     int id;
     int type;

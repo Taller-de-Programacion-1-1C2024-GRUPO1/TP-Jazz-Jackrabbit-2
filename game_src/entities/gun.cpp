@@ -41,7 +41,7 @@ bool BasicGun::has_ammo() { return true; }
 
 void BasicGun::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
-        manager.add_bullet(new Bullet(pos_x, pos_y, direction * bullet_speed, damage, owner));
+        manager.add_bullet(new Bullet(0, 0, pos_x, pos_y, direction * bullet_speed, damage, owner));
         fire_cooldown = BASIC_GUN_FIRE_COOLDOWN;
     }
 }
@@ -54,7 +54,7 @@ bool MachineGun::has_ammo() { return ammo > 0; }
 
 void MachineGun::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
-        manager.add_bullet(new Bullet(pos_x, pos_y, direction * bullet_speed, damage, owner));
+        manager.add_bullet(new Bullet(0, 0, pos_x, pos_y, direction * bullet_speed, damage, owner));
         fire_cooldown = MACHINEGUN_FIRE_COOLDOWN;
     }
 }
@@ -66,7 +66,7 @@ bool Sniper::has_ammo() { return ammo > 0; }
 
 void Sniper::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
-        manager.add_bullet(new Bullet(pos_x, pos_y, direction * bullet_speed, damage, owner));
+        manager.add_bullet(new Bullet(0, 0, pos_x, pos_y, direction * bullet_speed, damage, owner));
         fire_cooldown = SNIPER_FIRE_COOLDOWN;
     }
 }

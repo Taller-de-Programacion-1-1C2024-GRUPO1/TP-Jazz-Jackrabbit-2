@@ -108,7 +108,7 @@ void Map::set_max_players(int max_players) { this->max_players = max_players; }
 int Map::get_max_players() { return this->max_players; }
 
 std::shared_ptr<Snapshot> Map::get_snapshot() const {
-    Snapshot snapshot({}, {}, {});
+    Snapshot snapshot({}, {}, {}, {});
     snapshot.set_dimensions(height, width, RABBIT_HEIGHT_DEFAULT, RABBIT_WIDTH_DEFAULT,
                             amount_players);
     return std::make_shared<Snapshot>(snapshot);
@@ -150,30 +150,39 @@ std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
 
 
 void Map::create_entities() {
+    int id_counter_enemy = 0;
+    int id_counter_supply = 0;
     for (int i = 0; i < amount_players; i++) {
-        players.push_back(new Rabbit(spawn_points[RABBIT_SPAWN].at(i).get_x(),
+        players.push_back(new Rabbit(NULL_CHAMPION, spawn_points[RABBIT_SPAWN].at(i).get_x(),
                                      spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,
                                      *this));
     }
     for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(spawn_points[CRAB_SPAWN].at(i).get_x(),
+        enemies.push_back(new Enemy(id_counter_enemy, CRAB, spawn_points[CRAB_SPAWN].at(i).get_x(),
                                     spawn_points[CRAB_SPAWN].at(i).get_y(), physical_map));
+        id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[LIZARD_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(spawn_points[LIZARD_SPAWN].at(i).get_x(),
+        enemies.push_back(new Enemy(id_counter_enemy, LIZARD,
+                                    spawn_points[LIZARD_SPAWN].at(i).get_x(),
                                     spawn_points[LIZARD_SPAWN].at(i).get_y(), physical_map));
+        id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[TURTLE_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(spawn_points[TURTLE_SPAWN].at(i).get_x(),
+        enemies.push_back(new Enemy(id_counter_enemy, TURTLE,
+                                    spawn_points[TURTLE_SPAWN].at(i).get_x(),
                                     spawn_points[TURTLE_SPAWN].at(i).get_y(), physical_map));
+        id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[COIN_SPAWN].size(); i++) {
-        items.push_back(new Item(spawn_points[COIN_SPAWN].at(i).get_x(),
+        items.push_back(new Coin(id_counter_supply, spawn_points[COIN_SPAWN].at(i).get_x(),
                                  spawn_points[COIN_SPAWN].at(i).get_y()));
+        id_counter_supply++;
     }
     for (int i = 0; i < spawn_points[GEM_SPAWN].size(); i++) {
-        items.push_back(new Item(spawn_points[GEM_SPAWN].at(i).get_x(),
-                                 spawn_points[GEM_SPAWN].at(i).get_y()));
+        items.push_back(new Gem(id_counter_supply, spawn_points[GEM_SPAWN].at(i).get_x(),
+                                spawn_points[GEM_SPAWN].at(i).get_y()));
+        id_counter_supply++;
     }
 }
 

@@ -33,11 +33,12 @@ public:
      * Además, tiene las dimensiones del mapa para que el cliente pueda renderizarlo correctamente
      */
     std::vector<RabbitSnapshot> rabbits;
+    std::vector<EnemySnapshot> enemies;
     std::vector<ProjectileSnapshot> projectiles;
     std::vector<SupplySnapshot> supplies;
     MapDimensions_t map_dimensions;
 
-    Snapshot(const std::vector<RabbitSnapshot>& rabbits,
+    Snapshot(const std::vector<RabbitSnapshot>& rabbits, const std::vector<EnemySnapshot>& enemies,
              const std::vector<ProjectileSnapshot>& projectiles,
              const std::vector<SupplySnapshot>& supplies):
             rabbits(rabbits), projectiles(projectiles), supplies(supplies), map_dimensions() {}

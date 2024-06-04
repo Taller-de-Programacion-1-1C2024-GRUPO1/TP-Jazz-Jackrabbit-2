@@ -46,6 +46,7 @@ void Match::run() {
             player->start();
             players.push_back(player);
         }
+        send_players_ids();
 
         // hay que agregar el game_map
         Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, playing);

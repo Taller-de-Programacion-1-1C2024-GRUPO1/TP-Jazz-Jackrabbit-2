@@ -11,8 +11,6 @@
 #include "../game_src/spawn_point.h"
 #include "SDL2/SDL.h"
 
-#define BLOCK_DIVISION 32  // Lado de un bloque mapa
-
 class Character;
 /*
 0 = Vacio

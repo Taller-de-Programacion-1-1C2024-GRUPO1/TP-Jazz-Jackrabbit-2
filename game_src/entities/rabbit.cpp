@@ -7,10 +7,9 @@
 #include "gun.h"
 #include "item.h"
 #include "state.h"
-Rabbit::Rabbit(int id, int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map,
-               Map& manager):
+Rabbit::Rabbit(int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager):
         Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
-        id(id),
+        id(NULL_ID),
         champion_type(champion_type),
         spawn_x(init_pos_x),
         spawn_y(init_pos_y),
@@ -23,6 +22,8 @@ Rabbit::Rabbit(int id, int champion_type, int init_pos_x, int init_pos_y, Physic
     state = new Alive(*this);
     gun_inventory.push_back(new BasicGun(*this, manager));
 }
+
+void Rabbit::set_rabbit_id(int id) { this->id = id; }
 
 void Rabbit::receive_damage(int damage) {
     if (state->can_receive_damage()) {

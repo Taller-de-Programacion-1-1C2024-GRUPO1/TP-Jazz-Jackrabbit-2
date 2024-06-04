@@ -4,7 +4,7 @@
 
 #include "bullet.h"
 #include "rabbit.h"
-#define ENEMY_INITIAL_HEALTH 3
+
 #define POINTS_KILLING_ENEMY 300
 
 Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map):

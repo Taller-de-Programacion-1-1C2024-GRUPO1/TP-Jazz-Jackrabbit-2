@@ -10,13 +10,9 @@ class Rabbit;
 class Item;
 class Bullet;
 
-
-#define BLOCK_DIVISION 32  // Lado de un bloque mapa
-
 // FPS
 #define UPDATE_RATE 60
 #define DELTA_TIME 1000 / UPDATE_RATE
-
 
 /*
 NOTAS:

@@ -46,8 +46,8 @@ private:
     const int acc_y;
 
 public:
-    Rabbit(int id, int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map,
-           Map& manager);
+    Rabbit(int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager);
+    void set_rabbit_id(int id);
     void update();
     void update_action();
     void update_position();
