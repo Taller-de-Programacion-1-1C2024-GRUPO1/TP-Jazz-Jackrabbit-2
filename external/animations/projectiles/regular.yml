@@ -1,6 +1,5 @@
 Move:
   frames: 3
-  speed: 100
   loop: false
   sound: ""
   rects:

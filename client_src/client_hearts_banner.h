@@ -10,11 +10,11 @@ private:
     SDL2pp::Renderer& renderer;
     SDL2pp::Texture texture;
     SDL2pp::Rect heartRect;
-    int heartCount;
+    int livesCounter;
 
 public:
     explicit HeartsBanner(SDL2pp::Renderer& renderer);
-    void setHearts(int heartCount);
+    void setCurrentLives(int livesCount);
     void render();
 };
 

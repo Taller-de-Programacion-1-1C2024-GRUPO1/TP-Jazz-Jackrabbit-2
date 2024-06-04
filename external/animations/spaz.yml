@@ -1,6 +1,5 @@
 Idle:
   frames: 5
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -27,7 +26,6 @@ Idle:
 
 Run:
   frames: 8
-  speed: 100
   loop: true
   sound: ""
   rects:

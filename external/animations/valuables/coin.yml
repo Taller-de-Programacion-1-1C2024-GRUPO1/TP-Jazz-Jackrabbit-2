@@ -1,6 +1,5 @@
-Coin-flip:
+Flip:
   frames: 20
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -85,41 +84,3 @@ Coin-flip:
       w: 25
       h: 27
 
-Diamond-flip:
-  frames: 8
-  speed: 100
-  loop: true
-  sound: ""
-  rects:
-    - x: 147
-      y: 1241
-      w: 29
-      h: 30
-    - x: 176
-      y: 1241
-      w: 28
-      h: 30
-    - x: 204
-      y: 1241
-      w: 29
-      h: 30
-    - x: 233
-      y: 1241
-      w: 29
-      h: 30
-    - x: 262
-      y: 1241
-      w: 29
-      h: 30
-    - x: 291
-      y: 1241
-      w: 29
-      h: 30
-    - x: 320
-      y: 1241
-      w: 29
-      h: 30
-    - x: 349
-      y: 1241
-      w: 29
-      h: 30

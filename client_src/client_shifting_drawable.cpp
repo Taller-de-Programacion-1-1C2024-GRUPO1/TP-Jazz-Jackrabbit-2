@@ -9,10 +9,11 @@ ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, const std::string
                                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
                                    SoundManager& soundManager):
         Drawable(renderer, path, cp, textureRect, onMapRect),
-        currentAnimation(Animation()),
+        currentAnimation(new Animation()),
         angle(0),
         direction(0),
-        soundManager(soundManager) {
+        soundManager(soundManager),
+        iterationsBeetweenFrames(4) {
     SDL2pp::Surface surface(path);
     SDL_SetColorKey(surface.Get(), SDL_TRUE,
                     SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
@@ -44,7 +45,7 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
     }
 }
 
-void ShiftingDrawable::render(SDL2pp::Renderer& renderer) {
+void ShiftingDrawable::render() {
     renderer.Copy(texture, textureRect, adjustPosition(), angle, SDL2pp::Point(0, 0),
                   direction == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
@@ -55,16 +56,20 @@ void ShiftingDrawable::update() {
 
     textureRect =
             currentAnimation->frameRects[currentAnimation->currentFrame % currentAnimation->frames];
-    if (currentAnimation->justOneLoop &&
-        currentAnimation->currentFrame == currentAnimation->frames - 1) {
-        return;
+    if (iterationsBeetweenFrames == 0) {
+        iterationsBeetweenFrames = 4;
+        if (currentAnimation->justOneLoop &&
+            currentAnimation->currentFrame == currentAnimation->frames - 1) {
+            return;
+        } else {
+            currentAnimation->currentFrame++;
+        }
     } else {
-        currentAnimation->currentFrame++;
+        iterationsBeetweenFrames--;
     }
 }
 
 void ShiftingDrawable::setAngle(int newAngle) { angle = newAngle; }
-
 void ShiftingDrawable::setDirection(int dir) { direction = dir; }
 
 void ShiftingDrawable::setAnimation(const char* name) {
@@ -73,6 +78,7 @@ void ShiftingDrawable::setAnimation(const char* name) {
     }
     currentAnimation->currentFrame = 0;
     currentAnimation = &animations[name];
+    iterationsBeetweenFrames = 4;
     if (!currentAnimation->sound.empty()) {
         soundManager.playSoundEffect(currentAnimation->sound);
     }
@@ -80,11 +86,27 @@ void ShiftingDrawable::setAnimation(const char* name) {
 
 void ShiftingDrawable::reajustFrame(int framesToAdvance) {
     std::cout << "Reajusting frame to: " << framesToAdvance << std::endl;
-    if (currentAnimation->justOneLoop) {
-        if (currentAnimation->currentFrame + framesToAdvance >= currentAnimation->frames) {
-            currentAnimation->currentFrame = currentAnimation->frames - 1;
-        }
+
+    if (framesToAdvance - iterationsBeetweenFrames < 0) {
+        iterationsBeetweenFrames -= framesToAdvance;
     } else {
-        currentAnimation->currentFrame += framesToAdvance;
+        int remainingFrames = framesToAdvance - iterationsBeetweenFrames;
+        int animationFramesToAdvance = remainingFrames / 4;
+        animationFramesToAdvance += 1;
+        iterationsBeetweenFrames = (4 + remainingFrames) % 4;
+        if (iterationsBeetweenFrames == 0) {
+            iterationsBeetweenFrames = 4;
+        }
+
+        if (currentAnimation->justOneLoop) {
+            if (currentAnimation->currentFrame + animationFramesToAdvance >=
+                currentAnimation->frames) {
+                currentAnimation->currentFrame = currentAnimation->frames - 1;
+            }
+        } else {
+            currentAnimation->currentFrame += animationFramesToAdvance;
+        }
     }
 }
+// si framestoadvance = 12, y iterations = 4,
+// si framestoadvance = 7, y iteracion = 2,

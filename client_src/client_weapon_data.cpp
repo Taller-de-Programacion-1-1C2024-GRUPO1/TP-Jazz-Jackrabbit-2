@@ -13,14 +13,13 @@ void WeaponData::initialize() {
 
 SDL2pp::Rect WeaponData::getWeapon(int id) { return weaponMap[id]; }
 
-void WeaponData::loadAnimationsToProjectile(int id, ShiftingDrawable& projectile) {
+void WeaponData::loadAnimationsToProjectile(int id, ShiftingDrawable* projectile) {
     switch (id) {
         case 0:
-            projectile.loadAnimations("../external/animations/projectiles/regular.yml");
+            projectile->loadAnimations("../external/animations/projectiles/regular.yml");
             break;
         case 1:
-            projectile.loadAnimations("../external/animations/projectiles/blue_ray.yml");
+            projectile->loadAnimations("../external/animations/projectiles/blue_ray.yml");
             break;
     }
-    projectile.setAnimation("Move");
 }

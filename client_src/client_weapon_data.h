@@ -14,7 +14,8 @@ private:
 public:
     static void initialize();
     static SDL2pp::Rect getWeapon(int id);
-    static void loadAnimationsToProjectile(int id, ShiftingDrawable& projectile);
+    static void loadAnimationsToProjectile(int id, ShiftingDrawable* projectile);
 };
+
 
 #endif  // CLIENT_WEAPON_DATA_H

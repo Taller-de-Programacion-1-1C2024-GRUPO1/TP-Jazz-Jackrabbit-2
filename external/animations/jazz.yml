@@ -1,6 +1,5 @@
 Idle:
   frames: 27
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -115,7 +114,6 @@ Idle:
 
 Walk:
   frames: 8
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -154,7 +152,6 @@ Walk:
 
 Run:
   frames: 8
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -193,7 +190,6 @@ Run:
 
 Jump:
   frames: 17
-  speed: 70
   loop: true
   sound: ""
   rects:
@@ -268,7 +264,6 @@ Jump:
 
 Dash:
   frames: 4
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -315,7 +310,6 @@ Dash:
 
 Stop-dashing:
   frames: 4
-  speed: 100
   loop: false
   sound: ""
   rects:
@@ -346,7 +340,6 @@ Stop-dashing:
 
 Intoxicated-Idle:
   frames: 8
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -385,7 +378,6 @@ Intoxicated-Idle:
 
 Intoxicated-Run:
   frames: 12
-  speed: 100
   loop: true
   sound: ""
   rects:
@@ -440,7 +432,6 @@ Intoxicated-Run:
 
 Shoot:
   frames: 6
-  speed: 100
   loop: false
   sound: "Shooting"
   rects:
@@ -471,7 +462,6 @@ Shoot:
 
 Hurt:
   frames: 9
-  speed: 100
   loop: false
   sound: "Jazz-Auch"
   rects:
@@ -514,7 +504,6 @@ Hurt:
 
 Die:
   frames: 10
-  speed: 100
   loop: false
   sound: ""
   rects:

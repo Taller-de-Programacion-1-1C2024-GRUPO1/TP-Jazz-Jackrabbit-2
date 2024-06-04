@@ -18,6 +18,7 @@ private:
     double angle;
     int direction;
     SoundManager& soundManager;
+    int iterationsBeetweenFrames;
 
 public:
     ShiftingDrawable(SDL2pp::Renderer& renderer, const std::string& path, const SDL_Color& colorKey,
@@ -25,7 +26,7 @@ public:
                      SoundManager& soundManager);
 
     void loadAnimations(const std::string& path);
-    void render(SDL2pp::Renderer& renderer);
+    void render();
     void update();
     void setAngle(int angle);
     void setDirection(int dir);
