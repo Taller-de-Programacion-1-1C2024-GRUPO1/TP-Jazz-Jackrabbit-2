@@ -22,7 +22,7 @@ class Character;
 
 class PhysicalMap {
 public:
-    int map[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]; 
+    int map[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT];
     void load_map(const int* map);
     PhysicalMap();
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Character* character);
