@@ -18,7 +18,8 @@ enum /*COMMAND TYPE*/ {
 };
 
 enum ChampionType : uint8_t {
-    Jazz = 0,
+    NULL_CHAMPION_TYPE = 0,
+    Jazz,
     Spaz,
     Lori,
 };
@@ -70,7 +71,6 @@ enum /* CHEATS */ {
 #define PLAYING -1
 
 #define NULL_ID -1
-#define NULL_CHAMPION -1
 
 // ----------------- Messurements -----------------
 

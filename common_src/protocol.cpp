@@ -579,6 +579,7 @@ Snapshot Protocol::receive_Snapshot() {
     Snapshot snapshot;
     receive_dimensions(snapshot);
     receive_rabbits(snapshot);
+    receive_enemies(snapshot);
     receive_projectiles(snapshot);
     receive_supplies(snapshot);
     return snapshot;

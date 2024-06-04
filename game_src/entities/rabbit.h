@@ -30,7 +30,7 @@ enum EVENTS {
 class Rabbit: public Character {
 private:
     int id;
-    int champion_type;
+    uint8_t champion_type;
     int points;
     int action;
     const int spawn_x;
@@ -46,8 +46,10 @@ private:
     const int acc_y;
 
 public:
-    Rabbit(int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager);
+    Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager);
     void set_rabbit_id(int id);
+    void set_champion(uint8_t champion_type);
+    int get_rabbit_id();
     void update();
     void update_action();
     void update_position();

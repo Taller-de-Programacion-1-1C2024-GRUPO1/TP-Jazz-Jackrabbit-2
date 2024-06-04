@@ -1,7 +1,11 @@
 #include "map.h"
 
 Map::Map(int width, int height, int amount_players, const std::string& map_name):
-        map_name(map_name), width(width), height(height), amount_players(amount_players) {}
+        map_name(map_name),
+        width(width),
+        height(height),
+        amount_players(amount_players),
+        max_players(0) {}
 
 
 void Map::check_colision() {
@@ -69,14 +73,14 @@ void Map::reap_dead() {
     }
 }
 
-
 void Map::add_player(int PlayerID, ChampionType champion) {
-    /*
-    for (auto rabbit: players) {
-        // rabbit->set_id(PlayerID);
-        // rabbit->set_champion(champion);
+    for (auto& player: players) {
+        if (player->get_rabbit_id() == NULL_ID) {
+            player->set_rabbit_id(PlayerID);
+            player->set_champion(champion);
+            return;
+        }
     }
-    */
 }
 
 void Map::add_enemy(Enemy* enemy) { enemies.push_back(enemy); }
@@ -106,6 +110,8 @@ void Map::set_amount_players(int amount_players) { this->amount_players = amount
 void Map::set_max_players(int max_players) { this->max_players = max_players; }
 
 int Map::get_max_players() { return this->max_players; }
+
+int Map::get_amount_players() { return this->amount_players; }
 
 std::shared_ptr<Snapshot> Map::get_snapshot() const {
     Snapshot snapshot({}, {}, {}, {});
@@ -153,7 +159,7 @@ void Map::create_entities() {
     int id_counter_enemy = 0;
     int id_counter_supply = 0;
     for (int i = 0; i < amount_players; i++) {
-        players.push_back(new Rabbit(NULL_CHAMPION, spawn_points[RABBIT_SPAWN].at(i).get_x(),
+        players.push_back(new Rabbit(NULL_CHAMPION_TYPE, spawn_points[RABBIT_SPAWN].at(i).get_x(),
                                      spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,
                                      *this));
     }

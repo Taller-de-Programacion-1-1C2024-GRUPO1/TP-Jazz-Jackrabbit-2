@@ -32,8 +32,6 @@ void User::run() {
     }
 }
 
-// J1, crea la partida -> "joinea"
-
 void User::create_new_match(int number_of_players, const std::string& match_name,
                             const std::string& map_name, ChampionType character_name) {
 

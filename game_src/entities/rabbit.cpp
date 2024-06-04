@@ -7,7 +7,8 @@
 #include "gun.h"
 #include "item.h"
 #include "state.h"
-Rabbit::Rabbit(int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager):
+Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map,
+               Map& manager):
         Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
         id(NULL_ID),
         champion_type(champion_type),
@@ -24,6 +25,10 @@ Rabbit::Rabbit(int champion_type, int init_pos_x, int init_pos_y, PhysicalMap& m
 }
 
 void Rabbit::set_rabbit_id(int id) { this->id = id; }
+
+void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champion_type; }
+
+int Rabbit::get_rabbit_id() { return id; }
 
 void Rabbit::receive_damage(int damage) {
     if (state->can_receive_damage()) {

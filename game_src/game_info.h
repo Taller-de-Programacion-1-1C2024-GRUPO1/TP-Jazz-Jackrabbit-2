@@ -15,7 +15,7 @@ private:
     int InfoType = GAME_INFO;
 
 public:
-    explicit GameInfo(std::map<std::string, std::string> matchesAvailable);
+    explicit GameInfo(const std::map<std::string, std::string>& matchesAvailable);
     void send(Protocol& protocol) override;
     int get_infoType() override;
     std::map<std::string, std::string> getMatchesAvailable();

@@ -66,6 +66,8 @@ public:
 
     void set_max_players(int max_players);
 
+    int get_amount_players();
+
     DynamicMap get_dynamic_map() const;
 
     PhysicalMap get_physical_map() const;
