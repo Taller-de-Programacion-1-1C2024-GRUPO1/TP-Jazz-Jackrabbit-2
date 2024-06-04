@@ -3,26 +3,35 @@
 
 #include "../../physics_src/physical_objects.h"
 
+class Rabbit;
+#define COIN_POINTS 100
+#define GEM_POINTS 200
+
 class Item: public PhysicalObject {
 public:
-    Item(int init_pos_x, int init_pos_y):
-            PhysicalObject(BLOCK_DIVISION, BLOCK_DIVISION, init_pos_x, init_pos_y) {}
+    Item(int init_pos_x, int init_pos_y);
+    void on_colision_with(PhysicalObject* object){};
+    virtual void on_colision_with_rabbit(Rabbit* rabbit){};
 };
+
+
 
 class Coin: public Item {
 public:
-    Coin(int init_pos_x, int init_pos_y): Item(init_pos_x, init_pos_y) {}
+    Coin(int init_pos_x, int init_pos_y);
+    void on_colision_with_rabbit(Rabbit* rabbit);
 };
 
 class Gem: public Item {
 public:
-    Gem(int init_pos_x, int init_pos_y): Item(init_pos_x, init_pos_y) {}
+    Gem(int init_pos_x, int init_pos_y);
+    void on_colision_with_rabbit(Rabbit* rabbit);
 };
 
 
 class Ammo: public Item {
 public:
-    Ammo(int init_pos_x, int init_pos_y): Item(init_pos_x, init_pos_y) {}
+    Ammo(int init_pos_x, int init_pos_y);
 };
 
 #endif

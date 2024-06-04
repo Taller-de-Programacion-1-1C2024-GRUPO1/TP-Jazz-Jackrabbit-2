@@ -33,7 +33,15 @@ enum SupplyType : uint8_t {
 };
 
 // PLAYER CONSTANTS
-enum DIRECTIONS { LEFT, RIGHT };
+
+#define PLAYER_SIDE BLOCK_DIVISION * 2
+#define PLAYER_INITIAL_HEALTH 5
+#define PLAYER_SPEED 5
+#define JUMPING_INITIAL_SPEED 20
+
+#define POINTS_KILLING_RABBIT 500
+
+enum DIRECTIONS { LEFT = -1, RIGHT = 1 };
 
 enum ACTIONS {
     STAND,

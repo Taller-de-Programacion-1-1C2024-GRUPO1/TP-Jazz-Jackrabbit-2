@@ -14,6 +14,7 @@
 #include "entities/rabbit.h"
 
 #include "dynamic_map.h"
+#include "spawn_point.h"
 
 class Map {
 private:

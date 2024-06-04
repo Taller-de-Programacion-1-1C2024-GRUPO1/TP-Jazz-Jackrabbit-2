@@ -4,7 +4,27 @@ Map::Map(int width, int height, int amount_players, const std::string& map_name)
         map_name(map_name), width(width), height(height), amount_players(amount_players) {}
 
 
-void Map::check_colision() {}
+void Map::check_colision() {
+    for (auto player: players) {
+        for (auto enemy: enemies) {
+            player->check_colision_with(enemy);
+        }
+        for (auto bullet: bullets) {
+            player->check_colision_with(bullet);
+        }
+        for (auto item: items) {
+            player->check_colision_with(item);
+        }
+    }
+    for (auto enemy: enemies) {
+        for (auto bullet: bullets) {
+            enemy->check_colision_with(bullet);
+        }
+    }
+    for (auto bullet: bullets) {
+        bullet->check_colision_with(physical_map);
+    }
+}
 
 void Map::update() {
     for (auto player: players) {
@@ -22,24 +42,29 @@ void Map::update() {
 
 // FALTA HACER DELETE SI SE USA HEAP
 void Map::reap_dead() {
-    for (int i = 0; i < players.size(); i++) {
-        if (players[i]->is_dead()) {
-            players.erase(players.begin() + i);
-        }
-    }
-    for (int i = 0; i < enemies.size(); i++) {
+    int i = 0;
+    while (i < enemies.size()) {
         if (enemies[i]->is_dead()) {
             enemies.erase(enemies.begin() + i);
+        } else {
+            i++;
         }
     }
-    for (int i = 0; i < bullets.size(); i++) {
+    i = 0;
+    while (i < bullets.size()) {
         if (bullets[i]->is_dead()) {
+            delete bullets[i];
             bullets.erase(bullets.begin() + i);
+        } else {
+            i++;
         }
     }
-    for (int i = 0; i < items.size(); i++) {
+    i = 0;
+    while (i < items.size()) {
         if (items[i]->is_dead()) {
             items.erase(items.begin() + i);
+        } else {
+            i++;
         }
     }
 }
@@ -124,7 +149,7 @@ std::vector<SupplySnapshot> Map::get_supply_snapshot() {
 void Map::create_entities() {
     for (int i = 0; i < amount_players; i++) {
         players.push_back(new Rabbit(spawn_points[RABBIT_SPAWN].at(i).get_x(),
-                                     spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map));
+                                     spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,*this));
     }
     for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
         enemies.push_back(new Enemy(spawn_points[CRAB_SPAWN].at(i).get_x(),

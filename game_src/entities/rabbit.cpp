@@ -1,27 +1,85 @@
 #include "rabbit.h"
 
+#include "bullet.h"
+#include "enemy.h"
+#include "item.h"
+#include "state.h"
 
-Rabbit::Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map):
-        Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
-        action(STAND),
-        acc_y(GRAVITY),
-        direction(LEFT) {}
+#include "../map.h"
+#include "gun.h"
+Rabbit::Rabbit(int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager):
+    Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
+    spawn_x(init_pos_x),
+    spawn_y(init_pos_y),
+    action(STAND),
+    acc_y(GRAVITY),
+    direction(LEFT),
+    manager(manager),
+    points(0),
+    current_gun(0) {
+        state = new Alive(*this);
+        gun_inventory.push_back(new BasicGun(*this, manager));
+    }
+
+void Rabbit::receive_damage(int damage) {
+    if (state->can_receive_damage()){
+        health -= damage;
+        if (health <= 0) {
+            set_state(new Dead(*this));
+        } else {
+            set_state(new RecievedDamage(*this));
+        }
+    }
+}
+
+void Rabbit::add_points(int amount_of_points) { 
+    points += amount_of_points; 
+    printf("Points: %d\n", points);
+    }
+
+void Rabbit::on_colision_with(PhysicalObject* object) {
+    object->on_colision_with_rabbit(this);
+}
+
+
+bool Rabbit::is_killed_by_taking_damage(int damage){
+    bool killed = false;
+    if (state->can_receive_damage()) {
+        health -= damage;
+        if (health <= 0) {
+            set_state(new Dead(*this));
+            killed = true;
+        } else {
+            set_state(new RecievedDamage(*this));
+        }
+    }
+    printf("Healtfawefwegfwergergwerfh: %d, damage %d\n", health, damage);
+    return killed;
+}
+
+
+void Rabbit::hit_by_bullet(Bullet* bullet,int damage) {
+    if (is_killed_by_taking_damage(damage)){
+        bullet->bullet_killed_target(POINTS_KILLING_RABBIT);
+    }
+}
 
 void Rabbit::update() {
-    check_colision_with_map();
-
+    state->update();
+    update_guns();
     handle_events();
     update_position();
 
-    update_state();
+    update_action();
+
+    // NO HAY INERCIA EN EJE X
+    spe_x = 0;
 
     printf(action == STAND          ? "STAND\n" :
            action == RUN            ? "RUN\n" :
            action == RUN_FAST       ? "RUN_FAST\n" :
            action == JUMPING        ? "JUMPING\n" :
            action == FALLING        ? "FALLING\n" :
-           action == JUMP_FORWARD   ? "JUMP_FORWARD\n" :
-           action == FALL_FORWARD   ? "FALL_FORWARD\n" :
            action == SHOOT          ? "SHOOT\n" :
            action == SPECIAL_ATTACK ? "SPECIAL_ATTACK\n" :
                                       "DIE\n");
@@ -66,12 +124,9 @@ void Rabbit::update_position() {
             pos_y += spe_x;
         }
     }
-
-    // NO HAY INERCIA EN EJE X
-    spe_x = 0;
 }
 
-void Rabbit::update_state() {
+void Rabbit::update_action() {
     // DIRECCION
     if (spe_x > 0) {
         direction = RIGHT;
@@ -80,28 +135,33 @@ void Rabbit::update_state() {
     }
 
     // CAMBIO DE ACCION
-    if (!on_floor) {
+
+    if(!on_floor){
         if (spe_y > 0) {
-            if (spe_x != 0) {
-                action = FALL_FORWARD;
-            } else {
-                action = FALLING;
-            }
-        } else {
-            if (spe_x != 0) {
-                action = JUMP_FORWARD;
-            } else {
-                action = JUMPING;
-            }
+            action = FALLING;
+        } else  if (spe_y < 0){
+            action = JUMPING;
         }
     } else if (spe_x == 0) {
         action = STAND;
+    } else if (spe_x == PLAYER_SPEED || spe_x == -PLAYER_SPEED) {
+        action = RUN;
+    } else if (spe_x == PLAYER_SPEED * 2 || spe_x == -PLAYER_SPEED * 2) {
+        action = RUN_FAST;
     }
+
 
     // action = RUN_FAST;
 }
 
+void Rabbit::update_guns() {
+    for (int i = 0; i < gun_inventory.size(); i++) {
+        gun_inventory[i]->update();
+    }
+}
+
 void Rabbit::imprimir_posicion() { printf("X: %d Y: %d\n", pos_x, pos_y); }
+
 
 // EVENTS
 
@@ -126,45 +186,75 @@ void Rabbit::handle_events() {
             case EVENT_RUN_FAST_LEFT:
                 run_fast_left();
                 break;
+            case EVENT_SHOOT:
+                shoot();
+                break;
+            default:
+                break; 
         }
     }
 }
 // JUMP
-void Rabbit::jump() {
+void Rabbit::execute_jump() {
+    check_colision_with_map();
     if (on_floor || on_left_slope || on_right_slope) {
         spe_y = -JUMPING_INITIAL_SPEED;
     }
 }
 // RIGHT
-void Rabbit::run_right() {
+void Rabbit::execute_run_right() {
+    check_colision_with_map();
     if (!on_right_wall) {
         spe_x = PLAYER_SPEED;
     }
 }
 
 // RIGHT SPRINT
-void Rabbit::run_fast_right() {
+void Rabbit::execute_run_fast_right() {
+    check_colision_with_map();
     if (!on_right_wall) {
         spe_x = PLAYER_SPEED * 2;
     }
 }
 // LEFT
-void Rabbit::run_left() {
+void Rabbit::execute_run_left() {
+    check_colision_with_map();
     if (!on_left_wall) {
         spe_x = -PLAYER_SPEED;
     }
 }
 // LEFT SPRINT
-void Rabbit::run_fast_left() {
+void Rabbit::execute_run_fast_left() {
+    check_colision_with_map();
     if (!on_left_wall) {
         spe_x = -(PLAYER_SPEED * 2);
     }
 }
 // SHOOT
-void Rabbit::shoot() { action = SHOOT; }
+void Rabbit::execute_shoot() {
+    action = SHOOT;
+    if (direction == LEFT){
+        gun_inventory[current_gun]->fire(pos_x, pos_y+(height/2), direction);
+    } else {
+        gun_inventory[current_gun]->fire(pos_x+width, pos_y+(height/2), direction);
+    }
+    
+}
 // SPECIAL ATTACK
-void Rabbit::special_attack() { action = SPECIAL_ATTACK; }
+void Rabbit::execute_special_attack() {
+    action = SPECIAL_ATTACK;
+}
 
+
+void Rabbit::jump(){state->jump();};
+void Rabbit::run_right(){state->run_right();};
+void Rabbit::run_fast_right(){state->run_fast_right();};
+void Rabbit::run_left(){state->run_left();};
+void Rabbit::run_fast_left(){state->run_fast_left();};
+void Rabbit::shoot(){
+    state->shoot();
+    };
+void Rabbit::special_attack(){state->special_attack();};
 
 // COLA
 void Rabbit::add_jump() { events_queue.push(EVENT_JUMP); }
@@ -173,3 +263,13 @@ void Rabbit::add_run_fast_right() { events_queue.push(EVENT_RUN_FAST_RIGHT); }
 void Rabbit::add_run_left() { events_queue.push(EVENT_RUN_LEFT); }
 void Rabbit::add_run_fast_left() { events_queue.push(EVENT_RUN_FAST_LEFT); }
 void Rabbit::add_shoot() { events_queue.push(EVENT_SHOOT); }
+
+void Rabbit::set_state(State* new_state){
+    delete state;
+    state = new_state;
+
+}
+
+Rabbit::~Rabbit() {
+    delete state;
+}
