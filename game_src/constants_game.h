@@ -87,7 +87,7 @@ enum /*MAP OBJECTS*/ {
     NULL_OBJ = 0,
     DIAG_LEFT_OBJ,
     DIAG_RIGHT_OBJ,
-    COLLIDER_OBJ,
+    COLLIDER_OBJ = 4,
 };
 
 #define UNDEFINED -1
