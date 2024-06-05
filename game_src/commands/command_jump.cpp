@@ -1,7 +1,10 @@
 #include "command_jump.h"
 
-Jump::Jump(int id, int dir): Command(id), playerID(id), dir(dir) {}
+Jump::Jump(int id, int dir): Command(id), dir(dir) {}
 
+void Jump::execute_Command(Map& map) { map.execute_jump(playerID); }
+
+/*
 bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {
     if (dir == RIGHT_DIR) {
         // game_manager.jumpForwardPlayer(playerID);
@@ -12,6 +15,9 @@ bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {
     }
     return needsMove;
 }
+*/
+
+void Jump::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Jump::get_playerId() { return this->playerID; }
 

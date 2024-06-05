@@ -1,7 +1,6 @@
 #include "cheats.h"
 
-Cheats::Cheats(int playerID, int cheatID):
-        Command(playerID), playerID(playerID), cheatID(cheatID) {}
+Cheats::Cheats(int playerID, int cheatID): Command(playerID), cheatID(cheatID) {}
 
 bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
     if (cheatID == ADD_HEALTH) {
@@ -9,6 +8,8 @@ bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
     }
     return needsMove;
 }
+
+void Cheats::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Cheats::get_playerId() { return this->playerID; }
 

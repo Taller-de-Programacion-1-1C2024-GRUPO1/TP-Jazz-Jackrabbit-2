@@ -5,7 +5,9 @@
 #include <string>
 
 #include "../../common_src/constants.h"
+#include "../../common_src/protocol.h"
 #include "../constants_game.h"
+#include "../map.h"
 
 /*
     * Clase que representa un comando generico.
@@ -25,8 +27,11 @@
     - SpecialLori
     - SpecialSpaz
 */
+
+class Protocol;
+
 class Command {
-private:
+protected:
     int playerID;
 
 public:
@@ -34,8 +39,8 @@ public:
 
     virtual bool execute_Command(bool* cheatON, bool& needsMovement) { return true; }
 
-    virtual void execute_Command() { return; }
-
+    virtual void execute_Command(Map& map) = 0;
+    virtual void send(Protocol& protocol) = 0;
     virtual int get_playerId() = 0;
     virtual int get_commandType() = 0;
     virtual ~Command() {}

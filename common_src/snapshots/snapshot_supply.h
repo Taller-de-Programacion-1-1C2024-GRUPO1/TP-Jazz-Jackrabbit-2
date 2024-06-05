@@ -5,23 +5,13 @@
 
 class SupplySnapshot {
 public:
-    SupplyType type;
+    int id;
+    int supply_type;
     int pos_x;
     int pos_y;
-    char id;
-    SupplyState state;
-    int width;
-    int height;
 
-    SupplySnapshot(SupplyType type, int pos_x, int pos_y, char id, SupplyState state, int width,
-                   int height):
-            type(type),
-            pos_x(pos_x),
-            pos_y(pos_y),
-            id(id),
-            state(state),
-            width(width),
-            height(height) {}
+    SupplySnapshot(int id, int supply_type, int pos_x, int pos_y):
+            id(id), supply_type(supply_type), pos_x(pos_x), pos_y(pos_y) {}
 };
 
 #endif

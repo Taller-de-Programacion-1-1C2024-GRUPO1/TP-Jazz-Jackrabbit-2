@@ -1,11 +1,15 @@
 #include "command_move_faster.h"
 
-MoveFaster::MoveFaster(int id, int dir): Command(id), playerID(id), dir(dir) {}
+MoveFaster::MoveFaster(int id, int dir): Command(id), dir(dir) {}
 
 bool MoveFaster::execute_Command(bool* cheatOn, bool& needsMove) {
     // game_manager.moveFasterPlayer(this->playerID, this->dir);
     return needsMove;
 }
+
+void MoveFaster::execute_Command(Map& map) { map.execute_move_faster(playerID, dir); }
+
+void MoveFaster::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int MoveFaster::get_playerId() { return this->playerID; }
 

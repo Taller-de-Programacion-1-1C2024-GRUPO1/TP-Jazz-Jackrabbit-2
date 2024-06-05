@@ -30,6 +30,8 @@ struct Message {
 };
 
 // ----------------- Generic Constants -----------------
+// Queue codes DO NOT CHANGE
+#define QUEUE_MAX_SIZE 10000
 
 enum /*Senders*/ {
     READ_MAP = 0,
@@ -41,11 +43,13 @@ enum /*Senders*/ {
     SEND_COMMAND_SHOOT,
     SEND_COMMAND_MOVE,
     SEND_COMMAND_MOVE_FASTER,
+    ACK_MATCH_CREATED_SUCCEED,
     SEND_COMMAND_CHANGE_WEAPON,
     SEND_COMMAND_JUMP_PUNCH_ATTACK_JAZZ,
     SEND_COMMAND_SIDE_KICK_SPAZ,
     SEND_COMMAND_SHORT_RANGE_JUMP_KICK_LORI,
     SEND_COMMAND_SELECT_CHAMPION,
+    SEND_GAME_INFO,
     ACK_JOINED_SUCCEED,
 };
 
@@ -62,9 +66,10 @@ enum match_type {
     REFRESH,
 };
 
-enum /*GAME TYPE*/ {
-    GAME_MAP = 0,
-    GAME_INFO,
+enum /*INFO TYPE*/ {
+    GAME_INFO = 1,
+    SELECT_CHARACTER_INFO,
+    GAME_MAP_INFO,
 };
 
 

@@ -1,11 +1,15 @@
 #include "command_change_weapon.h"
 
-ChangeWeapon::ChangeWeapon(int id): Command(id), playerID(id) {}
+ChangeWeapon::ChangeWeapon(int id): Command(id) {}
 
 bool ChangeWeapon::execute_Command(bool* cheatOn, bool& needsMove) {
     // game_world.change_weapon(this->playerID);
     return needsMove;
 }
+
+void ChangeWeapon::execute_Command(Map& map) { map.execute_change_weapon(this->playerID); }
+
+void ChangeWeapon::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int ChangeWeapon::get_playerId() { return this->playerID; }
 

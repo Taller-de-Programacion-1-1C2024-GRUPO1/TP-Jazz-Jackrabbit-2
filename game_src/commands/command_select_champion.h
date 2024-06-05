@@ -3,13 +3,12 @@
 
 #include <string>
 
-#include "../constants_game.h"
-
 #include "command.h"
+
+class Protocol;
 
 class SelectChampion: public Command {
 private:
-    int playerID;
     ChampionType champion_type;
     std::string match_name;
     std::string map_name;
@@ -19,6 +18,8 @@ public:
     SelectChampion(int playerID, ChampionType champion_type, const std::string& match_name,
                    const std::string& map_name);
     int get_playerId() override;
+    void execute_Command(Map& map) override{};
+    void send(Protocol& protocol) override;
     ChampionType get_championType();
     std::string get_match_name();
     std::string get_map_name();

@@ -1,22 +1,31 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include "../../physics_src/constants_physics.h"
-#include "../../physics_src/physical_map.h"
-#include "../../physics_src/physical_objects.h"
-#include "../constants_game.h"
+#include "../../common_src/snapshots/snapshot_enemy.h"
 
 #include "character.h"
-
 class Enemy: public Character {
 private:
     // MODIFICACION DE POSICION
     int acc_y;
+    int damage;
+    int id;
+    int direction;
+    int enemy_type;
 
 public:
-    Enemy(int init_pos_x, int init_pos_y, PhysicalMap& map);
-    // RENDER
-    void render(SDL_Renderer* renderer);
+    Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map);
+
+
+    void receive_damage(int damage) override;
+    // COLISIONES CON ENTIDADES
+    void on_colision_with(PhysicalObject* object) override;
+    void on_colision_with_rabbit(Rabbit* rabbit) override;
+
+    void hit_by_bullet(Bullet* bullet, int damage);
+    bool is_killed_by_taking_damage(int damage);
+    void update();
+    EnemySnapshot get_snapshot();
 };
 
 #endif

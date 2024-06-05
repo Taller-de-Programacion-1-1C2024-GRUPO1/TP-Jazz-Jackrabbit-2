@@ -1,6 +1,6 @@
 #include "command_special_spaz.h"
 
-SpecialSpaz::SpecialSpaz(int id, int dir): Command(id), playerID(id), dir(dir) {}
+SpecialSpaz::SpecialSpaz(int id, int dir): Command(id), dir(dir) {}
 
 bool SpecialSpaz::execute_Command(bool* cheatOn, bool& needsMove) {
     if (dir == RIGHT_DIR) {
@@ -12,6 +12,8 @@ bool SpecialSpaz::execute_Command(bool* cheatOn, bool& needsMove) {
     }
     return needsMove;
 }
+
+void SpecialSpaz::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int SpecialSpaz::get_playerId() { return this->playerID; }
 

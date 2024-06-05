@@ -2,6 +2,7 @@
 #define COMMON_PROTOCOLO_H
 
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
 #include <utility>
@@ -9,27 +10,32 @@
 
 #include <arpa/inet.h>
 
-#include "../game_src/commands/cheats.h"
-#include "../game_src/commands/command_change_weapon.h"
-#include "../game_src/commands/command_jump.h"
-#include "../game_src/commands/command_match.h"
-#include "../game_src/commands/command_move.h"
-#include "../game_src/commands/command_move_faster.h"
-#include "../game_src/commands/command_select_champion.h"
-#include "../game_src/commands/command_shoot.h"
-#include "../game_src/commands/command_special_jazz.h"
-#include "../game_src/commands/command_special_lori.h"
-#include "../game_src/commands/command_special_spaz.h"
 #include "../game_src/constants_game.h"
 #include "../game_src/entities/bullet.h"
 #include "../game_src/entities/character.h"
 #include "../game_src/entities/item.h"
-#include "../game_src/entities/player.h"
+#include "../game_src/entities/rabbit.h"
 #include "snapshots/snapshot.h"
 
 #include "common_errors.h"
 #include "common_socket.h"
 #include "constants.h"
+
+class Command;
+class Move;
+class MoveFaster;
+class Jump;
+class Shoot;
+class MatchCommand;
+class Cheats;
+class ChangeWeapon;
+class SelectChampion;
+class SpecialJazz;
+class SpecialLori;
+class SpecialSpaz;
+class Information;
+class GameInfo;
+class DynamicMap;
 
 class Protocol {
 protected:
@@ -84,11 +90,19 @@ private:
 
     std::shared_ptr<SpecialSpaz> receive_SpecialSpaz();
 
+    // ------------------- SEND AND RECEIVE INFO -------------------
+
+    void send_GameInfo(GameInfo* gameInfo);
+
+    GameInfo* receive_GameInfo();
+
     // ------------------- SEND AND RECEIVE SNAPSHOTS -------------------
 
     void send_dimensions(const Snapshot& snapshot);
 
     void send_rabbits(Snapshot& snapshot);
+
+    void send_enemies(Snapshot& snapshot);
 
     void send_projectiles(Snapshot& snapshot);
 
@@ -97,6 +111,8 @@ private:
     void receive_dimensions(Snapshot& snapshot);
 
     void receive_rabbits(Snapshot& snapshot);
+
+    void receive_enemies(Snapshot& snapshot);
 
     void receive_projectiles(Snapshot& snapshot);
 
@@ -117,6 +133,8 @@ public:
     // Envia un Snapshot
     void send_Snapshot(Snapshot& snapshot);
 
+    void send_Info(Information* info);
+
     // ------------------- Funciones para Client -------------------
 
     // Envia un comando
@@ -124,6 +142,8 @@ public:
 
     // Recibe un Snapshot
     Snapshot receive_Snapshot();
+
+    std::shared_ptr<Information> receive_Info();
 
     // ------------------- Funciones para Client y Server -------------------
 
@@ -147,9 +167,13 @@ public:
     void send_char(char c);
     char receive_char();
 
+    // Envia un DynamicMap
+    void send_map(DynamicMap map);
+    DynamicMap receive_map();
+
     // Envia un ACK de que un jugador se unio a un match
-    void send_user_joined_match(int ACK_JOINED);
-    int receive_user_joined_match();
+    void send_response(int id);
+    int receive_response();
 
     // Chequea si el socket fue cerrado
     bool is_close();

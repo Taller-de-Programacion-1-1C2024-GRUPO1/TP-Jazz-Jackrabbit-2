@@ -3,29 +3,31 @@
 
 class RabbitSnapshot {
 public:
-    char id;
+    int id;
+    int direction;
+    int champion_type;
     int pos_x;
     int pos_y;
-    int angle;
-    int max_health;
-    int health;
-    char direction;
+    int score;
+    int lives;
     int weapon;
+    int ammo;
     int state;
-    int current_ammo;
+    int action;
 
-    RabbitSnapshot(char id, int pos_x, int pos_y, int angle, int max_health, int health,
-                   char direction, int weapon, int state, int current_ammo):
+    RabbitSnapshot(int id, int direction, int champion_type, int pos_x, int pos_y, int score,
+                   int lives, int weapon, int ammo, int state, int action):
             id(id),
+            direction(direction),
+            champion_type(champion_type),
             pos_x(pos_x),
             pos_y(pos_y),
-            angle(angle),
-            max_health(max_health),
-            health(health),
-            direction(direction),
+            score(score),
+            lives(lives),
             weapon(weapon),
+            ammo(ammo),
             state(state),
-            current_ammo(current_ammo) {}
+            action(action) {}
     ~RabbitSnapshot() {}
 };
 

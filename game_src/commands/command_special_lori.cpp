@@ -1,6 +1,6 @@
 #include "command_special_lori.h"
 
-SpecialLori::SpecialLori(int id, int dir): Command(id), playerID(id), dir(dir) {}
+SpecialLori::SpecialLori(int id, int dir): Command(id), dir(dir) {}
 
 bool SpecialLori::execute_Command(bool* cheatOn, bool& needsMove) {
     if (dir == FORWARD_DIR) {
@@ -12,6 +12,8 @@ bool SpecialLori::execute_Command(bool* cheatOn, bool& needsMove) {
     }
     return needsMove;
 }
+
+void SpecialLori::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int SpecialLori::get_playerId() { return this->playerID; }
 
