@@ -11,13 +11,12 @@ void User::run() {
     try {
         while (status == ACTIVE) {
             std::shared_ptr<Command> command = container_protocol->protocol.receive_Command();
-            std::shared_ptr<MatchCommand> new_match =
-                    std::dynamic_pointer_cast<MatchCommand>(command);
-            if (new_match->get_commandType() == NEW_MATCH) {
+            std::shared_ptr<MatchCommand> new_match = std::dynamic_pointer_cast<MatchCommand>(command);
+            if (new_match->getType() == NEW_MATCH) {
                 create_new_match(new_match->get_number_players(), new_match->get_match_name(),
-                                 new_match->get_map_name());
+                                 new_match->get_map_name(), new_match->get_character_name());
             } else if (new_match->getType() == JOIN) {
-                join_match(new_match->get_match_name());
+                join_match(new_match->get_match_name(), new_match->get_character_name());
             } else if (new_match->getType() == REFRESH) {
                 refresh();
             }
@@ -32,19 +31,22 @@ void User::run() {
 }
 
 void User::create_new_match(int number_of_players, const std::string& match_name,
-                            const std::string& map_name) {
+                            const std::string& map_name, ChampionType character_name) {
 
+    std::cout << "1" << std::endl;
     Map map = monitor_matches.get_map(map_name);
+    std::cout << "2" << std::endl;
     map.set_amount_players(number_of_players);
+    std::cout << "3" << std::endl;
     map.create_entities();
+    // queue<std::map<struct{id, champion}, ContainerProtocol>>>
 
-    std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> protocols_queue =
-            std::make_shared<Queue<std::shared_ptr<ContainerProtocol>>>();
+     std::cout << "4" << std::endl;
+    std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> protocols_queue = std::make_shared<Queue<std::shared_ptr<ContainerProtocol>>>();
     protocols_queue->push(this->container_protocol);
-
+     std::cout << "5" << std::endl;
     std::shared_ptr<MatchInfo> new_match =
             std::make_shared<MatchInfo>(match_name, map, protocols_queue, playing);
-
     int ACK = monitor_matches.add_new_match(match_name, new_match);
     container_protocol->protocol.send_response(ACK);
     if (ACK == ERROR) {
@@ -54,7 +56,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
     this->status = INACTIVE;
 }
 
-void User::join_match(const std::string& match_name) {
+void User::join_match(const std::string& match_name, ChampionType character_name) {
     // se fija si el match esta vivo
     int ACK = monitor_matches.join_match(match_name, container_protocol);
     if (ACK == ERROR) {

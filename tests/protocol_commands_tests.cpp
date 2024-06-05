@@ -11,6 +11,7 @@
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 #include "../common_src/snapshots/snapshot.h"
+#include "../game_src/constants_game.h"
 #include "../game_src/commands/cheats.h"
 #include "../game_src/commands/command.h"
 #include "../game_src/commands/command_change_weapon.h"
@@ -28,7 +29,7 @@ const char* server_port = "8080";
 const char* ip = "localhost";
 const std::string& map_test = "MAP_TEST";
 const std::string& match_test = "MATCH_TEST";
-const ChampionType jazz = JAZZ;
+const ChampionType jazz = JAZZ; // si no funciona poner Jazz con minusculas
 const int player_id = 1;
 const int number_players = 3;
 bool offCheat = false;
@@ -253,6 +254,7 @@ TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
     EXPECT_EQ(change_weapon->get_commandType(), received_change_weapon->get_commandType());
     delete change_weapon;
 }
+
 
 
 TEST(ProtocolTestMatch, SendAndReceiveMatch) {
