@@ -35,6 +35,7 @@ class SpecialLori;
 class SpecialSpaz;
 class Information;
 class GameInfo;
+class DynamicMap;
 
 class Protocol {
 protected:
@@ -101,6 +102,8 @@ private:
 
     void send_rabbits(Snapshot& snapshot);
 
+    void send_enemies(Snapshot& snapshot);
+
     void send_projectiles(Snapshot& snapshot);
 
     void send_supplies(Snapshot& snapshot);
@@ -108,6 +111,8 @@ private:
     void receive_dimensions(Snapshot& snapshot);
 
     void receive_rabbits(Snapshot& snapshot);
+
+    void receive_enemies(Snapshot& snapshot);
 
     void receive_projectiles(Snapshot& snapshot);
 
@@ -162,8 +167,12 @@ public:
     void send_char(char c);
     char receive_char();
 
+    // Envia un DynamicMap
+    void send_map(DynamicMap map);
+    DynamicMap receive_map();
+
     // Envia un ACK de que un jugador se unio a un match
-    void send_response(int ACK_JOINED);
+    void send_response(int id);
     int receive_response();
 
     // Chequea si el socket fue cerrado

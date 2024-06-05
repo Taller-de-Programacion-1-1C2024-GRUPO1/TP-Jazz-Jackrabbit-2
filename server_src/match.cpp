@@ -1,20 +1,21 @@
 #include "match.h"
 
-Match::Match(std::shared_ptr<Queue<std::shared_ptr<ContainerProtocol>>> matches_protocols_queue,
-             const Map& map, const std::string& match_name, bool* playing, int* status):
+Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
+             Map map, const std::string& match_name, bool* playing, int* status):
         map(map),
         match_name(match_name),
-        matches_protocols_queue(matches_protocols_queue),
+        matches_protocols_players_queue(matches_protocols_players_queue),
         playing(playing),
-        status(status),
-        id_counter(0) {
+        status(status) {
+    this->number_of_players = map.get_amount_players();
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
-uint8_t Match::get_number_of_players() { return id_counter; }
+uint8_t Match::get_number_of_players() { return this->number_of_players; }
 
+/*
 void Match::send_game_initial(Gameloop game) {
-    std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot(map);
+    std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot();
     // Enviar a cada jugador su snapshot inicial
     for (auto& player: players) {
         Queue<std::shared_ptr<Snapshot>>& player_snapshot_queue = player->get_snapshots_queue();
@@ -25,6 +26,7 @@ void Match::send_game_initial(Gameloop game) {
         }
     }
 }
+*/
 
 void Match::run() {
     Queue<std::shared_ptr<Command>> clients_cmd_queue(QUEUE_MAX_SIZE);
@@ -35,29 +37,26 @@ void Match::run() {
                 throw MatchAlreadyStarted();
             if (number_of_players >= map.get_max_players())
                 throw MatchFull();
-            int current_id = id_counter;
 
             // Desencolo el protocolo de los jugadores que se conectaron
-            std::shared_ptr<ContainerProtocol> container_protocol = matches_protocols_queue->pop();
+            std::shared_ptr<PlayerInfo> player_info = matches_protocols_players_queue->pop();
 
-            // game_map.add_player(current_id);
-            Player* player = new Player(container_protocol, current_id, broadcaster_snapshots,
-                                        clients_cmd_queue);
+            // Agrego al jugador al mapa, seteando su id y champion a un rabbit particular
+            map.add_player(player_info->get_player_id(), player_info->get_character_name());
+            Player* player =
+                    new Player(player_info->get_container_protocol(), player_info->get_player_id(),
+                               broadcaster_snapshots, clients_cmd_queue);
+
             player->start();
-
             players.push_back(player);
-            id_counter++;
         }
-        // enviar a cada jugador su id
+        // Ya se conectaron todos los jugadores, se envian los ids de cada uno
         send_players_ids();
 
-        // esperar a que todos los jugadores elijan su personaje
-        wait_for_players_to_choose_champion();
-
-        // hay que agregar el game_map
-        Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, playing);
+        Gameloop gameloop =
+                Gameloop(clients_cmd_queue, broadcaster_snapshots, players, map, playing);
         *status = MATCH_ALIVE;
-        send_game_initial(gameloop);
+        gameloop.send_initial_snapshots();
         gameloop.run();
 
         clients_cmd_queue.close();
@@ -70,20 +69,9 @@ void Match::run() {
 }
 
 void Match::send_players_ids() {
-    /*
     for (auto& player: players) {
-        player->send_id();
+        player->send_player_id();
     }
-    */
-}
-
-
-void Match::wait_for_players_to_choose_champion() {
-    /*
-    for (auto& player: players) {
-        player->wait_for_character();
-    }
-    */
 }
 
 void Match::delete_players() {

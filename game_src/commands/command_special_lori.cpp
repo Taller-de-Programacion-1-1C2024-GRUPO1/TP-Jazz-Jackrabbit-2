@@ -1,6 +1,6 @@
 #include "command_special_lori.h"
 
-SpecialLori::SpecialLori(int id, int dir): Command(id), playerID(id), dir(dir) {}
+SpecialLori::SpecialLori(int id, int dir): Command(id), dir(dir) {}
 
 bool SpecialLori::execute_Command(bool* cheatOn, bool& needsMove) {
     if (dir == FORWARD_DIR) {

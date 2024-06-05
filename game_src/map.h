@@ -14,6 +14,7 @@
 #include "entities/rabbit.h"
 
 #include "dynamic_map.h"
+#include "spawn_point.h"
 
 class Map {
 private:
@@ -38,11 +39,13 @@ private:
 
     std::vector<SupplySnapshot> get_supply_snapshot();
 
+    std::vector<EnemySnapshot> get_enemy_snapshot();
+
 public:
     void check_colision();
     void reap_dead();
     void update();
-    void add_player(int PlayerID);
+    void add_player(int PlayerID, ChampionType champion);
     void add_enemy(Enemy* enemy);
     void add_bullet(Bullet* bullet);
     void add_item(Item* item);
@@ -63,6 +66,8 @@ public:
 
     void set_max_players(int max_players);
 
+    int get_amount_players();
+
     DynamicMap get_dynamic_map() const;
 
     PhysicalMap get_physical_map() const;
@@ -73,9 +78,18 @@ public:
 
     void create_entities();
 
-    std::shared_ptr<Snapshot> get_snapshot() const;
+    std::shared_ptr<Snapshot> get_snapshot();
+
+    std::shared_ptr<Snapshot> get_init_snapshot();
 
     std::string get_name() const;
+
+    int get_rabbit_position_by_id(int id);
+    void execute_jump(int playerID);
+    void execute_move(int playerID, int dir);
+    void execute_shoot(int playerID);
+    void execute_move_faster(int playerID, int dir);
+    void execute_change_weapon(int playerID);
 
     ~Map();
 };

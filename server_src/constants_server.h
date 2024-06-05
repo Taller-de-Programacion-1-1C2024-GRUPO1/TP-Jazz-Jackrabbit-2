@@ -5,6 +5,7 @@
 #define INACTIVE 1
 #define OK 0
 #define ERROR 1
+#define INITIAL_ID 1
 
 enum /*Match Status*/ {
     MATCH_WAITING = 0,
@@ -12,6 +13,7 @@ enum /*Match Status*/ {
     MATCH_OVER,
 };
 
-#define FRAME_TIME 1.0f
+#define FPS 60
+#define FRAME_DELAY (1000 / FPS)
 
 #endif

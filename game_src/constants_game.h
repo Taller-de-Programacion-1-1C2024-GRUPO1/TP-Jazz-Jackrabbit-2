@@ -18,22 +18,31 @@ enum /*COMMAND TYPE*/ {
 };
 
 enum ChampionType : uint8_t {
-    JAZZ = 0,
-    SPAZ,
-    LORI,
+    NULL_CHAMPION_TYPE = 0,
+    Jazz,
+    Spaz,
+    Lori,
 };
 
 enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, TURTLE };
 
 enum SupplyType : uint8_t {
     HEALTH_CARROT,
-    AMMO_SUPPLY,
-    GEM_SUPPLY,
-    COIN_SUPPLY,
+    AMMO,
+    GEM,
+    COIN,
 };
 
 // PLAYER CONSTANTS
-enum DIRECTIONS { LEFT, RIGHT };
+
+#define PLAYER_SIDE BLOCK_DIVISION * 2
+#define PLAYER_INITIAL_HEALTH 5
+#define PLAYER_SPEED 5
+#define JUMPING_INITIAL_SPEED 20
+
+#define POINTS_KILLING_RABBIT 500
+
+enum DIRECTIONS { LEFT = -1, RIGHT = 1 };
 
 enum ACTIONS {
     STAND,
@@ -61,12 +70,16 @@ enum /* CHEATS */ {
 #define STARTED 1
 #define PLAYING -1
 
+#define NULL_ID -1
+
 // ----------------- Messurements -----------------
 
-#define ENEMY_INITIAL_HEALTH 100  // Se puede modificar
+#define ENEMY_INITIAL_HEALTH 3  // Se puede modificar
 
-#define RABBIT_WIDTH_DEFAULT 32   // modificar
-#define RABBIT_HEIGHT_DEFAULT 32  // modificar
+#define BLOCK_DIVISION 32
+
+#define RABBIT_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
+#define RABBIT_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
 
 #define RABBIT_AMOUNT_DEFAULT 1  // modificar
 

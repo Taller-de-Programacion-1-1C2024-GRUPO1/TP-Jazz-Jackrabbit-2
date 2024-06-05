@@ -2,7 +2,7 @@
 
 #include "../common_src/protocol.h"
 
-GameInfo::GameInfo(std::map<std::string, std::string> matchesAvailable):
+GameInfo::GameInfo(const std::map<std::string, std::string>& matchesAvailable):
         matchesAvailable(matchesAvailable) {}
 
 void GameInfo::send(Protocol& protocol) { protocol.send_Info(this); }

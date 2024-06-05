@@ -1,6 +1,6 @@
 #include "command_special_spaz.h"
 
-SpecialSpaz::SpecialSpaz(int id, int dir): Command(id), playerID(id), dir(dir) {}
+SpecialSpaz::SpecialSpaz(int id, int dir): Command(id), dir(dir) {}
 
 bool SpecialSpaz::execute_Command(bool* cheatOn, bool& needsMove) {
     if (dir == RIGHT_DIR) {

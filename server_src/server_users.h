@@ -13,7 +13,7 @@
 #include "../game_src/game_info.h"
 
 #include "constants_server.h"
-
+#include "player_info.h"
 // #include "match.h"
 // #include "match_struct.h"
 #include "monitor_matches.h"
@@ -24,15 +24,15 @@ class User: public Thread {
 
 private:
     int status;
-
+    int id;
     std::shared_ptr<ContainerProtocol> container_protocol;
     MonitorMatches& monitor_matches;
 
     bool* playing;
 
 public:
-    User(std::shared_ptr<ContainerProtocol> container_protocol, MonitorMatches& monitor_matches,
-         bool* playing);
+    User(int current_id, std::shared_ptr<ContainerProtocol> container_protocol,
+         MonitorMatches& monitor_matches, bool* playing);
     void run() override;
 
     void create_new_match(int number_of_players, const std::string& match_name,

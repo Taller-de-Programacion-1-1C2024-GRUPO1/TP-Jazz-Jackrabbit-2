@@ -2,8 +2,7 @@
 
 SelectChampion::SelectChampion(int playerID, ChampionType champion_type,
                                const std::string& match_name, const std::string& map_name):
-        Command(PLAYING),
-        playerID(playerID),
+        Command(playerID),
         champion_type(champion_type),
         match_name(match_name),
         map_name(map_name) {}

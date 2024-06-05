@@ -5,6 +5,7 @@ ServerAcceptor::ServerAcceptor(const char* servname, int number_players,
         sk(servname),
         sk_was_closed(false),
         number_players(number_players),
+        id_counter(INITIAL_ID),
         server_users(),
         map_routes(map_routes),
         is_alive(true),
@@ -18,8 +19,9 @@ void ServerAcceptor::run() {
         try {
             Socket peer = sk.accept();
             // se podría hacer un unique_ptr
-            User* user = new User(std::make_shared<ContainerProtocol>(std::move(peer)),
+            User* user = new User(id_counter, std::make_shared<ContainerProtocol>(std::move(peer)),
                                   monitor_matches, playing);
+            this->id_counter++;
             user->run();
             reap_dead();
             server_users.push_back(user);

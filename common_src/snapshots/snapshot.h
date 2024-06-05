@@ -6,10 +6,11 @@
 #include <vector>
 
 #include "../../game_src/constants_game.h"
+#include "../../game_src/dynamic_map.h"
 #include "../../server_src/config.h"
 #include "../constants.h"
 
-// #include "snapshot_map.h" ???
+#include "snapshot_enemy.h"
 #include "snapshot_projectile.h"
 #include "snapshot_rabbit.h"
 #include "snapshot_supply.h"
@@ -20,6 +21,7 @@ struct MapDimensions {
     int rabbit_amount = RABBIT_AMOUNT_DEFAULT;
     int rabbit_width = RABBIT_WIDTH_DEFAULT;
     int rabbit_height = RABBIT_HEIGHT_DEFAULT;
+    DynamicMap map_data = {};
 } typedef MapDimensions_t;
 
 class Snapshot {
@@ -32,15 +34,15 @@ public:
      * Además, tiene las dimensiones del mapa para que el cliente pueda renderizarlo correctamente
      */
     std::vector<RabbitSnapshot> rabbits;
+    std::vector<EnemySnapshot> enemies;
     std::vector<ProjectileSnapshot> projectiles;
     std::vector<SupplySnapshot> supplies;
     MapDimensions_t map_dimensions;
 
-    Snapshot(const std::vector<RabbitSnapshot>& rabbits,
+    Snapshot(const std::vector<RabbitSnapshot>& rabbits, const std::vector<EnemySnapshot>& enemies,
              const std::vector<ProjectileSnapshot>& projectiles,
              const std::vector<SupplySnapshot>& supplies):
             rabbits(rabbits), projectiles(projectiles), supplies(supplies), map_dimensions() {}
-
 
     Snapshot() {}
     ~Snapshot() {}
@@ -52,12 +54,14 @@ public:
      */
     void set_dimensions(int height = 0, int width = 0, int rabbit_width = RABBIT_WIDTH_DEFAULT,
                         int rabbit_height = RABBIT_HEIGHT_DEFAULT,
-                        int rabbit_ammount = RABBIT_AMOUNT_DEFAULT) {
+                        int rabbit_ammount = RABBIT_AMOUNT_DEFAULT,
+                        const DynamicMap& map_data = {}) {
         map_dimensions.height = height;
         map_dimensions.width = width;
         map_dimensions.rabbit_amount = rabbit_ammount;
         map_dimensions.rabbit_width = rabbit_width;
         map_dimensions.rabbit_height = rabbit_height;
+        map_dimensions.map_data = map_data;
     }
 
     void set_end_game() { end_game = true; }

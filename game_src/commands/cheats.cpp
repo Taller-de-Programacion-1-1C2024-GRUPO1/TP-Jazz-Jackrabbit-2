@@ -1,7 +1,6 @@
 #include "cheats.h"
 
-Cheats::Cheats(int playerID, int cheatID):
-        Command(playerID), playerID(playerID), cheatID(cheatID) {}
+Cheats::Cheats(int playerID, int cheatID): Command(playerID), cheatID(cheatID) {}
 
 bool Cheats::execute_Command(bool* cheatOn, bool& needsMove) {
     if (cheatID == ADD_HEALTH) {
