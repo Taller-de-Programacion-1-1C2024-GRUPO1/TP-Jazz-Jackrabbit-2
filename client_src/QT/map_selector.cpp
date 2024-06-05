@@ -27,19 +27,19 @@ MapSelector::~MapSelector() { delete ui; }
 
 
 void MapSelector::on_btnMap1_clicked() {
-    selected_map = "map1";
+    selected_map = "carrotus"; /////////////////PONER NOMBRE
     start_match();
 }
 
 
 void MapSelector::on_btnMap2_clicked() {
-    selected_map = "map2";
+    selected_map = "carrotus";
     start_match();
 }
 
 
 void MapSelector::on_btnMapCreate_clicked() {
-    selected_map = "create_map";
+    selected_map = "carrotus";             /////////////////PONER NOMBRE
     start_match();
 }
 
@@ -70,26 +70,34 @@ void MapSelector::start_match() {
                                     selected_character);
     q_cmds.push(&cmd);
 
+    /*
     int response;
     bool could_pop = false;
     while (!could_pop) {
         could_pop = q_responses.try_pop(response);
         QMessageBox::warning(this, "Error", "trying to connect:");
-        std::this_thread::sleep_for(std::chrono::seconds(4));
+        std::this_thread::sleep_for(std::chrono::seconds(2));
     }
+    */
+    int response = q_responses.pop();
     if (response == 0) {
+        hide();
+        WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
+        if (waiting_room.exec() == QDialog::Accepted) {
+            accept();
+        } else {
+            // error ?
+        }
+    } else if (response == -1) {
+        // no pude conectarme
         QMessageBox::warning(this, "Error", "Match name already exists.");
+        return;
+    } else {
+        QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
         return;
     }
 
 
-    hide();
-    WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
-    if (waiting_room.exec() == QDialog::Accepted) {
-        accept();
-    } else {
-        // error ?
-    }
 }
 
 

@@ -30,8 +30,9 @@ WaitingRoom::WaitingRoom(Queue<Command*>& q_cmds, Queue<int>& q_responses,
 WaitingRoom::~WaitingRoom() { delete ui; }
 
 void WaitingRoom::on_pushButton_clicked() {
-    // aca en realidad le pregunto al protocolo si ya puedo iniciar la partida
+    std::cout << "Waiting for game to start" << std::endl;
     int player_number = q_responses.pop();
+    std::cout << "Player number EN WAITING ROOM: " << player_number << std::endl;
     if (player_number < 0) {
         QMessageBox::warning(this, "Error", "error al iniciar la partida");
         return;

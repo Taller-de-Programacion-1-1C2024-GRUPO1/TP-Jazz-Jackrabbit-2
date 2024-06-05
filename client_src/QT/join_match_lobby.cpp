@@ -56,25 +56,22 @@ void JoinMatchLobby::on_btnJoin_clicked() {
     MatchCommand cmd = MatchCommand(JOIN, 0, match_name, "", selected_character);
     q_cmds.push(&cmd);
 
-    int response;
-    bool could_pop = false;
-    while (!could_pop) {
-        could_pop = q_responses.try_pop(response);
-        QMessageBox::warning(this, "Error", "trying to connect:");
-        std::this_thread::sleep_for(std::chrono::seconds(4));
-    }
+    int response = q_responses.pop();
     if (response == 0) {
-        QMessageBox::warning(this, "Error", "Match not found.");
+        hide();
+        WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
+        if (waiting_room.exec() == QDialog::Accepted) {
+            accept();
+        } else {
+            // error ?
+        }
+    } else if (response == -1) {
+        // no pude conectarme
+        QMessageBox::warning(this, "Error", "Match name already exists.");
         return;
-    }
-
-
-    hide();
-    WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
-    if (waiting_room.exec() == QDialog::Accepted) {
-        accept();
     } else {
-        // error ?
+        QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
+        return;
     }
 }
 
