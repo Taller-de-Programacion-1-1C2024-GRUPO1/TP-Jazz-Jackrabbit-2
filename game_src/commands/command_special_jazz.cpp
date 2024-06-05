@@ -1,6 +1,6 @@
 #include "command_special_jazz.h"
 
-SpecialJazz::SpecialJazz(int id): Command(id), playerID(id) {}
+SpecialJazz::SpecialJazz(int id): Command(id) {}
 
 bool SpecialJazz::execute_Command(bool* cheatOn, bool& needsMove) {
     // game_manager.specialJazzPlayer(this->playerID);

@@ -8,11 +8,11 @@ class Protocol;
 // Clase que representa el comando de cambiar de arma/municion
 class ChangeWeapon: public Command {
 private:
-    int playerID;
     int commandType = COMMAND_CHANGE_WEAPON;
 
 public:
     explicit ChangeWeapon(int playerID);
+    void execute_Command(Map& map) override;
     bool execute_Command(bool* cheatON, bool& needsMove) override;
     void send(Protocol& protocol) override;
     int get_playerId() override;

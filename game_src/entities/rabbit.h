@@ -65,6 +65,7 @@ public:
     void run_fast_left();
     void shoot();
     void special_attack();
+    void change_weapon();
 
     // SHOOT
 

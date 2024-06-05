@@ -210,4 +210,56 @@ void Map::create_entities() {
 
 std::string Map::get_name() const { return map_name; }
 
+int Map::get_rabbit_position_by_id(int id) {
+    for (int i = 0; i < players.size(); i++) {
+        if (players[i]->get_rabbit_id() == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void Map::execute_jump(int playerID) {
+    int player_pos = get_rabbit_position_by_id(playerID);
+    if (player_pos != -1) {
+        players[player_pos]->jump();
+    }
+}
+
+void Map::execute_move(int playerID, int dir) {
+    int player_pos = get_rabbit_position_by_id(playerID);
+    if (player_pos != -1) {
+        if (dir == LEFT) {
+            players[player_pos]->run_left();
+        } else {
+            players[player_pos]->run_right();
+        }
+    }
+}
+
+void Map::execute_move_faster(int playerID, int dir) {
+    int player_pos = get_rabbit_position_by_id(playerID);
+    if (player_pos != -1) {
+        if (dir == LEFT) {
+            players[player_pos]->run_fast_left();
+        } else {
+            players[player_pos]->run_fast_right();
+        }
+    }
+}
+
+void Map::execute_change_weapon(int playerID) {
+    int player_pos = get_rabbit_position_by_id(playerID);
+    if (player_pos != -1) {
+        players[player_pos]->change_weapon();
+    }
+}
+
+void Map::execute_shoot(int playerID) {
+    int player_pos = get_rabbit_position_by_id(playerID);
+    if (player_pos != -1) {
+        players[player_pos]->shoot();
+    }
+}
+
 Map::~Map() {}

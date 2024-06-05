@@ -13,6 +13,7 @@ enum /*Match Status*/ {
     MATCH_OVER,
 };
 
-#define FRAME_TIME 1.0f
+#define FPS 60
+#define FRAME_DELAY (1000 / FPS)
 
 #endif

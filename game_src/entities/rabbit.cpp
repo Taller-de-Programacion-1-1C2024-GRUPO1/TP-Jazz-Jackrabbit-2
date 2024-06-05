@@ -258,6 +258,8 @@ void Rabbit::run_fast_left() { state->run_fast_left(); }
 void Rabbit::shoot() { state->shoot(); }
 void Rabbit::special_attack() { state->special_attack(); }
 
+void Rabbit::change_weapon() {}
+
 // COLA
 void Rabbit::add_jump() { events_queue.push(EVENT_JUMP); }
 void Rabbit::add_run_right() { events_queue.push(EVENT_RUN_RIGHT); }

@@ -84,6 +84,13 @@ public:
 
     std::string get_name() const;
 
+    int get_rabbit_position_by_id(int id);
+    void execute_jump(int playerID);
+    void execute_move(int playerID, int dir);
+    void execute_shoot(int playerID);
+    void execute_move_faster(int playerID, int dir);
+    void execute_change_weapon(int playerID);
+
     ~Map();
 };
 
