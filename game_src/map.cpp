@@ -103,6 +103,8 @@ void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = d
 
 void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
     this->spawn_points = spawn_points;
+    std::cout << "Spawn points inicializados. Cantidad de puntos para RABBIT_SPAWN: "
+              << spawn_points.at(RABBIT_SPAWN).size() << std::endl;
 }
 
 void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }
@@ -174,6 +176,13 @@ std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
 void Map::create_entities() {
     int id_counter_enemy = 0;
     int id_counter_supply = 0;
+    // VER QUE HACER CON ESTO
+    if (spawn_points.at(RABBIT_SPAWN).size() < amount_players) {
+        std::cerr << "map.cpp Error: No hay suficientes puntos de spawn en el mapa para los jugadores." << std::endl;
+        amount_players = spawn_points[RABBIT_SPAWN].size();  // Limitar la cantidad de jugadores
+    }
+    
+
     for (int i = 0; i < amount_players; i++) {
         players.push_back(new Rabbit(NULL_CHAMPION_TYPE, spawn_points[RABBIT_SPAWN].at(i).get_x(),
                                      spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,

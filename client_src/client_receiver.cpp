@@ -16,13 +16,15 @@ void ClientReceiver::run() {
     while (keep_talking) {
         try {
             if (!game_started) {
+                std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << std::endl;
                 int response = this->protocol.receive_response();
+                std::cout << "pusheando respuesta: " << response << "\n";
                 q_responses.push(response);
             } else {
                 Snapshot snap = this->protocol.receive_Snapshot();
+                std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;
                 q_snapshots.push(snap);
             }
-            std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));
         } catch (const ClosedQueue& e) {
             std::cerr << "Se cerró la Snapshot queue" << std::endl;

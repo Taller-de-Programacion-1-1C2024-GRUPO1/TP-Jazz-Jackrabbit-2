@@ -35,13 +35,10 @@ void User::run() {
 void User::create_new_match(int number_of_players, const std::string& match_name,
                             const std::string& map_name, ChampionType character_name) {
 
-    std::cout << "1" << std::endl;
+
     Map map = monitor_matches.get_map(map_name);
-    std::cout << "2" << std::endl;
     map.set_amount_players(number_of_players);
-    std::cout << "3" << std::endl;
     map.create_entities();
-    std::cout << "4" << std::endl;
     std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> protocols_queue =
             std::make_shared<Queue<std::shared_ptr<PlayerInfo>>>();
 
@@ -53,10 +50,14 @@ void User::create_new_match(int number_of_players, const std::string& match_name
     std::shared_ptr<MatchInfo> new_match =
             std::make_shared<MatchInfo>(match_name, map, protocols_queue, playing);
     int ACK = monitor_matches.add_new_match(match_name, new_match);
+    std::cout << "1" << std::endl;
     container_protocol->protocol.send_response(ACK);
+    std::cout << "2" << std::endl;
     if (ACK == ERROR) {
+        std::cout << "3" << std::endl;
         return;
     }
+    std::cout << "SERVER USER" << std::endl;
     monitor_matches.start_match(match_name);
     this->status = INACTIVE;
 }

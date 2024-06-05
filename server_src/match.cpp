@@ -33,6 +33,7 @@ void Match::run() {
     BroadcasterSnapshots broadcaster_snapshots;
     try {
         for (int cont = 0; cont < number_of_players; cont++) {
+            std::cout << "EL ESTADO DE LA PARTIDA ES" << status << std::endl;
             if (has_started())
                 throw MatchAlreadyStarted();
             if (number_of_players >= map.get_max_players())
@@ -51,6 +52,7 @@ void Match::run() {
             players.push_back(player);
         }
         // Ya se conectaron todos los jugadores, se envian los ids de cada uno
+        std::cout << "MATCH RUN ENVIA PLAYER IDS A CADA PLAYER" << std::endl;
         send_players_ids();
 
         Gameloop gameloop =
@@ -70,6 +72,7 @@ void Match::run() {
 
 void Match::send_players_ids() {
     for (auto& player: players) {
+        std::cout << "Player id: " << player->get_id() << std::endl;
         player->send_player_id();
     }
 }
