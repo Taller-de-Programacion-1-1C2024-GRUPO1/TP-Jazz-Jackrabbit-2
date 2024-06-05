@@ -79,14 +79,19 @@ void MapSelector::start_match() {
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
     */
-    int response = q_responses.pop();
+
+    bool could_pop = false;
+    int response;
+    while (!could_pop) {
+        could_pop = q_responses.try_pop(response);
+    }
     if (response == 0) {
         hide();
         WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
         if (waiting_room.exec() == QDialog::Accepted) {
             accept();
         } else {
-            // error ?
+            std::cerr << "Error en waiting room" << std::endl;
         }
     } else if (response == -1) {
         // no pude conectarme
