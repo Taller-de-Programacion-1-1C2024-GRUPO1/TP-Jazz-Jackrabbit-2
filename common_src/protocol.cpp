@@ -54,7 +54,20 @@ void Protocol::send_char(char c) {
 }
 
 void Protocol::send_map(DynamicMap map) {
-    socket.sendall(&map, sizeof(map), &was_closed);
+    // enviar el mapa: primero la cantidad de elementos y luego cada uno de ellos
+    // std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data;
+    send_uintThirtyTwo(map.map_data.size());
+    // enviar cada key y value del mapa
+    for (auto& key_value: map.map_data) {
+        // enviar la key
+        send_uintEight(key_value.first);
+        // enviar el value
+        for (int i = 0; i < MAP_HEIGHT_DEFAULT; i++) {
+            for (int j = 0; j < MAP_WIDTH_DEFAULT; j++) {
+                send_uintEight(key_value.second[j][i]);
+            }
+        }
+    }
     check_closed();
 }
 
@@ -102,8 +115,22 @@ char Protocol::receive_char() {
 }
 
 DynamicMap Protocol::receive_map() {
-    DynamicMap map;
-    socket.recvall(&map, sizeof(map), &was_closed);
+    std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data_temp;
+
+    // recibir la cantidad de elementos del mapa
+    uint8_t map_size = receive_uintThirtyTwo();
+    // recibir cada key y value del mapa
+    for (int i = 0; i < map_size; i++) {
+        // recibir la key
+        uint8_t key = receive_uintEight();
+        // recibir el value
+        for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
+            for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
+                map_data_temp[key][k][j] = receive_uintEight();
+            }
+        }
+    }
+    DynamicMap map(map_data_temp);
     check_closed();
     return map;
 }
