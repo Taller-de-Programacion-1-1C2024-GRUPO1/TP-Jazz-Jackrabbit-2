@@ -3,11 +3,17 @@
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png"
 //#define FONT FONTS_PATH "/04B_30__.ttf"
 //#define GAME_TITLE "Juego"
+
+//#include "client_config.h"
+//#define CHARACTERS_PATH ClientConfigSingleton::getInstance().getCharactersPath()
+
 /*
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
 //#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
 
+//#define JAZZ_IMG CHARACTERS_PATH + "/Jazz.png"
+//#define LORI_IMG CHARACTERS_PATH + "/Lori.png"
 #define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
 #define LORI_IMG "../client_src/resources/characters/Lori.png"
 #define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
@@ -40,7 +46,7 @@
 
 #include "client_number_images.h"
 
-
+*//*
 using SDL2pp::Chunk;
 using SDL2pp::Font;
 using SDL2pp::Mixer;
@@ -125,7 +131,7 @@ void handle_events(bool& game_running, int& score, ShiftingDrawable& jazz, Shift
         jazz.setDirection(-1);
     } else if (state[SDL_SCANCODE_RIGHT]) {
         score++;
-
+*//*
         jazz.setPosition(++x_counter, 10);
         jazz.setAnimation("Run");
         jazz.setDirection(1);

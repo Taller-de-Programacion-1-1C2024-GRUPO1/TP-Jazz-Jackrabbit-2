@@ -5,9 +5,12 @@ Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)),
         q_cmds(15),  // ESE 15 HAY QUE SACARLO ////////////////////////////////// ACA HAY QUE USAR
                      // PUNTEROS INTELIGENTES
+        q_responses(),
+        game_started(false),
+        player_id(-1),
         q_snapshots(),
         client_sender(protocol, q_cmds),
-        client_receiver(protocol, q_snapshots),
+        client_receiver(protocol, q_responses, game_started, q_snapshots),
         drawer(q_cmds, q_snapshots) {}
 
 
@@ -18,12 +21,16 @@ void Client::run(int argc, char* argv[]) {
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w(protocol);
+    ClientLobby w(q_cmds, q_responses, game_started, player_id);
     w.show();
-    a.exec();
+    int result = a.exec();
 
-    // SDL
-    drawer.run();
+    if (result == 0) {
+        // SDL
+        drawer.run(player_id);
+    } else {
+        // error
+    }
 }
 
 Client::~Client() {

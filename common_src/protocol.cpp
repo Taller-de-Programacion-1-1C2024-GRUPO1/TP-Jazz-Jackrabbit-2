@@ -53,12 +53,18 @@ void Protocol::send_char(char c) {
     check_closed();
 }
 
+// Primer Response:
+// envia un ACK 0 en caso de haberse unido/creado un match
+// envia un ACK negativo (-1) en caso de no poder unirse/crear un match
+// Segundo response:
+// envia un ACK positivo (player_id) justo antes de iniciar la match
 void Protocol::send_map(DynamicMap map) {
     socket.sendall(&map, sizeof(map), &was_closed);
     check_closed();
 }
 
 void Protocol::send_response(int ACK) {
+    std::cout << "Sending response" << ACK << std::endl;
     check_closed();
     send_uintEight(ACK);
 }
@@ -421,6 +427,8 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
     std::cout << "Sending rabbits" << std::endl;
+        std::cout << "Cantidad de rabbits: " << snapshot.rabbits.size() << std::endl;
+
     // enviar la cantidad de conejos
     send_uintEight(snapshot.rabbits.size());
     // enviar cada conejo
@@ -498,12 +506,21 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     std::cout << "Receiving dimensions" << std::endl;
     // recibir y setear las dimensiones del mapa en el snapshot pasado por referencia
     uint32_t width = receive_uintThirtyTwo();
+    std::cout << "Recibí width" << std::endl;
     uint32_t height = receive_uintThirtyTwo();
+    std::cout << "Recibí height" << std::endl;
     uint32_t rabbit_ammount = receive_uintThirtyTwo();
+    std::cout << "Recibí rabbit_ammount" << std::endl;
     uint32_t rabbit_width = receive_uintThirtyTwo();
+    std::cout << "Recibí rabbit_width" << std::endl;
     uint32_t rabbit_height = receive_uintThirtyTwo();
+    std::cout << "Recibí rabbit_height" << std::endl;
     DynamicMap map_data = receive_map();
+        std::cout << "Recibí mapa" << std::endl;
+
     snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
+    
+    std::cout << "FIn de receive dimensions" << std::endl;
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {
@@ -537,6 +554,7 @@ void Protocol::receive_enemies(Snapshot& snapshot) {
     // recibir y setear enemies en el snapshot pasado por referencia
     // recibir la cantidad de enemigos
     uint8_t enemy_amount = receive_uintEight();
+    std::cout << "Recibí enemy_amount" << enemy_amount << std::endl;
     // recibir cada enemigo
     for (int i = 0; i < enemy_amount; i++) {
         // recibir cada atributo del enemigo

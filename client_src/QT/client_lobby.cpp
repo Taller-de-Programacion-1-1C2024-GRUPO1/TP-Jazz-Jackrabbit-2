@@ -1,74 +1,87 @@
 #include "client_lobby.h"
 
-#include <QMessageBox>
-
 #include "./ui_client_lobby.h"
 
-// ClientLobby::ClientLobby(QWidget* parent): QMainWindow(parent) ,ui(new Ui::ClientLobby) {
 
-ClientLobby::ClientLobby(Protocol& protocol): protocol(protocol), ui(new Ui::ClientLobby) {
+ClientLobby::ClientLobby(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+                         std::atomic<bool>& game_started, int& player_id, QWidget* parent):
+        QMainWindow(parent),
+        ui(new Ui::ClientLobby),
+        q_cmds(q_cmds),
+        q_responses(q_responses),
+        player_id(player_id),
+        game_started(game_started) {
     ui->setupUi(this);
 
-    // Cargar la fuente desde los recursos
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
     if (fontId != -1) {
         QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
         QFont font(fontFamily);
         QApplication::setFont(font);
+        QFont buttonFont(fontFamily, 24);
+        ui->btnCreateMatch->setFont(buttonFont);
+        ui->btnJoinMatch->setFont(buttonFont);
+        ui->btnQuit->setFont(buttonFont);
     } else {
         qWarning() << "No se pudo cargar la fuente 04B_30__";
     }
-
-    // Establecer el fondo
-    // background-image: url(:/backgrounds/lobby.png)
     QPixmap pixmap(":/backgrounds/lobby.png");
     QPalette palette;
-    palette.setBrush(QPalette::Window,
-                     pixmap);  // Usar QPalette::Window en lugar de QPalette::Background
+    palette.setBrush(QPalette::Window, pixmap);
     this->setPalette(palette);
 }
 
 ClientLobby::~ClientLobby() { delete ui; }
 
-int match_code;
-// std::string map;
 void ClientLobby::on_btnCreateMatch_clicked() {
-    match_code = ui->txtCreateMatch->toPlainText().toInt();
-    // map = "mapa1";
-    // Match match(NEW_MATCH, std::to_string(match_code), map);
-    // protocol.send(match);
+    hide();
+    CharacterSelector characterSelector;
+    connect(&characterSelector, &CharacterSelector::windowClosed, this,
+            &ClientLobby::handleWindowClosed);
+    connect(&characterSelector, &CharacterSelector::characterSelected, this,
+            &ClientLobby::handleCharacterSelected);
 
-    if (match_code == 0) {
-        QMessageBox::critical(this, "ERROR", "nombre de partida invalido");
-        return;
+    if (characterSelector.exec() == QDialog::Accepted) {
+        MapSelector map_selector(q_cmds, q_responses, game_started, selected_character, player_id);
+        connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
+        if (map_selector.exec() == QDialog::Accepted) {
+            // ENVIO COMANDO E INICIO PARTIDA
+            QApplication::exit(0);
+        }
     }
+}
+
+void ClientLobby::on_btnJoinMatch_clicked() {
 
     hide();
-    MapSelector map_selector;
-    map_selector.setModal(true);
-    map_selector.exec();
+    CharacterSelector characterSelector;
+    connect(&characterSelector, &CharacterSelector::characterSelected, this,
+            &ClientLobby::handleCharacterSelected);
+    connect(&characterSelector, &CharacterSelector::windowClosed, this,
+            &ClientLobby::handleWindowClosed);
 
-    // ui->txtAvailableMatches->setPlainText(QString::number(match_code));
+    if (characterSelector.exec() == QDialog::Accepted) {
+        JoinMatchLobby joinMatchLobby(q_cmds, q_responses, game_started, selected_character,
+                                      player_id);
+        connect(&joinMatchLobby, &JoinMatchLobby::windowClosed, this,
+                &ClientLobby::handleWindowClosed);
+
+        if (joinMatchLobby.exec() == QDialog::Accepted) {
+
+            // ESpero a que se conecten todos los jugadores y se inicie la partida
+
+
+            QApplication::exit(0);
+        }
+    }
 }
 
-int join_match_code;
-void ClientLobby::on_btnJoinMatch_clicked() {
-    join_match_code = ui->txtJoinMatch->toPlainText().toInt();
+void ClientLobby::on_btnQuit_clicked() { QApplication::exit(1); }
+
+
+void ClientLobby::handleCharacterSelected(ChampionType character) {
+    selected_character = character;
 }
 
 
-void ClientLobby::on_btnError_clicked() {
-    // QMessageBox::about(this, "ERROR", "Ingrese un numero valido");
-    QMessageBox::critical(this, "ERROR", "Ingrese un numero valido");
-}
-
-/*
-void ClientLobby::run(int argc, char* argv[])
-{
-   QApplication a(argc, argv);
-   Q_INIT_RESOURCE(resources);
-   ClientLobby w;
-   w.show();
-   a.exec();
-}
-*/
+void ClientLobby::handleWindowClosed() { QApplication::exit(1); }

@@ -8,9 +8,12 @@
 //#define FONT FONTS_PATH "/04B_30__.ttf"
 //#define GAME_TITLE "Juego"
 
+//#include "client_config.h"
+//#define CHARACTERS_PATH ClientConfigSingleton::getInstance().getCharactersPath()
+
+
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
-//#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png" PREGUNTAR SI ESTA BIEN
 
 #define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
 #define LORI_IMG "../client_src/resources/characters/Lori.png"
@@ -96,9 +99,8 @@ private:
 public:
     ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots);
 
-    int run();
+    int run(int player_id);
     void handle_keyboard(bool& game_running);
-    void testingSnapshot();
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
     //~ClientDrawer();
 };

@@ -13,24 +13,24 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="txtSelectMap">
+  <widget class="QLabel" name="labelSelectMap">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>90</y>
+     <y>20</y>
      <width>801</width>
-     <height>61</height>
+     <height>191</height>
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;Select a map&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;Select&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;number of players&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;and map&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnMap1">
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>330</y>
+     <y>380</y>
      <width>200</width>
      <height>150</height>
     </rect>
@@ -51,7 +51,7 @@ font: 20pt;</string>
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>330</y>
+     <y>380</y>
      <width>200</width>
      <height>150</height>
     </rect>
@@ -72,7 +72,7 @@ font: 20pt;</string>
    <property name="geometry">
     <rect>
      <x>510</x>
-     <y>330</y>
+     <y>380</y>
      <width>200</width>
      <height>150</height>
     </rect>
@@ -91,20 +91,69 @@ a
 map</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnContinue">
+  <widget class="QSpinBox" name="spinNumberOfPlayers">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>500</y>
-     <width>171</width>
-     <height>51</height>
+     <x>290</x>
+     <y>300</y>
+     <width>71</width>
+     <height>61</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>24</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
-    <string notr="true">font: 20pt;</string>
+    <string notr="true">
+background-color: rgba(255, 255, 255, 100); 
+</string>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>3</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelNumberOfPlayers">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>300</y>
+     <width>171</width>
+     <height>61</height>
+    </rect>
    </property>
    <property name="text">
-    <string>continue</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Number &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;of players:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelMatchName">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>290</y>
+     <width>171</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Match&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;name:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="txtMatchName">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>300</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>match name</string>
    </property>
   </widget>
  </widget>

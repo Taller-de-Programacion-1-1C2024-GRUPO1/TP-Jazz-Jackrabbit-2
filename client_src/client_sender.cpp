@@ -10,8 +10,8 @@ ClientSender::ClientSender(Protocol& protocol, Queue<Command*>& q_cmds):
 void ClientSender::run() {
     while (keep_talking) {
         try {
-            // Command cmd = q_cmds.pop();
-            // this->protocol.send(cmd);
+            Command* cmd = q_cmds.pop();
+            cmd->send(this->protocol);
             std::cout << "Client SENDER: Enviando comando" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));
         } catch (const ClosedQueue& e) {

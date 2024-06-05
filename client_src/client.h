@@ -19,14 +19,19 @@
 #include "client_receiver.h"
 #include "client_sender.h"
 
+//#include "client_config.h"
+
 
 class Client {
 private:
     Protocol protocol;
     Queue<Command*> q_cmds;
+    Queue<int> q_responses;
+    std::atomic<bool> game_started;
+    int player_id;
     Queue<Snapshot> q_snapshots;
     ClientSender client_sender;
-    Client_Receiver client_receiver;
+    ClientReceiver client_receiver;
     // ClientLobby lobby;
     ClientDrawer drawer;
 

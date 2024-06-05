@@ -6,40 +6,48 @@
 #include <QFontDatabase>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <memory>
+#include <string>
 
 #include "../../common_src/constants.h"
-#include "../../common_src/protocol.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
+#include "../../game_src/constants_game.h"
+#include "../client_receiver.h"
+#include "../client_sender.h"
 
+#include "character_selector.h"
+#include "join_match_lobby.h"
 #include "map_selector.h"
 
-QT_BEGIN_NAMESPACE
 namespace Ui {
 class ClientLobby;
 }
-QT_END_NAMESPACE
 
 class ClientLobby: public QMainWindow {
     Q_OBJECT
-private:
-    Protocol& protocol;
 
 public:
-    // ClientLobby(QWidget* parent = nullptr);
-    explicit ClientLobby(Protocol& protocol);
+    explicit ClientLobby(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+                         std::atomic<bool>& game_started, int& player_id,
+                         QWidget* parent = nullptr);
     ~ClientLobby();
-    // void run(int argc, char* argv[]);
 
 private slots:
     void on_btnCreateMatch_clicked();
-
     void on_btnJoinMatch_clicked();
-
-    void on_btnError_clicked();
+    void on_btnQuit_clicked();
+    void handleWindowClosed();
+    void handleCharacterSelected(ChampionType character);
 
 
 private:
     Ui::ClientLobby* ui;
+    Queue<Command*>& q_cmds;
+    Queue<int>& q_responses;
+    int& player_id;
+    std::atomic<bool>& game_started;
+    ChampionType selected_character;
 };
+
 #endif  // CLIENT_LOBBY_H

@@ -2,18 +2,30 @@
 
 #include <chrono>
 
-Client_Receiver::Client_Receiver(Protocol& protocol, Queue<Snapshot>& q_snapshots):
-        protocol(protocol), q_snapshots(q_snapshots), keep_talking(true), is_alive(true) {}
+ClientReceiver::ClientReceiver(Protocol& protocol, Queue<int>& q_responses,
+                               std::atomic<bool>& game_started, Queue<Snapshot>& q_snapshots):
+        protocol(protocol),
+        q_responses(q_responses),
+        game_started(game_started),
+        q_snapshots(q_snapshots),
+        keep_talking(true),
+        is_alive(true) {}
 
 
-void Client_Receiver::run() {
+void ClientReceiver::run() {
     while (keep_talking) {
         try {
-            // Snapshot snap;
-            // this->protocol.recive(snap);
-            // q_snapshots.push(snap);
-
-            std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;
+            if (!game_started) {
+                std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << std::endl;
+                int response = this->protocol.receive_response();
+                std::cout << "pusheando respuesta: " << response << "\n";
+                q_responses.push(response);
+            } else {
+                Snapshot snap = this->protocol.receive_Snapshot();
+                std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;
+                std::cout << "Enemy size: " << snap.enemies.size() << std::endl;
+                q_snapshots.push(snap);
+            }
             std::this_thread::sleep_for(std::chrono::seconds(2));
         } catch (const ClosedQueue& e) {
             std::cerr << "Se cerró la Snapshot queue" << std::endl;
@@ -29,10 +41,10 @@ void Client_Receiver::run() {
 }
 
 
-bool Client_Receiver::is_dead() { return !this->is_alive; }
+bool ClientReceiver::is_dead() { return !this->is_alive; }
 
 
-void Client_Receiver::kill() {
+void ClientReceiver::kill() {
     this->keep_talking = false;
     q_snapshots.close();
 }

@@ -17,21 +17,22 @@ Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
 void Gameloop::send_initial_snapshots() {
 
     // Se debe leer el mapa elegido por el usuario y crearlo
-    std::shared_ptr<Snapshot> snapshot = map.get_init_snapshot();
+    Snapshot snapshot = map.get_init_snapshot();
+    std::cout << "Enviando enemigos: " << snapshot.enemies.size() << std::endl;
 
     // Enviar el snapshot inicial
-    push_all_players(*snapshot);
+    push_all_players(snapshot);
+
 }
 
 void Gameloop::push_all_players(const Snapshot& snapshot) {
     // Enviar a cada jugador la snapshot
-    for (auto& player: players) {
-        Queue<std::shared_ptr<Snapshot>>& player_snapshot_queue = player->get_snapshots_queue();
-        try {
-            player_snapshot_queue.push(std::make_shared<Snapshot>(snapshot));
-        } catch (const ClosedQueue& err) {
-            continue;
-        }
+    std::cout << "Enviando enemigos: " << snapshot.enemies.size() << std::endl;
+
+    try{
+        broadcaster_snapshots.broadcast(std::make_shared<Snapshot>(snapshot));
+    }
+    catch (ClosedQueue& err) {
     }
 }
 
@@ -44,7 +45,7 @@ void Gameloop::run() {
         }
         map.update();
 
-        push_all_players(*map.get_snapshot());
+        push_all_players(map.get_snapshot());
 
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

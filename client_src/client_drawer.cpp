@@ -9,61 +9,10 @@
 #include "client_map_loader.h"
 #include "client_sound_manager.h"
 
-
-int shiftable_x = 10;
-int direction_x = 0;
-
-RabbitSnapshot createRabbitSnapshot(int _id, int _pos_x, int _pos_y) {
-    RabbitSnapshot rabbit(_id, direction_x, 1, _pos_x, _pos_y, 10, 3, 0, 1000, 0, 1);
-    return rabbit;
-}
-
-EnemySnapshot createEnemySnapshot(int _id, int _pos_x, int _pos_y, int _enemy_type) {
-    EnemySnapshot enemy(_id, 0, _enemy_type, _pos_x, _pos_y);
-    return enemy;
-}
-
-ProjectileSnapshot createProjectileSnapshot(int _id, int _pos_x, int _pos_y, int _weapon) {
-    ProjectileSnapshot projectile_snapshot(_id, 0, _pos_x, _pos_y, _weapon);
-    return projectile_snapshot;
-}
-
-SupplySnapshot createSupplySnapshot(int _id, int _pos_x, int _pos_y) {
-    SupplySnapshot supply_snapshot(_id, 0, _pos_x, _pos_y);
-    return supply_snapshot;
-}
-
-Snapshot createInitialSnapshot() {
-    Snapshot initial;
-
-    initial.map_dimensions.height = 608;
-    initial.map_dimensions.width = 1120;
-    initial.map_dimensions.rabbit_amount = 3;
-    initial.map_dimensions.rabbit_height = 64;
-    initial.map_dimensions.rabbit_width = 64;
-    // initial.map_dimensions.map_data;
-
-    initial.rabbits.push_back(createRabbitSnapshot(0, 10, 100));
-    initial.rabbits.push_back(createRabbitSnapshot(1, 10, 150));
-    initial.rabbits.push_back(createRabbitSnapshot(2, 10, 200));
-
-    initial.enemies.push_back(createEnemySnapshot(0, 10, 500, 1));
-    initial.enemies.push_back(createEnemySnapshot(1, 10, 450, 2));
-    initial.enemies.push_back(createEnemySnapshot(2, 10, 400, 3));
-
-
-    initial.projectiles.push_back(createProjectileSnapshot(0, 500, 10, 0));
-    initial.projectiles.push_back(createProjectileSnapshot(1, 500, 120, 1));
-
-    initial.supplies.push_back(createSupplySnapshot(0, 400, 400));
-    // initial.supplies.push_back(createSupplySnapshot(0, 64, 64));
-    // initial.supplies.push_back(createSupplySnapshot(1, 256, 256));
-    // initial.supplies.push_back(createSupplySnapshot(2, 300, 300));
-
-    return initial;
-}
-
-// ACA EMPIEZA DRAWER
+enum  { None=0, JAZZ, SPAZ, LORI};
+enum  { RABBITT=0, LIZARDD, CRABB, TURTLEE};
+enum  { ALIVE, RECIEVED_DAMAGE, INTOXICATED, DEAD };
+enum  { STANDD, RUNN, RUN_FASTT, FALLINGG, JUMPINGG };
 
 ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds),
@@ -76,15 +25,10 @@ ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots
         rabbit_width(0),
         rabbit_height(0) {}
 
-void ClientDrawer::testingSnapshot() {
-    Snapshot initial_snapshot = createInitialSnapshot();
-    q_snapshots.push(initial_snapshot);
-}
-
 void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                                             ShiftingDrawable* drawable) {
     switch (snapshot.state) {
-        case ALIVEE:
+        case ALIVE:
             switch (snapshot.action) {
                 case STANDD:
                     drawable->setAnimation("Stand");
@@ -103,10 +47,10 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                     break;
             }
             break;
-        case RECIEVED_DAMAGEE:
+        case RECIEVED_DAMAGE:
             drawable->setAnimation("Hurt");
             break;
-        case INTOXICATEDD:
+        case INTOXICATED:
             switch (snapshot.action) {
                 case STANDD:
                     drawable->setAnimation("Intoxicated-Stand");
@@ -125,7 +69,7 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                     break;
             }
             break;
-        case DEADD:
+        case DEAD:
             drawable->setAnimation("Die");
             break;
     }
@@ -176,15 +120,16 @@ void handle_events(bool& game_running) {
     if (state[SDL_SCANCODE_ESCAPE]) {
         game_running = false;
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        shiftable_x += 10;
-        direction_x = 0;
+
     } else if (state[SDL_SCANCODE_LEFT]) {
-        shiftable_x -= 10;
-        direction_x = -1;
+
     }
 }
 
-int ClientDrawer::run() try {
+int ClientDrawer::run(int player_id) try {
+    client_id = player_id;
+    std::cout << "My id is: " << client_id << std::endl;
+
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     // Initialize SDL_ttf library
@@ -224,11 +169,13 @@ int ClientDrawer::run() try {
     HeartsBanner banner(renderer);
     AmmoLeft ammoLeft(renderer);
 
-    testingSnapshot();
-
     // Read first snapshot!
+
+    std::cout << "Estoy por leer snapshot" << std::endl;
     Snapshot initial_snapshot = q_snapshots.pop();
     game_running = !initial_snapshot.get_end_game();
+    std::cout << "Leí snapshot :)" << std::endl;
+
 
     std::vector<std::unique_ptr<Drawable>> mapComponents =
             mapLoader.loadMap(MAP_FILE, CARROTUS_TILE, mapColor, cameraPosition);
@@ -249,25 +196,16 @@ int ClientDrawer::run() try {
             playerPosition.x = rabbit.pos_x;
             playerPosition.y = rabbit.pos_y;
 
-            std::cout << "cargando rabbit propio" << std::endl;
             loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
-                        std::cout << "cargando textura y yaml" << std::endl;
-
-
-            std::cout << animationsPath << std::endl;
-            std::cout << texturePath << std::endl;
             client_rabbit = new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
                                                  textureRect, onMapRect, soundManager);
                                                  
-                                    std::cout << "cargando animaciones" << std::endl;
             client_rabbit->loadAnimations(animationsPath);
 
             setAnimationFromSnapshot(rabbit, client_rabbit);
             client_rabbit->setDirection(rabbit.direction);
 
         } else {
-                        std::cout << "cargando rabbit externo" << std::endl;
-
             loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
             ShiftingDrawable* newRabbit =
                     new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
@@ -318,6 +256,8 @@ int ClientDrawer::run() try {
 
     // Main loop
     while (game_running) {
+        std::cout << "Arranco la partida " << std::endl;
+
         // EVENTS HANDLER
         handle_events(game_running);
 
@@ -330,17 +270,20 @@ int ClientDrawer::run() try {
         cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
 
         // SNAPSHOT RECEIVER
-        Snapshot snapshot;
-        if (q_snapshots.try_pop(snapshot)) {
+        Snapshot snapshot = q_snapshots.pop();
+        std::cout << "Popie un snapshot in-game" << std::endl;
+       
             for (const auto& rabbit: snapshot.rabbits) {
-                std::cout << "rabbit number " << rabbit.id + 1 << std::endl;
                 if (rabbit.id == client_id) {
                     ammoLeft.setAmmo(rabbit.ammo);
                     ammoLeft.setWeapon(rabbit.weapon);
                     banner.setCurrentLives(rabbit.lives);
                     client_rabbit->setPosition(rabbit.pos_x, rabbit.pos_y);
+                    std::cout << "Posicion del conejo: " << rabbit.pos_x << " " << rabbit.pos_y << std::endl;
                     setAnimationFromSnapshot(rabbit, client_rabbit);
+                    std::cout << "Seteé animacion" << std::endl;
                     client_rabbit->setDirection(rabbit.direction);
+                    std::cout << "Seteé direccion" << std::endl;
                     playerPosition.x = rabbit.pos_x;
                     playerPosition.y = rabbit.pos_y;
                 } else {
@@ -416,14 +359,16 @@ int ClientDrawer::run() try {
                     supplies.emplace(valuable.id, newValuable);
                 }
             }
-        }
+        
 
         // UPDATE ENTITIES
 
         for (auto& tilePtr: mapComponents) {
             tilePtr->update();
         }
-        client_rabbit->update();
+        std::cout << "Actualicé los tiles" << std::endl;
+        //client_rabbit->update();
+        std::cout << "Actualicé al conejo" << std::endl;
         for (auto& rabbit: rabbits) {
             rabbit.second->update();
         }
@@ -446,7 +391,7 @@ int ClientDrawer::run() try {
             tilePtr->render();
         }
 
-        client_rabbit->render();
+       // client_rabbit->render();
         for (auto& rabbit: rabbits) {
             rabbit.second->render();
         }
@@ -484,7 +429,7 @@ int ClientDrawer::run() try {
             // Calculate how many frames we are behind
             int framesBehind = realFrameTime / expectedFrameTime;
             // Adjust the current frame
-            client_rabbit->reajustFrame(framesBehind);
+            //client_rabbit->reajustFrame(framesBehind);
             for (auto& rabbit: rabbits) {
                 rabbit.second->reajustFrame(framesBehind);
             }

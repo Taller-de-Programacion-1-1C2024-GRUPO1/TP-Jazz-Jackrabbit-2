@@ -79,28 +79,6 @@ enum /*Rabbit States*/ {
     INTOXICATEDD,
 };
 
-enum /*Rabbit Actions*/ {
-    STANDD = 0,
-    RUNN,
-    RUN_FASTT,
-    JUMPINGG,
-    FALLINGG,
-};
-
-enum {
-    NONE = 0,
-    JAZZ,
-    LORI,
-    SPAZ,
-};
-
-enum {
-    RABBITT = 0,
-    CRABB,
-    LIZARDD,
-    TURTLEE,
-};
-
 #define WAITING 0
 #define STARTED 1
 
