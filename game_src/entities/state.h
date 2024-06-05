@@ -1,11 +1,10 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include "../constants_game.h"
+
 #include "rabbit.h"
 
-#define RABBIT_REVIVAL_TIME 5
-#define RABBIT_DEINTOXICATE_TIME 0.5
-#define RABBIT_COOLDOWN_TAKE_DAMAGE 3
 
 enum RABBIT_STATES { ALIVE, DEAD, RECIEVED_DAMAGE, INTOXICATED };
 

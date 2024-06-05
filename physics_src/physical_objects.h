@@ -3,6 +3,7 @@
 
 #include <iostream>  //////////TESTING
 
+#include "../common_src/constants.h"
 #include "SDL2/SDL.h"
 
 class Enemy;
@@ -10,9 +11,6 @@ class Rabbit;
 class Item;
 class Bullet;
 
-// FPS
-#define UPDATE_RATE 60
-#define DELTA_TIME 1000 / UPDATE_RATE
 
 /*
 NOTAS:
