@@ -33,8 +33,7 @@ enum SupplyType : uint8_t {
     COIN,
 };
 
-
-enum DIRECTIONS { LEFT = -1, RIGHT = 1 };
+enum DIRECTIONS { LEFT = -1, RIGHT = 1, UP, DOWN };
 
 enum ACTIONS {
     STAND,
@@ -66,8 +65,9 @@ enum /* CHEATS */ {
 
 // ----------------- Messurements -----------------
 
-// PLAYER CONSTANTS
+#define BLOCK_DIVISION 32
 
+// PLAYER CONSTANTS
 #define PLAYER_SIDE BLOCK_DIVISION * 2
 #define PLAYER_SPEED 5
 #define JUMPING_INITIAL_SPEED 20  // Config
@@ -85,7 +85,6 @@ enum /* CHEATS */ {
 #define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2  // modificar
 #define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION     // modificar
 
-#define BLOCK_DIVISION 32
 
 #define GRAVITY 1
 #define MAX_FALLING_SPEED 15

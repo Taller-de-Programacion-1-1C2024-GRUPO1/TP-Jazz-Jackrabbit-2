@@ -31,13 +31,6 @@ enum /*Senders*/ {
     ACK_JOINED_SUCCEED,
 };
 
-enum /*Direction*/ {
-    LEFT_DIR = 0,
-    RIGHT_DIR,
-    FORWARD_DIR,
-    BACKWARD_DIR,
-};
-
 enum /*MATCH TYPE*/ {
     NEW_MATCH = 0,
     JOIN,

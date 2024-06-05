@@ -47,7 +47,7 @@ Protocol server_protocol(std::move(peer_test));
 // ------------------- TESTS -------------------
 
 TEST(ProtocolTestMove, SendAndReceiveMoveLeft) {
-    Move* move = new Move(player_id, LEFT_DIR);
+    Move* move = new Move(player_id, LEFT);
     client_protocol.send_Command(move);
     std::shared_ptr<Move> received_move =
             std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
@@ -58,7 +58,7 @@ TEST(ProtocolTestMove, SendAndReceiveMoveLeft) {
 }
 
 TEST(ProtocolTestMove, SendAndReceiveMoveRight) {
-    Move* move = new Move(player_id, RIGHT_DIR);
+    Move* move = new Move(player_id, RIGHT);
     client_protocol.send_Command(move);
     std::shared_ptr<Move> received_move =
             std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
@@ -69,7 +69,7 @@ TEST(ProtocolTestMove, SendAndReceiveMoveRight) {
 }
 
 TEST(ProtocolTestMove, SendAndReceiveMoveForward) {
-    Move* move = new Move(player_id, FORWARD_DIR);
+    Move* move = new Move(player_id, UP);
     client_protocol.send_Command(move);
     std::shared_ptr<Move> received_move =
             std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
@@ -80,7 +80,7 @@ TEST(ProtocolTestMove, SendAndReceiveMoveForward) {
 }
 
 TEST(ProtocolTestMove, SendAndReceiveMoveBackward) {
-    Move* move = new Move(player_id, BACKWARD_DIR);
+    Move* move = new Move(player_id, DOWN);
     client_protocol.send_Command(move);
     std::shared_ptr<Move> received_move =
             std::dynamic_pointer_cast<Move>(server_protocol.receive_Command());
@@ -91,7 +91,7 @@ TEST(ProtocolTestMove, SendAndReceiveMoveBackward) {
 }
 
 TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterRight) {
-    MoveFaster* move_faster = new MoveFaster(player_id, RIGHT_DIR);
+    MoveFaster* move_faster = new MoveFaster(player_id, RIGHT);
     client_protocol.send_Command(move_faster);
     std::shared_ptr<MoveFaster> received_move_faster =
             std::dynamic_pointer_cast<MoveFaster>(server_protocol.receive_Command());
@@ -102,7 +102,7 @@ TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterRight) {
 }
 
 TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterLeft) {
-    MoveFaster* move_faster = new MoveFaster(player_id, LEFT_DIR);
+    MoveFaster* move_faster = new MoveFaster(player_id, LEFT);
     client_protocol.send_Command(move_faster);
     std::shared_ptr<MoveFaster> received_move_faster =
             std::dynamic_pointer_cast<MoveFaster>(server_protocol.receive_Command());
@@ -113,7 +113,7 @@ TEST(ProtocolTestMoveFaster, SendAndReceiveMoveFasterLeft) {
 }
 
 TEST(ProtocolTestJump, SendAndReceiveJumpForwardERROR) {
-    Jump* jump = new Jump(player_id, FORWARD_DIR);
+    Jump* jump = new Jump(player_id, UP);
     client_protocol.send_Command(jump);
     std::shared_ptr<Jump> received_jump =
             std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
@@ -125,7 +125,7 @@ TEST(ProtocolTestJump, SendAndReceiveJumpForwardERROR) {
 }
 
 TEST(ProtocolTestJump, SendAndReceiveJumpBackwardERROR) {
-    Jump* jump = new Jump(player_id, BACKWARD_DIR);
+    Jump* jump = new Jump(player_id, DOWN);
     client_protocol.send_Command(jump);
     std::shared_ptr<Jump> received_jump =
             std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
@@ -136,7 +136,7 @@ TEST(ProtocolTestJump, SendAndReceiveJumpBackwardERROR) {
 }
 
 TEST(ProtocolTestJump, SendAndReceiveJumpRight) {
-    Jump* jump = new Jump(player_id, RIGHT_DIR);
+    Jump* jump = new Jump(player_id, RIGHT);
     client_protocol.send_Command(jump);
     std::shared_ptr<Jump> received_jump =
             std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
@@ -147,7 +147,7 @@ TEST(ProtocolTestJump, SendAndReceiveJumpRight) {
 }
 
 TEST(ProtocolTestJump, SendAndReceiveJumpLeft) {
-    Jump* jump = new Jump(player_id, LEFT_DIR);
+    Jump* jump = new Jump(player_id, LEFT);
     client_protocol.send_Command(jump);
     std::shared_ptr<Jump> received_jump =
             std::dynamic_pointer_cast<Jump>(server_protocol.receive_Command());
@@ -168,7 +168,7 @@ TEST(ProtocolTestShoot, SendAndReceiveShoot) {
 }
 
 TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriForward) {
-    SpecialLori* special_lori = new SpecialLori(player_id, FORWARD_DIR);
+    SpecialLori* special_lori = new SpecialLori(player_id, UP);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<SpecialLori> received_special_lori =
             std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
@@ -179,7 +179,7 @@ TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriForward) {
 }
 
 TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriBackward) {
-    SpecialLori* special_lori = new SpecialLori(player_id, BACKWARD_DIR);
+    SpecialLori* special_lori = new SpecialLori(player_id, DOWN);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<SpecialLori> received_special_lori =
             std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
@@ -190,7 +190,7 @@ TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriBackward) {
 }
 
 TEST(ProtocolTest, SendAndReceiveSpecialLoriRightERROR) {
-    SpecialLori* special_lori = new SpecialLori(player_id, RIGHT_DIR);
+    SpecialLori* special_lori = new SpecialLori(player_id, RIGHT);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<SpecialLori> received_special_lori =
             std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
@@ -203,7 +203,7 @@ TEST(ProtocolTest, SendAndReceiveSpecialLoriRightERROR) {
 }
 
 TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriLeftERROR) {
-    SpecialLori* special_lori = new SpecialLori(player_id, LEFT_DIR);
+    SpecialLori* special_lori = new SpecialLori(player_id, LEFT);
     client_protocol.send_Command(special_lori);
     std::shared_ptr<SpecialLori> received_special_lori =
             std::dynamic_pointer_cast<SpecialLori>(server_protocol.receive_Command());
@@ -214,7 +214,7 @@ TEST(ProtocolTestSpecialLori, SendAndReceiveSpecialLoriLeftERROR) {
 }
 
 TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazRight) {
-    SpecialSpaz* special_spaz = new SpecialSpaz(player_id, RIGHT_DIR);
+    SpecialSpaz* special_spaz = new SpecialSpaz(player_id, RIGHT);
     client_protocol.send_Command(special_spaz);
     std::shared_ptr<SpecialSpaz> received_special_spaz =
             std::dynamic_pointer_cast<SpecialSpaz>(server_protocol.receive_Command());
@@ -225,7 +225,7 @@ TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazRight) {
 }
 
 TEST(ProtocolTestSpecialSpaz, SendAndReceiveSpecialSpazLeft) {
-    SpecialSpaz* special_spaz = new SpecialSpaz(player_id, LEFT_DIR);
+    SpecialSpaz* special_spaz = new SpecialSpaz(player_id, LEFT);
     client_protocol.send_Command(special_spaz);
     std::shared_ptr<SpecialSpaz> received_special_spaz =
             std::dynamic_pointer_cast<SpecialSpaz>(server_protocol.receive_Command());
