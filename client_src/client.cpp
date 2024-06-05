@@ -27,7 +27,7 @@ void Client::run(int argc, char* argv[]) {
 
     if (result == 0) {
         // SDL
-        drawer.run();
+        //drawer.run();
     } else {
         // error
     }

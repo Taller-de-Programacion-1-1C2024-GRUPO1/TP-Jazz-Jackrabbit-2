@@ -47,7 +47,11 @@ void ClientLobby::on_btnCreateMatch_clicked() {
         if (map_selector.exec() == QDialog::Accepted) {
             // ENVIO COMANDO E INICIO PARTIDA
             QApplication::exit(0);
+        } else {
+            std::cerr << "Error al crear partida, map_selector falló" << std::endl;
         }
+    } else {
+        std::cerr << "Error al crear partida, characterSelector falló" << std::endl;
     }
 }
 
@@ -67,12 +71,14 @@ void ClientLobby::on_btnJoinMatch_clicked() {
                 &ClientLobby::handleWindowClosed);
 
         if (joinMatchLobby.exec() == QDialog::Accepted) {
-
             // ESpero a que se conecten todos los jugadores y se inicie la partida
 
-
             QApplication::exit(0);
+        } else {
+            std::cerr << "Error al unirse a partida, joinMatchLobby room falló" << std::endl;
         }
+    } else {
+        std::cerr << "Error al unirse a partida, character selector falló" << std::endl;
     }
 }
 
