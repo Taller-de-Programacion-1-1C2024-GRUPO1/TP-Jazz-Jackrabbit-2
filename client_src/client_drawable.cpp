@@ -6,8 +6,9 @@
 
 #include "client_shifting_drawable.h"
 
-Drawable::Drawable(SDL2pp::Renderer& renderer, const std::string& path, const SDL2pp::Color& colorKey,
-    SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect):
+Drawable::Drawable(SDL2pp::Renderer& renderer, const std::string& path,
+                   const SDL2pp::Color& colorKey, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
+                   SDL2pp::Rect& onMapRect):
         renderer(renderer),
         texture(renderer, SDL2pp::Surface(path)),
         cameraPosition(cp),

@@ -17,6 +17,7 @@ const int BLOCK_SIZE = 32;
 class MapLoader {
 private:
     Renderer& renderer;
+
 public:
     explicit MapLoader(Renderer& renderer): renderer(renderer) {}
 
@@ -49,8 +50,9 @@ public:
                         destRect.w = BLOCK_SIZE;
                         destRect.h = BLOCK_SIZE;
 
-                        tiles.push_back(std::move(std::unique_ptr<Drawable>(new Drawable(
-                                renderer, texturePath, colorKey, cameraPosition, srcRect, destRect))));
+                        tiles.push_back(std::move(std::unique_ptr<Drawable>(
+                                new Drawable(renderer, texturePath, colorKey, cameraPosition,
+                                             srcRect, destRect))));
                     }
                     x++;
                 }

@@ -1,6 +1,6 @@
 #include "client_keyboard_handler.h"
 
-KeyboardHandler::KeyboardHandler(int client_id) : client_id(client_id) {}
+KeyboardHandler::KeyboardHandler(int client_id): client_id(client_id) {}
 
 Command* KeyboardHandler::listenForCommands(bool& game_running) {
     SDL_Event event;
@@ -14,28 +14,29 @@ Command* KeyboardHandler::listenForCommands(bool& game_running) {
     if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) {  // HABILIDAD ESPECIAL JAZZ Y LLORI
         // q_cmds.push(new UpperHit(client_id, FORWARD_DIR));
         // q_cmds.push(new ShortRangeKick(client_id, BACKWARD_DIR));
-    } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
+    } else if (state[SDL_SCANCODE_RCTRL] and
+               state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
         // q_cmds.try_push(AsideKick(client_id, FORWARD_DIR));
     } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
-       // q_cmds.try_push(AsideKick(client_id, BACKWARD_DIR));
+        // q_cmds.try_push(AsideKick(client_id, BACKWARD_DIR));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-       return new MoveFaster(client_id, FORWARD_DIR);
+        return new MoveFaster(client_id, FORWARD_DIR);
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-       return new MoveFaster(client_id, BACKWARD_DIR);
+        return new MoveFaster(client_id, BACKWARD_DIR);
     } else if (state[SDL_SCANCODE_RIGHT]) {
-       return new Move(client_id, FORWARD_DIR);
+        return new Move(client_id, FORWARD_DIR);
     } else if (state[SDL_SCANCODE_LEFT]) {
-       return new Move(client_id, BACKWARD_DIR);
+        return new Move(client_id, BACKWARD_DIR);
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
-       return new Jump(client_id, FORWARD_DIR);
+        return new Jump(client_id, FORWARD_DIR);
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
-       return new Jump(client_id, BACKWARD_DIR);
+        return new Jump(client_id, BACKWARD_DIR);
     } else if (state[SDL_SCANCODE_S]) {
-       return new Shoot(client_id);
+        return new Shoot(client_id);
     } else if (state[SDL_SCANCODE_W]) {
-       // q_cmds.try_push(ChangeWeapon(client_id));
+        // q_cmds.try_push(ChangeWeapon(client_id));
     } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
-       game_running = false;
+        game_running = false;
     }
     return nullptr;
 }

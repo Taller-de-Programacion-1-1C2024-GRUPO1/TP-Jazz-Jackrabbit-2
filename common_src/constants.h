@@ -72,6 +72,26 @@ enum /*INFO TYPE*/ {
     GAME_MAP_INFO,
 };
 
+enum /*Rabbit Type*/ {
+    JAZZ = 0,
+    LORI,
+    SPAZ,
+};
+
+enum /*Rabbit States*/ {
+    ALIVEE = 0,
+    DEADD,
+    RECIEVED_DAMAGEE,
+    INTOXICATEDD,
+};
+
+enum /*Rabbit Actions*/ {
+    STANDD = 0,
+    RUNN,
+    RUN_FASTT,
+    JUMPINGG,
+    FALLINGG,
+};
 
 #define WAITING 0
 #define STARTED 1

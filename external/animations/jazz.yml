@@ -1,4 +1,4 @@
-Idle:
+Stand:
   frames: 27
   loop: true
   sound: ""
@@ -338,7 +338,7 @@ Stop-dashing:
       w: 65
       h: 40
 
-Intoxicated-Idle:
+Intoxicated-Stand:
   frames: 8
   loop: true
   sound: ""

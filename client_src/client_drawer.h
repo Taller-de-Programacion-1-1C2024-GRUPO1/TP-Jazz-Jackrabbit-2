@@ -72,62 +72,10 @@ using SDL2pp::Window;
 
 // pre-commit run --hook-stage manual --all-files
 
-struct TheFuckingRabbitSnapshot {
-    int id;
-    int direction;
-    int champion_type;
-    int pos_x;
-    int pos_y;
-    int score;
-    int lives;
-    int weapon;
-    int ammo;
-    // int state;
-    // int action;
-    const char* animation;
-};
-
-struct TheFuckingEnemySnapshot {
-    int id;
-    int direction;
-    int enemy_type;
-    int pos_x;
-    int pos_y;
-};
-
-struct TheFuckingProjectileSnapshot {
-    int id;
-    int weapon;
-    int pos_x;
-    int pos_y;
-    // int state;
-    const char* animation;
-};
-
-struct TheFuckingSupplySnapshot {
-    int supply_type;
-    int id;
-    int pos_x;
-    int pos_y;
-};
-
-struct TheFuckingInitialSnapshot {
-    bool end_game = false;
-    MapDimensions_t map_dimensions;
-    const char* map_name;
-
-    std::vector<TheFuckingRabbitSnapshot> rabbits;  // playing rabbits
-    std::vector<TheFuckingEnemySnapshot> enemies;
-    std::vector<TheFuckingProjectileSnapshot> projectiles;
-    std::vector<TheFuckingSupplySnapshot> valuables;
-    std::vector<TheFuckingSupplySnapshot> food;
-};
-
 class ClientDrawer {
 private:
     Queue<Command*>& q_cmds;
     Queue<Snapshot>& q_snapshots;
-    Queue<TheFuckingInitialSnapshot> qf_snapshots;
     bool game_running;
 
     // This client match data
@@ -140,8 +88,7 @@ private:
     std::map<int, ShiftingDrawable*> rabbits;
     std::map<int, ShiftingDrawable*> enemies;
     std::map<int, ShiftingDrawable*> projectiles;
-    std::map<int, ShiftingDrawable*> valuables;
-    std::map<int, Drawable*> food;
+    std::map<int, ShiftingDrawable*> supplies;
     int rabbit_width;
     int rabbit_height;
 
@@ -151,9 +98,7 @@ public:
     int run();
     void handle_keyboard(bool& game_running);
     void testingSnapshot();
-    void testingSnapshott();
-
-
+    void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
     //~ClientDrawer();
 };
 

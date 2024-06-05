@@ -18,114 +18,52 @@ dimensiones de cada cosa
 int shiftable_x = 10;
 int direction_x = 0;
 
-TheFuckingRabbitSnapshot createRabbitSnapshot(int _id, int _pos_x, int _pos_y) {
-    TheFuckingRabbitSnapshot rabbit;
-    rabbit.id = _id;
-    rabbit.direction = direction_x;
-    rabbit.champion_type = 0;
-    rabbit.pos_x = shiftable_x;
-    rabbit.pos_y = _pos_y;
-    rabbit.score = 0;
-    rabbit.lives = 3;
-    rabbit.weapon = 0;
-    rabbit.ammo = 1000;
-    rabbit.animation = "Idle";
+RabbitSnapshot createRabbitSnapshot(int _id, int _pos_x, int _pos_y) {
+    RabbitSnapshot rabbit(_id, direction_x, 0, _pos_x, _pos_y, 10, 3, 0, 1000, 3, 0);
     return rabbit;
 }
 
-TheFuckingEnemySnapshot createEnemySnapshot(int _id, int _pos_x, int _pos_y) {
-    TheFuckingEnemySnapshot enemy;
-    enemy.id = _id;
-    enemy.direction = direction_x;
-    enemy.enemy_type = 0;
-    enemy.pos_x = shiftable_x;
-    enemy.pos_y = _pos_y;
+EnemySnapshot createEnemySnapshot(int _id, int _pos_x, int _pos_y) {
+    EnemySnapshot enemy(_id, 0, 0, _pos_x, _pos_y);
     return enemy;
 }
 
-TheFuckingProjectileSnapshot createProjectileSnapshot(int _id, int _pos_x, int _pos_y,
-                                                      int _weapon) {
-    TheFuckingProjectileSnapshot projectile;
-    projectile.id = _id;
-    projectile.animation = "Move";
-    projectile.pos_x = _pos_x;
-    projectile.pos_y = _pos_y;
-    projectile.weapon = _weapon;
-    return projectile;
+ProjectileSnapshot createProjectileSnapshot(int _id, int _pos_x, int _pos_y, int _weapon) {
+    ProjectileSnapshot projectile_snapshot(_id, 0, _pos_x, _pos_y, _weapon);
+    return projectile_snapshot;
 }
 
-TheFuckingSupplySnapshot createSupplySnapshot(int _id, int _pos_x, int _pos_y, int _type) {
-    TheFuckingSupplySnapshot valuable;
-    valuable.id = _id;
-    valuable.supply_type = _type;
-    valuable.pos_x = _pos_x;
-    valuable.pos_y = _pos_y;
-    return valuable;
+SupplySnapshot createSupplySnapshot(int _id, int _pos_x, int _pos_y) {
+    SupplySnapshot supply_snapshot(_id, 0, _pos_x, _pos_y);
+    return supply_snapshot;
 }
 
-TheFuckingInitialSnapshot createInitialSnapshot() {
-    TheFuckingInitialSnapshot initial;
+Snapshot createInitialSnapshot() {
+    Snapshot initial;
 
     initial.map_dimensions.height = 608;
     initial.map_dimensions.width = 1120;
     initial.map_dimensions.rabbit_amount = 3;
     initial.map_dimensions.rabbit_height = 64;
     initial.map_dimensions.rabbit_width = 64;
-    initial.end_game = true;
-    initial.map_name = "carrotus";
+    // initial.map_dimensions.map_data;
 
     initial.rabbits.push_back(createRabbitSnapshot(0, 10, 100));
-    initial.rabbits.push_back(createRabbitSnapshot(1, 10, 150));
-    initial.rabbits.push_back(createRabbitSnapshot(2, 10, 200));
+    // initial.rabbits.push_back(createRabbitSnapshot(1, 10, 150));
+    // initial.rabbits.push_back(createRabbitSnapshot(2, 10, 200));
 
     initial.enemies.push_back(createEnemySnapshot(0, 10, 500));
 
     initial.projectiles.push_back(createProjectileSnapshot(0, 500, 10, 0));
     initial.projectiles.push_back(createProjectileSnapshot(1, 500, 120, 1));
 
-    initial.valuables.push_back(createSupplySnapshot(0, 400, 400, 0));
-
-    initial.food.push_back(createSupplySnapshot(0, 64, 64, 0));
-    initial.food.push_back(createSupplySnapshot(1, 256, 256, 1));
-    initial.food.push_back(createSupplySnapshot(2, 300, 300, 2));
-
-    return initial;
-}
-
-TheFuckingInitialSnapshot createInitialSnapshot2() {
-    TheFuckingInitialSnapshot initial;
-
-    initial.map_dimensions.height = 608;
-    initial.map_dimensions.width = 1120;
-    initial.map_dimensions.rabbit_amount = 3;
-    initial.map_dimensions.rabbit_height = 64;
-    initial.map_dimensions.rabbit_width = 64;
-    initial.end_game = true;
-    initial.map_name = "carrotus";
-
-    initial.rabbits.push_back(createRabbitSnapshot(0, 10, 100));
-    initial.rabbits.push_back(createRabbitSnapshot(1, 10, 150));
-    initial.rabbits.push_back(createRabbitSnapshot(2, 10, 200));
-    initial.rabbits.push_back(createRabbitSnapshot(3, 10, 250));
-
-    initial.enemies.push_back(createEnemySnapshot(0, 10, 500));
-    initial.enemies.push_back(createEnemySnapshot(1, 10, 550));
-
-    initial.projectiles.push_back(createProjectileSnapshot(0, 500, 10, 0));
-    initial.projectiles.push_back(createProjectileSnapshot(1, 500, 120, 1));
-    initial.projectiles.push_back(createProjectileSnapshot(2, 500, 160, 0));
-
-    initial.valuables.push_back(createSupplySnapshot(0, 400, 400, 0));
-    initial.valuables.push_back(createSupplySnapshot(1, 450, 450, 0));
-
-    initial.food.push_back(createSupplySnapshot(0, 64, 64, 0));
-    initial.food.push_back(createSupplySnapshot(1, 256, 256, 1));
-    initial.food.push_back(createSupplySnapshot(2, 300, 300, 2));
-    initial.food.push_back(createSupplySnapshot(3, 364, 300, 2));
+    initial.supplies.push_back(createSupplySnapshot(0, 400, 400));
+    // initial.supplies.push_back(createSupplySnapshot(0, 64, 64));
+    // initial.supplies.push_back(createSupplySnapshot(1, 256, 256));
+    // initial.supplies.push_back(createSupplySnapshot(2, 300, 300));
 
     return initial;
 }
-
 
 // ACA EMPIEZA DRAWER
 
@@ -141,13 +79,58 @@ ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots
         rabbit_height(0) {}
 
 void ClientDrawer::testingSnapshot() {
-    TheFuckingInitialSnapshot initial_snapshot = createInitialSnapshot();
-    qf_snapshots.push(initial_snapshot);
+    Snapshot initial_snapshot = createInitialSnapshot();
+    q_snapshots.push(initial_snapshot);
 }
 
-void ClientDrawer::testingSnapshott() {
-    TheFuckingInitialSnapshot initial_snapshot = createInitialSnapshot2();
-    qf_snapshots.push(initial_snapshot);
+void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
+                                            ShiftingDrawable* drawable) {
+    switch (snapshot.state) {
+        case ALIVEE:
+            switch (snapshot.action) {
+                case STANDD:
+                    drawable->setAnimation("Stand");
+                    break;
+                case RUNN:
+                    drawable->setAnimation("Run");
+                    break;
+                case RUN_FASTT:
+                    drawable->setAnimation("Dash");
+                    break;
+                case FALLINGG:
+                    drawable->setAnimation("Run");
+                    break;
+                case JUMPINGG:
+                    drawable->setAnimation("Run");
+                    break;
+            }
+            break;
+        case RECIEVED_DAMAGEE:
+            drawable->setAnimation("Hurt");
+            break;
+        case INTOXICATEDD:
+            switch (snapshot.action) {
+                case STANDD:
+                    drawable->setAnimation("Intoxicated-Stand");
+                    break;
+                case RUNN:
+                    drawable->setAnimation("Intoxicated-Run");
+                    break;
+                case RUN_FASTT:
+                    drawable->setAnimation("Intoxicated-Run");
+                    break;
+                case FALLINGG:
+                    drawable->setAnimation("Intoxicated-Stand");
+                    break;
+                case JUMPINGG:
+                    drawable->setAnimation("Intoxicated-Stand");
+                    break;
+            }
+            break;
+        case DEADD:
+            drawable->setAnimation("Die");
+            break;
+    }
 }
 
 void handle_events(bool& game_running) {
@@ -188,7 +171,7 @@ int ClientDrawer::run() try {
 
     SDL_Color characterColor = {44, 102, 150, 255};   // Color en formato RGBA
     SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
-    SDL_Color mapColor = {87,0,203,0};
+    SDL_Color mapColor = {87, 0, 203, 0};
     MapLoader mapLoader(renderer);
 
     SDL2pp::Point playerPosition(10, 10);
@@ -212,8 +195,8 @@ int ClientDrawer::run() try {
     testingSnapshot();
 
     // Read first snapshot!
-    TheFuckingInitialSnapshot initial_snapshot = qf_snapshots.pop();
-    game_running = initial_snapshot.end_game;
+    Snapshot initial_snapshot = q_snapshots.pop();
+    game_running = !initial_snapshot.get_end_game();
 
     std::vector<std::unique_ptr<Drawable>> mapComponents =
             mapLoader.loadMap(MAP_FILE, CARROTUS_TILE, mapColor, cameraPosition);
@@ -235,14 +218,14 @@ int ClientDrawer::run() try {
             client_rabbit = new ShiftingDrawable(renderer, JAZZ_IMG, characterColor, cameraPosition,
                                                  textureRect, onMapRect, soundManager);
             client_rabbit->loadAnimations("../external/animations/jazz.yml");
-            client_rabbit->setAnimation(rabbit.animation);
+            setAnimationFromSnapshot(rabbit, client_rabbit);
             client_rabbit->setDirection(rabbit.direction);
         } else {
             ShiftingDrawable* newRabbit =
                     new ShiftingDrawable(renderer, SPAZ_IMG, characterColor, cameraPosition,
                                          textureRect, onMapRect, soundManager);
             newRabbit->loadAnimations("../external/animations/spaz.yml");
-            newRabbit->setAnimation(rabbit.animation);
+            setAnimationFromSnapshot(rabbit, newRabbit);
             newRabbit->setDirection(rabbit.direction);
             rabbits.emplace(rabbit.id, newRabbit);
         }
@@ -268,7 +251,7 @@ int ClientDrawer::run() try {
         newProjectile->setAnimation("Move");
         projectiles.emplace(projectile.id, newProjectile);
     }
-    for (auto& valuable: initial_snapshot.valuables) {
+    for (auto& valuable: initial_snapshot.supplies) {
         SDL2pp::Rect textureRect(0, 0, 32, 32);
         SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
         ShiftingDrawable* newValuable =
@@ -276,15 +259,8 @@ int ClientDrawer::run() try {
                                      textureRect, onMapRect, soundManager);
         newValuable->loadAnimations("../external/animations/valuables/coin.yml");
         newValuable->setAnimation("Flip");
-        valuables.emplace(valuable.id, newValuable);
+        supplies.emplace(valuable.id, newValuable);
     }
-    for (auto& f: initial_snapshot.food) {
-        SDL2pp::Rect onMapRect(f.pos_x, f.pos_y, 32, 32);
-        Drawable* newFood = new Drawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
-                                         FoodProvider::getFood(f.supply_type), onMapRect);
-        food.emplace(f.id, newFood);
-    }
-
 
     // Game state
     const int FPS = 60;
@@ -306,10 +282,8 @@ int ClientDrawer::run() try {
         cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
 
         // SNAPSHOT RECEIVER
-        testingSnapshott();
-
-        TheFuckingInitialSnapshot snapshot;
-        if (qf_snapshots.try_pop(snapshot)) {
+        Snapshot snapshot;
+        if (q_snapshots.try_pop(snapshot)) {
             for (const auto& rabbit: snapshot.rabbits) {
                 std::cout << "rabbit number " << rabbit.id + 1 << std::endl;
                 if (rabbit.id == client_id) {
@@ -317,7 +291,7 @@ int ClientDrawer::run() try {
                     ammoLeft.setWeapon(rabbit.weapon);
                     banner.setCurrentLives(rabbit.lives);
                     client_rabbit->setPosition(rabbit.pos_x, rabbit.pos_y);
-                    client_rabbit->setAnimation(rabbit.animation);
+                    setAnimationFromSnapshot(rabbit, client_rabbit);
                     client_rabbit->setDirection(rabbit.direction);
                     playerPosition.x = rabbit.pos_x;
                     playerPosition.y = rabbit.pos_y;
@@ -325,7 +299,7 @@ int ClientDrawer::run() try {
                     auto it = rabbits.find(rabbit.id);
                     if (it != rabbits.end()) {
                         it->second->setPosition(rabbit.pos_x, rabbit.pos_y);
-                        it->second->setAnimation(rabbit.animation);
+                        setAnimationFromSnapshot(rabbit, it->second);
                         it->second->setDirection(rabbit.direction);
                     } else {
                         // Crear un nuevo conejo
@@ -336,7 +310,7 @@ int ClientDrawer::run() try {
                                 renderer, SPAZ_IMG, characterColor, cameraPosition, textureRect,
                                 onMapRect, soundManager);
                         newRabbit->loadAnimations("../external/animations/spaz.yml");
-                        newRabbit->setAnimation(rabbit.animation);
+                        setAnimationFromSnapshot(rabbit, newRabbit);
                         newRabbit->setDirection(rabbit.direction);
                         rabbits.emplace(rabbit.id, newRabbit);
                     }
@@ -376,9 +350,9 @@ int ClientDrawer::run() try {
                     projectiles.emplace(projectile.id, newProjectile);
                 }
             }
-            for (const auto& valuable: snapshot.valuables) {
-                auto it = valuables.find(valuable.id);
-                if (it != valuables.end()) {
+            for (const auto& valuable: snapshot.supplies) {
+                auto it = supplies.find(valuable.id);
+                if (it != supplies.end()) {
                     it->second->setPosition(valuable.pos_x, valuable.pos_y);
                 } else {
                     // Crear un nuevo objeto valioso
@@ -389,20 +363,7 @@ int ClientDrawer::run() try {
                             onMapRect, soundManager);
                     newValuable->loadAnimations("../external/animations/valuables/coin.yml");
                     newValuable->setAnimation("Flip");
-                    valuables.emplace(valuable.id, newValuable);
-                }
-            }
-            for (const auto& f: snapshot.food) {
-                auto it = food.find(f.id);
-                if (it != food.end()) {
-                    it->second->setPosition(f.pos_x, f.pos_y);
-                } else {
-                    // Crear un nuevo objeto valioso
-                    SDL2pp::Rect onMapRect(f.pos_x, f.pos_y, 32, 32);
-                    Drawable* newFood =
-                            new Drawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
-                                         FoodProvider::getFood(f.supply_type), onMapRect);
-                    food.emplace(f.id, newFood);
+                    supplies.emplace(valuable.id, newValuable);
                 }
             }
         }
@@ -422,11 +383,8 @@ int ClientDrawer::run() try {
         for (auto& projectile: projectiles) {
             projectile.second->update();
         }
-        for (auto& valuable: valuables) {
-            valuable.second->update();
-        }
-        for (auto& food: food) {
-            food.second->update();
+        for (auto& supply: supplies) {
+            supply.second->update();
         }
 
         // Clear screen
@@ -448,15 +406,12 @@ int ClientDrawer::run() try {
         for (auto& projectile: projectiles) {
             projectile.second->render();
         }
-        for (auto& valuable: valuables) {
-            valuable.second->render();
-        }
-        for (auto& food: food) {
-            food.second->render();
+        for (auto& suply: supplies) {
+            suply.second->render();
         }
 
         banner.render();
- //       ammoLeft.render(); //<--consume muchisimo tiempo
+        //       ammoLeft.render(); //<--consume muchisimo tiempo
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position
@@ -489,8 +444,8 @@ int ClientDrawer::run() try {
             for (auto& projectile: projectiles) {
                 projectile.second->reajustFrame(framesBehind);
             }
-            for (auto& valuable: valuables) {
-                valuable.second->reajustFrame(framesBehind);
+            for (auto& supply: supplies) {
+                supply.second->reajustFrame(framesBehind);
             }
 
             // Calculate the next frame start time
