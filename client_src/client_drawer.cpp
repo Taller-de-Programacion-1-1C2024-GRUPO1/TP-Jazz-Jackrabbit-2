@@ -9,22 +9,17 @@
 #include "client_map_loader.h"
 #include "client_sound_manager.h"
 
-/*
-COSAS PARA HABLAR
-dimensiones de cada cosa
-
-*/
 
 int shiftable_x = 10;
 int direction_x = 0;
 
 RabbitSnapshot createRabbitSnapshot(int _id, int _pos_x, int _pos_y) {
-    RabbitSnapshot rabbit(_id, direction_x, 0, _pos_x, _pos_y, 10, 3, 0, 1000, 3, 0);
+    RabbitSnapshot rabbit(_id, direction_x, 1, _pos_x, _pos_y, 10, 3, 0, 1000, 0, 1);
     return rabbit;
 }
 
-EnemySnapshot createEnemySnapshot(int _id, int _pos_x, int _pos_y) {
-    EnemySnapshot enemy(_id, 0, 0, _pos_x, _pos_y);
+EnemySnapshot createEnemySnapshot(int _id, int _pos_x, int _pos_y, int _enemy_type) {
+    EnemySnapshot enemy(_id, 0, _enemy_type, _pos_x, _pos_y);
     return enemy;
 }
 
@@ -49,10 +44,13 @@ Snapshot createInitialSnapshot() {
     // initial.map_dimensions.map_data;
 
     initial.rabbits.push_back(createRabbitSnapshot(0, 10, 100));
-    // initial.rabbits.push_back(createRabbitSnapshot(1, 10, 150));
-    // initial.rabbits.push_back(createRabbitSnapshot(2, 10, 200));
+    initial.rabbits.push_back(createRabbitSnapshot(1, 10, 150));
+    initial.rabbits.push_back(createRabbitSnapshot(2, 10, 200));
 
-    initial.enemies.push_back(createEnemySnapshot(0, 10, 500));
+    initial.enemies.push_back(createEnemySnapshot(0, 10, 500, 1));
+    initial.enemies.push_back(createEnemySnapshot(1, 10, 450, 2));
+    initial.enemies.push_back(createEnemySnapshot(2, 10, 400, 3));
+
 
     initial.projectiles.push_back(createProjectileSnapshot(0, 500, 10, 0));
     initial.projectiles.push_back(createProjectileSnapshot(1, 500, 120, 1));
@@ -133,6 +131,40 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
     }
 }
 
+void loadAnimationsForCharacter(std::string &animationsPath, std::string &texturePath,const int character_id) {
+    switch(character_id){
+        case JAZZ:
+            animationsPath = "../external/animations/jazz.yml";
+            texturePath = JAZZ_IMG;
+            break;
+        case SPAZ:
+            animationsPath = "../external/animations/spaz.yml";
+            texturePath = SPAZ_IMG;
+            break;
+        case LORI:
+            animationsPath = "../external/animations/lori.yml";
+            texturePath = LORI_IMG;
+            break;  
+    }
+}
+
+void loadAnimationForEnemy(std::string &animationsPath, std::string &texturePath, const int enemy_id) {
+    switch(enemy_id){
+        case LIZARDD:
+            animationsPath = "../external/animations/lizard.yml";
+            texturePath = ENEMIES_IMG;
+            break;
+        case CRABB:
+            animationsPath = "../external/animations/crab.yml";
+            texturePath = ENEMIES_IMG;
+            break;
+        case TURTLEE:
+            animationsPath = "../external/animations/turtle.yml";
+            texturePath = TURTLE_IMG;
+            break;
+    }
+}
+
 void handle_events(bool& game_running) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -203,6 +235,8 @@ int ClientDrawer::run() try {
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
 
+    std::string animationsPath;
+    std::string texturePath;
     for (auto& rabbit: initial_snapshot.rabbits) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width, rabbit_height);
@@ -215,16 +249,30 @@ int ClientDrawer::run() try {
             playerPosition.x = rabbit.pos_x;
             playerPosition.y = rabbit.pos_y;
 
-            client_rabbit = new ShiftingDrawable(renderer, JAZZ_IMG, characterColor, cameraPosition,
+            std::cout << "cargando rabbit propio" << std::endl;
+            loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
+                        std::cout << "cargando textura y yaml" << std::endl;
+
+
+            std::cout << animationsPath << std::endl;
+            std::cout << texturePath << std::endl;
+            client_rabbit = new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
                                                  textureRect, onMapRect, soundManager);
-            client_rabbit->loadAnimations("../external/animations/jazz.yml");
+                                                 
+                                    std::cout << "cargando animaciones" << std::endl;
+            client_rabbit->loadAnimations(animationsPath);
+
             setAnimationFromSnapshot(rabbit, client_rabbit);
             client_rabbit->setDirection(rabbit.direction);
+
         } else {
+                        std::cout << "cargando rabbit externo" << std::endl;
+
+            loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
             ShiftingDrawable* newRabbit =
-                    new ShiftingDrawable(renderer, SPAZ_IMG, characterColor, cameraPosition,
+                    new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
                                          textureRect, onMapRect, soundManager);
-            newRabbit->loadAnimations("../external/animations/spaz.yml");
+            newRabbit->loadAnimations(animationsPath);
             setAnimationFromSnapshot(rabbit, newRabbit);
             newRabbit->setDirection(rabbit.direction);
             rabbits.emplace(rabbit.id, newRabbit);
@@ -233,10 +281,11 @@ int ClientDrawer::run() try {
     for (auto& enemy: initial_snapshot.enemies) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
+        loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
         ShiftingDrawable* newEnemy =
-                new ShiftingDrawable(renderer, TURTLE_IMG, enemyAndItemsColor, cameraPosition,
+                new ShiftingDrawable(renderer, texturePath, enemyAndItemsColor, cameraPosition,
                                      textureRect, onMapRect, soundManager);
-        newEnemy->loadAnimations("../external/animations/turtle.yml");
+        newEnemy->loadAnimations(animationsPath);
         newEnemy->setAnimation("Walk");
         newEnemy->setDirection(enemy.direction);
         enemies.emplace(enemy.id, newEnemy);
@@ -269,7 +318,6 @@ int ClientDrawer::run() try {
 
     // Main loop
     while (game_running) {
-
         // EVENTS HANDLER
         handle_events(game_running);
 
@@ -306,10 +354,11 @@ int ClientDrawer::run() try {
                         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
                         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width,
                                                rabbit_height);
+                        loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
                         ShiftingDrawable* newRabbit = new ShiftingDrawable(
-                                renderer, SPAZ_IMG, characterColor, cameraPosition, textureRect,
+                                renderer, texturePath, characterColor, cameraPosition, textureRect,
                                 onMapRect, soundManager);
-                        newRabbit->loadAnimations("../external/animations/spaz.yml");
+                        newRabbit->loadAnimations(animationsPath);
                         setAnimationFromSnapshot(rabbit, newRabbit);
                         newRabbit->setDirection(rabbit.direction);
                         rabbits.emplace(rabbit.id, newRabbit);
@@ -325,10 +374,11 @@ int ClientDrawer::run() try {
                     // Crear un nuevo enemigo
                     SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
                     SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
+                    loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
                     ShiftingDrawable* newEnemy = new ShiftingDrawable(
-                            renderer, ENEMIES_IMG, enemyAndItemsColor, cameraPosition, textureRect,
+                            renderer, texturePath, enemyAndItemsColor, cameraPosition, textureRect,
                             onMapRect, soundManager);
-                    newEnemy->loadAnimations("../external/animations/lizard.yml");
+                    newEnemy->loadAnimations(animationsPath);
                     newEnemy->setAnimation("Walk");
                     newEnemy->setDirection(enemy.direction);
                     enemies.emplace(enemy.id, newEnemy);
