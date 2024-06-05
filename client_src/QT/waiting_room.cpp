@@ -6,7 +6,7 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+WaitingRoom::WaitingRoom(std::shared_ptr<Queue<Command*>> q_cmds, std::shared_ptr<Queue<int>> q_responses,
                          std::atomic<bool>& game_started, int& player_id, QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),
@@ -43,7 +43,7 @@ void WaitingRoom::startWaitingForGame() {
         bool could_pop = false;
         int player_number;
         while (!stop_thread && !could_pop) {
-            could_pop = q_responses.try_pop(player_number);
+            could_pop = q_responses->try_pop(player_number);
             if (!could_pop) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
             }

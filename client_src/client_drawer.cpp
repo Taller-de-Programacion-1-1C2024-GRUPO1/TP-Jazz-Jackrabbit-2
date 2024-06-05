@@ -1,7 +1,7 @@
 #include "client_drawer.h"
 
 
-ClientDrawer::ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots):
+ClientDrawer::ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds), q_snapshots(q_snapshots), client_id(0) {}
 
 
@@ -15,27 +15,27 @@ void ClientDrawer::handle_keyboard(bool& game_running) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
     if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) {  // HABILIDAD ESPECIAL JAZZ Y LLORI
-        // q_cmds.push(new UpperHit(client_id, FORWARD_DIR));
-        // q_cmds.push(new ShortRangeKick(client_id, BACKWARD_DIR));
+        // q_cmds->push(new UpperHit(client_id, FORWARD_DIR));
+        // q_cmds->push(new ShortRangeKick(client_id, BACKWARD_DIR));
     } else if (state[SDL_SCANCODE_RCTRL] and
                state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
         // q_cmds.try_push(AsideKick(client_id, FORWARD_DIR));
     } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
         // q_cmds.try_push(AsideKick(client_id, BACKWARD_DIR));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds.push(new MoveFaster(client_id, FORWARD_DIR));
+        q_cmds->push(new MoveFaster(client_id, FORWARD_DIR));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds.push(new MoveFaster(client_id, BACKWARD_DIR));
+        q_cmds->push(new MoveFaster(client_id, BACKWARD_DIR));
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        q_cmds.push(new Move(client_id, FORWARD_DIR));
+        q_cmds->push(new Move(client_id, FORWARD_DIR));
     } else if (state[SDL_SCANCODE_LEFT]) {
-        q_cmds.push(new Move(client_id, BACKWARD_DIR));
+        q_cmds->push(new Move(client_id, BACKWARD_DIR));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds.push(new Jump(client_id, FORWARD_DIR));
+        q_cmds->push(new Jump(client_id, FORWARD_DIR));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds.push(new Jump(client_id, BACKWARD_DIR));
+        q_cmds->push(new Jump(client_id, BACKWARD_DIR));
     } else if (state[SDL_SCANCODE_S]) {
-        q_cmds.push(new Shoot(client_id));
+        q_cmds->push(new Shoot(client_id));
     } else if (state[SDL_SCANCODE_W]) {
         // q_cmds.try_push(ChangeWeapon(client_id));
     } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
