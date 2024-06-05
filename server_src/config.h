@@ -17,9 +17,9 @@ public:
     int getMaxPlayers() const { return max_players; }
     int getNullState() const { return null_state; }
     int getRabbitSpeed() const { return rabbit_speed; }
-    int getRabbitRunSpeed() const { return rabbit_run_speed; }
     int getRabbitJumpSpeed() const { return rabbit_jump_speed; }
-    int getRabbitJumpHorSpeed() const { return rabbit_jump_hor_speed; }
+    int getRabbitRevivalTime() const { return rabbit_revival_time; }
+    int getRabbitDeintoxicateTime() const { return rabbit_desintoxicate_time; }
     int getBlasterDamage() const { return blaster_damage; }
     int getBlasterSpeed() const { return blaster_speed; }
     bool getBlasterInfiniteAmmo() const { return blaster_infinite_ammo; }
@@ -69,9 +69,9 @@ private:
             max_players = config["max_players"].as<int>();
             null_state = config["null_state"].as<int>();
             rabbit_speed = config["rabbit_speed"].as<int>();
-            rabbit_run_speed = config["rabbit_run_speed"].as<int>();
             rabbit_jump_speed = config["rabbit_jump_speed"].as<int>();
-            rabbit_jump_hor_speed = config["rabbit_jump_hor_speed"].as<int>();
+            rabbit_revival_time = config["rabbit_revival_time"].as<int>();
+            rabbit_desintoxicate_time = config["rabbit_desintoxicate_time"].as<int>();
             blaster_damage = config["blaster_damage"].as<int>();
             blaster_speed = config["blaster_speed"].as<int>();
             blaster_infinite_ammo = config["blaster_infinite_ammo"].as<bool>();
@@ -112,9 +112,9 @@ private:
 
     // Physics
     int rabbit_speed;
-    int rabbit_run_speed;
     int rabbit_jump_speed;
-    int rabbit_jump_hor_speed;
+    int rabbit_revival_time;
+    int rabbit_desintoxicate_time;
 
     // Weapons
     int blaster_damage;

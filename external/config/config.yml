@@ -5,10 +5,10 @@ max_players: 3
 null_state: 0
 
 # Physics
-rabbit_speed: 2
-rabbit_run_speed: 4
-rabbit_jump_speed: 6
-rabbit_jump_hor_speed: 4
+rabbit_speed: 5
+rabbit_jump_speed: 20
+rabbit_revival_time: 5
+rabbit_desintoxicate_time: 1
 
 # Weapons
 blaster_damage: 10
