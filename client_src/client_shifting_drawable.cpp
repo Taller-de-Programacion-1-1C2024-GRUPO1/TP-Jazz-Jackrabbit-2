@@ -8,17 +8,12 @@ ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, const std::string
                                    const SDL_Color& colorKey, SDL2pp::Point& cp,
                                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
                                    SoundManager& soundManager):
-        Drawable(renderer, path, cp, textureRect, onMapRect),
+        Drawable(renderer, path, colorKey, cp, textureRect, onMapRect),
         currentAnimation(new Animation()),
         angle(0),
         direction(0),
         soundManager(soundManager),
-        iterationsBeetweenFrames(4) {
-    SDL2pp::Surface surface(path);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE,
-                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
-    this->texture = SDL2pp::Texture(renderer, surface);
-}
+        iterationsBeetweenFrames(4) {}
 
 // gets the animations from a yaml file
 void ShiftingDrawable::loadAnimations(const std::string& path) {
@@ -108,5 +103,3 @@ void ShiftingDrawable::reajustFrame(int framesToAdvance) {
         }
     }
 }
-// si framestoadvance = 12, y iterations = 4,
-// si framestoadvance = 7, y iteracion = 2,

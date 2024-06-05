@@ -21,8 +21,8 @@ protected:
 
 public:
     Drawable() = delete;
-    Drawable(SDL2pp::Renderer& renderer, const std::string& path, SDL2pp::Point& cp,
-             SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect);
+    Drawable(SDL2pp::Renderer& renderer, const std::string& path, const SDL2pp::Color& colorKey,
+            SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect);
     Drawable(const Drawable& other) = delete;
 
     void render();

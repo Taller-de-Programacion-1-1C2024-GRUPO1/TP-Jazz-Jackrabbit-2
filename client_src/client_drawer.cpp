@@ -38,7 +38,7 @@ TheFuckingEnemySnapshot createEnemySnapshot(int _id, int _pos_x, int _pos_y) {
     enemy.id = _id;
     enemy.direction = direction_x;
     enemy.enemy_type = 0;
-    enemy.pos_x = _pos_x;
+    enemy.pos_x = shiftable_x;
     enemy.pos_y = _pos_y;
     return enemy;
 }
@@ -188,6 +188,7 @@ int ClientDrawer::run() try {
 
     SDL_Color characterColor = {44, 102, 150, 255};   // Color en formato RGBA
     SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
+    SDL_Color mapColor = {87,0,203,0};
     MapLoader mapLoader(renderer);
 
     SDL2pp::Point playerPosition(10, 10);
@@ -215,7 +216,7 @@ int ClientDrawer::run() try {
     game_running = initial_snapshot.end_game;
 
     std::vector<std::unique_ptr<Drawable>> mapComponents =
-            mapLoader.loadMap(MAP_FILE, CARROTUS_TILE, cameraPosition);
+            mapLoader.loadMap(MAP_FILE, CARROTUS_TILE, mapColor, cameraPosition);
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
 
@@ -250,9 +251,9 @@ int ClientDrawer::run() try {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
         ShiftingDrawable* newEnemy =
-                new ShiftingDrawable(renderer, ENEMIES_IMG, enemyAndItemsColor, cameraPosition,
+                new ShiftingDrawable(renderer, TURTLE_IMG, enemyAndItemsColor, cameraPosition,
                                      textureRect, onMapRect, soundManager);
-        newEnemy->loadAnimations("../external/animations/lizard.yml");
+        newEnemy->loadAnimations("../external/animations/turtle.yml");
         newEnemy->setAnimation("Walk");
         newEnemy->setDirection(enemy.direction);
         enemies.emplace(enemy.id, newEnemy);
@@ -279,7 +280,7 @@ int ClientDrawer::run() try {
     }
     for (auto& f: initial_snapshot.food) {
         SDL2pp::Rect onMapRect(f.pos_x, f.pos_y, 32, 32);
-        Drawable* newFood = new Drawable(renderer, ITEMS_IMG, cameraPosition,
+        Drawable* newFood = new Drawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
                                          FoodProvider::getFood(f.supply_type), onMapRect);
         food.emplace(f.id, newFood);
     }
@@ -399,7 +400,7 @@ int ClientDrawer::run() try {
                     // Crear un nuevo objeto valioso
                     SDL2pp::Rect onMapRect(f.pos_x, f.pos_y, 32, 32);
                     Drawable* newFood =
-                            new Drawable(renderer, ITEMS_IMG, cameraPosition,
+                            new Drawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
                                          FoodProvider::getFood(f.supply_type), onMapRect);
                     food.emplace(f.id, newFood);
                 }
@@ -455,7 +456,7 @@ int ClientDrawer::run() try {
         }
 
         banner.render();
-        // ammoLeft.render(); //<--consume muchisimo tiempo
+ //       ammoLeft.render(); //<--consume muchisimo tiempo
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position

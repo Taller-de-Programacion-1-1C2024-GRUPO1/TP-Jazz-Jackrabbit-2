@@ -17,7 +17,7 @@
 #define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
 #define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
 #define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
-
+#define TURTLE_IMG "../client_src/resources/enemies/turtle.png"
 #define CASTLE_TILE "../client_src/resources/tiles/carrotus.png"
 
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"

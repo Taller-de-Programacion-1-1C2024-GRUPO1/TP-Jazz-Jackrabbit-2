@@ -17,12 +17,12 @@ const int BLOCK_SIZE = 32;
 class MapLoader {
 private:
     Renderer& renderer;
-
 public:
     explicit MapLoader(Renderer& renderer): renderer(renderer) {}
 
     std::vector<std::unique_ptr<Drawable>> loadMap(const std::string& filename,
                                                    const std::string& texturePath,
+                                                   const SDL2pp::Color& colorKey,
                                                    SDL2pp::Point& cameraPosition) {
         YAML::Node map = YAML::LoadFile(filename);
         std::vector<std::unique_ptr<Drawable>> tiles;
@@ -50,7 +50,7 @@ public:
                         destRect.h = BLOCK_SIZE;
 
                         tiles.push_back(std::move(std::unique_ptr<Drawable>(new Drawable(
-                                renderer, texturePath, cameraPosition, srcRect, destRect))));
+                                renderer, texturePath, colorKey, cameraPosition, srcRect, destRect))));
                     }
                     x++;
                 }
