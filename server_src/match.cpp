@@ -87,7 +87,7 @@ void Match::delete_players() {
     players.clear();
 }
 
-bool Match::has_started() { return status; }
+bool Match::has_started() { return (*status == MATCH_ALIVE); }
 
 std::string Match::get_match_name() { return this->match_name; }
 

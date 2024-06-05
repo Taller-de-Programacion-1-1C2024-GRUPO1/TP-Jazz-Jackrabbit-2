@@ -27,7 +27,7 @@ MapSelector::~MapSelector() { delete ui; }
 
 
 void MapSelector::on_btnMap1_clicked() {
-    selected_map = "carrotus"; /////////////////PONER NOMBRE
+    selected_map = "carrotus";  /////////////////PONER NOMBRE
     start_match();
 }
 
@@ -39,7 +39,7 @@ void MapSelector::on_btnMap2_clicked() {
 
 
 void MapSelector::on_btnMapCreate_clicked() {
-    selected_map = "carrotus";             /////////////////PONER NOMBRE
+    selected_map = "carrotus";  /////////////////PONER NOMBRE
     start_match();
 }
 
@@ -96,8 +96,6 @@ void MapSelector::start_match() {
         QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
         return;
     }
-
-
 }
 
 

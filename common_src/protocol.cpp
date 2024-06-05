@@ -66,9 +66,7 @@ void Protocol::send_map(DynamicMap map) {
 void Protocol::send_response(int ACK) {
     std::cout << "Sending response" << ACK << std::endl;
     check_closed();
-    std::cout << "10" << std::endl;
     send_uintEight(ACK);
-    std::cout << "11" << std::endl;
 }
 
 // ----------------------------- RECEIVE BYTES/STRINGS/CHAR/ACK -----------------------------
@@ -130,9 +128,7 @@ int Protocol::receive_response() {
 bool Protocol::is_close() { return this->was_closed; }
 
 void Protocol::check_closed() {
-    std::cout << "check_closed" << std::endl;
     if (is_close()) {
-        std::cout << "is_close" << std::endl;
         throw SocketClosed();
     }
 }
