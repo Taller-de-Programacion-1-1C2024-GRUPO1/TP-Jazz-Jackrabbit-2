@@ -2,11 +2,9 @@
 #define CHARACTER_H
 
 #include "../../physics_src/physical_objects.h"
-#define MAX_FALLING_SPEED 15
-class PhysicalMap;
+#include "../constants_game.h"
 
-// FISIC
-#define GRAVITY 1
+class PhysicalMap;
 
 class Character: public PhysicalObject {
 

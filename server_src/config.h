@@ -15,15 +15,15 @@ public:
     }
 
     int getMaxPlayers() const { return max_players; }
-    int getStartingLife() const { return starting_life; }
     int getNullState() const { return null_state; }
     int getRabbitSpeed() const { return rabbit_speed; }
-    int getRabbitRunSpeed() const { return rabbit_run_speed; }
     int getRabbitJumpSpeed() const { return rabbit_jump_speed; }
-    int getRabbitJumpHorSpeed() const { return rabbit_jump_hor_speed; }
+    int getRabbitRevivalTime() const { return rabbit_revival_time; }
+    int getRabbitDeintoxicateTime() const { return rabbit_desintoxicate_time; }
     int getBlasterDamage() const { return blaster_damage; }
     int getBlasterSpeed() const { return blaster_speed; }
     bool getBlasterInfiniteAmmo() const { return blaster_infinite_ammo; }
+    int getPlayerStartingLife() const { return player_starting_life; }
     int getEnemyRatSpeed() const { return enemy_rat_speed; }
     int getEnemyRatDamage() const { return enemy_rat_damage; }
     int getEnemyRatLife() const { return enemy_rat_life; }
@@ -67,15 +67,15 @@ private:
             std::cout << "Reading config file: " << file_path << std::endl;
             YAML::Node config = YAML::LoadFile(file_path);
             max_players = config["max_players"].as<int>();
-            starting_life = config["starting_life"].as<int>();
             null_state = config["null_state"].as<int>();
             rabbit_speed = config["rabbit_speed"].as<int>();
-            rabbit_run_speed = config["rabbit_run_speed"].as<int>();
             rabbit_jump_speed = config["rabbit_jump_speed"].as<int>();
-            rabbit_jump_hor_speed = config["rabbit_jump_hor_speed"].as<int>();
+            rabbit_revival_time = config["rabbit_revival_time"].as<int>();
+            rabbit_desintoxicate_time = config["rabbit_desintoxicate_time"].as<int>();
             blaster_damage = config["blaster_damage"].as<int>();
             blaster_speed = config["blaster_speed"].as<int>();
             blaster_infinite_ammo = config["blaster_infinite_ammo"].as<bool>();
+            player_starting_life = config["player_starting_life"].as<int>();
             enemy_rat_speed = config["enemy_rat_speed"].as<int>();
             enemy_rat_damage = config["enemy_rat_damage"].as<int>();
             enemy_rat_life = config["enemy_rat_life"].as<int>();
@@ -108,19 +108,21 @@ private:
     int max_players;
 
     // World
-    int starting_life;
     int null_state;
 
     // Physics
     int rabbit_speed;
-    int rabbit_run_speed;
     int rabbit_jump_speed;
-    int rabbit_jump_hor_speed;
+    int rabbit_revival_time;
+    int rabbit_desintoxicate_time;
 
     // Weapons
     int blaster_damage;
     int blaster_speed;
     bool blaster_infinite_ammo;
+
+    // Player
+    int player_starting_life;
 
     // Enemies
     /*

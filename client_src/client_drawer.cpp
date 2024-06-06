@@ -15,25 +15,25 @@ void ClientDrawer::handle_keyboard(bool& game_running) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
     if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) {  // HABILIDAD ESPECIAL JAZZ Y LLORI
-        // q_cmds->push(new UpperHit(client_id, FORWARD_DIR));
-        // q_cmds->push(new ShortRangeKick(client_id, BACKWARD_DIR));
+        // q_cmds->push(new UpperHit(client_id, RIGHT));
+        // q_cmds->push(new ShortRangeKick(client_id, LEFT));
     } else if (state[SDL_SCANCODE_RCTRL] and
                state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
-        // q_cmds.try_push(AsideKick(client_id, FORWARD_DIR));
+        // q_cmds.try_push(AsideKick(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
-        // q_cmds.try_push(AsideKick(client_id, BACKWARD_DIR));
+        // q_cmds.try_push(AsideKick(client_id, LEFT));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(std::make_shared<MoveFaster>(client_id, FORWARD_DIR));
+        q_cmds->push(std::make_shared<MoveFaster>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(std::make_shared<MoveFaster>(client_id, BACKWARD_DIR));
+        q_cmds->push(std::make_shared<MoveFaster>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(std::make_shared<Move>(client_id, FORWARD_DIR));
+        q_cmds->push(std::make_shared<Move>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(std::make_shared<Move>(client_id, BACKWARD_DIR));
+        q_cmds->push(std::make_shared<Move>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(std::make_shared<Jump>(client_id, FORWARD_DIR));
+        q_cmds->push(std::make_shared<Jump>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(std::make_shared<Jump>(client_id, BACKWARD_DIR));
+        q_cmds->push(std::make_shared<Jump>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_S]) {
         q_cmds->push(std::make_shared<Shoot>(client_id));
     } else if (state[SDL_SCANCODE_W]) {

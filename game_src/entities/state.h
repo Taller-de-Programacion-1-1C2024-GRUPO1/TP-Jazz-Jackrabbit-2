@@ -1,13 +1,13 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include "../constants_game.h"
+
 #include "rabbit.h"
+#include "../../server_src/config.h"
 
-#define RABBIT_REVIVAL_TIME 5
-#define RABBIT_DEINTOXICATE_TIME 0.5
-#define RABBIT_COOLDOWN_TAKE_DAMAGE 3
-
-enum RABBIT_STATES { ALIVE, DEAD, RECIEVED_DAMAGE, INTOXICATED };
+#define RABBIT_REVIVAL_TIME ConfigSingleton::getInstance().getRabbitRevivalTime()
+#define RABBIT_DEINTOXICATE_TIME ConfigSingleton::getInstance().getRabbitDeintoxicateTime()
 
 class State {
 protected:

@@ -2,19 +2,21 @@
 max_players: 3
 
 # World
-starting_life: 5
 null_state: 0
 
 # Physics
-rabbit_speed: 2
-rabbit_run_speed: 4
-rabbit_jump_speed: 6
-rabbit_jump_hor_speed: 4
+rabbit_speed: 5
+rabbit_jump_speed: 20
+rabbit_revival_time: 5
+rabbit_desintoxicate_time: 1
 
 # Weapons
 blaster_damage: 10
 blaster_speed: 10
 blaster_infinite_ammo: true
+
+# Players
+player_starting_life: 5
 
 # Enemies
 # RAT: enemigo que se mueve de izquierda a derecha. Si estas en cierto rango, te ataca.
