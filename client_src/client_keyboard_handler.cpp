@@ -1,6 +1,6 @@
 #include "client_keyboard_handler.h"
 
-KeyboardHandler::KeyboardHandler(std::shared_ptr<Queue<Command*>>& q_cmds): 
+KeyboardHandler::KeyboardHandler(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds): 
     q_cmds(q_cmds) {}
 
 void KeyboardHandler::listenForCommands(bool& game_running) {
@@ -13,31 +13,32 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
     if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) {  // HABILIDAD ESPECIAL JAZZ Y LLORI
-        // q_cmds.push(new UpperHit(client_id, 1)); //1: FORWARD
-        // q_cmds.push(new ShortRangeKick(client_id, 0));
+        // q_cmds->push(new UpperHit(client_id, RIGHT));
+        // q_cmds->push(new ShortRangeKick(client_id, LEFT));
     } else if (state[SDL_SCANCODE_RCTRL] and
                state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
-        // q_cmds.try_push(AsideKick(client_id, 1)); //1: FORWARD
+        // q_cmds.try_push(AsideKick(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
-        // q_cmds.try_push(AsideKick(client_id, 0));
+        // q_cmds.try_push(AsideKick(client_id, LEFT));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(new MoveFaster(client_id, 1)); //1: FORWARD
+        q_cmds->push(std::make_shared<MoveFaster>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(new MoveFaster(client_id, 0));
+        q_cmds->push(std::make_shared<MoveFaster>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(new Move(client_id, 1)); //1: FORWARD
+        q_cmds->push(std::make_shared<Move>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(new Move(client_id, 0));
+        q_cmds->push(std::make_shared<Move>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(new Move(client_id, 1)); //1: FORWARD
+        q_cmds->push(std::make_shared<Jump>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(new Jump(client_id, 0));
+        q_cmds->push(std::make_shared<Jump>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_S]) {
-        //return new Shoot(client_id);
+        q_cmds->push(std::make_shared<Shoot>(client_id));
     } else if (state[SDL_SCANCODE_W]) {
-        // q_cmds->try_push(ChangeWeapon(client_id));
+        // q_cmds.try_push(ChangeWeapon(client_id));
     } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
         game_running = false;
+    } else {
     }
 }
 

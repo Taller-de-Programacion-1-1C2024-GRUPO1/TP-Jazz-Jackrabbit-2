@@ -3,7 +3,7 @@
 #include "./ui_client_lobby.h"
 
 
-ClientLobby::ClientLobby(std::shared_ptr<Queue<Command*>> q_cmds, std::shared_ptr<Queue<int>> q_responses,
+ClientLobby::ClientLobby(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, std::shared_ptr<Queue<int>> q_responses,
                          std::atomic<bool>& game_started, int& player_id, QWidget* parent):
         QMainWindow(parent),
         ui(new Ui::ClientLobby),

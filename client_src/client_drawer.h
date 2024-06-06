@@ -78,7 +78,7 @@ using SDL2pp::Window;
 
 class ClientDrawer {
 private:
-    std::shared_ptr<Queue<Command*>> q_cmds;
+    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
     Queue<Snapshot>& q_snapshots;
     bool game_running;
 
@@ -99,9 +99,9 @@ private:
     KeyboardHandler keyboard_handler;
 
 public:
-    ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots);
     int run(int player_id);
-    void handle_keyboard(bool& game_running);
+    ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, Queue<Snapshot>& q_snapshots);
+
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
     //~ClientDrawer();
 };

@@ -14,7 +14,7 @@ enum  { RABBITT=0, LIZARDD, CRABB, TURTLEE};
 enum  { ALIVEE, RECIEVED_DAMAGEE, INTOXICATEDD, DEADD };
 enum  { STANDD, RUNN, RUN_FASTT, FALLINGG, JUMPINGG };
 
-ClientDrawer::ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots):
+ClientDrawer::ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds),
         q_snapshots(q_snapshots),
         game_running(false),
@@ -25,6 +25,7 @@ ClientDrawer::ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapsh
         rabbit_width(0),
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
+
 
 void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                                             ShiftingDrawable* drawable) {
