@@ -26,7 +26,7 @@ class MapSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit MapSelector(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+    explicit MapSelector(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
                          std::atomic<bool>& game_started, ChampionType selected_character,
                          int& player_id, QWidget* parent = nullptr);
     ~MapSelector();
@@ -49,7 +49,7 @@ protected:
 
 private:
     Ui::MapSelector* ui;
-    Queue<Command*>& q_cmds;
+    Queue<std::shared_ptr<Command>>& q_cmds;
     Queue<int>& q_responses;
     int& player_id;
     std::atomic<bool>& game_started;

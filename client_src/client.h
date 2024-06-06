@@ -25,7 +25,7 @@
 class Client {
 private:
     Protocol protocol;
-    Queue<Command*> q_cmds;
+    Queue<std::shared_ptr<Command>> q_cmds;
     Queue<int> q_responses;
     std::atomic<bool> game_started;
     int player_id;

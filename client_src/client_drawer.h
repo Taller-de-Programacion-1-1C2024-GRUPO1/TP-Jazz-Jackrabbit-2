@@ -56,7 +56,7 @@
 #include "../game_src/commands/command_shoot.h"
 
 #include "client_number_images.h"
-
+#include "../client_keyboard_handler.h"
 
 
 using SDL2pp::Chunk;
@@ -78,7 +78,7 @@ using SDL2pp::Window;
 
 class ClientDrawer {
 private:
-    Queue<Command*>& q_cmds;
+    Queue<std::shared_ptr<Command>>& q_cmds;
     Queue<Snapshot>& q_snapshots;
     bool game_running;
 
@@ -96,8 +96,10 @@ private:
     int rabbit_width;
     int rabbit_height;
 
+    KeyboardHandler keyboard_handler;
+
 public:
-    ClientDrawer(Queue<Command*>& q_cmds, Queue<Snapshot>& q_snapshots);
+    ClientDrawer(Queue<std::shared_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     int run(int player_id);
     void handle_keyboard(bool& game_running);

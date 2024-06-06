@@ -3,7 +3,7 @@
 #include "ui_map_selector.h"
 
 
-MapSelector::MapSelector(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+MapSelector::MapSelector(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
                          std::atomic<bool>& game_started, ChampionType selected_character,
                          int& player_id, QWidget* parent):
         QDialog(parent),
@@ -68,8 +68,7 @@ void MapSelector::start_match() {
 
     MatchCommand cmd = MatchCommand(NEW_MATCH, number_of_players, match_name, selected_map,
                                     selected_character);
-    q_cmds.push(&cmd);
-
+    q_cmds.push(std::make_shared<MatchCommand>(cmd));
     /*
     int response;
     bool could_pop = false;

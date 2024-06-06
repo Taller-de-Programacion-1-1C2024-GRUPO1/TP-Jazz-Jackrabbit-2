@@ -3,8 +3,7 @@
 
 Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)),
-        q_cmds(15),  // ESE 15 HAY QUE SACARLO ////////////////////////////////// ACA HAY QUE USAR
-                     // PUNTEROS INTELIGENTES
+        q_cmds(), 
         q_responses(),
         game_started(false),
         player_id(-1),

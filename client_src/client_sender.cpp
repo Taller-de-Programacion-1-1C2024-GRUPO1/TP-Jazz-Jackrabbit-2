@@ -3,14 +3,14 @@
 
 #include <chrono>
 
-ClientSender::ClientSender(Protocol& protocol, Queue<Command*>& q_cmds):
+ClientSender::ClientSender(Protocol& protocol, Queue<std::shared_ptr<Command>>& q_cmds):
         protocol(protocol), q_cmds(q_cmds), keep_talking(true), is_alive(true) {}
 
 
 void ClientSender::run() {
     while (keep_talking) {
         try {
-            Command* cmd = q_cmds.pop();
+            std::shared_ptr<Command> cmd = q_cmds.pop();
             cmd->send(this->protocol);
             std::cout << "Client SENDER: Enviando comando" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(2));

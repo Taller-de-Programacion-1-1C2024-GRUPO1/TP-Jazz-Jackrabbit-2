@@ -6,7 +6,7 @@
 #include "ui_join_match_lobby.h"
 
 
-JoinMatchLobby::JoinMatchLobby(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+JoinMatchLobby::JoinMatchLobby(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
                                std::atomic<bool>& game_started, ChampionType selected_character,
                                int& player_id, QWidget* parent):
         QDialog(parent),
@@ -54,7 +54,7 @@ void JoinMatchLobby::on_btnJoin_clicked() {
 
 
     MatchCommand cmd = MatchCommand(JOIN, 0, match_name, "", selected_character);
-    q_cmds.push(&cmd);
+    q_cmds.push(std::make_shared<MatchCommand>(cmd));
 
     int response = q_responses.pop();
     if (response == 0) {

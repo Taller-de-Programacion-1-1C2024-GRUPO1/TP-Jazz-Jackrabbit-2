@@ -88,7 +88,7 @@ void ShiftingDrawable::reajustFrame(int framesToAdvance) {
         int remainingFrames = framesToAdvance - iterationsBeetweenFrames;
         int animationFramesToAdvance = remainingFrames / 4;
         animationFramesToAdvance += 1;
-        iterationsBeetweenFrames = (4 + remainingFrames) % 4;
+        iterationsBeetweenFrames = (framesToAdvance  + (4 - iterationsBeetweenFrames)) % 4;
         if (iterationsBeetweenFrames == 0) {
             iterationsBeetweenFrames = 4;
         }

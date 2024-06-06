@@ -29,10 +29,13 @@ void ClientReceiver::run() {
             std::this_thread::sleep_for(std::chrono::seconds(2));
         } catch (const ClosedQueue& e) {
             std::cerr << "Se cerró la Snapshot queue" << std::endl;
+            q_snapshots.close();
             break;
+        } catch (const SocketClosed& e){
+              std::cerr << "Se cerro el socket (Receiver)" << std::endl;
+              break;
         } catch (const std::exception& e) {
-            std::cerr << "Client Receiver: error al recibir snapshot o se cerro el servidor "
-                         "forzadamente"
+            std::cerr << "Client Receiver: error al recibir snapshot "
                       << std::endl;
             break;
         }
@@ -46,5 +49,6 @@ bool ClientReceiver::is_dead() { return !this->is_alive; }
 
 void ClientReceiver::kill() {
     this->keep_talking = false;
+    q_responses.close();
     q_snapshots.close();
 }

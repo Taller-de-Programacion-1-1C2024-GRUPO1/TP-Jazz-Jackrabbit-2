@@ -25,7 +25,7 @@ class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+    explicit WaitingRoom(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
                          std::atomic<bool>& game_started, int& player_id,
                          QWidget* parent = nullptr);
     ~WaitingRoom();
@@ -35,7 +35,7 @@ private slots:
 
 private:
     Ui::WaitingRoom* ui;
-    Queue<Command*>& q_cmds;
+    Queue<std::shared_ptr<Command>>& q_cmds;
     Queue<int>& q_responses;
     std::atomic<bool>& game_started;
     int& player_id;

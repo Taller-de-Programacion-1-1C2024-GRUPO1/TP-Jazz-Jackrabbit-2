@@ -16,12 +16,12 @@
 class ClientSender: public Thread {
 private:
     Protocol& protocol;
-    Queue<Command*>& q_cmds;
+    Queue<std::shared_ptr<Command>>& q_cmds;
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
 
 public:
-    explicit ClientSender(Protocol& protocol, Queue<Command*>& q_cmds);
+    explicit ClientSender(Protocol& protocol, Queue<std::shared_ptr<Command>>& q_cmds);
     virtual void run() override;
     bool is_dead();
     void kill();

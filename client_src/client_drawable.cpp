@@ -49,6 +49,7 @@ void Drawable::update() {
 void Drawable::setPosition(int x, int y) {
     onMapRect.x = x;
     onMapRect.y = y;
+    std::cout << "Drawable position: " << onMapRect.x << ", " << onMapRect.y << std::endl;
 }
 
 void Drawable::setCameraPosition(const SDL2pp::Point& position) { cameraPosition = position; }

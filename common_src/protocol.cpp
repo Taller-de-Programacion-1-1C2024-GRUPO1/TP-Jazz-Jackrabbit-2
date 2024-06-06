@@ -459,6 +459,8 @@ void Protocol::send_enemies(Snapshot& snapshot) {
         send_uintEight(enemy.enemy_type);
         send_uintThirtyTwo(enemy.pos_x);
         send_uintThirtyTwo(enemy.pos_y);
+        std::cout << "Enemie pos x: " << enemy.pos_x << std::endl;
+        std::cout << "Enemie pos y: " << enemy.pos_y << std::endl;
     }
 }
 

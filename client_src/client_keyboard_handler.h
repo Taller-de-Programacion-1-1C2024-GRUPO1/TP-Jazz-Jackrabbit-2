@@ -6,16 +6,19 @@
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
+#include "../common_src/queue.h"
 #include "SDL2pp/SDL2pp.hh"
 
 class KeyboardHandler {
 private:
     int client_id;
+    Queue<std::shared_ptr<Command>>& q_cmds;
 
 public:
-    explicit KeyboardHandler(int client_id);
+    explicit KeyboardHandler(Queue<std::shared_ptr<Command>>& q_cmds);
 
-    Command* listenForCommands(bool& gameRunning);
+    void listenForCommands(bool& gameRunning);
+    void setId(int id);
 };
 
 

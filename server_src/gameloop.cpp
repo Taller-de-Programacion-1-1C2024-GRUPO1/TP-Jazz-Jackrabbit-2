@@ -28,32 +28,31 @@ void Gameloop::send_initial_snapshots() {
 void Gameloop::push_all_players(const Snapshot& snapshot) {
     // Enviar a cada jugador la snapshot
     std::cout << "Enviando enemigos: " << snapshot.enemies.size() << std::endl;
-
-    try{
-        broadcaster_snapshots.broadcast(std::make_shared<Snapshot>(snapshot));
-    }
-    catch (ClosedQueue& err) {
-    }
+    broadcaster_snapshots.broadcast(std::make_shared<Snapshot>(snapshot));
 }
 
 void Gameloop::run() {
-    try {
-        auto start = std::chrono::high_resolution_clock::now();
-        std::shared_ptr<Command> game_command;
-        while (client_cmd_queue.try_pop(game_command)) {
-            game_command->execute_Command(map);
+    while(playing){
+        try {
+            auto start = std::chrono::high_resolution_clock::now();
+            std::shared_ptr<Command> game_command;
+            while (client_cmd_queue.try_pop(game_command)) {
+                game_command->execute_Command(map);
+            }
+            map.update();
+
+            push_all_players(map.get_snapshot());
+
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+            if (FRAME_DELAY > duration.count()) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_DELAY - duration.count()));
+            }
+
+        } catch (ClosedQueue& err) {
+            *playing = false;
         }
-        map.update();
-
-        push_all_players(map.get_snapshot());
-
-        auto end = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-        if (FRAME_DELAY > duration.count()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_DELAY - duration.count()));
-        }
-
-    } catch (ClosedQueue& err) {}
+    }
 }
 
 void Gameloop::stop() { *playing = false; }

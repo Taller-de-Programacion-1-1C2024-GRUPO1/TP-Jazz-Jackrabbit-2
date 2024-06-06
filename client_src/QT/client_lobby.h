@@ -28,7 +28,7 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(Queue<Command*>& q_cmds, Queue<int>& q_responses,
+    explicit ClientLobby(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
                          std::atomic<bool>& game_started, int& player_id,
                          QWidget* parent = nullptr);
     ~ClientLobby();
@@ -43,7 +43,7 @@ private slots:
 
 private:
     Ui::ClientLobby* ui;
-    Queue<Command*>& q_cmds;
+    Queue<std::shared_ptr<Command>>& q_cmds;
     Queue<int>& q_responses;
     int& player_id;
     std::atomic<bool>& game_started;

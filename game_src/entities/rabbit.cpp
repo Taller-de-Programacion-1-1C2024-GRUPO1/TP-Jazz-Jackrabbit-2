@@ -81,7 +81,6 @@ void Rabbit::update() {
 
     // NO HAY INERCIA EN EJE X
     spe_x = 0;
-
     printf(action == STAND          ? "STAND\n" :
            action == RUN            ? "RUN\n" :
            action == RUN_FAST       ? "RUN_FAST\n" :
