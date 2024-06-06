@@ -6,7 +6,7 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(std::shared_ptr<Queue<Command*>> q_cmds, std::shared_ptr<Queue<int>> q_responses,
+WaitingRoom::WaitingRoom(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, std::shared_ptr<Queue<int>> q_responses,
                          std::atomic<bool>& game_started, int& player_id, QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),

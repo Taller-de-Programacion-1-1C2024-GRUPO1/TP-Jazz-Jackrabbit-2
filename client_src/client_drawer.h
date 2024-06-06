@@ -76,12 +76,12 @@ using SDL2pp::Window;
 
 class ClientDrawer {
 private:
-    std::shared_ptr<Queue<Command*>> q_cmds;
+    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
     Queue<Snapshot>& q_snapshots;
     int client_id;
 
 public:
-    ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots);
+    ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     int run();
     void handle_keyboard(bool& game_running);
