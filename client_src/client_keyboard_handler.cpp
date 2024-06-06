@@ -1,7 +1,7 @@
 #include "client_keyboard_handler.h"
 
-KeyboardHandler::KeyboardHandler(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds): 
-    q_cmds(q_cmds) {}
+KeyboardHandler::KeyboardHandler(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds):
+        q_cmds(q_cmds) {}
 
 void KeyboardHandler::listenForCommands(bool& game_running) {
     SDL_Event event;
@@ -42,6 +42,4 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     }
 }
 
-void KeyboardHandler::setId(int id) {
-    client_id = id;
-}
+void KeyboardHandler::setId(int id) { client_id = id; }

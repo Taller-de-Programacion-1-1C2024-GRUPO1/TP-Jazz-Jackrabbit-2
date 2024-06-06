@@ -3,10 +3,11 @@
 
 #include <QApplication>
 #include <fstream>
+#include <memory>  // Para std::shared_ptr
 #include <string>
 #include <unordered_map>
 #include <utility>
-#include <memory>  // Para std::shared_ptr
+
 #include "../common_src/common_socket.h"
 #include "../common_src/constants.h"
 #include "../common_src/protocol.h"
@@ -25,8 +26,8 @@
 class Client {
 private:
     Protocol protocol;
-    std::shared_ptr<Queue<std::shared_ptr<Command>>> q_cmds; // Cambiado a std::shared_ptr
-    std::shared_ptr<Queue<int>> q_responses; // Cambiado a std::shared_ptr
+    std::shared_ptr<Queue<std::shared_ptr<Command>>> q_cmds;  // Cambiado a std::shared_ptr
+    std::shared_ptr<Queue<int>> q_responses;                  // Cambiado a std::shared_ptr
     std::atomic<bool> game_started;
     int player_id;
     Queue<Snapshot> q_snapshots;

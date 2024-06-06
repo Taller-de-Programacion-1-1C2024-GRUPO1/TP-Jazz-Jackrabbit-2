@@ -25,17 +25,18 @@ void ClientReceiver::run() {
                 std::cout << "Enemy size: " << snap.enemies.size() << std::endl;
                 q_snapshots.push(snap);
             }
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            // ESTE SLEEP ESTA POR AHORA HASTA TENER POLIMORFISMO
+            // PARA QUE CADA COMANDO O RESPOSE SEPA EN QUE COLA PUSHEARSE
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         } catch (const ClosedQueue& e) {
             std::cerr << "Se cerró la Snapshot queue" << std::endl;
             q_snapshots.close();
             break;
-        } catch (const SocketClosed& e){
-              std::cerr << "Se cerro el socket (Receiver)" << std::endl;
-              break;
+        } catch (const SocketClosed& e) {
+            std::cerr << "Se cerro el socket (Receiver)" << std::endl;
+            break;
         } catch (const std::exception& e) {
-            std::cerr << "Client Receiver: error al recibir snapshot "
-                      << std::endl;
+            std::cerr << "Client Receiver: error al recibir snapshot " << std::endl;
             break;
         }
     }

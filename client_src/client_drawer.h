@@ -29,17 +29,18 @@
 #define MUSIC_VOLUME 5
 
 // pre-commit run --hook-stage manual --all-files
-
 #include <algorithm>
 #include <exception>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
 
+#include "../client_keyboard_handler.h"
 #include "../client_src/client_ammo_left.h"
 #include "../client_src/client_animation.h"
 #include "../client_src/client_drawable.h"
@@ -56,7 +57,6 @@
 #include "../game_src/commands/command_shoot.h"
 
 #include "client_number_images.h"
-#include "../client_keyboard_handler.h"
 
 
 using SDL2pp::Chunk;
@@ -100,14 +100,11 @@ private:
 
 public:
     int run(int player_id);
-    ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, Queue<Snapshot>& q_snapshots);
+    ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
+                 Queue<Snapshot>& q_snapshots);
 
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
     //~ClientDrawer();
 };
 
 #endif
-
-
-  
-

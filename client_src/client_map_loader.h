@@ -22,17 +22,18 @@ public:
     explicit MapLoader(Renderer& renderer): renderer(renderer) {}
 
     std::vector<std::unique_ptr<Drawable>> loadMap(const DynamicMap& map,
-                                               const std::string& texturePath,
-                                               const SDL2pp::Color& colorKey,
-                                               SDL2pp::Point& cameraPosition) {
+                                                   const std::string& texturePath,
+                                                   const SDL2pp::Color& colorKey,
+                                                   SDL2pp::Point& cameraPosition) {
         std::vector<std::unique_ptr<Drawable>> tiles;
         const auto& data = map.map_data;  // Use const reference to avoid copying the map
         std::cout << "DATA SIZE: " << data.size() << std::endl;
         for (int key = 0; key <= 4; key++) {
             auto it = data.find(key);  // Use find to check if key exists in the map
-            if (it != data.end()) {  // Key exists in the map
+            if (it != data.end()) {    // Key exists in the map
                 std::cout << "Reading layer " << key << std::endl;
-                auto& matrix = it->second;  // Use iterator to access the value associated with the key
+                auto& matrix =
+                        it->second;  // Use iterator to access the value associated with the key
                 int x = 0;
                 int y = 0;
                 for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
@@ -54,17 +55,16 @@ public:
                             destRect.w = BLOCK_SIZE;
                             destRect.h = BLOCK_SIZE;
 
-                            tiles.push_back(std::make_unique<Drawable>(
-                                    renderer, texturePath, colorKey, cameraPosition,
-                                    srcRect, destRect));
+                            tiles.push_back(std::make_unique<Drawable>(renderer, texturePath,
+                                                                       colorKey, cameraPosition,
+                                                                       srcRect, destRect));
                         }
                         x++;
                     }
                     x = 0;
                     y++;
                 }
-            }
-            else{
+            } else {
                 std::cout << "Layer " << key << " not found" << std::endl;
             }
         }

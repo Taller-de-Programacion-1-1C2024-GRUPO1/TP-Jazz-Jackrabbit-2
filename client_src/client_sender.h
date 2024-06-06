@@ -2,6 +2,7 @@
 #define CLIENTSENDER_H
 #include <iostream>
 #include <list>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <unordered_map>
@@ -16,12 +17,13 @@
 class ClientSender: public Thread {
 private:
     Protocol& protocol;
-    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds; // Cambiado a std::shared_ptr
+    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;  // Cambiado a std::shared_ptr
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
 
 public:
-    explicit ClientSender(Protocol& protocol, std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds);
+    explicit ClientSender(Protocol& protocol,
+                          std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds);
     virtual void run() override;
     bool is_dead();
     void kill();

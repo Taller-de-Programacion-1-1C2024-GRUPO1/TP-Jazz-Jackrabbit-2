@@ -47,7 +47,7 @@ void ShiftingDrawable::render() {
 
 void ShiftingDrawable::update() {
     Drawable::update();
-    //std::cout << "Current frame: " << currentAnimation->currentFrame << std::endl;
+    // std::cout << "Current frame: " << currentAnimation->currentFrame << std::endl;
 
     textureRect =
             currentAnimation->frameRects[currentAnimation->currentFrame % currentAnimation->frames];
@@ -88,7 +88,7 @@ void ShiftingDrawable::reajustFrame(int framesToAdvance) {
         int remainingFrames = framesToAdvance - iterationsBeetweenFrames;
         int animationFramesToAdvance = remainingFrames / 4;
         animationFramesToAdvance += 1;
-        iterationsBeetweenFrames = (framesToAdvance  + (4 - iterationsBeetweenFrames)) % 4;
+        iterationsBeetweenFrames = (framesToAdvance + (4 - iterationsBeetweenFrames)) % 4;
         if (iterationsBeetweenFrames == 0) {
             iterationsBeetweenFrames = 4;
         }

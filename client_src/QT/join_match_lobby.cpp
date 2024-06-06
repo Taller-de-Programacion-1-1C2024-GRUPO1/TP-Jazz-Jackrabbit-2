@@ -6,7 +6,8 @@
 #include "ui_join_match_lobby.h"
 
 
-JoinMatchLobby::JoinMatchLobby(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, std::shared_ptr<Queue<int>> q_responses,
+JoinMatchLobby::JoinMatchLobby(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
+                               std::shared_ptr<Queue<int>> q_responses,
                                std::atomic<bool>& game_started, ChampionType selected_character,
                                int& player_id, QWidget* parent):
         QDialog(parent),
@@ -51,8 +52,6 @@ void JoinMatchLobby::on_btnJoin_clicked() {
 
     // ENVIO COMANDO preguntando por existencia de partida. Si existe acepto para que inicie la
     // partida
-
-
 
 
     q_cmds->push(std::make_shared<MatchCommand>(JOIN, 0, match_name, "", selected_character));

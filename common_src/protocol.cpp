@@ -455,7 +455,7 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
     std::cout << "Sending rabbits" << std::endl;
-        std::cout << "Cantidad de rabbits: " << snapshot.rabbits.size() << std::endl;
+    std::cout << "Cantidad de rabbits: " << snapshot.rabbits.size() << std::endl;
 
     // enviar la cantidad de conejos
     send_uintEight(snapshot.rabbits.size());
@@ -541,7 +541,7 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_height = receive_uintThirtyTwo();
     DynamicMap map_data = receive_map();
     snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
-    
+
     std::cout << "Fin de receive dimensions" << std::endl;
 }
 

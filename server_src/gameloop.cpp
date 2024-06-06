@@ -21,7 +21,6 @@ void Gameloop::send_initial_snapshots() {
 
     // Enviar el snapshot inicial
     push_all_players(snapshot);
-
 }
 
 void Gameloop::push_all_players(const Snapshot& snapshot) {
@@ -32,7 +31,7 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 void Gameloop::run() {
     std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
-    while(playing){
+    while (playing) {
         try {
             auto start = std::chrono::high_resolution_clock::now();
             std::shared_ptr<Command> game_command;
@@ -46,7 +45,8 @@ void Gameloop::run() {
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
             if (FRAME_DELAY > duration.count()) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_DELAY - duration.count()));
+                std::this_thread::sleep_for(
+                        std::chrono::milliseconds(FRAME_DELAY - duration.count()));
             }
 
         } catch (ClosedQueue& err) {

@@ -5,10 +5,13 @@ Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)),
 
 
-        
-        q_cmds(std::make_shared<Queue<std::shared_ptr<Command>>>()), // Usamos std::make_shared           // ESE 15 HAY QUE SACARLO ////////////////////////////////// ACA HAY QUE USAR
-                                                                                             // PUNTEROS INTELIGENTES
-        q_responses(std::make_shared<Queue<int>>()),   // Usamos std::make_shared  
+        q_cmds(std::make_shared<
+                Queue<std::shared_ptr<Command>>>()),  // Usamos std::make_shared //
+                                                      // ESE 15 HAY QUE SACARLO
+                                                      // //////////////////////////////////
+                                                      // ACA HAY QUE USAR PUNTEROS
+                                                      // INTELIGENTES
+        q_responses(std::make_shared<Queue<int>>()),  // Usamos std::make_shared
         game_started(false),
         player_id(-1),
         q_snapshots(),

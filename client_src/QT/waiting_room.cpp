@@ -6,8 +6,9 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, std::shared_ptr<Queue<int>> q_responses,
-                         std::atomic<bool>& game_started, int& player_id, QWidget* parent):
+WaitingRoom::WaitingRoom(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
+                         std::shared_ptr<Queue<int>> q_responses, std::atomic<bool>& game_started,
+                         int& player_id, QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),
         q_cmds(q_cmds),
@@ -48,7 +49,8 @@ void WaitingRoom::startWaitingForGame() {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
             }
         }
-        if (stop_thread) return;
+        if (stop_thread)
+            return;
 
         std::cout << "Player number EN WAITING ROOM: " << player_number << std::endl;
         if (player_number < 0) {
@@ -59,15 +61,11 @@ void WaitingRoom::startWaitingForGame() {
         }
         player_id = player_number;
         game_started = true;
-        QMetaObject::invokeMethod(this, [this]() {
-            accept();
-        });
+        QMetaObject::invokeMethod(this, [this]() { accept(); });
     });
 }
 
-void WaitingRoom::stopWaitingForGame() {
-    stop_thread = true;
-}
+void WaitingRoom::stopWaitingForGame() { stop_thread = true; }
 
 void WaitingRoom::closeEvent(QCloseEvent* event) {
     stopWaitingForGame();

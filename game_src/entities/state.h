@@ -1,10 +1,10 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include "../../server_src/config.h"
 #include "../constants_game.h"
 
 #include "rabbit.h"
-#include "../../server_src/config.h"
 
 #define RABBIT_REVIVAL_TIME ConfigSingleton::getInstance().getRabbitRevivalTime()
 #define RABBIT_DEINTOXICATE_TIME ConfigSingleton::getInstance().getRabbitDeintoxicateTime()

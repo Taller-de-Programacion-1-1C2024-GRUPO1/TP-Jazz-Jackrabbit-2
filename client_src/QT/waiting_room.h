@@ -8,9 +8,9 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QWidget>
+#include <atomic>
 #include <memory>
 #include <thread>
-#include <atomic>
 
 #include "../../common_src/constants.h"
 #include "../../game_src/commands/command.h"
@@ -26,9 +26,9 @@ class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom( std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds, std::shared_ptr<Queue<int>> q_responses,
-                         std::atomic<bool>& game_started, int& player_id,
-                         QWidget* parent = nullptr);
+    explicit WaitingRoom(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
+                         std::shared_ptr<Queue<int>> q_responses, std::atomic<bool>& game_started,
+                         int& player_id, QWidget* parent = nullptr);
     ~WaitingRoom();
 
 protected:
@@ -40,7 +40,7 @@ private:
 
     Ui::WaitingRoom* ui;
     std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
-    std::shared_ptr<Queue<int>> q_responses; // Cambiado a std::shared_ptr
+    std::shared_ptr<Queue<int>> q_responses;  // Cambiado a std::shared_ptr
     std::atomic<bool>& game_started;
     int& player_id;
     std::thread waiting_thread;
