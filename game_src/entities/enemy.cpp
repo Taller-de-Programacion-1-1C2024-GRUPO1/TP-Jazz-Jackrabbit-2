@@ -11,8 +11,8 @@ Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map)
         id(id),
         direction(LEFT),
         enemy_type(type),
-        Character(ENEMY_WIDTH_DEFAULT, ENEMY_HEIGHT_DEFAULT, init_pos_x * BLOCK_DIVISION,
-                  init_pos_y * BLOCK_DIVISION, map, ENEMY_INITIAL_HEALTH),
+        Character(ENEMY_WIDTH_DEFAULT, ENEMY_HEIGHT_DEFAULT, init_pos_x,
+                  init_pos_y, map, ENEMY_INITIAL_HEALTH),
         acc_y(GRAVITY),
         damage(1) {}
 

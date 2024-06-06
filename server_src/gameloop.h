@@ -23,7 +23,7 @@
 
 class Gameloop {
 private:
-    Queue<std::shared_ptr<Command>>& client_cmd_queue;
+    Queue<std::shared_ptr<Command>>& client_cmds_queue;
     BroadcasterSnapshots& broadcaster_snapshots;
     std::list<Player*>& players;
     Map& map;
@@ -34,7 +34,7 @@ private:
     bool playing_done = false;
 
 public:
-    Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
+    Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
              BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players, Map& map,
              bool* playing);
 

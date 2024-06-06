@@ -33,7 +33,7 @@ enum SupplyType : uint8_t {
     COIN,
 };
 
-enum DIRECTIONS { LEFT = -1, RIGHT = 1, UP, DOWN };
+enum DIRECTIONS { LEFT, RIGHT, UP, DOWN };
 
 enum ACTIONS {
     STAND,

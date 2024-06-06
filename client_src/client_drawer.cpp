@@ -9,10 +9,10 @@
 #include "client_map_loader.h"
 #include "client_sound_manager.h"
 
-enum { None = 0, JAZZ, SPAZ, LORI };
-enum { RABBITT = 0, LIZARDD, CRABB, TURTLEE };
-enum { ALIVEE, RECIEVED_DAMAGEE, INTOXICATEDD, DEADD };
-enum { STANDD, RUNN, RUN_FASTT, FALLINGG, JUMPINGG };
+enum { None = 0, JAZZ, SPAZ, LORI }; /////////////
+enum { RABBITT = 0, CRABB, LIZARDD, TURTLEE }; //////////////
+enum { ALIVEE, DEADD, RECIEVED_DAMAGEE, INTOXICATEDD }; /////////////////////////////////////
+enum { STANDD, RUNN, RUN_FASTT, JUMPINGG, FALLINGG }; ////////////////////
 
 ClientDrawer::ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
                            Queue<Snapshot>& q_snapshots):

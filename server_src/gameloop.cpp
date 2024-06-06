@@ -2,10 +2,10 @@
 
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
-Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmd_queue,
+Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
                    BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
                    Map& map, bool* playing):
-        client_cmd_queue(client_cmd_queue),
+        client_cmds_queue(client_cmds_queue),
         broadcaster_snapshots(broadcaster_snapshots),
         players(players),
         map(map),
@@ -35,7 +35,8 @@ void Gameloop::run() {
         try {
             auto start = std::chrono::high_resolution_clock::now();
             std::shared_ptr<Command> game_command;
-            while (client_cmd_queue.try_pop(game_command)) {
+            while (client_cmds_queue.try_pop(game_command)) {
+                std::cout << "Command received" << std::endl;
                 game_command->execute_Command(map);
             }
             map.update();
