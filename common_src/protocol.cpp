@@ -518,6 +518,7 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_height = receive_uintThirtyTwo();
     std::cout << "Recibí rabbit_height" << std::endl;
     DynamicMap map_data = receive_map();
+
         std::cout << "Recibí mapa" << std::endl;
 
     snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);

@@ -100,7 +100,6 @@ private:
 
 public:
     ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots);
-
     int run(int player_id);
     void handle_keyboard(bool& game_running);
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
@@ -108,3 +107,7 @@ public:
 };
 
 #endif
+
+
+  
+

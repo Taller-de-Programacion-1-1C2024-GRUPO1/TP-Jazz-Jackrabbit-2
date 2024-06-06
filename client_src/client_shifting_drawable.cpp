@@ -47,7 +47,7 @@ void ShiftingDrawable::render() {
 
 void ShiftingDrawable::update() {
     Drawable::update();
-    std::cout << "Current frame: " << currentAnimation->currentFrame << std::endl;
+    //std::cout << "Current frame: " << currentAnimation->currentFrame << std::endl;
 
     textureRect =
             currentAnimation->frameRects[currentAnimation->currentFrame % currentAnimation->frames];

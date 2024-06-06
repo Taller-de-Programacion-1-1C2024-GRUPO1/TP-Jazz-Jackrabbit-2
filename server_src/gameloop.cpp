@@ -18,7 +18,6 @@ void Gameloop::send_initial_snapshots() {
 
     // Se debe leer el mapa elegido por el usuario y crearlo
     Snapshot snapshot = map.get_init_snapshot();
-    std::cout << "Enviando enemigos: " << snapshot.enemies.size() << std::endl;
 
     // Enviar el snapshot inicial
     push_all_players(snapshot);
@@ -27,11 +26,12 @@ void Gameloop::send_initial_snapshots() {
 
 void Gameloop::push_all_players(const Snapshot& snapshot) {
     // Enviar a cada jugador la snapshot
-    std::cout << "Enviando enemigos: " << snapshot.enemies.size() << std::endl;
     broadcaster_snapshots.broadcast(std::make_shared<Snapshot>(snapshot));
 }
 
 void Gameloop::run() {
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
     while(playing){
         try {
             auto start = std::chrono::high_resolution_clock::now();

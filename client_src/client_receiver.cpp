@@ -48,6 +48,6 @@ bool ClientReceiver::is_dead() { return !this->is_alive; }
 
 void ClientReceiver::kill() {
     this->keep_talking = false;
-    q_responses.close();
+    q_responses->close();
     q_snapshots.close();
 }

@@ -21,43 +21,47 @@ private:
 public:
     explicit MapLoader(Renderer& renderer): renderer(renderer) {}
 
-    std::vector<std::unique_ptr<Drawable>> loadMap(const std::string& filename,
-                                                   const std::string& texturePath,
-                                                   const SDL2pp::Color& colorKey,
-                                                   SDL2pp::Point& cameraPosition) {
-        YAML::Node map = YAML::LoadFile(filename);
+    std::vector<std::unique_ptr<Drawable>> loadMap(const DynamicMap& map,
+                                               const std::string& texturePath,
+                                               const SDL2pp::Color& colorKey,
+                                               SDL2pp::Point& cameraPosition) {
         std::vector<std::unique_ptr<Drawable>> tiles;
+        const auto& data = map.map_data;  // Use const reference to avoid copying the map
+        std::cout << "Map data size: " << data.size() << std::endl;
+        for (int key = 0; key <= 4; key++) {
+            auto it = data.find(key);  // Use find to check if key exists in the map
+            if (it != data.end()) {  // Key exists in the map
+                const auto& layerNode = it->second;  // Use iterator to access the value associated with the key
+                int x = 0;
+                int y = 0;
+                for (const auto& row: layerNode) {
+                    for (const auto& block: row) {
+                        std::cout << "Block: " << block << std::endl;
+                        int id = block;
+                        if (id != -1) {  // Ignore empty tiles, but they count in the iteration
+                            // Calculate srcRect based on the texture id
+                            SDL2pp::Rect srcRect;
+                            srcRect.x = (id % TILE_WIDTH) * 32;
+                            srcRect.y = (id / TILE_WIDTH) * 32;
+                            srcRect.w = BLOCK_SIZE;
+                            srcRect.h = BLOCK_SIZE;
 
-        for (const auto& layerNode: map["layers"]) {
-            int x = 0;
-            int y = 0;
-            for (const auto& row: layerNode["data"]) {
-                for (const auto& block: row) {
-                    int id = block.as<int>();
-                    if (id != -1) {  // Ignore empty tiles, but they count in the iteration
+                            // Calculate destRect based on the position in the layer
+                            SDL2pp::Rect destRect;
+                            destRect.x = x * BLOCK_SIZE;
+                            destRect.y = y * BLOCK_SIZE;
+                            destRect.w = BLOCK_SIZE;
+                            destRect.h = BLOCK_SIZE;
 
-                        // Calculate srcRect based on the texture id
-                        SDL2pp::Rect srcRect;
-                        srcRect.x = (id % TILE_WIDTH) * 32;
-                        srcRect.y = (id / TILE_WIDTH) * 32;
-                        srcRect.w = BLOCK_SIZE;
-                        srcRect.h = BLOCK_SIZE;
-
-                        // Calculate destRect based on the position in the layer
-                        SDL2pp::Rect destRect;
-                        destRect.x = x * BLOCK_SIZE;
-                        destRect.y = y * BLOCK_SIZE;
-                        destRect.w = BLOCK_SIZE;
-                        destRect.h = BLOCK_SIZE;
-
-                        tiles.push_back(std::move(std::unique_ptr<Drawable>(
-                                new Drawable(renderer, texturePath, colorKey, cameraPosition,
-                                             srcRect, destRect))));
+                            tiles.push_back(std::make_unique<Drawable>(
+                                    renderer, texturePath, colorKey, cameraPosition,
+                                    srcRect, destRect));
+                        }
+                        x++;
                     }
-                    x++;
+                    x = 0;
+                    y++;
                 }
-                x = 0;
-                y++;
             }
         }
 
