@@ -33,16 +33,7 @@ enum SupplyType : uint8_t {
     COIN,
 };
 
-// PLAYER CONSTANTS
-
-#define PLAYER_SIDE BLOCK_DIVISION * 2
-#define PLAYER_INITIAL_HEALTH 5
-#define PLAYER_SPEED 5
-#define JUMPING_INITIAL_SPEED 20
-
-#define POINTS_KILLING_RABBIT 500
-
-enum DIRECTIONS { LEFT = -1, RIGHT = 1 };
+enum DIRECTIONS { LEFT = -1, RIGHT = 1, UP, DOWN };
 
 enum ACTIONS {
     STAND,
@@ -66,6 +57,8 @@ enum /* CHEATS */ {
     ADD_HEALTH = 0,
 };
 
+enum RABBIT_STATES { ALIVE, DEAD, RECIEVED_DAMAGE, INTOXICATED };
+
 #define WAITING 0
 #define STARTED 1
 #define PLAYING -1
@@ -74,12 +67,22 @@ enum /* CHEATS */ {
 
 // ----------------- Messurements -----------------
 
-#define ENEMY_INITIAL_HEALTH 3  // Se puede modificar
-
 #define BLOCK_DIVISION 32
 
-#define RABBIT_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
-#define RABBIT_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
+// PLAYER CONSTANTS
+#define PLAYER_SIDE BLOCK_DIVISION * 2
+#define RABBIT_COOLDOWN_TAKE_DAMAGE 3
+
+#define RABBIT_WIDTH_DEFAULT PLAYER_SIDE   // modificar
+#define RABBIT_HEIGHT_DEFAULT PLAYER_SIDE  // modificar
+
+// ENEMY CONSTANTS
+#define ENEMY_INITIAL_HEALTH 3                  // Config
+#define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2  // modificar
+#define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION     // modificar
+
+#define GRAVITY 1
+#define MAX_FALLING_SPEED 15
 
 #define RABBIT_AMOUNT_DEFAULT 1  // modificar
 

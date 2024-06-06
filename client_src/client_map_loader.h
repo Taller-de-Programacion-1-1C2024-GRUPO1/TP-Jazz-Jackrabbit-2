@@ -27,19 +27,20 @@ public:
                                                SDL2pp::Point& cameraPosition) {
         std::vector<std::unique_ptr<Drawable>> tiles;
         const auto& data = map.map_data;  // Use const reference to avoid copying the map
-        std::cout << "Map data size: " << data.size() << std::endl;
+        std::cout << "DATA SIZE: " << data.size() << std::endl;
         for (int key = 0; key <= 4; key++) {
             auto it = data.find(key);  // Use find to check if key exists in the map
             if (it != data.end()) {  // Key exists in the map
-                const auto& layerNode = it->second;  // Use iterator to access the value associated with the key
+                std::cout << "Reading layer " << key << std::endl;
+                auto& matrix = it->second;  // Use iterator to access the value associated with the key
                 int x = 0;
                 int y = 0;
-                for (const auto& row: layerNode) {
-                    for (const auto& block: row) {
-                        std::cout << "Block: " << block << std::endl;
-                        int id = block;
-                        if (id != -1) {  // Ignore empty tiles, but they count in the iteration
+                for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
+                    for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
+                        int id = matrix[k][j];
+                        if (id != 65535) {  // Ignore empty tiles, but they count in the iteration
                             // Calculate srcRect based on the texture id
+                            std::cout << "ID: " << id << std::endl;
                             SDL2pp::Rect srcRect;
                             srcRect.x = (id % TILE_WIDTH) * 32;
                             srcRect.y = (id / TILE_WIDTH) * 32;
@@ -62,6 +63,9 @@ public:
                     x = 0;
                     y++;
                 }
+            }
+            else{
+                std::cout << "Layer " << key << " not found" << std::endl;
             }
         }
 

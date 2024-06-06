@@ -59,7 +59,20 @@ void Protocol::send_char(char c) {
 // Segundo response:
 // envia un ACK positivo (player_id) justo antes de iniciar la match
 void Protocol::send_map(DynamicMap map) {
-    socket.sendall(&map, sizeof(map), &was_closed);
+    // enviar el mapa: primero la cantidad de elementos y luego cada uno de ellos
+    // std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data;
+    send_uintThirtyTwo(map.map_data.size());
+    // enviar cada key y value del mapa
+    for (auto& key_value: map.map_data) {
+        // enviar la key
+        send_uintEight(key_value.first);
+        // enviar el value
+        for (int i = 0; i < MAP_HEIGHT_DEFAULT; i++) {
+            for (int j = 0; j < MAP_WIDTH_DEFAULT; j++) {
+                send_uintSixteen(key_value.second[j][i]);
+            }
+        }
+    }
     check_closed();
 }
 
@@ -108,8 +121,23 @@ char Protocol::receive_char() {
 }
 
 DynamicMap Protocol::receive_map() {
-    DynamicMap map;
-    socket.recvall(&map, sizeof(map), &was_closed);
+    std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data_temp;
+
+    // recibir la cantidad de elementos del mapa
+    uint8_t map_size = receive_uintThirtyTwo();
+    // recibir cada key y value del mapa
+    for (int i = 0; i < map_size; i++) {
+        // recibir la key
+        uint8_t key = receive_uintEight();
+        // recibir el value
+        for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
+            for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
+                map_data_temp[key][k][j] = receive_uintSixteen();
+                std::cout << "Map data: " << map_data_temp[key][k][j] << std::endl;
+            }
+        }
+    }
+    DynamicMap map(map_data_temp);
     check_closed();
     return map;
 }
@@ -505,25 +533,16 @@ void Protocol::send_Snapshot(Snapshot& snapshot) {
 // ----------------------------- RECEIVE SNAPSHOTS -----------------------------
 
 void Protocol::receive_dimensions(Snapshot& snapshot) {
-    std::cout << "Receiving dimensions" << std::endl;
     // recibir y setear las dimensiones del mapa en el snapshot pasado por referencia
     uint32_t width = receive_uintThirtyTwo();
-    std::cout << "Recibí width" << std::endl;
     uint32_t height = receive_uintThirtyTwo();
-    std::cout << "Recibí height" << std::endl;
     uint32_t rabbit_ammount = receive_uintThirtyTwo();
-    std::cout << "Recibí rabbit_ammount" << std::endl;
     uint32_t rabbit_width = receive_uintThirtyTwo();
-    std::cout << "Recibí rabbit_width" << std::endl;
     uint32_t rabbit_height = receive_uintThirtyTwo();
-    std::cout << "Recibí rabbit_height" << std::endl;
     DynamicMap map_data = receive_map();
-
-        std::cout << "Recibí mapa" << std::endl;
-
     snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
     
-    std::cout << "FIn de receive dimensions" << std::endl;
+    std::cout << "Fin de receive dimensions" << std::endl;
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {
@@ -557,7 +576,6 @@ void Protocol::receive_enemies(Snapshot& snapshot) {
     // recibir y setear enemies en el snapshot pasado por referencia
     // recibir la cantidad de enemigos
     uint8_t enemy_amount = receive_uintEight();
-    std::cout << "Recibí enemy_amount" << enemy_amount << std::endl;
     // recibir cada enemigo
     for (int i = 0; i < enemy_amount; i++) {
         // recibir cada atributo del enemigo

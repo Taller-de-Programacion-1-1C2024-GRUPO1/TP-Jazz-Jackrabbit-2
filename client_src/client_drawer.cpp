@@ -11,7 +11,7 @@
 
 enum  { None=0, JAZZ, SPAZ, LORI};
 enum  { RABBITT=0, LIZARDD, CRABB, TURTLEE};
-enum  { ALIVE, RECIEVED_DAMAGE, INTOXICATED, DEAD };
+enum  { ALIVEE, RECIEVED_DAMAGEE, INTOXICATEDD, DEADD };
 enum  { STANDD, RUNN, RUN_FASTT, FALLINGG, JUMPINGG };
 
 ClientDrawer::ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots):
@@ -29,7 +29,7 @@ ClientDrawer::ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapsh
 void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                                             ShiftingDrawable* drawable) {
     switch (snapshot.state) {
-        case ALIVE:
+        case ALIVEE:
             switch (snapshot.action) {
                 case STANDD:
                     drawable->setAnimation("Stand");
@@ -48,10 +48,11 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                     break;
             }
             break;
-        case RECIEVED_DAMAGE:
+        case RECIEVED_DAMAGEE:
             drawable->setAnimation("Hurt");
             break;
-        case INTOXICATED:
+        case INTOXICATEDD:
+            std::cout << "INtoxicado " << std::endl;
             switch (snapshot.action) {
                 case STANDD:
                     drawable->setAnimation("Intoxicated-Stand");
@@ -70,7 +71,7 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                     break;
             }
             break;
-        case DEAD:
+        case DEADD:
             drawable->setAnimation("Die");
             break;
     }
@@ -173,8 +174,6 @@ int ClientDrawer::run(int player_id) try {
 
     // Read first snapshot!
 
-        std::cout << "VOY A LEER PRIMER SNAP" << std::endl;
-
     Snapshot initial_snapshot = q_snapshots.pop();
     game_running = !initial_snapshot.get_end_game();
 
@@ -184,8 +183,9 @@ int ClientDrawer::run(int player_id) try {
     std::string texturePath;
     std::cout << "VOY A SETEAR" << std::endl;
     for (auto& rabbit: initial_snapshot.rabbits) {
-        SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
-        SDL2pp::Rect onMapRect(rabbit.pos_x , rabbit.pos_y , rabbit_width, rabbit_height);
+        SDL2pp::Rect textureRect(0, 0, rabbit_width * 32, rabbit_height * 32);
+        SDL2pp::Rect onMapRect(rabbit.pos_x , rabbit.pos_y , 64, 64);
+        std::cout << "RABBIT WIDTH: " << rabbit_width << " RABBIT HEIGHT: " << rabbit_height << std::endl;
 
         std::cout << "Rabbit pos: " << rabbit.pos_x << " " << rabbit.pos_y << std::endl;
         if (rabbit.id == client_id) {
@@ -219,7 +219,7 @@ int ClientDrawer::run(int player_id) try {
     }
     for (auto& enemy: initial_snapshot.enemies) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
-        SDL2pp::Rect onMapRect(enemy.pos_x * 32, enemy.pos_y * 32, rabbit_width, rabbit_height);
+        SDL2pp::Rect onMapRect(enemy.pos_x * 32, enemy.pos_y * 32, 64, 64);
         std::cout << "Seteando posicion inicial de enemigo a" << enemy.pos_x << " " << enemy.pos_y<< std::endl;
         loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
         ShiftingDrawable* newEnemy =
@@ -278,7 +278,7 @@ int ClientDrawer::run(int player_id) try {
         if (q_snapshots.try_pop(snapshot)){
             std::cout << "Popie un snapshot in-game!!!!!!!!!!!!!!!!!!!" << std::endl;
        
-            /*for (const auto& rabbit: snapshot.rabbits) {
+            for (const auto& rabbit: snapshot.rabbits) {
                     std::cout << "Seteando posicion de conejo a" << rabbit.pos_x << " " << rabbit.pos_y << std::endl;
                 if (rabbit.id == client_id) {
                                                                     std::cout << " es tu  id" << std::endl;
@@ -368,7 +368,7 @@ int ClientDrawer::run(int player_id) try {
                     newValuable->setAnimation("Flip");
                     supplies.emplace(valuable.id, newValuable);
                 }
-            }*/
+            }
         }
 
         // UPDATE ENTITIES
