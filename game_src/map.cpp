@@ -234,7 +234,7 @@ int Map::get_rabbit_position_by_id(int id) {
 void Map::execute_jump(int playerID) {
     int player_pos = get_rabbit_position_by_id(playerID);
     if (player_pos != -1) {
-        players[player_pos]->jump();
+        players[player_pos]->add_jump();
     }
 }
 
@@ -245,10 +245,10 @@ void Map::execute_move(int playerID, int dir) {
         std::cout << "XXXXXXXXXXXXXX: " << player_pos << std::endl;
         if (dir == LEFT) {
             std::cout << "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGg: " << player_pos << std::endl;
-            players[player_pos]->run_left();
+            players[player_pos]->add_run_left();
         } else {
             std::cout << "LLLLLLLLLLLLLLLLLLLLL: " << player_pos << std::endl;
-            players[player_pos]->run_right();
+            players[player_pos]->add_run_right();
         }
     }
 }
@@ -257,9 +257,9 @@ void Map::execute_move_faster(int playerID, int dir) {
     int player_pos = get_rabbit_position_by_id(playerID);
     if (player_pos != -1) {
         if (dir == LEFT) {
-            players[player_pos]->run_fast_left();
+            players[player_pos]->add_run_fast_left();
         } else {
-            players[player_pos]->run_fast_right();
+            players[player_pos]->add_run_fast_right();
         }
     }
 }
