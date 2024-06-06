@@ -20,7 +20,7 @@ private:
     BroadcasterSnapshots& broadcaster_snapshots;
     ServerSender server_sender;
 
-    Queue<std::shared_ptr<Command>> client_cmds_queue;
+    Queue<std::shared_ptr<Command>>& client_cmds_queue;
     ServerReceiver server_receiver;
 
     std::atomic<bool> keep_talking;

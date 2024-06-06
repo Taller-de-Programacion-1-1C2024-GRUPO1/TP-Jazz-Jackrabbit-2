@@ -8,6 +8,7 @@ Player::Player(std::shared_ptr<ContainerProtocol> cont_protocol, int player_id,
         snapshots_queue(QUEUE_MAX_SIZE),
         broadcaster_snapshots(broadcaster_snapshots),
         server_sender(container_protocol->protocol, broadcaster_snapshots, player_id),
+        client_cmds_queue(client_cmds_queue),
         server_receiver(container_protocol->protocol, client_cmds_queue) {
     broadcaster_snapshots.add_player(player_id, &snapshots_queue);
 }

@@ -1,5 +1,5 @@
 #include "server_receiver.h"
-
+#include "../game_src/commands/command.h"
 ServerReceiver::ServerReceiver(Protocol& protocol,
                                Queue<std::shared_ptr<Command>>& client_cmds_queue):
         protocol(protocol),
