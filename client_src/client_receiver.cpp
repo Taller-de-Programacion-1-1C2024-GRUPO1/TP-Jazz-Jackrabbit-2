@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-ClientReceiver::ClientReceiver(Protocol& protocol, Queue<int>& q_responses,
+ClientReceiver::ClientReceiver(Protocol& protocol, std::shared_ptr<Queue<int>> q_responses,
                                std::atomic<bool>& game_started, Queue<Snapshot>& q_snapshots):
         protocol(protocol),
         q_responses(q_responses),
@@ -16,10 +16,9 @@ void ClientReceiver::run() {
     while (keep_talking) {
         try {
             if (!game_started) {
-                std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa" << std::endl;
                 int response = this->protocol.receive_response();
                 std::cout << "pusheando respuesta: " << response << "\n";
-                q_responses.push(response);
+                q_responses->push(response);
             } else {
                 Snapshot snap = this->protocol.receive_Snapshot();
                 std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;

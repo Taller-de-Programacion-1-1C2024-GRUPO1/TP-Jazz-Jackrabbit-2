@@ -6,16 +6,16 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+WaitingRoom::WaitingRoom(std::shared_ptr<Queue<Command*>> q_cmds, std::shared_ptr<Queue<int>> q_responses,
                          std::atomic<bool>& game_started, int& player_id, QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),
         q_cmds(q_cmds),
         q_responses(q_responses),
         game_started(game_started),
-        player_id(player_id) {
+        player_id(player_id),
+        stop_thread(false) {
     ui->setupUi(this);
-
 
     // Establecer el fondo
     QPixmap originalPixmap(":/backgrounds/match_lobby.png");
@@ -24,20 +24,55 @@ WaitingRoom::WaitingRoom(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_
     QPalette palette;
     palette.setBrush(QPalette::Window, scaledPixmap);
     this->setPalette(palette);
+
+    // Inicia el hilo para esperar la respuesta
+    startWaitingForGame();
 }
 
-
-WaitingRoom::~WaitingRoom() { delete ui; }
-
-void WaitingRoom::on_pushButton_clicked() {
-    std::cout << "Waiting for game to start" << std::endl;
-    int player_number = q_responses.pop();
-    std::cout << "Player number EN WAITING ROOM: " << player_number << std::endl;
-    if (player_number < 0) {
-        QMessageBox::warning(this, "Error", "error al iniciar la partida");
-        return;
+WaitingRoom::~WaitingRoom() {
+    stopWaitingForGame();
+    if (waiting_thread.joinable()) {
+        waiting_thread.join();
     }
-    player_id = player_number;
-    game_started = true;
-    accept();
+    delete ui;
+}
+
+void WaitingRoom::startWaitingForGame() {
+    waiting_thread = std::thread([this]() {
+        std::cout << "Waiting for game to start" << std::endl;
+        bool could_pop = false;
+        int player_number;
+        while (!stop_thread && !could_pop) {
+            could_pop = q_responses->try_pop(player_number);
+            if (!could_pop) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
+            }
+        }
+        if (stop_thread) return;
+
+        std::cout << "Player number EN WAITING ROOM: " << player_number << std::endl;
+        if (player_number < 0) {
+            QMetaObject::invokeMethod(this, [this]() {
+                QMessageBox::warning(this, "Error", "error al iniciar la partida");
+            });
+            return;
+        }
+        player_id = player_number;
+        game_started = true;
+        QMetaObject::invokeMethod(this, [this]() {
+            accept();
+        });
+    });
+}
+
+void WaitingRoom::stopWaitingForGame() {
+    stop_thread = true;
+}
+
+void WaitingRoom::closeEvent(QCloseEvent* event) {
+    stopWaitingForGame();
+    if (waiting_thread.joinable()) {
+        waiting_thread.join();
+    }
+    QDialog::closeEvent(event);
 }

@@ -14,101 +14,98 @@ enum  { RABBITT=0, LIZARDD, CRABB, TURTLEE};
 enum  { ALIVE, RECIEVED_DAMAGE, INTOXICATED, DEAD };
 enum  { STANDD, RUNN, RUN_FASTT, FALLINGG, JUMPINGG };
 
-ClientDrawer::ClientDrawer(Queue<std::shared_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots):
-        q_cmds(q_cmds),
-        q_snapshots(q_snapshots),
-        game_running(false),
-        client_id(0),
-        score(0),
-        lives(0),
-        client_rabbit(nullptr),
-        rabbit_width(0),
-        rabbit_height(0),
-        keyboard_handler(q_cmds) {}
+ClientDrawer::ClientDrawer(std::shared_ptr<Queue<Command*>> q_cmds, Queue<Snapshot>& q_snapshots):
+        q_cmds(q_cmds), q_snapshots(q_snapshots), client_id(0) {}
 
-void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
-                                            ShiftingDrawable* drawable) {
-    switch (snapshot.state) {
-        case ALIVE:
-            switch (snapshot.action) {
-                case STANDD:
-                    drawable->setAnimation("Stand");
-                    break;
-                case RUNN:
-                    drawable->setAnimation("Run");
-                    break;
-                case RUN_FASTT:
-                    drawable->setAnimation("Dash");
-                    break;
-                case FALLINGG:
-                    drawable->setAnimation("Run");
-                    break;
-                case JUMPINGG:
-                    drawable->setAnimation("Run");
-                    break;
+
+void ClientDrawer::handle_keyboard(bool& game_running) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            game_running = false;
+        }
+    }
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+
+    if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) {  // HABILIDAD ESPECIAL JAZZ Y LLORI
+        // q_cmds->push(new UpperHit(client_id, FORWARD_DIR));
+        // q_cmds->push(new ShortRangeKick(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_RCTRL] and
+               state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
+        // q_cmds.try_push(AsideKick(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
+        // q_cmds.try_push(AsideKick(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
+        q_cmds->push(new MoveFaster(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
+        q_cmds->push(new MoveFaster(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_RIGHT]) {
+        q_cmds->push(new Move(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_LEFT]) {
+        q_cmds->push(new Move(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
+        q_cmds->push(new Jump(client_id, FORWARD_DIR));
+    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
+        q_cmds->push(new Jump(client_id, BACKWARD_DIR));
+    } else if (state[SDL_SCANCODE_S]) {
+        q_cmds->push(new Shoot(client_id));
+    } else if (state[SDL_SCANCODE_W]) {
+        // q_cmds.try_push(ChangeWeapon(client_id));
+    } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
+        game_running = false;
+    } else {
+    }
+}
+
+
+int x_counter = 10;
+int ammo = 1000;
+bool is_shooting = false;
+
+struct Tile {
+    int id;
+    Rect srcRect;   // Rectángulo de la textura
+    Rect destRect;  // Rectángulo de destino en la pantalla
+};
+
+std::vector<Tile> loadMap(const std::string& filename) {
+    YAML::Node map = YAML::LoadFile(filename);
+    std::vector<Tile> tiles;
+
+    int tilesetWidth = 10;  // Ancho del tileset en bloques
+
+
+    for (const auto& layerNode: map["layers"]) {
+        int x = 0;
+        int y = 0;
+        for (const auto& row: layerNode["data"]) {
+            for (const auto& block: row) {
+                int id = block.as<int>();
+                if (id != -1) {  // Ignorar tiles vacíos, pero cuentan en la iteración
+                    Tile tile;
+                    tile.id = id;
+                    // Calcular srcRect basado en el id de la textura
+                    tile.srcRect.x = (id % tilesetWidth) * 32;
+                    tile.srcRect.y = (id / tilesetWidth) * 32;
+                    tile.srcRect.w = 32;
+                    tile.srcRect.h = 32;
+                    // Calcular destRect basado en la posición en la capa
+                    tile.destRect.x = x * 32;
+                    tile.destRect.y = y * 32;
+                    tile.destRect.w = 32;
+                    tile.destRect.h = 32;
+                    tiles.push_back(tile);
+                }
+                x++;
             }
-            break;
-        case RECIEVED_DAMAGE:
-            drawable->setAnimation("Hurt");
-            break;
-        case INTOXICATED:
-            switch (snapshot.action) {
-                case STANDD:
-                    drawable->setAnimation("Intoxicated-Stand");
-                    break;
-                case RUNN:
-                    drawable->setAnimation("Intoxicated-Run");
-                    break;
-                case RUN_FASTT:
-                    drawable->setAnimation("Intoxicated-Run");
-                    break;
-                case FALLINGG:
-                    drawable->setAnimation("Intoxicated-Stand");
-                    break;
-                case JUMPINGG:
-                    drawable->setAnimation("Intoxicated-Stand");
-                    break;
-            }
-            break;
-        case DEAD:
-            drawable->setAnimation("Die");
-            break;
+            x = 0;
+            y++;
+        }
     }
+
+    return tiles;
 }
 
-void loadAnimationsForCharacter(std::string &animationsPath, std::string &texturePath,const int character_id) {
-    switch(character_id){
-        case JAZZ:
-            animationsPath = "../external/animations/jazz.yml";
-            texturePath = JAZZ_IMG;
-            break;
-        case SPAZ:
-            animationsPath = "../external/animations/spaz.yml";
-            texturePath = SPAZ_IMG;
-            break;
-        case LORI:
-            animationsPath = "../external/animations/lori.yml";
-            texturePath = LORI_IMG;
-            break;  
-    }
-}
-
-void loadAnimationForEnemy(std::string &animationsPath, std::string &texturePath, const int enemy_id) {
-    switch(enemy_id){
-        case LIZARDD:
-            animationsPath = "../external/animations/lizard.yml";
-            texturePath = ENEMIES_IMG;
-            break;
-        case CRABB:
-            animationsPath = "../external/animations/crab.yml";
-            texturePath = ENEMIES_IMG;
-            break;
-        case TURTLEE:
-            animationsPath = "../external/animations/turtle.yml";
-            texturePath = TURTLE_IMG;
-            break;
-    }
-}
 
 void handle_events(bool& game_running) {
     SDL_Event event;

@@ -9,6 +9,8 @@
 #include <QMessageBox>
 #include <QWidget>
 #include <memory>
+#include <thread>
+#include <atomic>
 
 #include "../../common_src/constants.h"
 #include "../../game_src/commands/command.h"
@@ -20,25 +22,29 @@ namespace Ui {
 class WaitingRoom;
 }
 
-
 class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom(Queue<std::shared_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+    explicit WaitingRoom(std::shared_ptr<Queue<Command*>> q_cmds, std::shared_ptr<Queue<int>> q_responses,
                          std::atomic<bool>& game_started, int& player_id,
                          QWidget* parent = nullptr);
     ~WaitingRoom();
 
-private slots:
-    void on_pushButton_clicked();
+protected:
+    void closeEvent(QCloseEvent* event) override;
 
 private:
+    void startWaitingForGame();
+    void stopWaitingForGame();
+
     Ui::WaitingRoom* ui;
-    Queue<std::shared_ptr<Command>>& q_cmds;
-    Queue<int>& q_responses;
+    std::shared_ptr<Queue<Command*>> q_cmds; // Cambiado a std::shared_ptr
+    std::shared_ptr<Queue<int>> q_responses; // Cambiado a std::shared_ptr
     std::atomic<bool>& game_started;
     int& player_id;
+    std::thread waiting_thread;
+    std::atomic<bool> stop_thread;
 };
 
 #endif  // WAITING_ROOM_H
