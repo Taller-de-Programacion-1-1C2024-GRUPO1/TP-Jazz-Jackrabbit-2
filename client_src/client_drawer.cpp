@@ -195,6 +195,7 @@ int ClientDrawer::run(int player_id) try {
         showLoadingScreen(renderer);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
+    showLoadingScreen(renderer);
 
     game_running = !initial_snapshot.get_end_game();
     std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
@@ -296,21 +297,21 @@ int ClientDrawer::run(int player_id) try {
         // SNAPSHOT RECEIVER
 
         if (q_snapshots.try_pop(snapshot)) {
-            std::cout << "Popie un snapshot in-game!!!!!!!!!!!!!!!!!!!" << std::endl;
-
-
-            // try pop en un loop hasta que no pueda popear (me quedo con el ultimo snapshot) y ese
-            // es el que uso para actualizar el juego
 
             // Got a snapshot? Good
             while (q_snapshots.try_pop(snapshot)) {
                 // Oh, more?
                 // OK, let's keep the last one
             }
+
+            //RABBITS UPDATE
+            std::set<int> rabbitIds;
+            for (const auto& pair : rabbits) {
+                rabbitIds.insert(pair.first);
+            }
             for (const auto& rabbit: snapshot.rabbits) {
-                std::cout << "Seteando posicion de conejo a" << rabbit.pos_x << " " << rabbit.pos_y
-                          << std::endl;
                 if (rabbit.id == client_id) {
+                    score = rabbit.score;
                     ammoLeft.setAmmo(rabbit.ammo);
                     ammoLeft.setWeapon(rabbit.weapon);
                     banner.setCurrentLives(rabbit.lives);
@@ -319,12 +320,14 @@ int ClientDrawer::run(int player_id) try {
                     client_rabbit->setDirection(rabbit.direction);
                     playerPosition.x = rabbit.pos_x;
                     playerPosition.y = rabbit.pos_y;
+                    rabbitIds.erase(rabbit.id);
                 } else {
                     auto it = rabbits.find(rabbit.id);
                     if (it != rabbits.end()) {
                         it->second->setPosition(rabbit.pos_x, rabbit.pos_y);
                         setAnimationFromSnapshot(rabbit, it->second);
                         it->second->setDirection(rabbit.direction);
+                        rabbitIds.erase(rabbit.id);
                     } else {
                         // Crear un nuevo conejo
                         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
@@ -342,11 +345,22 @@ int ClientDrawer::run(int player_id) try {
                     }
                 }
             }
+            for (const auto& id: rabbitIds) {
+                delete rabbits[id];
+                rabbits.erase(id);
+            }
+
+            //ENEMIES UPDATE
+            std::set<int> enemyIds;
+            for (const auto& pair : enemies) {
+                enemyIds.insert(pair.first);
+            }
             for (const auto& enemy: snapshot.enemies) {
                 auto it = enemies.find(enemy.id);
                 if (it != enemies.end()) {
                     it->second->setPosition(enemy.pos_x, enemy.pos_y);
                     it->second->setDirection(enemy.direction);
+                    enemyIds.erase(enemy.id);
                 } else {
                     // Crear un nuevo enemigo
                     SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
@@ -361,10 +375,21 @@ int ClientDrawer::run(int player_id) try {
                     enemies.emplace(enemy.id, newEnemy);
                 }
             }
+            for (const auto& id: enemyIds) {
+                delete enemies[id];
+                enemies.erase(id);
+            }
+
+            //PROJECTILES UPDATE
+            std::set<int> projectilesIds;
+            for (const auto& pair : projectiles) {
+                projectilesIds.insert(pair.first);
+            }
             for (const auto& projectile: snapshot.projectiles) {
                 auto it = projectiles.find(projectile.id);
                 if (it != projectiles.end()) {
                     it->second->setPosition(projectile.pos_x, projectile.pos_y);
+                    projectilesIds.erase(projectile.id);
                 } else {
                     // Crear un nuevo proyectil
                     SDL2pp::Rect textureRect(0, 0, 32, 32);
@@ -377,10 +402,21 @@ int ClientDrawer::run(int player_id) try {
                     projectiles.emplace(projectile.id, newProjectile);
                 }
             }
+            for (const auto& id : projectilesIds) {
+                delete projectiles[id];
+                projectiles.erase(id);
+            }
+
+            //SUPPLIES UPDATE
+            std::set<int> suppliesIds;
+            for (const auto& pair : supplies) {
+                suppliesIds.insert(pair.first);
+            }
             for (const auto& valuable: snapshot.supplies) {
                 auto it = supplies.find(valuable.id);
                 if (it != supplies.end()) {
                     it->second->setPosition(valuable.pos_x, valuable.pos_y);
+                    suppliesIds.erase(valuable.id);
                 } else {
                     // Crear un nuevo item
                     SDL2pp::Rect textureRect(0, 0, 32, 32);
@@ -393,6 +429,10 @@ int ClientDrawer::run(int player_id) try {
                     newValuable->setAnimation("Flip");
                     supplies.emplace(valuable.id, newValuable);
                 }
+            }
+            for (const auto& id : suppliesIds) {
+                delete supplies[id];
+                supplies.erase(id);
             }
         }
 
