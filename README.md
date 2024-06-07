@@ -6,7 +6,7 @@ This project is the final group assignment for the subject 'Taller de Programaci
 | Nombre | Apellido | Mail | Padrón |
 | ------ | -------- | ------ | ------ |
 | Ian  | von der Heyde | ivon@fi.uba.ar | 107638 |
-| Ignacio | Sugai | @fi.uba.ar | 109549 |
+| Ignacio | Sugai | isugai@fi.uba.ar | 109549 |
 | Juan Martín | de la Cruz | jdelacruz@fi.uba.ar | 109588 |
 | Juan Patricio | Amboage | jamboage@fi.uba.ar | 106892 |
 
