@@ -3,12 +3,12 @@
 This project is the final group assignment for the subject 'Taller de Programación' (course code 75.42) at the Faculty of Engineering, University of Buenos Aires. The aim of the project is to implement a functional and comprehensive version of the classic game Jazz Jackrabbit 2 using modern programming techniques and tools learned during the course such as Sockets and Threads. The project focuses on collaborative development, problem-solving, and practical application of software engineering principles.
 
 ## Authors
-| Nombre | Apellido | Padrón |
-| ------ | -------- | ------ |
-| Ian  | von der Heyde | 107638 |
-| Ignacio | Sugai | 109549 |
-| Juan Martín | de la Cruz | 109588 |
-| Juan Patricio | Amboage | 106892 |
+| Nombre | Apellido | Mail | Padrón |
+| ------ | -------- | ------ | ------ |
+| Ian  | von der Heyde | ivon@fi.uba.ar | 107638 |
+| Ignacio | Sugai | @fi.uba.ar | 109549 |
+| Juan Martín | de la Cruz | jdelacruz@fi.uba.ar | 109588 |
+| Juan Patricio | Amboage | jamboage@fi.uba.ar | 106892 |
 
 -----------------
 ### Installation and Usage
