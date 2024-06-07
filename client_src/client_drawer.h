@@ -104,6 +104,8 @@ public:
                  Queue<Snapshot>& q_snapshots);
 
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
+    void showLoadingScreen(Renderer& renderer);
+
     //~ClientDrawer();
 };
 
