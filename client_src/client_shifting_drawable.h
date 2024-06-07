@@ -9,6 +9,7 @@
 #include "../client_src/client_animation.h"
 #include "../client_src/client_drawable.h"
 #include "../client_src/client_sound_manager.h"
+#include "../game_src/constants_game.h"
 
 // Every entity that moves will be an instance of this class
 class ShiftingDrawable: public Drawable {
