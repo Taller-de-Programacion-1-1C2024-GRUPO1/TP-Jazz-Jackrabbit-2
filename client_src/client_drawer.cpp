@@ -1,9 +1,9 @@
-#include "client_drawer.h"
 
 #include <algorithm>
 #include <memory>
 #include <utility>
 
+#include "client_drawer.h"
 #include "client_drawable.h"
 #include "client_food_provider.h"
 #include "client_map_loader.h"
@@ -12,11 +12,6 @@
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-
-enum { None = 0, JAZZ, SPAZ, LORI }; /////////////
-enum { RABBITT = 0, CRABB, LIZARDD, TURTLEE }; //////////////
-enum { ALIVEE, DEADD, RECIEVED_DAMAGEE, INTOXICATEDD }; /////////////////////////////////////
-enum { STANDD, RUNN, RUN_FASTT, JUMPINGG, FALLINGG }; ////////////////////
 
 ClientDrawer::ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
                            Queue<Snapshot>& q_snapshots):
@@ -35,49 +30,49 @@ ClientDrawer::ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_c
 void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
                                             ShiftingDrawable* drawable) {
     switch (snapshot.state) {
-        case ALIVEE:
+        case ALIVE:
             switch (snapshot.action) {
-                case STANDD:
+                case STAND:
                     drawable->setAnimation("Stand");
                     break;
-                case RUNN:
+                case RUN:
                     drawable->setAnimation("Run");
                     break;
-                case RUN_FASTT:
+                case RUN_FAST:
                     drawable->setAnimation("Dash");
                     break;
-                case FALLINGG:
+                case FALLING:
                     drawable->setAnimation("Run");
                     break;
-                case JUMPINGG:
+                case JUMPING:
                     drawable->setAnimation("Run");
                     break;
             }
             break;
-        case RECIEVED_DAMAGEE:
+        case RECIEVED_DAMAGE:
             drawable->setAnimation("Hurt");
             break;
-        case INTOXICATEDD:
+        case INTOXICATED:
             std::cout << "INtoxicado " << std::endl;
             switch (snapshot.action) {
-                case STANDD:
+                case STAND:
                     drawable->setAnimation("Intoxicated-Stand");
                     break;
-                case RUNN:
+                case RUN:
                     drawable->setAnimation("Intoxicated-Run");
                     break;
-                case RUN_FASTT:
+                case RUN_FAST:
                     drawable->setAnimation("Intoxicated-Run");
                     break;
-                case FALLINGG:
+                case FALLING:
                     drawable->setAnimation("Intoxitamos nuestrocated-Stand");
                     break;
-                case JUMPINGG:
+                case JUMPING:
                     drawable->setAnimation("Intoxicated-Stand");
                     break;
             }
             break;
-        case DEADD:
+        case DEAD:
             drawable->setAnimation("Die");
             break;
     }
@@ -86,15 +81,15 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
 void loadAnimationsForCharacter(std::string& animationsPath, std::string& texturePath,
                                 const int character_id) {
     switch (character_id) {
-        case JAZZ:
+        case Jazz:
             animationsPath = "../external/animations/jazz.yml";
             texturePath = JAZZ_IMG;
             break;
-        case SPAZ:
+        case Spaz:
             animationsPath = "../external/animations/spaz.yml";
             texturePath = SPAZ_IMG;
             break;
-        case LORI:
+        case Lori:
             animationsPath = "../external/animations/lori.yml";
             texturePath = LORI_IMG;
             break;
@@ -104,23 +99,34 @@ void loadAnimationsForCharacter(std::string& animationsPath, std::string& textur
 void loadAnimationForEnemy(std::string& animationsPath, std::string& texturePath,
                            const int enemy_id) {
     switch (enemy_id) {
-        case LIZARDD:
+        case LIZARD:
             animationsPath = "../external/animations/lizard.yml";
             texturePath = ENEMIES_IMG;
             break;
-        case CRABB:
+        case CRAB:
             animationsPath = "../external/animations/crab.yml";
             texturePath = ENEMIES_IMG;
             break;
-        case TURTLEE:
+        case TURTLE:
             animationsPath = "../external/animations/turtle.yml";
             texturePath = TURTLE_IMG;
             break;
     }
 }
 
+void loadAnimationForItem(std::string& animationsPath, const int supply_id) {
+    switch (supply_id) {
+        case COIN:
+            animationsPath = "../external/animations/valuables/coin.yml";
+            break;
+        case GEM:
+            animationsPath = "../external/animations/valuables/gem.yml";
+            break;
+    }
+}
+
 void ClientDrawer::showLoadingScreen(Renderer& renderer) {
-    Font font(FONT, 12);
+    Font font(FONT, 24);
     Texture texture(renderer,font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
 
     renderer.SetDrawColor(0, 63, 63);
@@ -196,7 +202,6 @@ int ClientDrawer::run(int player_id) try {
 
     std::string animationsPath;
     std::string texturePath;
-    std::cout << "VOY A SETEAR" << std::endl;
     for (auto& rabbit: initial_snapshot.rabbits) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, 64, 64);
@@ -237,8 +242,6 @@ int ClientDrawer::run(int player_id) try {
     for (auto& enemy: initial_snapshot.enemies) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, 64, 64);
-        std::cout << "Seteando posicion inicial de enemigo a" << enemy.pos_x << " " << enemy.pos_y
-                  << std::endl;
         loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
         ShiftingDrawable* newEnemy =
                 new ShiftingDrawable(renderer, texturePath, enemyAndItemsColor, cameraPosition,
@@ -264,12 +267,11 @@ int ClientDrawer::run(int player_id) try {
         ShiftingDrawable* newValuable =
                 new ShiftingDrawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
                                      textureRect, onMapRect, soundManager);
-        newValuable->loadAnimations("../external/animations/valuables/coin.yml");
+        loadAnimationForItem(animationsPath, valuable.supply_type);
+        newValuable->loadAnimations(animationsPath);
         newValuable->setAnimation("Flip");
         supplies.emplace(valuable.id, newValuable);
     }
-    std::cout << "TERMINE DE SETEAR" << std::endl;
-
 
     // Game state
     const int FPS = 60;
@@ -380,7 +382,8 @@ int ClientDrawer::run(int player_id) try {
                     ShiftingDrawable* newValuable = new ShiftingDrawable(
                             renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition, textureRect,
                             onMapRect, soundManager);
-                    newValuable->loadAnimations("../external/animations/valuables/coin.yml");
+                    loadAnimationForItem(animationsPath, valuable.supply_type);
+                    newValuable->loadAnimations(animationsPath);
                     newValuable->setAnimation("Flip");
                     supplies.emplace(valuable.id, newValuable);
                 }
@@ -445,8 +448,8 @@ int ClientDrawer::run(int player_id) try {
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
         Uint32 realFrameTime = SDL_GetTicks() - frameStart;
-        std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
-        std::cout << "Frame time: " << realFrameTime << std::endl;
+        //std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
+        //std::cout << "Frame time: " << realFrameTime << std::endl;
 
         if (realFrameTime > expectedFrameTime) {
             // Calculate how many frames we are behind
