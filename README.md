@@ -50,9 +50,9 @@ This project is the final group assignment for the subject 'Taller de Programaci
 
 -----------------
 ### Testing
-After building the game, to run the tests *you will need to be in the build folder and execute:*
+After building the game, to run the tests you will have to execute:
 ```
-GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
+./run_tests.sh
 ```
 -----------------
 ### Acknowledgements
