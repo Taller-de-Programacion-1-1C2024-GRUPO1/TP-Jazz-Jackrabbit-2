@@ -38,15 +38,11 @@ void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champio
 int Rabbit::get_rabbit_id() { return id; }
 
 void Rabbit::receive_damage(int damage) {
-    std::cout << "ACCCCAAAAAAAAAAAAAAAAAa: " << std::endl;
     if (state->can_receive_damage()) {
-        std::cout << "BBBBBBBBBB: " << std::endl;
         health -= damage;
         if (health <= 0) {
-            std::cout << "ASESINANDO RABBIT: " << std::endl;
             set_state(new Dead(*this));
         } else {
-            std::cout << "EEEEEEEEEEEEEEEE RABBIT: " << std::endl;
             set_state(new RecievedDamage(*this));
         }
     }
@@ -223,9 +219,7 @@ void Rabbit::execute_jump() {
 // RIGHT
 void Rabbit::execute_run_right() {
     check_colision_with_map();
-    /// std::cout << "DDDDDDDDDDDD    player_pos: " << std::endl;
     if (!on_right_wall) {
-        // std::cout << "EEEEEEEEEEEEEEEE    player_pos: " << std::endl;
         spe_x = PLAYER_SPEED;
     }
 }
@@ -239,11 +233,8 @@ void Rabbit::execute_run_fast_right() {
 }
 // LEFT
 void Rabbit::execute_run_left() {
-    std::cout << "execute_run_left  AAAAAAAAAAAAAAAAAAAAAAAAAAAa   " << std::endl;
     check_colision_with_map();
-    std::cout << "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB   " << std::endl;
     if (!on_left_wall) {
-        std::cout << "CCCCCCCCCCCCCCCCCCCCCCCC   " << std::endl;
         spe_x = -PLAYER_SPEED;
     }
 }

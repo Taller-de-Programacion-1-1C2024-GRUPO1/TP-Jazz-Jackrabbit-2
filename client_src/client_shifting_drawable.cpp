@@ -80,8 +80,6 @@ void ShiftingDrawable::setAnimation(const char* name) {
 }
 
 void ShiftingDrawable::reajustFrame(int framesToAdvance) {
-    std::cout << "Reajusting frame to: " << framesToAdvance << std::endl;
-
     if (framesToAdvance - iterationsBeetweenFrames < 0) {
         iterationsBeetweenFrames -= framesToAdvance;
     } else {

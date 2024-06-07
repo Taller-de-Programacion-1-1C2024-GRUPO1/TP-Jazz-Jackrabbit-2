@@ -103,7 +103,7 @@ void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = d
 
 void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
     this->spawn_points = spawn_points;
-    std::cout << "Spawn points inicializados. Cantidad de puntos para RABBIT_SPAWN: "
+    std::cout << "Spawn points inicializados. Cantidad de RABBIT_SPAWN: "
               << spawn_points.at(RABBIT_SPAWN).size() << std::endl;
 }
 
@@ -243,15 +243,10 @@ void Map::execute_jump(int playerID) {
 
 void Map::execute_move(int playerID, int dir) {
     int player_pos = get_rabbit_position_by_id(playerID);
-    std::cout << "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWplayer_pos: " << player_pos
-              << std::endl;
     if (player_pos != -1) {
-        std::cout << "XXXXXXXXXXXXXX: " << player_pos << std::endl;
         if (dir == LEFT) {
-            std::cout << "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGg: " << player_pos << std::endl;
             players[player_pos]->add_run_left();
         } else {
-            std::cout << "LLLLLLLLLLLLLLLLLLLLL: " << player_pos << std::endl;
             players[player_pos]->add_run_right();
         }
     }

@@ -52,7 +52,7 @@ void Match::run() {
             players.push_back(player);
         }
         // Ya se conectaron todos los jugadores, se envian los ids de cada uno
-        std::cout << "MATCH RUN ENVIA PLAYER IDS A CADA PLAYER" << std::endl;
+        std::cout << "SE ENVIAN PLAYER IDS A CADA PLAYER" << std::endl;
         send_players_ids();
 
         Gameloop gameloop =

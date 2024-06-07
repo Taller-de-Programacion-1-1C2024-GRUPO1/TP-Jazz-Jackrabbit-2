@@ -36,7 +36,6 @@ void Gameloop::run() {
             auto start = std::chrono::high_resolution_clock::now();
             std::shared_ptr<Command> game_command;
             while (client_cmds_queue.try_pop(game_command)) {
-                std::cout << "Command received" << std::endl;
                 game_command->execute_Command(map);
             }
             map.update();

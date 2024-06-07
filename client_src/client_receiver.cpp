@@ -29,7 +29,6 @@ void ClientReceiver::run() {
 
             } else {
                 Snapshot snap = this->protocol.receive_Snapshot();
-                std::cout << "Client Receiver: recibí snapshot" << std::endl;
                 q_snapshots.push(snap);
             }
 

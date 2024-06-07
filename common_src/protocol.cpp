@@ -132,7 +132,6 @@ DynamicMap Protocol::receive_map() {
         for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
             for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
                 map_data_temp[key][k][j] = receive_uintSixteen();
-                std::cout << "Map data: " << map_data_temp[key][k][j] << std::endl;
             }
         }
     }
@@ -443,7 +442,6 @@ std::unique_ptr<Information> Protocol::receive_Info() {
 // ----------------------------- SEND SNAPSHOTS -----------------------------
 
 void Protocol::send_dimensions(const Snapshot& snapshot) {
-    std::cout << "Sending dimensions" << std::endl;
     send_uintThirtyTwo(snapshot.map_dimensions.width);
     send_uintThirtyTwo(snapshot.map_dimensions.height);
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_amount);
@@ -453,9 +451,6 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
 }
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
-    std::cout << "Sending rabbits" << std::endl;
-    std::cout << "Cantidad de rabbits: " << snapshot.rabbits.size() << std::endl;
-
     // enviar la cantidad de conejos
     send_uintEight(snapshot.rabbits.size());
     // enviar cada conejo
@@ -475,7 +470,6 @@ void Protocol::send_rabbits(Snapshot& snapshot) {
 }
 
 void Protocol::send_enemies(Snapshot& snapshot) {
-    std::cout << "Sending enemies" << std::endl;
     // enviar la cantidad de enemigos
     send_uintEight(snapshot.enemies.size());
     // enviar cada enemigo
@@ -486,13 +480,10 @@ void Protocol::send_enemies(Snapshot& snapshot) {
         send_uintEight(enemy.enemy_type);
         send_uintThirtyTwo(enemy.pos_x);
         send_uintThirtyTwo(enemy.pos_y);
-        std::cout << "Enemie pos x: " << enemy.pos_x << std::endl;
-        std::cout << "Enemie pos y: " << enemy.pos_y << std::endl;
     }
 }
 
 void Protocol::send_projectiles(Snapshot& snapshot) {
-    std::cout << "Sending projectiles" << std::endl;
     // enviar la cantidad de proyectiles
     send_uintEight(snapshot.projectiles.size());
     // enviar cada proyectil
@@ -507,7 +498,6 @@ void Protocol::send_projectiles(Snapshot& snapshot) {
 }
 
 void Protocol::send_supplies(Snapshot& snapshot) {
-    std::cout << "Sending supplies" << std::endl;
     // enviar la cantidad de suministros
     send_uintEight(snapshot.supplies.size());
     // enviar cada suministro
@@ -540,12 +530,9 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_height = receive_uintThirtyTwo();
     DynamicMap map_data = receive_map();
     snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
-
-    std::cout << "Fin de receive dimensions" << std::endl;
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {
-    std::cout << "Receiving rabbits" << std::endl;
     // recibir y setear rabbits en el snapshot pasado por referencia
     // recibir la cantidad de conejos
     uint8_t rabbit_amount = receive_uintEight();
@@ -571,7 +558,6 @@ void Protocol::receive_rabbits(Snapshot& snapshot) {
 }
 
 void Protocol::receive_enemies(Snapshot& snapshot) {
-    std::cout << "Receiving enemies" << std::endl;
     // recibir y setear enemies en el snapshot pasado por referencia
     // recibir la cantidad de enemigos
     uint8_t enemy_amount = receive_uintEight();
@@ -590,7 +576,6 @@ void Protocol::receive_enemies(Snapshot& snapshot) {
 }
 
 void Protocol::receive_projectiles(Snapshot& snapshot) {
-    std::cout << "Receiving projectiles" << std::endl;
     // recibir y setear projectiles en el snapshot pasado por referencia
     // recibir la cantidad de proyectiles
     uint8_t projectile_amount = receive_uintEight();
@@ -609,7 +594,6 @@ void Protocol::receive_projectiles(Snapshot& snapshot) {
 }
 
 void Protocol::receive_supplies(Snapshot& snapshot) {
-    std::cout << "Receiving supplies" << std::endl;
     // recibir y setear supplies en el snapshot pasado por referencia
     // recibir la cantidad de suministros
     uint8_t supply_amount = receive_uintEight();

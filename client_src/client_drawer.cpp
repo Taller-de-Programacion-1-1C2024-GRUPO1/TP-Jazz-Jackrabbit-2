@@ -53,7 +53,7 @@ void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
             drawable->setAnimation("Hurt");
             break;
         case INTOXICATED:
-            std::cout << "INtoxicado " << std::endl;
+            std::cout << "Intoxicado " << std::endl;
             switch (snapshot.action) {
                 case STAND:
                     drawable->setAnimation("Intoxicated-Stand");
@@ -206,10 +206,6 @@ int ClientDrawer::run(int player_id) try {
     for (auto& rabbit: initial_snapshot.rabbits) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, 64, 64);
-        std::cout << "RABBIT WIDTH: " << rabbit_width << " RABBIT HEIGHT: " << rabbit_height
-                  << std::endl;
-
-        std::cout << "Rabbit pos: " << rabbit.pos_x << " " << rabbit.pos_y << std::endl;
         if (rabbit.id == client_id) {
             score = rabbit.score;
 

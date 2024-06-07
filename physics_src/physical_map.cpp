@@ -31,7 +31,6 @@ void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int h
     int x2 = trunc((pos_x + width) / BLOCK_DIVISION);
     int y2 = trunc((pos_y + height) / BLOCK_DIVISION);
 
-    // printf("x0: %d, x1: %d, x2: %d, y0: %d, y1: %d, y2: %d\n", x0, x1, x2, y0, y1, y2);
     if (((map[x0][y2]) + (map[x1][y2]) + (map[x2][y2])) > 4) {
         std::cout << "on floor" << std::endl;
         character->is_on_floor();
