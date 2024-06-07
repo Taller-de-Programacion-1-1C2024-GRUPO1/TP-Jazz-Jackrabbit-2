@@ -26,17 +26,17 @@ public:
                                                    const SDL2pp::Color& colorKey,
                                                    SDL2pp::Point& cameraPosition) {
         std::vector<std::unique_ptr<Drawable>> tiles;
-        const auto& data = map.map_data; 
+        const auto& data = map.map_data;
         for (int key = 0; key <= 4; key++) {
-            auto it = data.find(key);  
-            if (it != data.end()) { 
-                auto& matrix = it->second;  
+            auto it = data.find(key);
+            if (it != data.end()) {
+                auto& matrix = it->second;
                 int x = 0;
                 int y = 0;
                 for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
                     for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
                         int id = matrix[k][j];
-                        if (id != 65535) {                             
+                        if (id != 65535) {
                             SDL2pp::Rect srcRect;
                             srcRect.x = (id % TILE_WIDTH) * 32;
                             srcRect.y = (id / TILE_WIDTH) * 32;

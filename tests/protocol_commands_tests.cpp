@@ -62,7 +62,7 @@ TEST(ProtocolTestMove, SendAndReceiveMoveLeft) {
 TEST(ProtocolTestMove, SendAndReceiveMoveRight) {
     Move* move = new Move(player_id, RIGHT);
     client_protocol.send_Command(move);
-    
+
     std::unique_ptr<Command> cmd = server_protocol.receive_Command();
     Move* received_move = dynamic_cast<Move*>(cmd.get());
 
@@ -271,4 +271,3 @@ TEST(ProtocolTestMatch, SendAndReceiveMatch) {
     EXPECT_EQ(match->get_map_name(), received_match->get_map_name());
     delete match;
 }
-

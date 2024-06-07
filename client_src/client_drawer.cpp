@@ -1,19 +1,15 @@
 
+#include "client_drawer.h"
+
 #include <algorithm>
 #include <memory>
+#include <thread>
 #include <utility>
 
-#include "client_drawer.h"
 #include "client_drawable.h"
 #include "client_food_provider.h"
 #include "client_map_loader.h"
 #include "client_sound_manager.h"
-
-enum { None = 0, JAZZ, SPAZ, LORI };                     /////////////
-enum { RABBITT = 0, CRABB, LIZARDD, TURTLEE };           //////////////
-enum { ALIVEE, DEADD, RECIEVED_DAMAGEE, INTOXICATEDD };  /////////////////////////////////////
-enum { STANDD, RUNN, RUN_FASTT, JUMPINGG, FALLINGG };    ////////////////////
-#include <thread>
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -131,7 +127,8 @@ void loadAnimationForItem(std::string& animationsPath, const int supply_id) {
 
 void ClientDrawer::showLoadingScreen(Renderer& renderer) {
     Font font(FONT, 24);
-    Texture texture(renderer,font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
+    Texture texture(renderer,
+                    font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
 
     renderer.SetDrawColor(0, 63, 63);
     renderer.Clear();
@@ -162,8 +159,8 @@ int ClientDrawer::run(int player_id) try {
     SoundManager soundManager;  // pasarle parametros??
 
     // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-    Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,
-                  SDL_WINDOW_SHOWN);
+    Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
+                  SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -193,9 +190,6 @@ int ClientDrawer::run(int player_id) try {
     AmmoLeft ammoLeft(renderer);
 
     // Read first snapshot!
-
-    Snapshot initial_snapshot =
-            q_snapshots.pop();  // TRY POP///////////////////////////////////////////////////
     Snapshot initial_snapshot;
     while (!q_snapshots.try_pop(initial_snapshot)) {
         showLoadingScreen(renderer);
@@ -308,7 +302,7 @@ int ClientDrawer::run(int player_id) try {
             // try pop en un loop hasta que no pueda popear (me quedo con el ultimo snapshot) y ese
             // es el que uso para actualizar el juego
 
-            //Got a snapshot? Good
+            // Got a snapshot? Good
             while (q_snapshots.try_pop(snapshot)) {
                 // Oh, more?
                 // OK, let's keep the last one
@@ -460,8 +454,8 @@ int ClientDrawer::run(int player_id) try {
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
         Uint32 realFrameTime = SDL_GetTicks() - frameStart;
-        //std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
-        //std::cout << "Frame time: " << realFrameTime << std::endl;
+        // std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
+        // std::cout << "Frame time: " << realFrameTime << std::endl;
 
         if (realFrameTime > expectedFrameTime) {
             // Calculate how many frames we are behind
