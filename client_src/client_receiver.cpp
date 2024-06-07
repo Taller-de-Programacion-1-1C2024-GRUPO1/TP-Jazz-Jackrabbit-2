@@ -2,26 +2,48 @@
 
 #include <chrono>
 
-Client_Receiver::Client_Receiver(Protocol& protocol, Queue<Snapshot>& q_snapshots):
-        protocol(protocol), q_snapshots(q_snapshots), keep_talking(true), is_alive(true) {}
+ClientReceiver::ClientReceiver(Protocol& protocol, Queue<int>& q_responses,
+                               Queue<Snapshot>& q_snapshots, int& player_id):
+        protocol(protocol),
+        q_responses(q_responses),
+        q_snapshots(q_snapshots),
+        keep_talking(true),
+        is_alive(true),
+        player_id(player_id) {}
 
 
-void Client_Receiver::run() {
+void ClientReceiver::run() {
+    bool game_started = false;
     while (keep_talking) {
         try {
-            // Snapshot snap;
-            // this->protocol.recive(snap);
-            // q_snapshots.push(snap);
+            if (!game_started) {
+                int response = this->protocol.receive_response();
+                // si la response es > 0 entonces response = client_ID, eso significa que a partir
+                // de ahora recibo snapshots
+                if (response > 0) {
+                    player_id = response;
+                    game_started = true;
+                    std::cout << "Client Receiver: recibí player_id" << player_id << std::endl;
+                }
+                q_responses.push(response);
 
-            std::cout << "Client Receiver: Recibiendo Snapshot" << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            } else {
+                Snapshot snap = this->protocol.receive_Snapshot();
+                std::cout << "Client Receiver: recibí snapshot" << std::endl;
+                q_snapshots.push(snap);
+            }
+
+
         } catch (const ClosedQueue& e) {
+            // HACER EL CORRECTO MANEJO DE ERRORES
             std::cerr << "Se cerró la Snapshot queue" << std::endl;
+            q_snapshots.close();
+            break;
+        } catch (const SocketClosed& e) {
+            std::cerr << "Se cerro el socket (Receiver)" << std::endl;
             break;
         } catch (const std::exception& e) {
-            std::cerr << "Client Receiver: error al recibir snapshot o se cerro el servidor "
-                         "forzadamente"
-                      << std::endl;
+            std::cerr << "Client Receiver: error al recibir snapshot " << std::endl;
             break;
         }
     }
@@ -29,10 +51,11 @@ void Client_Receiver::run() {
 }
 
 
-bool Client_Receiver::is_dead() { return !this->is_alive; }
+bool ClientReceiver::is_dead() { return !this->is_alive; }
 
 
-void Client_Receiver::kill() {
+void ClientReceiver::kill() {
     this->keep_talking = false;
+    q_responses.close();
     q_snapshots.close();
 }

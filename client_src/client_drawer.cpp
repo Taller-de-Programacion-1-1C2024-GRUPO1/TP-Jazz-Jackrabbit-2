@@ -1,169 +1,500 @@
+
 #include "client_drawer.h"
 
+#include <algorithm>
+#include <memory>
+#include <thread>
+#include <utility>
 
-ClientDrawer::ClientDrawer(const std::string& host, const std::string& service):
-        manager(std::move(host), std::move(service)) {}
+#include "client_drawable.h"
+#include "client_food_provider.h"
+#include "client_map_loader.h"
+#include "client_sound_manager.h"
 
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
-int ClientDrawer::run() {
-    manager.run();
-
-    try {
-        // Initialize SDL library
-        SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-        // Initialize SDL_ttf library
-        SDLTTF ttf;
-
-
-        // Inicialización de SDL_mixer a través de SDL2pp::Mixer
-        Mixer mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
-        // Cargar música de fondo
-        Music backgroundMusic(MUSIC_FILE);
-        // Set music volume
-        mixer.SetMusicVolume(MUSIC_VOLUME);
-        // Reproducir música en bucle
-        mixer.PlayMusic(backgroundMusic, -1);
-
-
-        // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
-        Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600,
-                      SDL_WINDOW_SHOWN);
+ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots):
+        q_cmds(q_cmds),
+        q_snapshots(q_snapshots),
+        game_running(false),
+        client_id(0),
+        score(0),
+        lives(0),
+        client_rabbit(nullptr),
+        rabbit_width(0),
+        rabbit_height(0),
+        keyboard_handler(q_cmds) {}
 
 
-        // Create accelerated video renderer with default driver
-        Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-        // Dibuja la imagen de fondo
-        Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
+void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
+                                            ShiftingDrawable* drawable) {
+    switch (snapshot.state) {
+        case ALIVE:
+            switch (snapshot.action) {
+                case STAND:
+                    drawable->setAnimation("Stand");
+                    break;
+                case RUN:
+                    drawable->setAnimation("Run");
+                    break;
+                case RUN_FAST:
+                    drawable->setAnimation("Dash");
+                    break;
+                case FALLING:
+                    drawable->setAnimation("Run");
+                    break;
+                case JUMPING:
+                    drawable->setAnimation("Run");
+                    break;
+            }
+            break;
+        case RECIEVED_DAMAGE:
+            drawable->setAnimation("Hurt");
+            break;
+        case INTOXICATED:
+            std::cout << "INtoxicado " << std::endl;
+            switch (snapshot.action) {
+                case STAND:
+                    drawable->setAnimation("Intoxicated-Stand");
+                    break;
+                case RUN:
+                    drawable->setAnimation("Intoxicated-Run");
+                    break;
+                case RUN_FAST:
+                    drawable->setAnimation("Intoxicated-Run");
+                    break;
+                case FALLING:
+                    drawable->setAnimation("Intoxitamos nuestrocated-Stand");
+                    break;
+                case JUMPING:
+                    drawable->setAnimation("Intoxicated-Stand");
+                    break;
+            }
+            break;
+        case DEAD:
+            drawable->setAnimation("Die");
+            break;
+    }
+}
+
+void loadAnimationsForCharacter(std::string& animationsPath, std::string& texturePath,
+                                const int character_id) {
+    switch (character_id) {
+        case Jazz:
+            animationsPath = "../external/animations/jazz.yml";
+            texturePath = JAZZ_IMG;
+            break;
+        case Spaz:
+            animationsPath = "../external/animations/spaz.yml";
+            texturePath = SPAZ_IMG;
+            break;
+        case Lori:
+            animationsPath = "../external/animations/lori.yml";
+            texturePath = LORI_IMG;
+            break;
+    }
+}
+
+void loadAnimationForEnemy(std::string& animationsPath, std::string& texturePath,
+                           const int enemy_id) {
+    switch (enemy_id) {
+        case LIZARD:
+            animationsPath = "../external/animations/lizard.yml";
+            texturePath = ENEMIES_IMG;
+            break;
+        case CRAB:
+            animationsPath = "../external/animations/crab.yml";
+            texturePath = ENEMIES_IMG;
+            break;
+        case TURTLE:
+            animationsPath = "../external/animations/turtle.yml";
+            texturePath = TURTLE_IMG;
+            break;
+    }
+}
+
+void loadAnimationForItem(std::string& animationsPath, const int supply_id) {
+    switch (supply_id) {
+        case COIN:
+            animationsPath = "../external/animations/valuables/coin.yml";
+            break;
+        case GEM:
+            animationsPath = "../external/animations/valuables/gem.yml";
+            break;
+    }
+}
+
+void ClientDrawer::showLoadingScreen(Renderer& renderer) {
+    Font font(FONT, 24);
+    Texture texture(renderer,
+                    font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
+
+    renderer.SetDrawColor(0, 63, 63);
+    renderer.Clear();
+
+    int textWidth = texture.GetWidth();
+    int textHeight = texture.GetHeight();
+
+    Rect textRect;
+    textRect.x = (SCREEN_WIDTH - textWidth) / 2;
+    textRect.y = (SCREEN_HEIGHT - textHeight) / 2;
+    textRect.w = textWidth;
+    textRect.h = textHeight;
+
+    renderer.Copy(texture, NullOpt, textRect);
+    renderer.Present();
+}
+
+int ClientDrawer::run(int player_id) try {
+    client_id = player_id;
+    keyboard_handler.setId(player_id);
+    std::cout << "My id is: " << client_id << std::endl;
+
+    // Initialize SDL library
+    SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    // Initialize SDL_ttf library
+    SDLTTF ttf;
+
+    SoundManager soundManager;  // pasarle parametros??
+
+    // Create main window: 640x480 dimensions, resizable, "SDL2pp demo" title
+    Window window(GAME_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH,
+                  SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+
+    // Create accelerated video renderer with default driver
+    Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
+    // Background image
+    Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
+
+    SDL_Color characterColor = {44, 102, 150, 255};   // Color en formato RGBA
+    SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
+    SDL_Color mapColor = {87, 0, 203, 0};
+    MapLoader mapLoader(renderer);
+
+    SDL2pp::Point playerPosition(10, 10);
+    SDL2pp::Point cameraPosition(0, 0);
+    SDL2pp::Point desiredCameraPosition(0, 0);
+    float lerpFactor = 0.1f;
+
+    const char* CARROTUS_TILE = "../client_src/resources/tiles/carrotus.png";
+
+    // Number images
+    NumberImages numberImages(renderer);
+    numberImages.setCorner(0);
+
+    // Heart banner
+    WeaponData::initialize();
+    FoodProvider::initialize();
+    HeartsBanner banner(renderer);
+    AmmoLeft ammoLeft(renderer);
+
+    // Read first snapshot!
+    Snapshot initial_snapshot;
+    while (!q_snapshots.try_pop(initial_snapshot)) {
+        showLoadingScreen(renderer);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    game_running = !initial_snapshot.get_end_game();
+    std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
+            initial_snapshot.map_dimensions.map_data, CARROTUS_TILE, mapColor, cameraPosition);
+
+    std::string animationsPath;
+    std::string texturePath;
+    for (auto& rabbit: initial_snapshot.rabbits) {
+        SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
+        SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, 64, 64);
+        std::cout << "RABBIT WIDTH: " << rabbit_width << " RABBIT HEIGHT: " << rabbit_height
+                  << std::endl;
+
+        std::cout << "Rabbit pos: " << rabbit.pos_x << " " << rabbit.pos_y << std::endl;
+        if (rabbit.id == client_id) {
+            score = rabbit.score;
+
+            banner.setCurrentLives(rabbit.lives);
+            ammoLeft.setWeapon(rabbit.weapon);
+            ammoLeft.setAmmo(rabbit.ammo);
+            playerPosition.x = rabbit.pos_x;
+            playerPosition.y = rabbit.pos_y;
+
+            loadAnimationsForCharacter(animationsPath, texturePath, 1);
+            client_rabbit =
+                    new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
+                                         textureRect, onMapRect, soundManager);
+
+            client_rabbit->loadAnimations(animationsPath);
+
+            setAnimationFromSnapshot(rabbit, client_rabbit);
+            client_rabbit->setDirection(rabbit.direction);
+
+        } else {
+            loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
+            ShiftingDrawable* newRabbit =
+                    new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
+                                         textureRect, onMapRect, soundManager);
+            newRabbit->loadAnimations(animationsPath);
+            setAnimationFromSnapshot(rabbit, newRabbit);
+            newRabbit->setDirection(rabbit.direction);
+            rabbits.emplace(rabbit.id, newRabbit);
+        }
+    }
+    for (auto& enemy: initial_snapshot.enemies) {
+        SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
+        SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, 64, 64);
+        loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
+        ShiftingDrawable* newEnemy =
+                new ShiftingDrawable(renderer, texturePath, enemyAndItemsColor, cameraPosition,
+                                     textureRect, onMapRect, soundManager);
+        newEnemy->loadAnimations(animationsPath);
+        newEnemy->setAnimation("Walk");
+        newEnemy->setDirection(enemy.direction);
+        enemies.emplace(enemy.id, newEnemy);
+    }
+    for (auto& projectile: initial_snapshot.projectiles) {
+        SDL2pp::Rect textureRect(0, 0, 32, 32);
+        SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, 32, 32);
+        ShiftingDrawable* newProjectile =
+                new ShiftingDrawable(renderer, PROJECTILES_IMG, enemyAndItemsColor, cameraPosition,
+                                     textureRect, onMapRect, soundManager);
+        WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
+        newProjectile->setAnimation("Move");
+        projectiles.emplace(projectile.id, newProjectile);
+    }
+    for (auto& valuable: initial_snapshot.supplies) {
+        SDL2pp::Rect textureRect(0, 0, 32, 32);
+        SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
+        ShiftingDrawable* newValuable =
+                new ShiftingDrawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
+                                     textureRect, onMapRect, soundManager);
+        loadAnimationForItem(animationsPath, valuable.supply_type);
+        newValuable->loadAnimations(animationsPath);
+        newValuable->setAnimation("Flip");
+        supplies.emplace(valuable.id, newValuable);
+    }
+
+    // Game state
+    const int FPS = 60;
+    const int expectedFrameTime = 1000 / FPS;
+    Uint32 frameStart = SDL_GetTicks();
+
+    // Main loop
+
+    while (game_running) {
+
+        // EVENTS HANDLER
+        keyboard_handler.listenForCommands(game_running);
+
+        desiredCameraPosition.x = playerPosition.x - (window.GetWidth() / 2);
+        desiredCameraPosition.y = playerPosition.y - (window.GetHeight() / 2);
+
+        // Interpolación lineal para suavizar el movimiento
+        cameraPosition.x += (desiredCameraPosition.x - cameraPosition.x) * lerpFactor;
+        cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
+
+        Snapshot snapshot;
+        // SNAPSHOT RECEIVER
+
+        if (q_snapshots.try_pop(snapshot)) {
+            std::cout << "Popie un snapshot in-game!!!!!!!!!!!!!!!!!!!" << std::endl;
 
 
-        // Load sprites image as a new texture; since there's no alpha channel
-        // but we need transparency, use helper surface for which set color key
-        // to color index 0 -> black background on image will be transparent on our
-        // texture
-        SDL_Color colorKey = {44, 102, 150, 255};  // Color en formato RGBA
-        Surface surface(PLAYER_IMG);
-        SDL_SetColorKey(surface.Get(), SDL_TRUE,
-                        SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
-        Texture sprites(renderer, surface);
+            // try pop en un loop hasta que no pueda popear (me quedo con el ultimo snapshot) y ese
+            // es el que uso para actualizar el juego
 
-
-        // Enable alpha blending for the sprites
-        sprites.SetBlendMode(SDL_BLENDMODE_BLEND);
-
-        // Load font, 12pt size
-        Font font(FONT, 12);
-
-        // Game state
-        bool is_running = false;  // whether the character is currently running
-        int run_phase = -1;       // run animation phase
-        float position = 0.0;     // player position
-        int score = 0;            // player score
-
-        unsigned int prev_ticks = SDL_GetTicks();
-        // Main loop
-        while (1) {
-            // Timing: calculate difference between this and previous frame
-            // in milliseconds
-            unsigned int frame_ticks = SDL_GetTicks();
-            unsigned int frame_delta = frame_ticks - prev_ticks;
-            prev_ticks = frame_ticks;
-
-            // Event processing:
-            // - If window is closed, or Q or Escape buttons are pressed,
-            //   quit the application
-            // - If Right key is pressed, character would run
-            // - If Right key is released, character would stop
-            SDL_Event event;
-            while (SDL_PollEvent(&event)) {
-                if (event.type == SDL_QUIT) {
-                    return 0;
-                } else if (event.type == SDL_KEYDOWN) {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_ESCAPE:
-                        case SDLK_q:
-                            return 0;
-                        case SDLK_RIGHT:
-                            is_running = true;
-                            break;
-                    }
-                } else if (event.type == SDL_KEYUP) {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_RIGHT:
-                            is_running = false;
-                            score++;
-                            break;
+            // Got a snapshot? Good
+            while (q_snapshots.try_pop(snapshot)) {
+                // Oh, more?
+                // OK, let's keep the last one
+            }
+            for (const auto& rabbit: snapshot.rabbits) {
+                std::cout << "Seteando posicion de conejo a" << rabbit.pos_x << " " << rabbit.pos_y
+                          << std::endl;
+                if (rabbit.id == client_id) {
+                    ammoLeft.setAmmo(rabbit.ammo);
+                    ammoLeft.setWeapon(rabbit.weapon);
+                    banner.setCurrentLives(rabbit.lives);
+                    client_rabbit->setPosition(rabbit.pos_x, rabbit.pos_y);
+                    setAnimationFromSnapshot(rabbit, client_rabbit);
+                    client_rabbit->setDirection(rabbit.direction);
+                    playerPosition.x = rabbit.pos_x;
+                    playerPosition.y = rabbit.pos_y;
+                } else {
+                    auto it = rabbits.find(rabbit.id);
+                    if (it != rabbits.end()) {
+                        it->second->setPosition(rabbit.pos_x, rabbit.pos_y);
+                        setAnimationFromSnapshot(rabbit, it->second);
+                        it->second->setDirection(rabbit.direction);
+                    } else {
+                        // Crear un nuevo conejo
+                        SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
+                        SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width,
+                                               rabbit_height);
+                        loadAnimationsForCharacter(animationsPath, texturePath,
+                                                   rabbit.champion_type);
+                        ShiftingDrawable* newRabbit = new ShiftingDrawable(
+                                renderer, texturePath, characterColor, cameraPosition, textureRect,
+                                onMapRect, soundManager);
+                        newRabbit->loadAnimations(animationsPath);
+                        setAnimationFromSnapshot(rabbit, newRabbit);
+                        newRabbit->setDirection(rabbit.direction);
+                        rabbits.emplace(rabbit.id, newRabbit);
                     }
                 }
             }
-
-            // Update game state for this frame:
-            // if character is runnung, move it to the right
-            if (is_running) {
-                position += frame_delta * 0.2;
-                run_phase = (frame_ticks / 100) % 8;
-            } else {
-                run_phase = 0;
+            for (const auto& enemy: snapshot.enemies) {
+                auto it = enemies.find(enemy.id);
+                if (it != enemies.end()) {
+                    it->second->setPosition(enemy.pos_x, enemy.pos_y);
+                    it->second->setDirection(enemy.direction);
+                } else {
+                    // Crear un nuevo enemigo
+                    SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
+                    SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
+                    loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
+                    ShiftingDrawable* newEnemy = new ShiftingDrawable(
+                            renderer, texturePath, enemyAndItemsColor, cameraPosition, textureRect,
+                            onMapRect, soundManager);
+                    newEnemy->loadAnimations(animationsPath);
+                    newEnemy->setAnimation("Walk");
+                    newEnemy->setDirection(enemy.direction);
+                    enemies.emplace(enemy.id, newEnemy);
+                }
             }
-
-            // If player passes past the right side of the window, wrap him
-            // to the left side
-            if (position > renderer.GetOutputWidth())
-                position = -50;
-
-            int vcenter = renderer.GetOutputHeight() / 2;  // Y coordinate of window center
-
-            // Clear screen
-            renderer.Clear();
-            renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
-
-
-            // Pick sprite from sprite atlas based on whether
-            // player is running and run animation phase
-            int src_x = 8, src_y = 11;  // by default, standing sprite
-            if (is_running) {
-                // one of 8 run animation sprites
-                src_x = 8 + 51 * run_phase;
-                src_y = 67;
+            for (const auto& projectile: snapshot.projectiles) {
+                auto it = projectiles.find(projectile.id);
+                if (it != projectiles.end()) {
+                    it->second->setPosition(projectile.pos_x, projectile.pos_y);
+                } else {
+                    // Crear un nuevo proyectil
+                    SDL2pp::Rect textureRect(0, 0, 32, 32);
+                    SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, 32, 32);
+                    ShiftingDrawable* newProjectile = new ShiftingDrawable(
+                            renderer, PROJECTILES_IMG, enemyAndItemsColor, cameraPosition,
+                            textureRect, onMapRect, soundManager);
+                    WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
+                    newProjectile->setAnimation("Move");
+                    projectiles.emplace(projectile.id, newProjectile);
+                }
             }
-
-            // Draw player sprite
-            sprites.SetAlphaMod(255);  // sprite is fully opaque
-            renderer.Copy(sprites, Rect(src_x, src_y, 25, 50),
-                          Rect((int)position, vcenter - 50, 50, 50));
-
-            // Draw the same sprite, below the first one, 50% transparent and
-            // vertically flipped. It'll look like reflection in the mirror
-            sprites.SetAlphaMod(127);  // 50% transparent
-            renderer.Copy(sprites, Rect(src_x, src_y, 50, 50), Rect((int)position, vcenter, 50, 50),
-                          0.0,                 // don't rotate
-                          NullOpt,             // rotation center - not needed
-                          SDL_FLIP_VERTICAL);  // vertical flip
-
-            // Create text string to render
-            std::string text = "Score: " + std::to_string(score) +
-                               ", running: " + (is_running ? "true" : "false");
-
-            // Render the text into new texture. Note that SDL_ttf render
-            // text into Surface, which is converted into texture on the fly
-            Texture text_sprite(renderer,
-                                font.RenderText_Blended(text, SDL_Color{255, 255, 255, 255}));
-
-            // Copy texture into top-left corner of the window
-            renderer.Copy(text_sprite, NullOpt,
-                          Rect(0, 0, text_sprite.GetWidth(), text_sprite.GetHeight()));
-
-            // Show rendered frame
-            renderer.Present();
-
-            // Frame limiter: sleep for a little bit to not eat 100% of CPU
-            SDL_Delay(1);
+            for (const auto& valuable: snapshot.supplies) {
+                auto it = supplies.find(valuable.id);
+                if (it != supplies.end()) {
+                    it->second->setPosition(valuable.pos_x, valuable.pos_y);
+                } else {
+                    // Crear un nuevo item
+                    SDL2pp::Rect textureRect(0, 0, 32, 32);
+                    SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
+                    ShiftingDrawable* newValuable = new ShiftingDrawable(
+                            renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition, textureRect,
+                            onMapRect, soundManager);
+                    loadAnimationForItem(animationsPath, valuable.supply_type);
+                    newValuable->loadAnimations(animationsPath);
+                    newValuable->setAnimation("Flip");
+                    supplies.emplace(valuable.id, newValuable);
+                }
+            }
         }
 
-        // Here all resources are automatically released and libraries deinitialized
-        return 0;
-    } catch (std::exception& e) {
-        // If case of error, print it and exit with error
-        std::cerr << e.what() << std::endl;
-        return 1;
+        // UPDATE ENTITIES
+
+        for (auto& tilePtr: mapComponents) {
+            tilePtr->update();
+        }
+        client_rabbit->update();
+        for (auto& rabbit: rabbits) {
+            rabbit.second->update();
+        }
+        for (auto& enemy: enemies) {
+            enemy.second->update();
+        }
+        for (auto& projectile: projectiles) {
+            projectile.second->update();
+        }
+        for (auto& supply: supplies) {
+            supply.second->update();
+        }
+
+        // Clear screen
+        renderer.Clear();
+        renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
+
+        // Map render
+        for (auto& tilePtr: mapComponents) {
+            tilePtr->render();
+        }
+        client_rabbit->render();
+        for (auto& rabbit: rabbits) {
+            rabbit.second->render();
+        }
+        for (auto& enemy: enemies) {
+            enemy.second->render();
+        }
+        for (auto& projectile: projectiles) {
+            projectile.second->render();
+        }
+        for (auto& suply: supplies) {
+            suply.second->render();
+        }
+
+        banner.render();
+        //       ammoLeft.render(); //<--consume muchisimo tiempo
+
+        std::string scoreStr = std::to_string(score);
+        int offset = 32;  // Start position
+
+        for (char c: scoreStr) {
+            int number = c - '0';  // Convert char to int
+            numberImages.renderNumber(number, offset);
+            offset += 24;  // Move position to the left for the next digit
+        }
+
+        // Show rendered frame
+        renderer.Present();
+
+        // Frame limiter: sleep for a little bit to not eat 100% of CPU
+        Uint32 realFrameTime = SDL_GetTicks() - frameStart;
+        // std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
+        // std::cout << "Frame time: " << realFrameTime << std::endl;
+
+        if (realFrameTime > expectedFrameTime) {
+            // Calculate how many frames we are behind
+            int framesBehind = realFrameTime / expectedFrameTime;
+            // Adjust the current frame
+            client_rabbit->reajustFrame(framesBehind);
+            for (auto& rabbit: rabbits) {
+                rabbit.second->reajustFrame(framesBehind);
+            }
+            for (auto& enemy: enemies) {
+                enemy.second->reajustFrame(framesBehind);
+            }
+            for (auto& projectile: projectiles) {
+                projectile.second->reajustFrame(framesBehind);
+            }
+            for (auto& supply: supplies) {
+                supply.second->reajustFrame(framesBehind);
+            }
+
+            // Calculate the next frame start time
+            frameStart += framesBehind * expectedFrameTime;
+            Uint32 newFrameStart = frameStart + expectedFrameTime;
+
+            // Wait until the start of the next frame
+            Uint32 delayTime = newFrameStart - SDL_GetTicks();
+            if (delayTime > 0) {
+                SDL_Delay(delayTime);
+            }
+            frameStart = newFrameStart;  // Set new frame start time
+        } else {
+            Uint32 restTime = expectedFrameTime - realFrameTime;
+            SDL_Delay(restTime);
+            frameStart += expectedFrameTime;
+        }
     }
+
+    return 0;
+} catch (std::exception& e) {
+    // If case of error, print it and exit with error
+    std::cerr << e.what() << std::endl;
+    return 1;
 }

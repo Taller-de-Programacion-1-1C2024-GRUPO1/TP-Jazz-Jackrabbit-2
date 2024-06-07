@@ -1,29 +1,50 @@
 #ifndef CLIENT_LOBBY_H
 #define CLIENT_LOBBY_H
 
+#include <QApplication>
+#include <QDebug>
+#include <QFontDatabase>
 #include <QMainWindow>
+#include <QMessageBox>
+#include <memory>
+#include <string>
 
-QT_BEGIN_NAMESPACE
+#include "../../common_src/constants.h"
+#include "../../game_src/commands/command.h"
+#include "../../game_src/commands/command_match.h"
+#include "../../game_src/constants_game.h"
+#include "../client_receiver.h"
+#include "../client_sender.h"
+
+#include "character_selector.h"
+#include "join_match_lobby.h"
+#include "map_selector.h"
+
 namespace Ui {
 class ClientLobby;
 }
-QT_END_NAMESPACE
 
 class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(QWidget* parent = nullptr);
+    explicit ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                         QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
-    void on_btnCreate_clicked();
+    void on_btnCreateMatch_clicked();
+    void on_btnJoinMatch_clicked();
+    void on_btnQuit_clicked();
+    void handleWindowClosed();
+    void handleCharacterSelected(ChampionType character);
 
-    void on_btnJoin_clicked();
-
-    void on_btnError_clicked();
 
 private:
     Ui::ClientLobby* ui;
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<int>& q_responses;
+    ChampionType selected_character;
 };
+
 #endif  // CLIENT_LOBBY_H

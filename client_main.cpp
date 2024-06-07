@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "client_src/client.h"
+#include "client_src/client_config.h"
 
 /*
 pre-commit run --hook-stage manual --files xxx.cpp
@@ -22,6 +23,10 @@ int main(int argc, char* argv[]) {
             std::cerr << "Bad program call. Expected " << argv[0] << " <hostname> [<servname>]\n";
             return -1;
         }
+
+        // std::string config_file = "/etc/jazz/client_config.yml";
+        // ClientConfigSingleton::getInstance(config_file);
+
 
         Client client(std::move(hostname), std::move(servname));
         client.run(argc, argv);

@@ -103,6 +103,8 @@ void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = d
 
 void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
     this->spawn_points = spawn_points;
+    std::cout << "Spawn points inicializados. Cantidad de puntos para RABBIT_SPAWN: "
+              << spawn_points.at(RABBIT_SPAWN).size() << std::endl;
 }
 
 void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }
@@ -113,7 +115,7 @@ int Map::get_max_players() { return this->max_players; }
 
 int Map::get_amount_players() { return this->amount_players; }
 
-std::shared_ptr<Snapshot> Map::get_snapshot() {
+Snapshot Map::get_snapshot() {
     // obtengo las snapshots de cada entidad
     std::vector<RabbitSnapshot> rabbit_snapshots = get_rabbit_snapshot();
     std::vector<ProjectileSnapshot> projectile_snapshots = get_projectile_snapshot();
@@ -121,20 +123,21 @@ std::shared_ptr<Snapshot> Map::get_snapshot() {
     std::vector<EnemySnapshot> enemy_snapshots = get_enemy_snapshot();
     // creo el snapshot
     Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
-    return std::make_shared<Snapshot>(snapshot);
+    return snapshot;
 }
 
-std::shared_ptr<Snapshot> Map::get_init_snapshot() {
+Snapshot Map::get_init_snapshot() {
     // obtengo las snapshots de cada entidad
     std::vector<RabbitSnapshot> rabbit_snapshots = get_rabbit_snapshot();
     std::vector<ProjectileSnapshot> projectile_snapshots = get_projectile_snapshot();
     std::vector<SupplySnapshot> supply_snapshots = get_supply_snapshot();
     std::vector<EnemySnapshot> enemy_snapshots = get_enemy_snapshot();
     // creo el snapshot
+
     Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
     snapshot.set_dimensions(height, width, RABBIT_WIDTH_DEFAULT, RABBIT_HEIGHT_DEFAULT,
                             RABBIT_AMOUNT_DEFAULT, dynamic_map);
-    return std::make_shared<Snapshot>(snapshot);
+    return snapshot;
 }
 
 std::vector<RabbitSnapshot> Map::get_rabbit_snapshot() {
@@ -174,36 +177,48 @@ std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
 void Map::create_entities() {
     int id_counter_enemy = 0;
     int id_counter_supply = 0;
+    // VER QUE HACER CON ESTO
+    if (spawn_points.at(RABBIT_SPAWN).size() < amount_players) {
+        std::cerr << "map.cpp Error: No hay suficientes puntos de spawn en el mapa para los "
+                     "jugadores."
+                  << std::endl;
+        amount_players = spawn_points[RABBIT_SPAWN].size();  // Limitar la cantidad de jugadores
+    }
+
+
     for (int i = 0; i < amount_players; i++) {
-        players.push_back(new Rabbit(NULL_CHAMPION_TYPE, spawn_points[RABBIT_SPAWN].at(i).get_x(),
-                                     spawn_points[RABBIT_SPAWN].at(i).get_y(), physical_map,
-                                     *this));
+        players.push_back(new Rabbit(
+                NULL_CHAMPION_TYPE, spawn_points[RABBIT_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[RABBIT_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map, *this));
     }
     for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(id_counter_enemy, CRAB, spawn_points[CRAB_SPAWN].at(i).get_x(),
-                                    spawn_points[CRAB_SPAWN].at(i).get_y(), physical_map));
+        enemies.push_back(new Enemy(
+                id_counter_enemy, CRAB, spawn_points[CRAB_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[CRAB_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[LIZARD_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(id_counter_enemy, LIZARD,
-                                    spawn_points[LIZARD_SPAWN].at(i).get_x(),
-                                    spawn_points[LIZARD_SPAWN].at(i).get_y(), physical_map));
+        enemies.push_back(new Enemy(
+                id_counter_enemy, LIZARD, spawn_points[LIZARD_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[LIZARD_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[TURTLE_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(id_counter_enemy, TURTLE,
-                                    spawn_points[TURTLE_SPAWN].at(i).get_x(),
-                                    spawn_points[TURTLE_SPAWN].at(i).get_y(), physical_map));
+        enemies.push_back(new Enemy(
+                id_counter_enemy, TURTLE, spawn_points[TURTLE_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[TURTLE_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[COIN_SPAWN].size(); i++) {
-        items.push_back(new Coin(id_counter_supply, spawn_points[COIN_SPAWN].at(i).get_x(),
-                                 spawn_points[COIN_SPAWN].at(i).get_y()));
+        items.push_back(new Coin(id_counter_supply,
+                                 spawn_points[COIN_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                                 spawn_points[COIN_SPAWN].at(i).get_y() * BLOCK_DIVISION));
         id_counter_supply++;
     }
     for (int i = 0; i < spawn_points[GEM_SPAWN].size(); i++) {
-        items.push_back(new Gem(id_counter_supply, spawn_points[GEM_SPAWN].at(i).get_x(),
-                                spawn_points[GEM_SPAWN].at(i).get_y()));
+        items.push_back(new Gem(id_counter_supply,
+                                spawn_points[GEM_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                                spawn_points[GEM_SPAWN].at(i).get_y() * BLOCK_DIVISION));
         id_counter_supply++;
     }
 }
@@ -222,17 +237,22 @@ int Map::get_rabbit_position_by_id(int id) {
 void Map::execute_jump(int playerID) {
     int player_pos = get_rabbit_position_by_id(playerID);
     if (player_pos != -1) {
-        players[player_pos]->jump();
+        players[player_pos]->add_jump();
     }
 }
 
 void Map::execute_move(int playerID, int dir) {
     int player_pos = get_rabbit_position_by_id(playerID);
+    std::cout << "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWplayer_pos: " << player_pos
+              << std::endl;
     if (player_pos != -1) {
+        std::cout << "XXXXXXXXXXXXXX: " << player_pos << std::endl;
         if (dir == LEFT) {
-            players[player_pos]->run_left();
+            std::cout << "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGg: " << player_pos << std::endl;
+            players[player_pos]->add_run_left();
         } else {
-            players[player_pos]->run_right();
+            std::cout << "LLLLLLLLLLLLLLLLLLLLL: " << player_pos << std::endl;
+            players[player_pos]->add_run_right();
         }
     }
 }
@@ -241,9 +261,9 @@ void Map::execute_move_faster(int playerID, int dir) {
     int player_pos = get_rabbit_position_by_id(playerID);
     if (player_pos != -1) {
         if (dir == LEFT) {
-            players[player_pos]->run_fast_left();
+            players[player_pos]->add_run_fast_left();
         } else {
-            players[player_pos]->run_fast_right();
+            players[player_pos]->add_run_fast_right();
         }
     }
 }

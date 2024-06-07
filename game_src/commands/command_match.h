@@ -13,8 +13,8 @@ private:
     int number_players;
     std::string match_name;
     std::string map_name;
-    ChampionType character_name;
     int commandType = COMMAND_MATCH;
+    ChampionType character_name;
 
 public:
     MatchCommand(int type, int number_players, const std::string& match_name,

@@ -53,6 +53,11 @@ void Protocol::send_char(char c) {
     check_closed();
 }
 
+// Primer Response:
+// envia un ACK 0 en caso de haberse unido/creado un match
+// envia un ACK negativo (-1) en caso de no poder unirse/crear un match
+// Segundo response:
+// envia un ACK positivo (player_id) justo antes de iniciar la match
 void Protocol::send_map(DynamicMap map) {
     // enviar el mapa: primero la cantidad de elementos y luego cada uno de ellos
     // std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data;
@@ -64,7 +69,7 @@ void Protocol::send_map(DynamicMap map) {
         // enviar el value
         for (int i = 0; i < MAP_HEIGHT_DEFAULT; i++) {
             for (int j = 0; j < MAP_WIDTH_DEFAULT; j++) {
-                send_uintEight(key_value.second[j][i]);
+                send_uintSixteen(key_value.second[j][i]);
             }
         }
     }
@@ -126,7 +131,8 @@ DynamicMap Protocol::receive_map() {
         // recibir el value
         for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
             for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
-                map_data_temp[key][k][j] = receive_uintEight();
+                map_data_temp[key][k][j] = receive_uintSixteen();
+                std::cout << "Map data: " << map_data_temp[key][k][j] << std::endl;
             }
         }
     }
@@ -283,76 +289,76 @@ void Protocol::send_Command(Command* command) {
 
 // ----------------------------- RECEIVE COMMANDS -----------------------------
 
-std::shared_ptr<Move> Protocol::receive_Move() {
+std::unique_ptr<Move> Protocol::receive_Move() {
     uint8_t player_id = receive_uintEight();
     uint8_t dir = receive_uintEight();
-    return std::make_shared<Move>(player_id, dir);
+    return std::make_unique<Move>(player_id, dir);
 }
 
-std::shared_ptr<MoveFaster> Protocol::receive_MoveFaster() {
+std::unique_ptr<MoveFaster> Protocol::receive_MoveFaster() {
     uint8_t player_id = receive_uintEight();
     uint8_t dir = receive_uintEight();
-    return std::make_shared<MoveFaster>(player_id, dir);
+    return std::make_unique<MoveFaster>(player_id, dir);
 }
 
-std::shared_ptr<Jump> Protocol::receive_Jump() {
+std::unique_ptr<Jump> Protocol::receive_Jump() {
     uint8_t player_id = receive_uintEight();
     uint8_t dir = receive_uintEight();
-    return std::make_shared<Jump>(player_id, dir);
+    return std::make_unique<Jump>(player_id, dir);
 }
 
-std::shared_ptr<Shoot> Protocol::receive_Shoot() {
+std::unique_ptr<Shoot> Protocol::receive_Shoot() {
     uint8_t player_id = receive_uintEight();
-    return std::make_shared<Shoot>(player_id);
+    return std::make_unique<Shoot>(player_id);
 }
 
-std::shared_ptr<MatchCommand> Protocol::receive_Match() {
+std::unique_ptr<MatchCommand> Protocol::receive_Match() {
     uint8_t type = receive_uintEight();
     uint8_t number_players = receive_uintEight();
     std::string match_name = receive_string();
     std::string map_name = receive_string();
     ChampionType character_name = static_cast<ChampionType>(receive_uintEight());
-    return std::make_shared<MatchCommand>(type, number_players, match_name, map_name,
+    return std::make_unique<MatchCommand>(type, number_players, match_name, map_name,
                                           character_name);
 }
 
-std::shared_ptr<Cheats> Protocol::receive_Cheat() {
+std::unique_ptr<Cheats> Protocol::receive_Cheat() {
     uint8_t player_id = receive_uintEight();
     uint8_t cheat_id = receive_uintEight();
-    return std::make_shared<Cheats>(player_id, cheat_id);
+    return std::make_unique<Cheats>(player_id, cheat_id);
 }
 
-std::shared_ptr<ChangeWeapon> Protocol::receive_ChangeWeapon() {
+std::unique_ptr<ChangeWeapon> Protocol::receive_ChangeWeapon() {
     uint8_t player_id = receive_uintEight();
-    return std::make_shared<ChangeWeapon>(player_id);
+    return std::make_unique<ChangeWeapon>(player_id);
 }
 
-std::shared_ptr<SelectChampion> Protocol::receive_SelectChampion() {
+std::unique_ptr<SelectChampion> Protocol::receive_SelectChampion() {
     uint8_t player_id = receive_uintEight();
     ChampionType champion_type = static_cast<ChampionType>(receive_uintEight());
     std::string match_name = receive_string();
     std::string map_name = receive_string();
-    return std::make_shared<SelectChampion>(player_id, champion_type, match_name, map_name);
+    return std::make_unique<SelectChampion>(player_id, champion_type, match_name, map_name);
 }
 
-std::shared_ptr<SpecialJazz> Protocol::receive_SpecialJazz() {
+std::unique_ptr<SpecialJazz> Protocol::receive_SpecialJazz() {
     uint8_t player_id = receive_uintEight();
-    return std::make_shared<SpecialJazz>(player_id);
+    return std::make_unique<SpecialJazz>(player_id);
 }
 
-std::shared_ptr<SpecialLori> Protocol::receive_SpecialLori() {
-    uint8_t player_id = receive_uintEight();
-    uint8_t dir = receive_uintEight();
-    return std::make_shared<SpecialLori>(player_id, dir);
-}
-
-std::shared_ptr<SpecialSpaz> Protocol::receive_SpecialSpaz() {
+std::unique_ptr<SpecialLori> Protocol::receive_SpecialLori() {
     uint8_t player_id = receive_uintEight();
     uint8_t dir = receive_uintEight();
-    return std::make_shared<SpecialSpaz>(player_id, dir);
+    return std::make_unique<SpecialLori>(player_id, dir);
 }
 
-std::shared_ptr<Command> Protocol::receive_Command() {
+std::unique_ptr<SpecialSpaz> Protocol::receive_SpecialSpaz() {
+    uint8_t player_id = receive_uintEight();
+    uint8_t dir = receive_uintEight();
+    return std::make_unique<SpecialSpaz>(player_id, dir);
+}
+
+std::unique_ptr<Command> Protocol::receive_Command() {
     uint8_t command = receive_uintEight();
     switch (command) {
         case SEND_COMMAND_MOVE:
@@ -421,13 +427,13 @@ GameInfo* Protocol::receive_GameInfo() {
     return new GameInfo(matches_available);
 }
 
-std::shared_ptr<Information> Protocol::receive_Info() {
+std::unique_ptr<Information> Protocol::receive_Info() {
     check_closed();
     int type = receive_uintEight();
     if (type == SELECT_CHARACTER_INFO) {
         // return receiveDynamic();
     } else if (type == GAME_INFO) {
-        return std::shared_ptr<Information>(receive_GameInfo());
+        return std::unique_ptr<Information>(receive_GameInfo());
     } else if (type == GAME_MAP_INFO) {
         // return receiveMap();
     }
@@ -448,6 +454,8 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
     std::cout << "Sending rabbits" << std::endl;
+    std::cout << "Cantidad de rabbits: " << snapshot.rabbits.size() << std::endl;
+
     // enviar la cantidad de conejos
     send_uintEight(snapshot.rabbits.size());
     // enviar cada conejo
@@ -478,6 +486,8 @@ void Protocol::send_enemies(Snapshot& snapshot) {
         send_uintEight(enemy.enemy_type);
         send_uintThirtyTwo(enemy.pos_x);
         send_uintThirtyTwo(enemy.pos_y);
+        std::cout << "Enemie pos x: " << enemy.pos_x << std::endl;
+        std::cout << "Enemie pos y: " << enemy.pos_y << std::endl;
     }
 }
 
@@ -522,7 +532,6 @@ void Protocol::send_Snapshot(Snapshot& snapshot) {
 // ----------------------------- RECEIVE SNAPSHOTS -----------------------------
 
 void Protocol::receive_dimensions(Snapshot& snapshot) {
-    std::cout << "Receiving dimensions" << std::endl;
     // recibir y setear las dimensiones del mapa en el snapshot pasado por referencia
     uint32_t width = receive_uintThirtyTwo();
     uint32_t height = receive_uintThirtyTwo();
@@ -531,6 +540,8 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_height = receive_uintThirtyTwo();
     DynamicMap map_data = receive_map();
     snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
+
+    std::cout << "Fin de receive dimensions" << std::endl;
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {

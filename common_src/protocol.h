@@ -68,27 +68,27 @@ private:
 
     void send_SpecialSpaz(SpecialSpaz* specialSpaz);
 
-    std::shared_ptr<Move> receive_Move();
+    std::unique_ptr<Move> receive_Move();
 
-    std::shared_ptr<MoveFaster> receive_MoveFaster();
+    std::unique_ptr<MoveFaster> receive_MoveFaster();
 
-    std::shared_ptr<Jump> receive_Jump();
+    std::unique_ptr<Jump> receive_Jump();
 
-    std::shared_ptr<Shoot> receive_Shoot();
+    std::unique_ptr<Shoot> receive_Shoot();
 
-    std::shared_ptr<MatchCommand> receive_Match();
+    std::unique_ptr<MatchCommand> receive_Match();
 
-    std::shared_ptr<Cheats> receive_Cheat();
+    std::unique_ptr<Cheats> receive_Cheat();
 
-    std::shared_ptr<ChangeWeapon> receive_ChangeWeapon();
+    std::unique_ptr<ChangeWeapon> receive_ChangeWeapon();
 
-    std::shared_ptr<SelectChampion> receive_SelectChampion();
+    std::unique_ptr<SelectChampion> receive_SelectChampion();
 
-    std::shared_ptr<SpecialJazz> receive_SpecialJazz();
+    std::unique_ptr<SpecialJazz> receive_SpecialJazz();
 
-    std::shared_ptr<SpecialLori> receive_SpecialLori();
+    std::unique_ptr<SpecialLori> receive_SpecialLori();
 
-    std::shared_ptr<SpecialSpaz> receive_SpecialSpaz();
+    std::unique_ptr<SpecialSpaz> receive_SpecialSpaz();
 
     // ------------------- SEND AND RECEIVE INFO -------------------
 
@@ -128,7 +128,7 @@ public:
     // ------------------- Funciones para Server -------------------
 
     // Recibe un comando
-    std::shared_ptr<Command> receive_Command();
+    std::unique_ptr<Command> receive_Command();
 
     // Envia un Snapshot
     void send_Snapshot(Snapshot& snapshot);
@@ -143,7 +143,7 @@ public:
     // Recibe un Snapshot
     Snapshot receive_Snapshot();
 
-    std::shared_ptr<Information> receive_Info();
+    std::unique_ptr<Information> receive_Info();
 
     // ------------------- Funciones para Client y Server -------------------
 

@@ -13,233 +13,86 @@
   <property name="windowTitle">
    <string>ClientLobby</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="labelCreateMatch_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>390</y>
-      <width>331</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>04b</family>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Join a &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;match&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="txtCreateMatchCode">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>280</y>
-      <width>190</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
-    </property>
-    <property name="plainText">
-     <string>4 digit code</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="txtJoinMatchCode">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>430</y>
-      <width>190</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
-    </property>
-    <property name="plainText">
-     <string>4 digit code</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnCreate">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>280</y>
-      <width>90</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>Create</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnJoin">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>430</y>
-      <width>90</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Join</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="available_matches">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>200</y>
-      <width>231</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>04b</family>
-      <pointsize>20</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;available&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;matches&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="txtAvailableMatches">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>290</y>
-      <width>231</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgba(0, 0, 0, 128)</string>
-    </property>
-    <property name="plainText">
-     <string/>
-    </property>
-    <property name="overwriteMode">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelGameTitle">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>801</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>04b</family>
-      <pointsize>45</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Jazz Jack rabbit&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnError">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>520</y>
-      <width>89</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>ERROR</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelBackGround">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>800</width>
-      <height>600</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/backgrounds/lobby.png)</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="labelCreateMatch_3">
+   <widget class="QPushButton" name="btnCreateMatch">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>240</y>
-      <width>331</width>
-      <height>81</height>
+      <y>290</y>
+      <width>190</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>04b</family>
-      <pointsize>20</pointsize>
+      <pointsize>24</pointsize>
+      <italic>false</italic>
+      <bold>false</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">font-family: 04b;</string>
+     <string notr="true">color: white; 
+background-color: rgba(0, 0, 0, 128); 
+border: 2px solid white; 
+border-radius: 15px;
+padding: 5px; </string>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Create a &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;match&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>Create 
+match</string>
     </property>
    </widget>
-   <zorder>labelBackGround</zorder>
-   <zorder>labelGameTitle</zorder>
-   <zorder>labelCreateMatch_3</zorder>
-   <zorder>labelCreateMatch_2</zorder>
-   <zorder>txtCreateMatchCode</zorder>
-   <zorder>txtJoinMatchCode</zorder>
-   <zorder>btnCreate</zorder>
-   <zorder>btnJoin</zorder>
-   <zorder>available_matches</zorder>
-   <zorder>txtAvailableMatches</zorder>
-   <zorder>btnError</zorder>
+   <widget class="QPushButton" name="btnJoinMatch">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>400</y>
+      <width>190</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white; 
+background-color: rgba(0, 0, 0, 128); 
+border: 2px solid white; 
+border-radius: 15px;
+padding: 5px; </string>
+    </property>
+    <property name="text">
+     <string>Join
+match</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnQuit">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>400</y>
+      <width>190</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: white; 
+background-color: rgba(0, 0, 0, 128); 
+border: 2px solid white; 
+border-radius: 15px;
+padding: 5px; </string>
+    </property>
+    <property name="text">
+     <string>Quit</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
