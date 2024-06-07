@@ -273,14 +273,14 @@ template <typename T, class C>
 class Queue<std::unique_ptr<T>, C> {
 private:
     std::queue<std::unique_ptr<T>, C> q;
-    const unsigned int max_size;
-    bool closed;
+    const unsigned int max_size = UINT_MAX - 1;
+    bool closed = false;
     std::mutex mtx;
     std::condition_variable is_not_full;
     std::condition_variable is_not_empty;
 
 public:
-    Queue(): max_size(UINT_MAX - 1), closed(false) {}
+    Queue() {}
     explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
 
     bool try_push(std::unique_ptr<T> val) {
