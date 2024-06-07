@@ -103,6 +103,8 @@ public:
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
+    void showLoadingScreen(Renderer& renderer);
+
     //~ClientDrawer();
 };
 
