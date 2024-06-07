@@ -9,13 +9,12 @@
 #include "client_map_loader.h"
 #include "client_sound_manager.h"
 
-enum { None = 0, JAZZ, SPAZ, LORI }; /////////////
-enum { RABBITT = 0, CRABB, LIZARDD, TURTLEE }; //////////////
-enum { ALIVEE, DEADD, RECIEVED_DAMAGEE, INTOXICATEDD }; /////////////////////////////////////
-enum { STANDD, RUNN, RUN_FASTT, JUMPINGG, FALLINGG }; ////////////////////
+enum { None = 0, JAZZ, SPAZ, LORI };                     /////////////
+enum { RABBITT = 0, CRABB, LIZARDD, TURTLEE };           //////////////
+enum { ALIVEE, DEADD, RECIEVED_DAMAGEE, INTOXICATEDD };  /////////////////////////////////////
+enum { STANDD, RUNN, RUN_FASTT, JUMPINGG, FALLINGG };    ////////////////////
 
-ClientDrawer::ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                           Queue<Snapshot>& q_snapshots):
+ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds),
         q_snapshots(q_snapshots),
         game_running(false),
@@ -177,7 +176,8 @@ int ClientDrawer::run(int player_id) try {
 
     // Read first snapshot!
 
-    Snapshot initial_snapshot = q_snapshots.pop();
+    Snapshot initial_snapshot =
+            q_snapshots.pop();  // TRY POP///////////////////////////////////////////////////
     game_running = !initial_snapshot.get_end_game();
 
     std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
@@ -284,6 +284,10 @@ int ClientDrawer::run(int player_id) try {
         // SNAPSHOT RECEIVER
         if (q_snapshots.try_pop(snapshot)) {
             std::cout << "Popie un snapshot in-game!!!!!!!!!!!!!!!!!!!" << std::endl;
+
+
+            // try pop en un loop hasta que no pueda popear (me quedo con el ultimo snapshot) y ese
+            // es el que uso para actualizar el juego
 
             for (const auto& rabbit: snapshot.rabbits) {
                 std::cout << "Seteando posicion de conejo a" << rabbit.pos_x << " " << rabbit.pos_y

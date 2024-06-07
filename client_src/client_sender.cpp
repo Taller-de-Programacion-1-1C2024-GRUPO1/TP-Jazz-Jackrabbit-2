@@ -3,15 +3,14 @@
 
 #include <chrono>
 
-ClientSender::ClientSender(Protocol& protocol,
-                           std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds):
+ClientSender::ClientSender(Protocol& protocol, Queue<std::unique_ptr<Command>>& q_cmds):
         protocol(protocol), q_cmds(q_cmds), keep_talking(true), is_alive(true) {}
 
 
 void ClientSender::run() {
     while (keep_talking) {
         try {
-            std::shared_ptr<Command> cmd = q_cmds->pop();
+            std::unique_ptr<Command> cmd = q_cmds.pop();
             cmd->send(this->protocol);
             std::cout << "Client SENDER: Enviando comando" << std::endl;
         } catch (const ClosedQueue& e) {
@@ -33,5 +32,5 @@ bool ClientSender::is_dead() { return !this->is_alive; }
 
 void ClientSender::kill() {
     this->keep_talking = false;
-    q_cmds->close();
+    q_cmds.close();
 }

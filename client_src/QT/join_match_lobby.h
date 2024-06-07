@@ -24,10 +24,8 @@ class JoinMatchLobby: public QDialog {
     Q_OBJECT
 
 public:
-    explicit JoinMatchLobby(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                            std::shared_ptr<Queue<int>> q_responses,
-                            std::atomic<bool>& game_started, ChampionType selected_character,
-                            int& player_id, QWidget* parent = nullptr);
+    explicit JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                            ChampionType selected_character, QWidget* parent = nullptr);
     ~JoinMatchLobby();
 
 signals:
@@ -42,10 +40,8 @@ private slots:
 
 private:
     Ui::JoinMatchLobby* ui;
-    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
-    std::shared_ptr<Queue<int>> q_responses;  // Cambiado a std::shared_ptr
-    int& player_id;
-    std::atomic<bool>& game_started;
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<int>& q_responses;
     ChampionType selected_character;
 };
 

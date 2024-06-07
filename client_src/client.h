@@ -3,7 +3,7 @@
 
 #include <QApplication>
 #include <fstream>
-#include <memory>  // Para std::shared_ptr
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -26,16 +26,18 @@
 class Client {
 private:
     Protocol protocol;
-    std::shared_ptr<Queue<std::shared_ptr<Command>>> q_cmds;  // Cambiado a std::shared_ptr
-    std::shared_ptr<Queue<int>> q_responses;                  // Cambiado a std::shared_ptr
-    std::atomic<bool> game_started;
+    Queue<std::unique_ptr<Command>> q_cmds;
+    Queue<int> q_responses;
     int player_id;
-    Queue<Snapshot> q_snapshots;
+    Queue<Snapshot> q_snapshots;  /////////// SI el snapshot no es demasiado grande (200bytes)
+                                  ///(copia) esta bien asi, sino hacerlo en el heap (2kbytes)
     ClientSender client_sender;
     ClientReceiver client_receiver;
-    // ClientLobby lobby;
     ClientDrawer drawer;
 
+
+    // el editor NO TIENE QUE COMUNICArse con el sertver
+    // HACER para el martes un manual de usuario como instalar, jugar, etc..
 
 public:
     Client(const std::string& host, const std::string& service);

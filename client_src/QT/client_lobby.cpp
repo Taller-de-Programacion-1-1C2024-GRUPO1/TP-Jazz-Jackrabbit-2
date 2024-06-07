@@ -3,15 +3,9 @@
 #include "./ui_client_lobby.h"
 
 
-ClientLobby::ClientLobby(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                         std::shared_ptr<Queue<int>> q_responses, std::atomic<bool>& game_started,
-                         int& player_id, QWidget* parent):
-        QMainWindow(parent),
-        ui(new Ui::ClientLobby),
-        q_cmds(q_cmds),
-        q_responses(q_responses),
-        player_id(player_id),
-        game_started(game_started) {
+ClientLobby::ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                         QWidget* parent):
+        QMainWindow(parent), ui(new Ui::ClientLobby), q_cmds(q_cmds), q_responses(q_responses) {
     ui->setupUi(this);
 
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
@@ -43,7 +37,7 @@ void ClientLobby::on_btnCreateMatch_clicked() {
             &ClientLobby::handleCharacterSelected);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        MapSelector map_selector(q_cmds, q_responses, game_started, selected_character, player_id);
+        MapSelector map_selector(q_cmds, q_responses, selected_character);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         if (map_selector.exec() == QDialog::Accepted) {
             // ENVIO COMANDO E INICIO PARTIDA
@@ -66,8 +60,7 @@ void ClientLobby::on_btnJoinMatch_clicked() {
             &ClientLobby::handleWindowClosed);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        JoinMatchLobby joinMatchLobby(q_cmds, q_responses, game_started, selected_character,
-                                      player_id);
+        JoinMatchLobby joinMatchLobby(q_cmds, q_responses, selected_character);
         connect(&joinMatchLobby, &JoinMatchLobby::windowClosed, this,
                 &ClientLobby::handleWindowClosed);
 

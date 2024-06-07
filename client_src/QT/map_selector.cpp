@@ -3,15 +3,12 @@
 #include "ui_map_selector.h"
 
 
-MapSelector::MapSelector(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                         std::shared_ptr<Queue<int>> q_responses, std::atomic<bool>& game_started,
-                         ChampionType selected_character, int& player_id, QWidget* parent):
+MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                         ChampionType selected_character, QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        player_id(player_id),
-        game_started(game_started),
         selected_character(selected_character) {
     ui->setupUi(this);
 
@@ -67,8 +64,8 @@ void MapSelector::start_match() {
     // Si no existe acepto para que inicie la partida
 
 
-    q_cmds->push(std::make_shared<MatchCommand>(NEW_MATCH, number_of_players, match_name,
-                                                selected_map, selected_character));
+    q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
+                                               selected_map, selected_character));
 
     /*
     int response;
@@ -83,11 +80,11 @@ void MapSelector::start_match() {
     bool could_pop = false;
     int response;
     while (!could_pop) {
-        could_pop = q_responses->try_pop(response);
+        could_pop = q_responses.try_pop(response);
     }
     if (response == 0) {
         hide();
-        WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
+        WaitingRoom waiting_room(q_cmds, q_responses);
         if (waiting_room.exec() == QDialog::Accepted) {
             accept();
         } else {

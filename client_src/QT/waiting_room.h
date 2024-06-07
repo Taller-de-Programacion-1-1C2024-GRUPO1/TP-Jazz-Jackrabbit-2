@@ -26,9 +26,8 @@ class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                         std::shared_ptr<Queue<int>> q_responses, std::atomic<bool>& game_started,
-                         int& player_id, QWidget* parent = nullptr);
+    explicit WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                         QWidget* parent = nullptr);
     ~WaitingRoom();
 
 protected:
@@ -39,10 +38,8 @@ private:
     void stopWaitingForGame();
 
     Ui::WaitingRoom* ui;
-    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
-    std::shared_ptr<Queue<int>> q_responses;  // Cambiado a std::shared_ptr
-    std::atomic<bool>& game_started;
-    int& player_id;
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<int>& q_responses;
     std::thread waiting_thread;
     std::atomic<bool> stop_thread;
 };

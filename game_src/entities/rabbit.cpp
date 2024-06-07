@@ -223,9 +223,9 @@ void Rabbit::execute_jump() {
 // RIGHT
 void Rabbit::execute_run_right() {
     check_colision_with_map();
-    ///std::cout << "DDDDDDDDDDDD    player_pos: " << std::endl;
+    /// std::cout << "DDDDDDDDDDDD    player_pos: " << std::endl;
     if (!on_right_wall) {
-        //std::cout << "EEEEEEEEEEEEEEEE    player_pos: " << std::endl;
+        // std::cout << "EEEEEEEEEEEEEEEE    player_pos: " << std::endl;
         spe_x = PLAYER_SPEED;
     }
 }

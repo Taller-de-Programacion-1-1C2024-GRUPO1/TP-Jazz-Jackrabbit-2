@@ -14,10 +14,10 @@
 class KeyboardHandler {
 private:
     int client_id;
-    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
+    Queue<std::unique_ptr<Command>>& q_cmds;
 
 public:
-    explicit KeyboardHandler(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds);
+    explicit KeyboardHandler(Queue<std::unique_ptr<Command>>& q_cmds);
 
     void listenForCommands(bool& gameRunning);
     void setId(int id);

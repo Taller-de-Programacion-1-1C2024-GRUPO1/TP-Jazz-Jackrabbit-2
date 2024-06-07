@@ -13,8 +13,7 @@ Ammo::Ammo(int id, int init_pos_x, int init_pos_y): Item(id, AMMO, init_pos_x, i
 
 Gem::Gem(int id, int init_pos_x, int init_pos_y): Item(id, GEM, init_pos_x, init_pos_y) {}
 
-Coin::Coin(int id, int init_pos_x, int init_pos_y):
-        Item(id, COIN, init_pos_x , init_pos_y) {}
+Coin::Coin(int id, int init_pos_x, int init_pos_y): Item(id, COIN, init_pos_x, init_pos_y) {}
 
 void Coin::on_colision_with_rabbit(Rabbit* rabbit) {
     rabbit->add_points(COIN_POINTS);

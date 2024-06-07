@@ -78,7 +78,7 @@ using SDL2pp::Window;
 
 class ClientDrawer {
 private:
-    std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds;
+    Queue<std::unique_ptr<Command>>& q_cmds;
     Queue<Snapshot>& q_snapshots;
     bool game_running;
 
@@ -100,8 +100,7 @@ private:
 
 public:
     int run(int player_id);
-    ClientDrawer(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                 Queue<Snapshot>& q_snapshots);
+    ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
     //~ClientDrawer();

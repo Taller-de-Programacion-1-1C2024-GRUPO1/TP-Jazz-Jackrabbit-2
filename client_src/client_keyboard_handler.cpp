@@ -1,7 +1,7 @@
 #include "client_keyboard_handler.h"
 
-KeyboardHandler::KeyboardHandler(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds):
-        q_cmds(q_cmds) {}
+KeyboardHandler::KeyboardHandler(Queue<std::unique_ptr<Command>>& q_cmds):
+        q_cmds(q_cmds), client_id(-1) {}
 
 void KeyboardHandler::listenForCommands(bool& game_running) {
     SDL_Event event;
@@ -21,19 +21,19 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
         // q_cmds.try_push(AsideKick(client_id, LEFT));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(std::make_shared<MoveFaster>(client_id, RIGHT));
+        q_cmds.push(std::make_unique<MoveFaster>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(std::make_shared<MoveFaster>(client_id, LEFT));
+        q_cmds.push(std::make_unique<MoveFaster>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(std::make_shared<Move>(client_id, RIGHT));
+        q_cmds.push(std::make_unique<Move>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(std::make_shared<Move>(client_id, LEFT));
+        q_cmds.push(std::make_unique<Move>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds->push(std::make_shared<Jump>(client_id, RIGHT));
+        q_cmds.push(std::make_unique<Jump>(client_id, RIGHT));
     } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds->push(std::make_shared<Jump>(client_id, LEFT));
+        q_cmds.push(std::make_unique<Jump>(client_id, LEFT));
     } else if (state[SDL_SCANCODE_S]) {
-        q_cmds->push(std::make_shared<Shoot>(client_id));
+        q_cmds.push(std::make_unique<Shoot>(client_id));
     } else if (state[SDL_SCANCODE_W]) {
         // q_cmds.try_push(ChangeWeapon(client_id));
     } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {

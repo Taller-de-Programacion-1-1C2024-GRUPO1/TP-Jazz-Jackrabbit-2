@@ -6,16 +6,12 @@
 #include "ui_join_match_lobby.h"
 
 
-JoinMatchLobby::JoinMatchLobby(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                               std::shared_ptr<Queue<int>> q_responses,
-                               std::atomic<bool>& game_started, ChampionType selected_character,
-                               int& player_id, QWidget* parent):
+JoinMatchLobby::JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                               ChampionType selected_character, QWidget* parent):
         QDialog(parent),
         ui(new Ui::JoinMatchLobby),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        player_id(player_id),
-        game_started(game_started),
         selected_character(selected_character) {
     ui->setupUi(this);
 
@@ -54,16 +50,16 @@ void JoinMatchLobby::on_btnJoin_clicked() {
     // partida
 
 
-    q_cmds->push(std::make_shared<MatchCommand>(JOIN, 0, match_name, "", selected_character));
+    q_cmds.push(std::make_unique<MatchCommand>(JOIN, 0, match_name, "", selected_character));
 
     bool could_pop = false;
     int response;
     while (!could_pop) {
-        could_pop = q_responses->try_pop(response);
+        could_pop = q_responses.try_pop(response);
     }
     if (response == 0) {
         hide();
-        WaitingRoom waiting_room(q_cmds, q_responses, game_started, player_id);
+        WaitingRoom waiting_room(q_cmds, q_responses);
         if (waiting_room.exec() == QDialog::Accepted) {
             accept();
         } else {

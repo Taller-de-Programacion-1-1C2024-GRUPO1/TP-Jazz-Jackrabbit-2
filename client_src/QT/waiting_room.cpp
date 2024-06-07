@@ -6,15 +6,12 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(std::shared_ptr<Queue<std::shared_ptr<Command>>>& q_cmds,
-                         std::shared_ptr<Queue<int>> q_responses, std::atomic<bool>& game_started,
-                         int& player_id, QWidget* parent):
+WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+                         QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        game_started(game_started),
-        player_id(player_id),
         stop_thread(false) {
     ui->setupUi(this);
 
@@ -43,8 +40,9 @@ void WaitingRoom::startWaitingForGame() {
         std::cout << "Waiting for game to start" << std::endl;
         bool could_pop = false;
         int player_number;
+
         while (!stop_thread && !could_pop) {
-            could_pop = q_responses->try_pop(player_number);
+            could_pop = q_responses.try_pop(player_number);
             if (!could_pop) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
             }
@@ -59,8 +57,6 @@ void WaitingRoom::startWaitingForGame() {
             });
             return;
         }
-        player_id = player_number;
-        game_started = true;
         QMetaObject::invokeMethod(this, [this]() { accept(); });
     });
 }

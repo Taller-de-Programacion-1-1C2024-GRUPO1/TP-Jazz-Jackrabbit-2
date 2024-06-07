@@ -3,20 +3,12 @@
 
 Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)),
-
-
-        q_cmds(std::make_shared<
-                Queue<std::shared_ptr<Command>>>()),  // Usamos std::make_shared //
-                                                      // ESE 15 HAY QUE SACARLO
-                                                      // //////////////////////////////////
-                                                      // ACA HAY QUE USAR PUNTEROS
-                                                      // INTELIGENTES
-        q_responses(std::make_shared<Queue<int>>()),  // Usamos std::make_shared
-        game_started(false),
+        q_cmds(Queue<std::unique_ptr<Command>>()),
+        q_responses(),
         player_id(-1),
         q_snapshots(),
         client_sender(protocol, q_cmds),
-        client_receiver(protocol, q_responses, game_started, q_snapshots),
+        client_receiver(protocol, q_responses, q_snapshots, player_id),
         drawer(q_cmds, q_snapshots) {}
 
 
@@ -27,7 +19,7 @@ void Client::run(int argc, char* argv[]) {
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w(q_cmds, q_responses, game_started, player_id);
+    ClientLobby w(q_cmds, q_responses);
     w.show();
     int result = a.exec();
 
