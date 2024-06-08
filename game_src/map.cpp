@@ -277,20 +277,4 @@ void Map::execute_shoot(int playerID) {
     }
 }
 
-Map::~Map() {
-    if (!(players.empty() && enemies.empty() && bullets.empty() && items.empty())) {    
-        std::cout << "DESTROYING MAP ENTITIES" << std::endl;
-        for (auto player: players) {
-            delete player;
-        }
-        for (auto enemy: enemies) {
-            delete enemy;
-        }
-        for (auto bullet: bullets) {
-            delete bullet;
-        }
-        for (auto item: items) {
-            delete item;
-        }
-    }
-}
+Map::~Map() {}

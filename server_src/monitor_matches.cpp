@@ -1,10 +1,7 @@
 #include "monitor_matches.h"
 
 MonitorMatches::MonitorMatches(const std::string& map_routes): map_reader(map_routes) {
-    std::vector<std::string> maps_names = map_reader.load_maps_files();
-    for (auto& map_name: maps_names) {
-        maps[map_name] = map_reader.load_map(map_name);
-    }
+    maps = map_reader.get_maps();
 }
 
 int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_struct) {
@@ -52,7 +49,7 @@ int MonitorMatches::join_match(std::string match_name,
 
 Map MonitorMatches::get_map(std::string map_name) {
     std::lock_guard<std::mutex> lock(mutex);
-    return *maps[map_name];
+    return maps[map_name];
 }
 
 void MonitorMatches::close_matches() {

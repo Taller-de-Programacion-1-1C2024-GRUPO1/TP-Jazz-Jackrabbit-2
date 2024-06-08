@@ -71,7 +71,14 @@ public:
                 default:
                     break;
             }
-        } 
+        }
+        // print physical map
+        for (int y = 0; y < MAP_HEIGHT_DEFAULT; y++) {
+            for (int x = 0; x < MAP_WIDTH_DEFAULT; x++) {
+                std::cout << physic_map.map[x][y] << " ";
+            }
+            std::cout << std::endl;
+        }
     }
 
     void override_layer(
