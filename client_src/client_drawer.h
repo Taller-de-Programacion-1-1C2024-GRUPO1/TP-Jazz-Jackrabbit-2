@@ -52,9 +52,9 @@
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
 
-#include "client_number_images.h"
-#include "client_drawable_rabbit.h"
 #include "client_drawable_enemy.h"
+#include "client_drawable_rabbit.h"
+#include "client_number_images.h"
 
 using SDL2pp::Chunk;
 using SDL2pp::Font;

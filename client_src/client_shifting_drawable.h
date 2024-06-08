@@ -22,9 +22,8 @@ private:
     int iterationsBeetweenFrames;
 
 public:
-    ShiftingDrawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, 
-                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
-                     SoundManager& soundManager);
+    ShiftingDrawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
+                     SDL2pp::Rect& onMapRect, SoundManager& soundManager);
 
     void loadAnimations(const std::string& path);
     void render();

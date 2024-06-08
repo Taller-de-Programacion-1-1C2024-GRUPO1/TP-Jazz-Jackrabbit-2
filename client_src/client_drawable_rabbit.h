@@ -7,15 +7,15 @@
 #define LORI_IMG "../client_src/resources/characters/Lori.png"
 #define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
 
-class DrawableRabbit : public ShiftingDrawable {
+class DrawableRabbit: public ShiftingDrawable {
 
 public:
-    DrawableRabbit(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
-                   SoundManager& soundManager) :
+    DrawableRabbit(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
+                   SDL2pp::Rect& onMapRect, SoundManager& soundManager):
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setCharacterFromSnapshot(const int champion_type) {
-        SDL2pp::Color characterColor = {44, 102, 150, 255};   // Color en formato RGBA
+        SDL2pp::Color characterColor = {44, 102, 150, 255};  // Color en formato RGBA
         switch (champion_type) {
             case Jazz:
                 std::cout << "Jazz" << std::endl;
@@ -82,4 +82,4 @@ public:
     }
 };
 
-#endif //CLIENT_RABBIT_H
+#endif  // CLIENT_RABBIT_H

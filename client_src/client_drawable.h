@@ -1,6 +1,7 @@
 #ifndef CLIENT_DRAWABLE_H
 #define CLIENT_DRAWABLE_H
 
+#include <memory>
 #include <string>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -21,7 +22,8 @@ protected:
 
 public:
     Drawable() = delete;
-    Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect);
+    Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
+             SDL2pp::Rect& onMapRect);
     Drawable(const Drawable& other) = delete;
 
     void setTexture(const std::string& path, const SDL2pp::Color& colorKey);

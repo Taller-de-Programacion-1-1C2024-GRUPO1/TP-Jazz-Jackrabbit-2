@@ -9,11 +9,12 @@
 
 class DrawableEnemy: public ShiftingDrawable {
 public:
-    DrawableEnemy(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect, 
-                SDL2pp::Rect& onMapRect, SoundManager& soundManager) : ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
+    DrawableEnemy(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
+                  SDL2pp::Rect& onMapRect, SoundManager& soundManager):
+            ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setEnemyFromSnapshot(const int enemy_type) {
-        SDL2pp::Color color = {0, 128, 255, 1};   // Color en formato RGBA
+        SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
         switch (enemy_type) {
             case CRAB:
                 this->setTexture(ENEMIES_IMG, color);
@@ -31,4 +32,4 @@ public:
     }
 };
 
-#endif //CLIENT_DRAWABLE_ENEMY_H
+#endif  // CLIENT_DRAWABLE_ENEMY_H

@@ -118,9 +118,9 @@ int ClientDrawer::run(int player_id) try {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, 64, 64);
         DrawableRabbit* newRabbit =
-                    new DrawableRabbit(renderer, cameraPosition, textureRect, onMapRect, soundManager);
-        
-        newRabbit->setCharacterFromSnapshot(Lori);
+                new DrawableRabbit(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+
+        newRabbit->setCharacterFromSnapshot(rabbit.champion_type);
         newRabbit->setAnimationFromSnapshot(rabbit);
         newRabbit->setDirection(rabbit.direction);
         if (rabbit.id == client_id) {
@@ -149,8 +149,8 @@ int ClientDrawer::run(int player_id) try {
     for (auto& projectile: initial_snapshot.projectiles) {
         SDL2pp::Rect textureRect(0, 0, 32, 32);
         SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, 32, 32);
-        ShiftingDrawable* newProjectile =
-                new ShiftingDrawable(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+        ShiftingDrawable* newProjectile = new ShiftingDrawable(
+                renderer, cameraPosition, textureRect, onMapRect, soundManager);
         newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
         WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
         newProjectile->setAnimation("Move");
@@ -159,8 +159,8 @@ int ClientDrawer::run(int player_id) try {
     for (auto& valuable: initial_snapshot.supplies) {
         SDL2pp::Rect textureRect(0, 0, 32, 32);
         SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
-        ShiftingDrawable* newValuable =
-                new ShiftingDrawable(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+        ShiftingDrawable* newValuable = new ShiftingDrawable(renderer, cameraPosition, textureRect,
+                                                             onMapRect, soundManager);
         loadAnimationForItem(animationsPath, valuable.supply_type);
         newValuable->setTexture(ITEMS_IMG, enemyAndItemsColor);
         newValuable->loadAnimations(animationsPath);
@@ -227,8 +227,8 @@ int ClientDrawer::run(int player_id) try {
                         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
                         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width,
                                                rabbit_height);
-                        DrawableRabbit* newRabbit = new DrawableRabbit( renderer, cameraPosition, textureRect, 
-                                                    onMapRect, soundManager);
+                        DrawableRabbit* newRabbit = new DrawableRabbit(
+                                renderer, cameraPosition, textureRect, onMapRect, soundManager);
                         newRabbit->setCharacterFromSnapshot(rabbit.champion_type);
                         newRabbit->setAnimationFromSnapshot(rabbit);
                         newRabbit->setDirection(rabbit.direction);
@@ -256,7 +256,8 @@ int ClientDrawer::run(int player_id) try {
                     // Crear un nuevo enemigo
                     SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
                     SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
-                    DrawableEnemy* newEnemy = new DrawableEnemy(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+                    DrawableEnemy* newEnemy = new DrawableEnemy(
+                            renderer, cameraPosition, textureRect, onMapRect, soundManager);
                     newEnemy->setEnemyFromSnapshot(enemy.enemy_type);
                     newEnemy->setAnimation("Walk");
                     newEnemy->setDirection(enemy.direction);
@@ -282,8 +283,8 @@ int ClientDrawer::run(int player_id) try {
                     // Crear un nuevo proyectil
                     SDL2pp::Rect textureRect(0, 0, 32, 32);
                     SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, 32, 32);
-                    ShiftingDrawable* newProjectile = new ShiftingDrawable(renderer, cameraPosition,
-                            textureRect, onMapRect, soundManager);
+                    ShiftingDrawable* newProjectile = new ShiftingDrawable(
+                            renderer, cameraPosition, textureRect, onMapRect, soundManager);
                     newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
                     WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
                     newProjectile->setAnimation("Move");
@@ -310,9 +311,8 @@ int ClientDrawer::run(int player_id) try {
                     SDL2pp::Rect textureRect(0, 0, 32, 32);
                     SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
                     ShiftingDrawable* newValuable = new ShiftingDrawable(
-                            renderer, cameraPosition, textureRect,
-                            onMapRect, soundManager);
-                    
+                            renderer, cameraPosition, textureRect, onMapRect, soundManager);
+
                     loadAnimationForItem(animationsPath, valuable.supply_type);
                     newValuable->setTexture(ITEMS_IMG, enemyAndItemsColor);
                     newValuable->loadAnimations(animationsPath);

@@ -1,19 +1,19 @@
 #include "client_drawable.h"
 
 #include <fstream>
+#include <memory>
 
 #include <yaml-cpp/yaml.h>
 
 #include "client_shifting_drawable.h"
 
-Drawable::Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, 
-                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect):
+Drawable::Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
+                   SDL2pp::Rect& onMapRect):
         renderer(renderer),
         texture(nullptr),
         cameraPosition(cp),
         textureRect(textureRect),
-        onMapRect(onMapRect) {
-}
+        onMapRect(onMapRect) {}
 
 void Drawable::setTexture(const std::string& path, const SDL2pp::Color& colorKey) {
     SDL2pp::Surface surface(path);
@@ -29,8 +29,7 @@ SDL2pp::Rect Drawable::adjustPosition() {
     return adjustedOnMapRect;
 }
 
-void Drawable::render() { 
-    renderer.Copy(*texture, textureRect, adjustPosition()); }
+void Drawable::render() { renderer.Copy(*texture, textureRect, adjustPosition()); }
 
 void Drawable::update() {
     int mapWidth = 1120;
