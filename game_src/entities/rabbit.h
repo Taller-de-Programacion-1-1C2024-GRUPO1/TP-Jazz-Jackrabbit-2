@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <memory>
 #include <queue>
 #include <vector>
 
@@ -15,17 +16,7 @@ class Item;
 class State;
 class Map;
 class Gun;
-
-// TESTING
-enum EVENTS {
-    EVENT_JUMP,
-    EVENT_RUN_RIGHT,
-    EVENT_RUN_FAST_RIGHT,
-    EVENT_RUN_LEFT,
-    EVENT_RUN_FAST_LEFT,
-    EVENT_SHOOT,
-    EVENT_SPECIAL_ATTACK
-};
+class Command;
 
 class Rabbit: public Character {
 private:
@@ -40,7 +31,7 @@ private:
     int current_gun;
     State* state;
     int direction;
-    std::queue<int> events_queue;
+    std::queue<std::shared_ptr<Command>> events_queue;
 
     // MODIFICACION DE POSICION
     const int acc_y;
@@ -85,13 +76,7 @@ public:
 
     void imprimir_posicion();
 
-    // COLA
-    void add_jump();
-    void add_run_right();
-    void add_run_fast_right();
-    void add_run_left();
-    void add_run_fast_left();
-    void add_shoot();
+    void add_command(std::shared_ptr<Command> command);
 
     // ESTADOS
     void set_state(State* state);

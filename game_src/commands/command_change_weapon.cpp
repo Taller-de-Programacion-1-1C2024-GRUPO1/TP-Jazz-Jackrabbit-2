@@ -7,7 +7,7 @@ bool ChangeWeapon::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void ChangeWeapon::execute_Command(Map& map) { map.execute_change_weapon(this->playerID); }
+void ChangeWeapon::execute_Command(Rabbit& rabbit) { rabbit.change_weapon(); }
 
 void ChangeWeapon::send(Protocol& protocol) { protocol.send_Command(this); }
 

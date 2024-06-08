@@ -14,7 +14,7 @@ private:
 
 public:
     Move(int playerID, int dir);
-    void execute_Command(Map& map) override;
+    void execute_Command(Rabbit& rabbit) override;
     bool execute_Command(bool* cheatON, bool& needsMove) override;
     void send(Protocol& protocol) override;
     int get_playerId() override;

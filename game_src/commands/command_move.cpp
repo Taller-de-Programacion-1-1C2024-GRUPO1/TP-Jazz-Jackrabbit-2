@@ -7,7 +7,13 @@ bool Move::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void Move::execute_Command(Map& map) { map.execute_move(playerID, dir); }
+void Move::execute_Command(Rabbit& rabbit) {
+    if (dir == RIGHT) {
+        rabbit.run_right();
+    } else {
+        rabbit.run_left();
+    }
+}
 
 void Move::send(Protocol& protocol) { protocol.send_Command(this); }
 

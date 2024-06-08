@@ -2,7 +2,7 @@
 
 Jump::Jump(int id, int dir): Command(id), dir(dir) {}
 
-void Jump::execute_Command(Map& map) { map.execute_jump(playerID); }
+void Jump::execute_Command(Rabbit& rabbit) { rabbit.jump(); }
 
 /*
 bool Jump::execute_Command(bool* cheatOn, bool& needsMove) {

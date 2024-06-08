@@ -7,7 +7,13 @@ bool MoveFaster::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
-void MoveFaster::execute_Command(Map& map) { map.execute_move_faster(playerID, dir); }
+void MoveFaster::execute_Command(Rabbit& rabbit) {
+    if (dir == RIGHT) {
+        rabbit.run_fast_right();
+    } else {
+        rabbit.run_fast_left();
+    }
+}
 
 void MoveFaster::send(Protocol& protocol) { protocol.send_Command(this); }
 

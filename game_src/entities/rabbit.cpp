@@ -1,6 +1,7 @@
 #include "rabbit.h"
 
 #include "../../server_src/config.h"
+#include "../commands/command.h"
 #include "../map.h"
 
 #include "bullet.h"
@@ -86,8 +87,10 @@ void Rabbit::update() {
 
     update_action();
 
+
     // NO HAY INERCIA EN EJE X
     spe_x = 0;
+
     /*
     printf(action == STAND          ? "STAND\n" :
            action == RUN            ? "RUN\n" :
@@ -151,12 +154,10 @@ void Rabbit::update_action() {
 
     // CAMBIO DE ACCION
 
-    if (!on_floor) {
-        if (spe_y > 0) {
-            action = FALLING;
-        } else if (spe_y < 0) {
-            action = JUMPING;
-        }
+    if (spe_y > 0) {
+        action = FALLING;
+    } else if (spe_y < 0) {
+        action = JUMPING;
     } else if (spe_x == 0) {
         action = STAND;
     } else if (spe_x == PLAYER_SPEED || spe_x == -PLAYER_SPEED) {
@@ -164,9 +165,6 @@ void Rabbit::update_action() {
     } else if (spe_x == PLAYER_SPEED * 2 || spe_x == -PLAYER_SPEED * 2) {
         action = RUN_FAST;
     }
-
-
-    // action = RUN_FAST;
 }
 
 void Rabbit::update_guns() {
@@ -182,31 +180,9 @@ void Rabbit::imprimir_posicion() { printf("X: %d Y: %d\n", pos_x, pos_y); }
 
 void Rabbit::handle_events() {
     while (!events_queue.empty()) {
-        int event = events_queue.front();
+        std::shared_ptr<Command> event = events_queue.front();
         events_queue.pop();
-        printf("Event: %d\n", event);
-        switch (event) {
-            case EVENT_JUMP:
-                jump();
-                break;
-            case EVENT_RUN_RIGHT:
-                run_right();
-                break;
-            case EVENT_RUN_FAST_RIGHT:
-                run_fast_right();
-                break;
-            case EVENT_RUN_LEFT:
-                run_left();
-                break;
-            case EVENT_RUN_FAST_LEFT:
-                run_fast_left();
-                break;
-            case EVENT_SHOOT:
-                shoot();
-                break;
-            default:
-                break;
-        }
+        event->execute_Command(*this);
     }
 }
 // JUMP
@@ -269,12 +245,7 @@ void Rabbit::special_attack() { state->special_attack(); }
 void Rabbit::change_weapon() {}
 
 // COLA
-void Rabbit::add_jump() { events_queue.push(EVENT_JUMP); }
-void Rabbit::add_run_right() { events_queue.push(EVENT_RUN_RIGHT); }
-void Rabbit::add_run_fast_right() { events_queue.push(EVENT_RUN_FAST_RIGHT); }
-void Rabbit::add_run_left() { events_queue.push(EVENT_RUN_LEFT); }
-void Rabbit::add_run_fast_left() { events_queue.push(EVENT_RUN_FAST_LEFT); }
-void Rabbit::add_shoot() { events_queue.push(EVENT_SHOOT); }
+void Rabbit::add_command(std::shared_ptr<Command> command) { events_queue.push(command); }
 
 void Rabbit::set_state(State* new_state) {
     delete state;

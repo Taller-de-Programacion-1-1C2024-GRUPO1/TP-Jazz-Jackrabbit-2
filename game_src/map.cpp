@@ -232,47 +232,10 @@ int Map::get_rabbit_position_by_id(int id) {
     return -1;
 }
 
-void Map::execute_jump(int playerID) {
-    int player_pos = get_rabbit_position_by_id(playerID);
-    if (player_pos != -1) {
-        players[player_pos]->add_jump();
-    }
+void Map::add_command(std::shared_ptr<Command> command) {
+    int player_pos = get_rabbit_position_by_id(command->get_playerId());
+    players[player_pos]->add_command(command);
 }
 
-void Map::execute_move(int playerID, int dir) {
-    int player_pos = get_rabbit_position_by_id(playerID);
-    if (player_pos != -1) {
-        if (dir == LEFT) {
-            players[player_pos]->add_run_left();
-        } else {
-            players[player_pos]->add_run_right();
-        }
-    }
-}
-
-void Map::execute_move_faster(int playerID, int dir) {
-    int player_pos = get_rabbit_position_by_id(playerID);
-    if (player_pos != -1) {
-        if (dir == LEFT) {
-            players[player_pos]->add_run_fast_left();
-        } else {
-            players[player_pos]->add_run_fast_right();
-        }
-    }
-}
-
-void Map::execute_change_weapon(int playerID) {
-    int player_pos = get_rabbit_position_by_id(playerID);
-    if (player_pos != -1) {
-        players[player_pos]->change_weapon();
-    }
-}
-
-void Map::execute_shoot(int playerID) {
-    int player_pos = get_rabbit_position_by_id(playerID);
-    if (player_pos != -1) {
-        players[player_pos]->shoot();
-    }
-}
 
 Map::~Map() {}
