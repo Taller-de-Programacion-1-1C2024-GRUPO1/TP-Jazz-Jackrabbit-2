@@ -198,9 +198,9 @@ int ClientDrawer::run(int player_id) try {
                 // OK, let's keep the last one
             }
 
-            //RABBITS UPDATE
+            // RABBITS UPDATE
             std::set<int> rabbitIds;
-            for (const auto& pair : rabbits) {
+            for (const auto& pair: rabbits) {
                 rabbitIds.insert(pair.first);
             }
             for (const auto& rabbit: snapshot.rabbits) {
@@ -241,9 +241,9 @@ int ClientDrawer::run(int player_id) try {
                 rabbits.erase(id);
             }
 
-            //ENEMIES UPDATE
+            // ENEMIES UPDATE
             std::set<int> enemyIds;
-            for (const auto& pair : enemies) {
+            for (const auto& pair: enemies) {
                 enemyIds.insert(pair.first);
             }
             for (const auto& enemy: snapshot.enemies) {
@@ -268,9 +268,9 @@ int ClientDrawer::run(int player_id) try {
                 enemies.erase(id);
             }
 
-            //PROJECTILES UPDATE
+            // PROJECTILES UPDATE
             std::set<int> projectilesIds;
-            for (const auto& pair : projectiles) {
+            for (const auto& pair: projectiles) {
                 projectilesIds.insert(pair.first);
             }
             for (const auto& projectile: snapshot.projectiles) {
@@ -290,14 +290,14 @@ int ClientDrawer::run(int player_id) try {
                     projectiles.emplace(projectile.id, newProjectile);
                 }
             }
-            for (const auto& id : projectilesIds) {
+            for (const auto& id: projectilesIds) {
                 delete projectiles[id];
                 projectiles.erase(id);
             }
 
-            //SUPPLIES UPDATE
+            // SUPPLIES UPDATE
             std::set<int> suppliesIds;
-            for (const auto& pair : supplies) {
+            for (const auto& pair: supplies) {
                 suppliesIds.insert(pair.first);
             }
             for (const auto& valuable: snapshot.supplies) {
@@ -320,7 +320,7 @@ int ClientDrawer::run(int player_id) try {
                     supplies.emplace(valuable.id, newValuable);
                 }
             }
-            for (const auto& id : suppliesIds) {
+            for (const auto& id: suppliesIds) {
                 delete supplies[id];
                 supplies.erase(id);
             }

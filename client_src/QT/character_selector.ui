@@ -13,57 +13,6 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QPushButton" name="btnCharacterJazz">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>310</y>
-     <width>81</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">qproperty-icon: url(':/characters/jazz_character.png');
-qproperty-iconSize: 200px 250px; </string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnCharacterSpaz">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>310</y>
-     <width>81</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">qproperty-icon: url(':/characters/spaz_character.png');
-qproperty-iconSize: 200px 250px; </string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnCharacterLori">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>310</y>
-     <width>81</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">qproperty-icon: url(':/characters/lori_character.png');
-qproperty-iconSize: 200px 250px; </string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="txtSelectMap">
    <property name="geometry">
     <rect>
@@ -76,6 +25,57 @@ qproperty-iconSize: 200px 250px; </string>
    <property name="text">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;Select a character&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>290</y>
+     <width>650</width>
+     <height>258</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="btnCharacterJazz">
+      <property name="styleSheet">
+       <string notr="true">qproperty-icon: url(':/characters/jazz_character.png');
+qproperty-iconSize: 200px 250px; 
+background: transparent;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnCharacterLori">
+      <property name="styleSheet">
+       <string notr="true">qproperty-icon: url(':/characters/lori_character.png');
+qproperty-iconSize: 200px 250px; 
+background: transparent;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btnCharacterSpaz">
+      <property name="styleSheet">
+       <string notr="true">qproperty-icon: url(':/characters/spaz_character.png');
+qproperty-iconSize: 200px 250px; 
+background: transparent;
+border: none;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

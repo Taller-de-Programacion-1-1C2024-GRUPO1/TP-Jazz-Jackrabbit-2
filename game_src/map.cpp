@@ -149,7 +149,6 @@ std::vector<RabbitSnapshot> Map::get_rabbit_snapshot() {
 }
 
 std::vector<ProjectileSnapshot> Map::get_projectile_snapshot() {
-
     std::vector<ProjectileSnapshot> projectile_snapshots;
     for (auto bullet: bullets) {
         projectile_snapshots.push_back(bullet->get_snapshot());
@@ -158,15 +157,14 @@ std::vector<ProjectileSnapshot> Map::get_projectile_snapshot() {
 }
 
 std::vector<SupplySnapshot> Map::get_supply_snapshot() {
-
     std::vector<SupplySnapshot> supply_snapshots;
     for (auto item: items) {
         supply_snapshots.push_back(item->get_snapshot());
     }
     return supply_snapshots;
 }
-std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
 
+std::vector<EnemySnapshot> Map::get_enemy_snapshot() {
     std::vector<EnemySnapshot> enemy_snapshots;
     for (auto enemy: enemies) {
         enemy_snapshots.push_back(enemy->get_snapshot());

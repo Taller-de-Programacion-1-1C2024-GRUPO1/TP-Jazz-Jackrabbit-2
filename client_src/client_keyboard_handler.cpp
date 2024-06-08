@@ -12,20 +12,21 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     }
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
+
     if (state[SDL_SCANCODE_RIGHT]) {
-        if (state[SDL_SCANCODE_LSHIFT]){
+        if (state[SDL_SCANCODE_LSHIFT]) {
             q_cmds.push(std::make_unique<MoveFaster>(client_id, RIGHT));
         } else {
             q_cmds.push(std::make_unique<Move>(client_id, RIGHT));
         }
     } else if (state[SDL_SCANCODE_LEFT]) {
-        if (state[SDL_SCANCODE_LSHIFT]){
+        if (state[SDL_SCANCODE_LSHIFT]) {
             q_cmds.push(std::make_unique<MoveFaster>(client_id, LEFT));
         } else {
             q_cmds.push(std::make_unique<Move>(client_id, LEFT));
         }
     }
-    if (state[SDL_SCANCODE_UP] ){
+    if (state[SDL_SCANCODE_UP]) {
         q_cmds.push(std::make_unique<Jump>(client_id, LEFT));
     }
     if (state[SDL_SCANCODE_SPACE]) {
@@ -38,7 +39,6 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
         game_running = false;
     } else {
     }
-
 
 
     /*

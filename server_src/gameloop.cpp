@@ -15,7 +15,6 @@ Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
 }
 
 void Gameloop::send_initial_snapshots() {
-
     // Se debe leer el mapa elegido por el usuario y crearlo
     Snapshot snapshot = map.get_init_snapshot();
 
@@ -29,7 +28,7 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 }
 
 void Gameloop::run() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     while (playing) {
         try {
@@ -38,6 +37,7 @@ void Gameloop::run() {
             while (client_cmds_queue.try_pop(game_command)) {
                 game_command->execute_Command(map);
             }
+
             map.update();
 
             push_all_players(map.get_snapshot());
@@ -48,11 +48,21 @@ void Gameloop::run() {
                 std::this_thread::sleep_for(
                         std::chrono::milliseconds(FRAME_DELAY - duration.count()));
             }
+            check_players();
 
         } catch (ClosedQueue& err) {
+            *playing = false;
+        } catch (const std::exception& e) {
+            std::cerr << "Error in gameloop: " << e.what() << std::endl;
             *playing = false;
         }
     }
 }
 
 void Gameloop::stop() { *playing = false; }
+
+void Gameloop::check_players() {
+    if (broadcaster_snapshots.is_empty()) {
+        *playing = false;
+    }
+}

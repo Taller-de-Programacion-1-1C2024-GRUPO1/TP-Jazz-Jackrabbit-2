@@ -18,8 +18,6 @@ void Player::start() {
     server_receiver.start();
 }
 
-Queue<std::shared_ptr<Snapshot>>& Player::get_snapshots_queue() { return snapshots_queue; }
-
 void Player::send_player_id() { container_protocol->protocol.send_response(player_id); }
 
 int Player::get_id() { return player_id; }

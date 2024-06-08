@@ -46,6 +46,8 @@ public:
 
     void stop();
 
+    void check_players();
+
     // ~Gameloop();
 };
 

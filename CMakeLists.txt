@@ -39,23 +39,17 @@ add_subdirectory(game_src)
 
 add_executable(jazz_server server_main.cpp)
 add_executable(jazz_client client_main.cpp)
-add_executable(example_sdl client_src/example_sdl.cpp)
-add_executable(example_sdl2pp client_src/example_sdl2pp.cpp)
 
 # Vincular bibliotecas necesarias
 target_link_libraries(jazz_server common_lib server_lib)
 target_link_libraries(jazz_client common_lib client_lib SDL2pp Qt5::Widgets)
-target_link_libraries(example_sdl common_lib client_lib SDL2pp)
-target_link_libraries(example_sdl2pp common_lib client_lib SDL2pp)
 
 target_include_directories(jazz_client PRIVATE client_src)
 target_include_directories(jazz_client PRIVATE common_src)
-target_include_directories(example_sdl PRIVATE common_src)
-target_include_directories(example_sdl2pp PRIVATE common_src)
 
 set_target_properties(jazz_client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 
-install(TARGETS jazz_client jazz_server example_sdl example_sdl2pp
+install(TARGETS jazz_client jazz_server
         RUNTIME DESTINATION /usr/bin
 )
 
@@ -72,8 +66,6 @@ install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
 )
 
 
-
-
 ###################################################################
 #install(FILES ${CMAKE_SOURCE_DIR}/external/config/client_config.yml
 #        DESTINATION /etc/jazz
@@ -83,8 +75,6 @@ install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
 #        DESTINATION /etc/jazz
 #)
 ###################################################################
-
-
 
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/client_src
         DESTINATION /var/jazz

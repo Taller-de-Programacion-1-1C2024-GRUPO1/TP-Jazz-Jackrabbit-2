@@ -31,7 +31,6 @@ public:
            BroadcasterSnapshots& broadcaster_snapshots,
            Queue<std::shared_ptr<Command>>& client_cmds_queue);
     void start();
-    Queue<std::shared_ptr<Snapshot>>& get_snapshots_queue();
     void send_player_id();
     int get_id();
     bool is_dead();

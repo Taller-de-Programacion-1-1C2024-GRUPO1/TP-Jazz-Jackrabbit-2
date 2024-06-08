@@ -31,17 +31,21 @@ ClientLobby::~ClientLobby() { delete ui; }
 void ClientLobby::on_btnCreateMatch_clicked() {
     hide();
     CharacterSelector characterSelector;
-    connect(&characterSelector, &CharacterSelector::windowClosed, this,
-            &ClientLobby::handleWindowClosed);
-    connect(&characterSelector, &CharacterSelector::characterSelected, this,
-            &ClientLobby::handleCharacterSelected);
+    connect(&characterSelector, &CharacterSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
+    connect(&characterSelector, &CharacterSelector::characterSelected, this, &ClientLobby::handleCharacterSelected);
 
     if (characterSelector.exec() == QDialog::Accepted) {
         MapSelector map_selector(q_cmds, q_responses, selected_character);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
-        if (map_selector.exec() == QDialog::Accepted) {
-            // ENVIO COMANDO E INICIO PARTIDA
+        int result = map_selector.exec();
+        if (result == QDialog::Accepted) {
             QApplication::exit(0);
+        } else if (result == -2) {
+            // Map Creator exit case
+            QApplication::exit(-2);
+        } else if (result == -3) {
+            // Map Creator was closed without starting the designer
+            // No action needed
         } else {
             std::cerr << "Error al crear partida, map_selector falló" << std::endl;
         }
@@ -76,7 +80,7 @@ void ClientLobby::on_btnJoinMatch_clicked() {
     }
 }
 
-void ClientLobby::on_btnQuit_clicked() { QApplication::exit(1); }
+void ClientLobby::on_btnQuit_clicked() { QApplication::exit(-1); }
 
 
 void ClientLobby::handleCharacterSelected(ChampionType character) {
@@ -84,4 +88,4 @@ void ClientLobby::handleCharacterSelected(ChampionType character) {
 }
 
 
-void ClientLobby::handleWindowClosed() { QApplication::exit(1); }
+void ClientLobby::handleWindowClosed() { QApplication::exit(-1); }

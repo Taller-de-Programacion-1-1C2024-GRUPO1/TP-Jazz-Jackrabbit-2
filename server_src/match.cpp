@@ -62,8 +62,8 @@ void Match::run() {
         gameloop.run();
 
         clients_cmd_queue.close();
-        delete_players();
         *status = MATCH_OVER;
+        delete_players();
 
     } catch (const ClosedQueue& err) {
         std::cerr << "Error: " << err.what() << std::endl;
@@ -91,4 +91,4 @@ bool Match::has_started() { return (*status == MATCH_ALIVE); }
 
 std::string Match::get_match_name() { return this->match_name; }
 
-Match::~Match() {}
+Match::~Match() { delete_players(); }

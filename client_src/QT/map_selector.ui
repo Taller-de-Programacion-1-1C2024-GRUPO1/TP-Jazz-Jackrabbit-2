@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>20</y>
+     <y>10</y>
      <width>801</width>
      <height>191</height>
     </rect>
@@ -30,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>380</y>
+     <y>400</y>
      <width>200</width>
      <height>150</height>
     </rect>
@@ -51,7 +51,7 @@ font: 20pt;</string>
    <property name="geometry">
     <rect>
      <x>300</x>
-     <y>380</y>
+     <y>400</y>
      <width>200</width>
      <height>150</height>
     </rect>
@@ -72,7 +72,7 @@ font: 20pt;</string>
    <property name="geometry">
     <rect>
      <x>510</x>
-     <y>380</y>
+     <y>400</y>
      <width>200</width>
      <height>150</height>
     </rect>
@@ -94,8 +94,8 @@ map</string>
   <widget class="QSpinBox" name="spinNumberOfPlayers">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>300</y>
+     <x>180</x>
+     <y>330</y>
      <width>71</width>
      <height>61</height>
     </rect>
@@ -120,34 +120,44 @@ background-color: rgba(255, 255, 255, 100);
   <widget class="QLabel" name="labelNumberOfPlayers">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>300</y>
-     <width>171</width>
+     <x>0</x>
+     <y>280</y>
+     <width>400</width>
      <height>61</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Number &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;of players:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;players:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QLabel" name="labelMatchName">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>290</y>
-     <width>171</width>
+     <x>400</x>
+     <y>280</y>
+     <width>400</width>
      <height>61</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Match&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;name:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Match name:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="txtMatchName">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>300</y>
+     <x>520</x>
+     <y>340</y>
      <width>151</width>
      <height>41</height>
     </rect>
