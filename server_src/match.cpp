@@ -91,4 +91,4 @@ bool Match::has_started() { return (*status == MATCH_ALIVE); }
 
 std::string Match::get_match_name() { return this->match_name; }
 
-Match::~Match() {}
+Match::~Match() { delete_players(); }
