@@ -21,7 +21,7 @@ class MonitorMatches {
 private:
     MapReader map_reader;
     std::map<std::string, std::shared_ptr<MatchInfo>> matches;
-    std::map<std::string, Map> maps;
+    std::map<std::string, std::shared_ptr<Map>> maps;
     std::mutex mutex;
 
     void kill_dead_matches();
