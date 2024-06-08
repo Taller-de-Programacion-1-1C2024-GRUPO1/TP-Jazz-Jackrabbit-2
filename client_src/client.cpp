@@ -26,8 +26,11 @@ void Client::run(int argc, char* argv[]) {
     if (result == 0) {
         // SDL
         drawer.run(player_id);
+    } else if (result == -2) {
+        // create map
+        std::cout << "create map" << std::endl;
     } else {
-        // error
+        std::cerr << "Cerrando QT" << std::endl;
     }
 }
 

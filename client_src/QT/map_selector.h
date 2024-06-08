@@ -16,6 +16,7 @@
 #include "../client_sender.h"
 
 #include "character_selector.h"
+#include "map_creator_lobby.h"
 #include "waiting_room.h"
 
 namespace Ui {
@@ -42,6 +43,8 @@ private slots:
     void on_btnMapCreate_clicked();
 
     void start_match();
+
+    void handleWindowClosed();
 
 protected:
     void closeEvent(QCloseEvent* event) override;
