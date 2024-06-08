@@ -12,8 +12,6 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     }
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
-
-
     if (state[SDL_SCANCODE_RIGHT]) {
         if (state[SDL_SCANCODE_LSHIFT]){
             q_cmds.push(std::make_unique<MoveFaster>(client_id, RIGHT));

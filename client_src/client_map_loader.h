@@ -49,9 +49,9 @@ public:
                             destRect.w = BLOCK_SIZE;
                             destRect.h = BLOCK_SIZE;
 
-                            tiles.push_back(std::make_unique<Drawable>(renderer, texturePath,
-                                                                       colorKey, cameraPosition,
-                                                                       srcRect, destRect));
+                            std::unique_ptr<Drawable> drawable = std::make_unique<Drawable>(renderer, cameraPosition, srcRect, destRect);
+                            drawable->setTexture(texturePath, colorKey);
+                            tiles.push_back(std::move(drawable));
                         }
                         x++;
                     }

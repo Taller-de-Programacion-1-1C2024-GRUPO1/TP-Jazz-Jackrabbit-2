@@ -8,7 +8,7 @@
 class Drawable {
 protected:
     SDL2pp::Renderer& renderer;
-    SDL2pp::Texture texture;
+    std::unique_ptr<SDL2pp::Texture> texture;
     SDL2pp::Point& cameraPosition;
 
     // Guarda: (x,y,w,h) en el sprite de texturas
@@ -21,10 +21,10 @@ protected:
 
 public:
     Drawable() = delete;
-    Drawable(SDL2pp::Renderer& renderer, const std::string& path, const SDL2pp::Color& colorKey,
-             SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect);
+    Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect);
     Drawable(const Drawable& other) = delete;
 
+    void setTexture(const std::string& path, const SDL2pp::Color& colorKey);
     void render();
     void update();
     void setPosition(int x, int y);

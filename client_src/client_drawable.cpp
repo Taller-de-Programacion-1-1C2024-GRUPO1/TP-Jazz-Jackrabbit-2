@@ -6,18 +6,20 @@
 
 #include "client_shifting_drawable.h"
 
-Drawable::Drawable(SDL2pp::Renderer& renderer, const std::string& path,
-                   const SDL2pp::Color& colorKey, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
-                   SDL2pp::Rect& onMapRect):
+Drawable::Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, 
+                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect):
         renderer(renderer),
-        texture(renderer, SDL2pp::Surface(path)),
+        texture(nullptr),
         cameraPosition(cp),
         textureRect(textureRect),
         onMapRect(onMapRect) {
+}
+
+void Drawable::setTexture(const std::string& path, const SDL2pp::Color& colorKey) {
     SDL2pp::Surface surface(path);
     Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
     SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
-    this->texture = SDL2pp::Texture(renderer, surface);
+    texture = std::make_unique<SDL2pp::Texture>(renderer, surface);
 }
 
 SDL2pp::Rect Drawable::adjustPosition() {
@@ -27,7 +29,8 @@ SDL2pp::Rect Drawable::adjustPosition() {
     return adjustedOnMapRect;
 }
 
-void Drawable::render() { renderer.Copy(texture, textureRect, adjustPosition()); }
+void Drawable::render() { 
+    renderer.Copy(*texture, textureRect, adjustPosition()); }
 
 void Drawable::update() {
     int mapWidth = 1120;

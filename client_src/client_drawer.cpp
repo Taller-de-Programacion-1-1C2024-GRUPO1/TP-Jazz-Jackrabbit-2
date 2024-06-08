@@ -26,94 +26,6 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-
-void ClientDrawer::setAnimationFromSnapshot(const RabbitSnapshot& snapshot,
-                                            ShiftingDrawable* drawable) {
-    switch (snapshot.state) {
-        case ALIVE:
-            switch (snapshot.action) {
-                case STAND:
-                    drawable->setAnimation("Stand");
-                    break;
-                case RUN:
-                    drawable->setAnimation("Run");
-                    break;
-                case RUN_FAST:
-                    drawable->setAnimation("Dash");
-                    break;
-                case FALLING:
-                    drawable->setAnimation("Run");
-                    break;
-                case JUMPING:
-                    drawable->setAnimation("Run");
-                    break;
-            }
-            break;
-        case RECIEVED_DAMAGE:
-            drawable->setAnimation("Hurt");
-            break;
-        case INTOXICATED:
-            std::cout << "Intoxicado " << std::endl;
-            switch (snapshot.action) {
-                case STAND:
-                    drawable->setAnimation("Intoxicated-Stand");
-                    break;
-                case RUN:
-                    drawable->setAnimation("Intoxicated-Run");
-                    break;
-                case RUN_FAST:
-                    drawable->setAnimation("Intoxicated-Run");
-                    break;
-                case FALLING:
-                    drawable->setAnimation("Intoxitamos nuestrocated-Stand");
-                    break;
-                case JUMPING:
-                    drawable->setAnimation("Intoxicated-Stand");
-                    break;
-            }
-            break;
-        case DEAD:
-            drawable->setAnimation("Die");
-            break;
-    }
-}
-
-void loadAnimationsForCharacter(std::string& animationsPath, std::string& texturePath,
-                                const int character_id) {
-    switch (character_id) {
-        case Jazz:
-            animationsPath = "../external/animations/jazz.yml";
-            texturePath = JAZZ_IMG;
-            break;
-        case Spaz:
-            animationsPath = "../external/animations/spaz.yml";
-            texturePath = SPAZ_IMG;
-            break;
-        case Lori:
-            animationsPath = "../external/animations/lori.yml";
-            texturePath = LORI_IMG;
-            break;
-    }
-}
-
-void loadAnimationForEnemy(std::string& animationsPath, std::string& texturePath,
-                           const int enemy_id) {
-    switch (enemy_id) {
-        case LIZARD:
-            animationsPath = "../external/animations/lizard.yml";
-            texturePath = ENEMIES_IMG;
-            break;
-        case CRAB:
-            animationsPath = "../external/animations/crab.yml";
-            texturePath = ENEMIES_IMG;
-            break;
-        case TURTLE:
-            animationsPath = "../external/animations/turtle.yml";
-            texturePath = TURTLE_IMG;
-            break;
-    }
-}
-
 void loadAnimationForItem(std::string& animationsPath, const int supply_id) {
     switch (supply_id) {
         case COIN:
@@ -167,7 +79,6 @@ int ClientDrawer::run(int player_id) try {
     // Background image
     Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
 
-    SDL_Color characterColor = {44, 102, 150, 255};   // Color en formato RGBA
     SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
     SDL_Color mapColor = {87, 0, 203, 0};
     MapLoader mapLoader(renderer);
@@ -206,6 +117,12 @@ int ClientDrawer::run(int player_id) try {
     for (auto& rabbit: initial_snapshot.rabbits) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, 64, 64);
+        DrawableRabbit* newRabbit =
+                    new DrawableRabbit(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+        
+        newRabbit->setCharacterFromSnapshot(Lori);
+        newRabbit->setAnimationFromSnapshot(rabbit);
+        newRabbit->setDirection(rabbit.direction);
         if (rabbit.id == client_id) {
             score = rabbit.score;
 
@@ -214,36 +131,17 @@ int ClientDrawer::run(int player_id) try {
             ammoLeft.setAmmo(rabbit.ammo);
             playerPosition.x = rabbit.pos_x;
             playerPosition.y = rabbit.pos_y;
-
-            loadAnimationsForCharacter(animationsPath, texturePath, 1);
-            client_rabbit =
-                    new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
-                                         textureRect, onMapRect, soundManager);
-
-            client_rabbit->loadAnimations(animationsPath);
-
-            setAnimationFromSnapshot(rabbit, client_rabbit);
-            client_rabbit->setDirection(rabbit.direction);
-
+            client_rabbit = newRabbit;
         } else {
-            loadAnimationsForCharacter(animationsPath, texturePath, rabbit.champion_type);
-            ShiftingDrawable* newRabbit =
-                    new ShiftingDrawable(renderer, texturePath, characterColor, cameraPosition,
-                                         textureRect, onMapRect, soundManager);
-            newRabbit->loadAnimations(animationsPath);
-            setAnimationFromSnapshot(rabbit, newRabbit);
-            newRabbit->setDirection(rabbit.direction);
             rabbits.emplace(rabbit.id, newRabbit);
         }
     }
     for (auto& enemy: initial_snapshot.enemies) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, 64, 64);
-        loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
-        ShiftingDrawable* newEnemy =
-                new ShiftingDrawable(renderer, texturePath, enemyAndItemsColor, cameraPosition,
-                                     textureRect, onMapRect, soundManager);
-        newEnemy->loadAnimations(animationsPath);
+        DrawableEnemy* newEnemy =
+                new DrawableEnemy(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+        newEnemy->setEnemyFromSnapshot(enemy.enemy_type);
         newEnemy->setAnimation("Walk");
         newEnemy->setDirection(enemy.direction);
         enemies.emplace(enemy.id, newEnemy);
@@ -252,8 +150,8 @@ int ClientDrawer::run(int player_id) try {
         SDL2pp::Rect textureRect(0, 0, 32, 32);
         SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, 32, 32);
         ShiftingDrawable* newProjectile =
-                new ShiftingDrawable(renderer, PROJECTILES_IMG, enemyAndItemsColor, cameraPosition,
-                                     textureRect, onMapRect, soundManager);
+                new ShiftingDrawable(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+        newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
         WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
         newProjectile->setAnimation("Move");
         projectiles.emplace(projectile.id, newProjectile);
@@ -262,9 +160,9 @@ int ClientDrawer::run(int player_id) try {
         SDL2pp::Rect textureRect(0, 0, 32, 32);
         SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
         ShiftingDrawable* newValuable =
-                new ShiftingDrawable(renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition,
-                                     textureRect, onMapRect, soundManager);
+                new ShiftingDrawable(renderer, cameraPosition, textureRect, onMapRect, soundManager);
         loadAnimationForItem(animationsPath, valuable.supply_type);
+        newValuable->setTexture(ITEMS_IMG, enemyAndItemsColor);
         newValuable->loadAnimations(animationsPath);
         newValuable->setAnimation("Flip");
         supplies.emplace(valuable.id, newValuable);
@@ -312,7 +210,7 @@ int ClientDrawer::run(int player_id) try {
                     ammoLeft.setWeapon(rabbit.weapon);
                     banner.setCurrentLives(rabbit.lives);
                     client_rabbit->setPosition(rabbit.pos_x, rabbit.pos_y);
-                    setAnimationFromSnapshot(rabbit, client_rabbit);
+                    client_rabbit->setAnimationFromSnapshot(rabbit);
                     client_rabbit->setDirection(rabbit.direction);
                     playerPosition.x = rabbit.pos_x;
                     playerPosition.y = rabbit.pos_y;
@@ -321,7 +219,7 @@ int ClientDrawer::run(int player_id) try {
                     auto it = rabbits.find(rabbit.id);
                     if (it != rabbits.end()) {
                         it->second->setPosition(rabbit.pos_x, rabbit.pos_y);
-                        setAnimationFromSnapshot(rabbit, it->second);
+                        it->second->setAnimationFromSnapshot(rabbit);
                         it->second->setDirection(rabbit.direction);
                         rabbitIds.erase(rabbit.id);
                     } else {
@@ -329,13 +227,10 @@ int ClientDrawer::run(int player_id) try {
                         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
                         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width,
                                                rabbit_height);
-                        loadAnimationsForCharacter(animationsPath, texturePath,
-                                                   rabbit.champion_type);
-                        ShiftingDrawable* newRabbit = new ShiftingDrawable(
-                                renderer, texturePath, characterColor, cameraPosition, textureRect,
-                                onMapRect, soundManager);
-                        newRabbit->loadAnimations(animationsPath);
-                        setAnimationFromSnapshot(rabbit, newRabbit);
+                        DrawableRabbit* newRabbit = new DrawableRabbit( renderer, cameraPosition, textureRect, 
+                                                    onMapRect, soundManager);
+                        newRabbit->setCharacterFromSnapshot(rabbit.champion_type);
+                        newRabbit->setAnimationFromSnapshot(rabbit);
                         newRabbit->setDirection(rabbit.direction);
                         rabbits.emplace(rabbit.id, newRabbit);
                     }
@@ -361,11 +256,8 @@ int ClientDrawer::run(int player_id) try {
                     // Crear un nuevo enemigo
                     SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
                     SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
-                    loadAnimationForEnemy(animationsPath, texturePath, enemy.enemy_type);
-                    ShiftingDrawable* newEnemy = new ShiftingDrawable(
-                            renderer, texturePath, enemyAndItemsColor, cameraPosition, textureRect,
-                            onMapRect, soundManager);
-                    newEnemy->loadAnimations(animationsPath);
+                    DrawableEnemy* newEnemy = new DrawableEnemy(renderer, cameraPosition, textureRect, onMapRect, soundManager);
+                    newEnemy->setEnemyFromSnapshot(enemy.enemy_type);
                     newEnemy->setAnimation("Walk");
                     newEnemy->setDirection(enemy.direction);
                     enemies.emplace(enemy.id, newEnemy);
@@ -390,9 +282,9 @@ int ClientDrawer::run(int player_id) try {
                     // Crear un nuevo proyectil
                     SDL2pp::Rect textureRect(0, 0, 32, 32);
                     SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, 32, 32);
-                    ShiftingDrawable* newProjectile = new ShiftingDrawable(
-                            renderer, PROJECTILES_IMG, enemyAndItemsColor, cameraPosition,
+                    ShiftingDrawable* newProjectile = new ShiftingDrawable(renderer, cameraPosition,
                             textureRect, onMapRect, soundManager);
+                    newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
                     WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
                     newProjectile->setAnimation("Move");
                     projectiles.emplace(projectile.id, newProjectile);
@@ -418,9 +310,11 @@ int ClientDrawer::run(int player_id) try {
                     SDL2pp::Rect textureRect(0, 0, 32, 32);
                     SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, 32, 32);
                     ShiftingDrawable* newValuable = new ShiftingDrawable(
-                            renderer, ITEMS_IMG, enemyAndItemsColor, cameraPosition, textureRect,
+                            renderer, cameraPosition, textureRect,
                             onMapRect, soundManager);
+                    
                     loadAnimationForItem(animationsPath, valuable.supply_type);
+                    newValuable->setTexture(ITEMS_IMG, enemyAndItemsColor);
                     newValuable->loadAnimations(animationsPath);
                     newValuable->setAnimation("Flip");
                     supplies.emplace(valuable.id, newValuable);

@@ -4,11 +4,10 @@
 
 #include <yaml-cpp/yaml.h>
 
-ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, const std::string& path,
-                                   const SDL_Color& colorKey, SDL2pp::Point& cp,
+ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp,
                                    SDL2pp::Rect& textureRect, SDL2pp::Rect& onMapRect,
                                    SoundManager& soundManager):
-        Drawable(renderer, path, colorKey, cp, textureRect, onMapRect),
+        Drawable(renderer, cp, textureRect, onMapRect),
         currentAnimation(new Animation()),
         angle(0),
         direction(0),
@@ -41,7 +40,7 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
 }
 
 void ShiftingDrawable::render() {
-    renderer.Copy(texture, textureRect, adjustPosition(), angle, SDL2pp::Point(0, 0),
+    renderer.Copy(*texture, textureRect, adjustPosition(), angle, SDL2pp::Point(0, 0),
                   direction == LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 

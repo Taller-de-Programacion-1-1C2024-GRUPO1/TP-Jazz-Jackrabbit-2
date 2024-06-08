@@ -15,12 +15,7 @@
 #define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
 #define MUSIC_FILE "../client_src/resources/sounds/music.wav"
 
-#define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
-#define LORI_IMG "../client_src/resources/characters/Lori.png"
-#define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
-#define ENEMIES_IMG "../client_src/resources/enemies/Enemies.png"
 #define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
-#define TURTLE_IMG "../client_src/resources/enemies/turtle.png"
 #define CASTLE_TILE "../client_src/resources/tiles/carrotus.png"
 
 #define FONT "../client_src/resources/fonts/04B_30__.ttf"
@@ -57,7 +52,8 @@
 #include "../game_src/commands/command_shoot.h"
 
 #include "client_number_images.h"
-
+#include "client_drawable_rabbit.h"
+#include "client_drawable_enemy.h"
 
 using SDL2pp::Chunk;
 using SDL2pp::Font;
@@ -86,11 +82,11 @@ private:
     int client_id;
     int score;
     int lives;
-    ShiftingDrawable* client_rabbit;
+    DrawableRabbit* client_rabbit;
 
     // Game data
-    std::map<int, ShiftingDrawable*> rabbits;
-    std::map<int, ShiftingDrawable*> enemies;
+    std::map<int, DrawableRabbit*> rabbits;
+    std::map<int, DrawableEnemy*> enemies;
     std::map<int, ShiftingDrawable*> projectiles;
     std::map<int, ShiftingDrawable*> supplies;
     int rabbit_width;
@@ -102,7 +98,6 @@ public:
     int run(int player_id);
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
-    void setAnimationFromSnapshot(const RabbitSnapshot& snapshot, ShiftingDrawable* drawable);
     void showLoadingScreen(Renderer& renderer);
 
     //~ClientDrawer();

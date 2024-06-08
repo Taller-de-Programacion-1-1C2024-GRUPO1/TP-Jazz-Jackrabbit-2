@@ -66,10 +66,7 @@ public:
         map_dimensions.rabbit_amount = rabbit_ammount;
         map_dimensions.rabbit_width = rabbit_width;
         map_dimensions.rabbit_height = rabbit_height;
-        std::cout << "Antes de Setear map" << std::endl;
-        std::cout << "Map data size: " << map_data.map_data.size() << std::endl;
         map_dimensions.map_data = map_data;
-        std::cout << "Despues de Setear map" << std::endl;
     }
 
     void set_end_game() { end_game = true; }
