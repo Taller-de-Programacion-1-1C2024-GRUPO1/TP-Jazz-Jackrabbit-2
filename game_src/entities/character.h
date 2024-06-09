@@ -9,6 +9,7 @@ class PhysicalMap;
 class Character: public PhysicalObject {
 
 protected:
+    const int acc_y;
     int health;
     PhysicalMap& map;
     // MAP COLISION FLAGS
@@ -22,6 +23,7 @@ protected:
 public:
     Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health):
             PhysicalObject(width, height, init_pos_x, init_pos_y),
+            acc_y(GRAVITY),
             health(health),
             map(map),
             on_floor(false),
@@ -41,6 +43,7 @@ public:
         }
     }
 
+    void update_position();
     // COLISONES CON ENTIDADES
     virtual void on_colision_with(PhysicalObject* object) override {}
 
