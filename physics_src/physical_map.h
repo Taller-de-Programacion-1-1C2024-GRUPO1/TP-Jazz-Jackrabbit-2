@@ -26,6 +26,7 @@ public:
     PhysicalMap();
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Bullet* bullet);
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Character* character);
+    bool can_jump(int pos_x, int pos_y, int width, int height);
 };
 
 #endif

@@ -98,7 +98,7 @@ void Rabbit::update() {
     // NO HAY INERCIA EN EJE X
     spe_x = 0;
 
-    
+    /*
     printf(action == STAND          ? "STAND\n" :
            action == RUN            ? "RUN\n" :
            action == RUN_FAST       ? "RUN_FAST\n" :
@@ -107,7 +107,7 @@ void Rabbit::update() {
            action == SHOOT          ? "SHOOT\n" :
            action == SPECIAL_ATTACK ? "SPECIAL_ATTACK\n" :
                                       "DIE\n");
-    
+    */
 }
 
 
@@ -141,18 +141,10 @@ void Rabbit::update_position() {
 
     check_colision_with_map();
     if (on_right_slope) {
-        /*
-        if (spe_x > 0) {
-            pos_y -= abs(spe_x);
-        }
-        */
+
        pos_y += BLOCK_DIVISION-(pos_x % BLOCK_DIVISION)-(pos_y % BLOCK_DIVISION);
     } else if (on_left_slope) {
-        /*
-        if (spe_x < 0) {
-            pos_y -= abs(spe_x);
-        }
-        */
+
        pos_y += (pos_x % BLOCK_DIVISION)-(pos_y % BLOCK_DIVISION);
     }
 }
@@ -202,8 +194,7 @@ void Rabbit::handle_events() {
 }
 // JUMP
 void Rabbit::execute_jump() {
-    check_colision_with_map();
-    if (on_floor || on_left_slope || on_right_slope) {
+    if (map.can_jump(pos_x, pos_y, width, height)) {
         spe_y = -JUMPING_INITIAL_SPEED;
     }
 }
