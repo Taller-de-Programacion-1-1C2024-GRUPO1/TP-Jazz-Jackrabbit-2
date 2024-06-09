@@ -33,9 +33,6 @@ private:
     int direction;
     std::queue<std::shared_ptr<Command>> events_queue;
 
-    // MODIFICACION DE POSICION
-    const int acc_y;
-
 public:
     Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager);
     void set_rabbit_id(int id);
