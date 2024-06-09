@@ -37,9 +37,7 @@ void Rabbit::set_rabbit_id(int id) { this->id = id; }
 
 void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champion_type; }
 
-void Rabbit::set_action_shoot(){
-    action = SHOOT;
-}
+void Rabbit::set_action_shoot() { action = SHOOT; }
 
 int Rabbit::get_rabbit_id() { return id; }
 
@@ -110,8 +108,6 @@ void Rabbit::update() {
 }
 
 
-
-
 void Rabbit::update_action() {
     // DIRECCION
     if (spe_x > 0) {
@@ -122,7 +118,7 @@ void Rabbit::update_action() {
 
     // CAMBIO DE ACCION
 
-    if (action!=SHOOT){
+    if (action != SHOOT) {
         if (spe_y > 0) {
             action = FALLING;
         } else if (spe_y < 0) {
@@ -134,7 +130,7 @@ void Rabbit::update_action() {
         } else if (spe_x == PLAYER_SPEED * 2 || spe_x == -PLAYER_SPEED * 2) {
             action = RUN_FAST;
         }
-    }   
+    }
 }
 
 void Rabbit::update_guns() {

@@ -15,6 +15,7 @@
 #include "../../game_src/constants_game.h"
 #include "../client_receiver.h"
 #include "../client_sender.h"
+#include "../new_map_info.h"
 
 #include "character_selector.h"
 #include "join_match_lobby.h"
@@ -29,7 +30,7 @@ class ClientLobby: public QMainWindow {
 
 public:
     explicit ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         QWidget* parent = nullptr);
+                         NewMapInfo& new_map_info, QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
@@ -40,11 +41,15 @@ private slots:
     void handleCharacterSelected(ChampionType character);
 
 
+protected:
+    void closeEvent(QCloseEvent* event) override;
+
 private:
     Ui::ClientLobby* ui;
     Queue<std::unique_ptr<Command>>& q_cmds;
     Queue<int>& q_responses;
     ChampionType selected_character;
+    NewMapInfo& new_map_info;
 };
 
 #endif  // CLIENT_LOBBY_H

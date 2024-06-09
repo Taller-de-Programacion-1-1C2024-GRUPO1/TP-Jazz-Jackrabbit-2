@@ -15,9 +15,9 @@ void BroadcasterSnapshots::broadcast(std::shared_ptr<Snapshot> game) {
         } catch (const ClosedQueue& err) {
             /*
              * Si el jugador ya no esta conectado, no se envia el snapshot
-             * y se continua con el siguiente jugador. 
+             * y se continua con el siguiente jugador.
              * Esto se hace para evitar que el servidor se bloquee.
-             * El jugador desconectado sera eliminado cuando 
+             * El jugador desconectado sera eliminado cuando
              * se libere el lock de la funcion.
              */
             continue;

@@ -23,12 +23,13 @@ void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int h
     }
 }
 
-bool PhysicalMap::can_jump(int pos_x, int pos_y, int width, int height){
+bool PhysicalMap::can_jump(int pos_x, int pos_y, int width, int height) {
     int x0 = trunc((pos_x) / BLOCK_DIVISION);
     int x1 = trunc((pos_x + (width / 2)) / BLOCK_DIVISION);
     int x2 = trunc((pos_x + width) / BLOCK_DIVISION);
-    int y2 = trunc((pos_y + height+1) / BLOCK_DIVISION);
-    return(((map[x0][y2]) + (map[x1][y2]) + (map[x2][y2])) >= COLLIDER_OBJ) || ((map[x0][y2]) == DIAG_LEFT_OBJ) || ((map[x2][y2]) == DIAG_RIGHT_OBJ);
+    int y2 = trunc((pos_y + height + 1) / BLOCK_DIVISION);
+    return (((map[x0][y2]) + (map[x1][y2]) + (map[x2][y2])) >= COLLIDER_OBJ) ||
+           ((map[x0][y2]) == DIAG_LEFT_OBJ) || ((map[x2][y2]) == DIAG_RIGHT_OBJ);
 }
 
 void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int height,
@@ -51,13 +52,13 @@ void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int h
     }
     if (((map[x0][y0]) + (map[x0][y1]) + (map[x0][y2])) > COLLIDER_OBJ) {
         // std::cout << "on left wall" << std::endl;
-        if((map[x0][y1])!=DIAG_LEFT_OBJ){
+        if ((map[x0][y1]) != DIAG_LEFT_OBJ) {
             character->is_on_left_wall();
         }
     }
     if (((map[x2][y0]) + (map[x2][y1]) + (map[x2][y2])) > COLLIDER_OBJ) {
         // std::cout << "on right wall" << std::endl;
-        if((map[x2][y1])!=DIAG_RIGHT_OBJ){
+        if ((map[x2][y1]) != DIAG_RIGHT_OBJ) {
             character->is_on_right_wall();
         }
     }

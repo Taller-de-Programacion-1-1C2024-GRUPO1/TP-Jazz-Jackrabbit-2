@@ -9,6 +9,9 @@
 #include <QMessageBox>
 #include <string>
 
+#include "../../common_src/constants.h"
+#include "../new_map_info.h"
+
 namespace Ui {
 class MapCreatorLobby;
 }
@@ -17,7 +20,7 @@ class MapCreatorLobby: public QDialog {
     Q_OBJECT
 
 public:
-    explicit MapCreatorLobby(QWidget* parent = nullptr);
+    explicit MapCreatorLobby(NewMapInfo& new_map_info, QWidget* parent = nullptr);
     ~MapCreatorLobby();
 
 protected:
@@ -34,6 +37,7 @@ private slots:
     void on_btnTexture3_clicked();
 
 private:
+    NewMapInfo& new_map_info;
     Ui::MapCreatorLobby* ui;
     void start_creating_map(int texture);
 };

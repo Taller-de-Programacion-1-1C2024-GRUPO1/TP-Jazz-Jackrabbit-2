@@ -9,7 +9,8 @@ Client::Client(const std::string& host, const std::string& service):
         q_snapshots(),
         client_sender(protocol, q_cmds),
         client_receiver(protocol, q_responses, q_snapshots, player_id),
-        drawer(q_cmds, q_snapshots) {}
+        drawer(q_cmds, q_snapshots),
+        new_map_info() {}
 
 
 void Client::run(int argc, char* argv[]) {
@@ -19,7 +20,7 @@ void Client::run(int argc, char* argv[]) {
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w(q_cmds, q_responses);
+    ClientLobby w(q_cmds, q_responses, new_map_info);
     w.show();
     int result = a.exec();
 
@@ -29,6 +30,9 @@ void Client::run(int argc, char* argv[]) {
     } else if (result == -2) {
         // create map
         std::cout << "create map" << std::endl;
+        // ACA LLAMO A MAP CREATOR y le paso new_map_info
+        new_map_info.printMapInfo();
+
     } else {
         std::cerr << "Cerrando QT" << std::endl;
     }

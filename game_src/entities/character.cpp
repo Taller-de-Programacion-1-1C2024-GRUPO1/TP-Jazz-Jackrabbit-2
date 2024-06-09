@@ -41,7 +41,7 @@ void Character::update_position() {
     check_colision_with_map();
     if (on_floor) {
         if (!on_left_slope && !on_right_slope) {
-            pos_y = pos_y - ((pos_y % BLOCK_DIVISION) +1);
+            pos_y = pos_y - ((pos_y % BLOCK_DIVISION) + 1);
         }
         spe_y = 0;
     }
@@ -59,10 +59,10 @@ void Character::update_position() {
     check_colision_with_map();
     if (on_right_slope) {
 
-       pos_y += BLOCK_DIVISION-(pos_x % BLOCK_DIVISION)-(pos_y % BLOCK_DIVISION);
+        pos_y += BLOCK_DIVISION - (pos_x % BLOCK_DIVISION) - (pos_y % BLOCK_DIVISION);
     } else if (on_left_slope) {
 
-       pos_y += (pos_x % BLOCK_DIVISION)-(pos_y % BLOCK_DIVISION);
+        pos_y += (pos_x % BLOCK_DIVISION) - (pos_y % BLOCK_DIVISION);
     }
 }
 

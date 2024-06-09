@@ -38,9 +38,7 @@ bool Enemy::is_killed_by_taking_damage(int damage) {
     return killed;
 }
 
-void Enemy::update() {
-    Character::update_position();
-}
+void Enemy::update() { Character::update_position(); }
 
 EnemySnapshot Enemy::get_snapshot() {
     return EnemySnapshot(id, direction, enemy_type, pos_x, pos_y);

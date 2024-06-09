@@ -1,7 +1,7 @@
 #include "client_keyboard_handler.h"
 
 KeyboardHandler::KeyboardHandler(Queue<std::unique_ptr<Command>>& q_cmds):
-        q_cmds(q_cmds), client_id(-1) {}
+        client_id(-1), q_cmds(q_cmds) {}
 
 void KeyboardHandler::listenForCommands(bool& game_running) {
     SDL_Event event;

@@ -2,7 +2,8 @@
 
 #include "ui_map_creator_lobby.h"
 
-MapCreatorLobby::MapCreatorLobby(QWidget* parent): QDialog(parent), ui(new Ui::MapCreatorLobby) {
+MapCreatorLobby::MapCreatorLobby(NewMapInfo& new_map_info, QWidget* parent):
+        QDialog(parent), new_map_info(new_map_info), ui(new Ui::MapCreatorLobby) {
     ui->setupUi(this);
     // Establecer el fondo
     QPixmap originalPixmap(":/backgrounds/match_lobby.png");
@@ -44,5 +45,6 @@ void MapCreatorLobby::start_creating_map(int texture) {
     }
     int width = ui->spinWidth->value();
     int height = ui->spinHeight->value();
+    new_map_info = NewMapInfo(map_name, width, height, texture);
     QApplication::exit(-2);
 }

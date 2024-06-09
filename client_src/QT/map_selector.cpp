@@ -3,12 +3,14 @@
 #include "ui_map_selector.h"
 
 MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         ChampionType selected_character, QWidget* parent):
+                         ChampionType selected_character, NewMapInfo& new_map_info,
+                         QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        selected_character(selected_character) {
+        selected_character(selected_character),
+        new_map_info(new_map_info) {
     ui->setupUi(this);
 
     // Set the background
@@ -34,7 +36,7 @@ void MapSelector::on_btnMap2_clicked() {
 
 void MapSelector::on_btnMapCreate_clicked() {
     hide();
-    MapCreatorLobby map_creator_lobby;
+    MapCreatorLobby map_creator_lobby(new_map_info);
     connect(&map_creator_lobby, &MapCreatorLobby::windowClosed, this,
             &MapSelector::handleWindowClosed);
 
