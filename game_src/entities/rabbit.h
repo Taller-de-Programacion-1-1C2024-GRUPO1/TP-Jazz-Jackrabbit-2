@@ -59,7 +59,7 @@ public:
     void change_weapon();
 
     // SHOOT
-
+    void set_action_shoot();
 
     // COLISION
     void on_colision_with(PhysicalObject* object) override;

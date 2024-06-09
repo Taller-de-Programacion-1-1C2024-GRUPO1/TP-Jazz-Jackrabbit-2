@@ -32,7 +32,7 @@ void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int h
     int x2 = trunc((pos_x + width) / BLOCK_DIVISION);
     int y2 = trunc((pos_y + height) / BLOCK_DIVISION);
 
-    if (((map[x0][y2]) + (map[x1][y2]) + (map[x2][y2])) > COLLIDER_OBJ) {
+    if (((map[x0][y2]) + (map[x1][y2]) + (map[x2][y2])) >= COLLIDER_OBJ) {
         // std::cout << "on floor" << std::endl;
         character->is_on_floor();
     }
@@ -43,23 +43,28 @@ void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int h
     }
     if (((map[x0][y0]) + (map[x0][y1]) + (map[x0][y2])) > COLLIDER_OBJ) {
         // std::cout << "on left wall" << std::endl;
-        character->is_on_left_wall();
+        if((map[x0][y1])!=DIAG_LEFT_OBJ){
+            character->is_on_left_wall();
+        }
     }
     if (((map[x2][y0]) + (map[x2][y1]) + (map[x2][y2])) > COLLIDER_OBJ) {
         // std::cout << "on right wall" << std::endl;
-        character->is_on_right_wall();
+        if((map[x2][y1])!=DIAG_RIGHT_OBJ){
+            character->is_on_right_wall();
+        }
     }
 
 
-    if ((map[x0][y2]) == DIAG_LEFT_OBJ || (map[x0][y1]) == DIAG_LEFT_OBJ) {
+    if ((map[x0][y2]) == DIAG_LEFT_OBJ) {
         character->is_on_left_slope();
-    } else if ((map[x2][y2]) == DIAG_RIGHT_OBJ || (map[x2][y1]) == DIAG_RIGHT_OBJ) {
+    } else if ((map[x2][y2]) == DIAG_RIGHT_OBJ) {
         character->is_on_right_slope();
     }
-
+    /*
     if (map[x2][y2] == DIAG_LEFT_OBJ || map[x2][y1] == DIAG_LEFT_OBJ) {
         character->is_on_right_wall();
     } else if (map[x0][y2] == DIAG_RIGHT_OBJ || map[x0][y1] == DIAG_RIGHT_OBJ) {
         character->is_on_left_wall();
     }
+    */
 }

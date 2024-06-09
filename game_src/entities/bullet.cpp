@@ -10,7 +10,7 @@ Bullet::Bullet(int id, int type, int init_pos_x, int init_pos_y, int bullet_spee
                Rabbit& sender):
         id(id),
         type(type),
-        PhysicalObject(BLOCK_DIVISION / 4, BLOCK_DIVISION / 16, init_pos_x, init_pos_y),
+        PhysicalObject(BLOCK_DIVISION / 2, BLOCK_DIVISION / 4, init_pos_x, init_pos_y),
         damage(damage),
         sender(sender) {
     spe_x = bullet_speed;

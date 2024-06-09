@@ -60,6 +60,9 @@ public:
                     case JUMP_FORWARD:
                         this->setAnimation("Jump-Forward");
                         break;
+                    case SHOOT:
+                        this->setAnimation("Shoot");
+                        break;
                 }
                 break;
             case RECIEVED_DAMAGE:
