@@ -29,14 +29,14 @@ public:
     void update();
     int get_ammo();
     bool can_fire();
-
+    void reset_ammo_amount();
     void add_ammo(int amount_ammo);
 };
 
 #define BASIC_GUN_FIRE_COOLDOWN 20
 #define BASIC_GUN_MAX_AMMO 999
 #define BASIC_GUN_DAMAGE 1
-#define BASIC_GUN_RANGE 100
+#define BASIC_GUN_RANGE 40
 #define BASIC_GUN_BULLET_SPEED 10
 
 class BasicGun: public Gun {

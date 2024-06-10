@@ -67,7 +67,8 @@ void JoinMatchLobby::on_btnJoin_clicked() {
         }
     } else if (response == ERROR) {
         // no pude conectarme
-        QMessageBox::warning(this, "Error", "Match name does not exists or match has already started.");
+        QMessageBox::warning(this, "Error",
+                             "Match name does not exists or match has already started.");
         return;
     } else {
         QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");

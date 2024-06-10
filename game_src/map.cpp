@@ -51,6 +51,7 @@ void Map::reap_dead() {
     int i = 0;
     while (i < enemies.size()) {
         if (enemies[i]->is_dead()) {
+            delete enemies[i];
             enemies.erase(enemies.begin() + i);
         } else {
             i++;
@@ -68,6 +69,7 @@ void Map::reap_dead() {
     i = 0;
     while (i < items.size()) {
         if (items[i]->is_dead()) {
+            delete items[i];
             items.erase(items.begin() + i);
         } else {
             i++;

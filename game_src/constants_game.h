@@ -68,6 +68,8 @@ enum RABBIT_STATES { ALIVE, DEAD, RECIEVED_DAMAGE, INTOXICATED };
 
 #define NULL_ID -1
 
+#define CHANGE_WEAPON_COOLDOWN 10
+
 // ----------------- Messurements -----------------
 
 #define BLOCK_DIVISION 32

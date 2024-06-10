@@ -43,7 +43,7 @@ public:
     void update_action();
     void update_position();
     void update_guns();
-
+    void revive();
     // EVENTS
     void handle_events();
 
@@ -58,6 +58,8 @@ public:
 
     // SHOOT
     void set_action_shoot();
+    void add_machinegun_ammo(int amount_ammo);
+    void add_sniper_ammo(int amount_ammo);
 
     // COLISION
     void on_colision_with(PhysicalObject* object) override;
@@ -86,6 +88,7 @@ public:
     void execute_run_fast_left();
     void execute_shoot();
     void execute_special_attack();
+    void execute_change_weapon();
 
     // SNAPSHOTS
     RabbitSnapshot get_snapshot();

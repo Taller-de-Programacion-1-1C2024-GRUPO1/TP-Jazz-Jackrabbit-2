@@ -33,7 +33,7 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
         q_cmds.push(std::make_unique<Shoot>(client_id));
     }
     if (state[SDL_SCANCODE_W]) {
-        // q_cmds.try_push(ChangeWeapon(client_id));
+        q_cmds.push(std::make_unique<ChangeWeapon>(client_id));
     }
     if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
         game_running = false;

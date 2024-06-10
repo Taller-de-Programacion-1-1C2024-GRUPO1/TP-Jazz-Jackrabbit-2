@@ -367,7 +367,7 @@ int ClientDrawer::run(int player_id) try {
         }
 
         banner.render();
-        ammoLeft.render(); //<--consume muchisimo tiempo
+        ammoLeft.render();  //<--consume muchisimo tiempo
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position

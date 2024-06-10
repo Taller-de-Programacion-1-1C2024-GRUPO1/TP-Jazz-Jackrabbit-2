@@ -5,7 +5,6 @@
 #include <string>
 
 
-
 struct NewMapInfo {
     std::string map_name;
     int width;
@@ -24,8 +23,7 @@ struct NewMapInfo {
                   << "Width: " << width << "\n"
                   << "Height: " << height << "\n"
                   << "Texture: " << texture << "\n"
-                  << "Max Players: " << max_players
-                  << std::endl;
+                  << "Max Players: " << max_players << std::endl;
     }
 };
 

@@ -60,6 +60,9 @@ public:
                     case SHOOT:
                         this->setAnimation("Shoot");
                         break;
+                    default:
+                        this->setAnimation("Stand");
+                        break;
                 }
                 break;
             case RECIEVED_DAMAGE:
@@ -72,6 +75,9 @@ public:
                         break;
                     case RUN:
                         this->setAnimation("Intoxicated-Run");
+                        break;
+                    default:
+                        this->setAnimation("Intoxicated-Stand");
                         break;
                 }
                 break;

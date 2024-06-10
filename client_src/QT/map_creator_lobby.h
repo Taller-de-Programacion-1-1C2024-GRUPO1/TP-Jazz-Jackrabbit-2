@@ -10,8 +10,8 @@
 #include <string>
 
 #include "../../common_src/constants.h"
-#include "../new_map_info.h"
 #include "../client_constants.h"
+#include "../new_map_info.h"
 
 namespace Ui {
 class MapCreatorLobby;

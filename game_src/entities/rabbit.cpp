@@ -34,7 +34,27 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
     gun_inventory.push_back(new Sniper(*this, this->map));
 }
 
-void Rabbit::set_rabbit_id(int id) { this->id = id; }
+
+////////////////////////////////////////////////////////
+void Rabbit::set_rabbit_id(int id) {
+    this->id = id;
+}
+////////////////////////////////////////////////////////////
+
+void Rabbit::add_machinegun_ammo(int amount_ammo) {
+    gun_inventory[MACHINE_GUN]->add_ammo(amount_ammo);
+}
+void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[SNIPER]->add_ammo(amount_ammo); }
+
+void Rabbit::revive() {
+    health = PLAYER_INITIAL_HEALTH;
+    gun_inventory[MACHINE_GUN]->reset_ammo_amount();
+    gun_inventory[SNIPER]->reset_ammo_amount();
+    current_gun = BASIC_GUN;
+    pos_x = spawn_x;
+    pos_y = spawn_y;
+    set_state(new Alive(*this));
+}
 
 void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champion_type; }
 
@@ -198,6 +218,14 @@ void Rabbit::execute_shoot() {
 // SPECIAL ATTACK
 void Rabbit::execute_special_attack() { action = SPECIAL_ATTACK; }
 
+// CHANGE_WEAPON
+void Rabbit::execute_change_weapon() {
+    std::cout << "Cambiando arma" << std::endl;
+    current_gun = (current_gun + 1) % gun_inventory.size();
+    while (!gun_inventory[current_gun]->has_ammo()) {
+        current_gun = (current_gun + 1) % gun_inventory.size();
+    }
+}
 
 void Rabbit::jump() { state->jump(); }
 void Rabbit::run_right() { state->run_right(); }
@@ -206,8 +234,8 @@ void Rabbit::run_left() { state->run_left(); }
 void Rabbit::run_fast_left() { state->run_fast_left(); }
 void Rabbit::shoot() { state->shoot(); }
 void Rabbit::special_attack() { state->special_attack(); }
+void Rabbit::change_weapon() { state->change_weapon(); }
 
-void Rabbit::change_weapon() {}
 
 // COLA
 void Rabbit::add_command(std::shared_ptr<Command> command) { events_queue.push(command); }

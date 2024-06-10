@@ -17,6 +17,7 @@ Gun::Gun(int max_ammo, int damage, int range, int bullet_speed, Rabbit& owner, M
 void Gun::update() {
     if (fire_cooldown > 0) {
         fire_cooldown--;
+        owner.set_action_shoot();
     }
 }
 
@@ -28,10 +29,12 @@ void Gun::add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int c
         direction_variable = 1;
     }
     manager.add_bullet(new Bullet(manager.get_projectile_id(), type, pos_x, pos_y,
-                                  direction_variable * bullet_speed, damage, owner));
+                                  direction_variable * bullet_speed, damage, range, owner));
     fire_cooldown = cooldown;
     owner.set_action_shoot();
 }
+
+void Gun::reset_ammo_amount() { ammo = 0; }
 
 int Gun::get_ammo() { return ammo; }
 

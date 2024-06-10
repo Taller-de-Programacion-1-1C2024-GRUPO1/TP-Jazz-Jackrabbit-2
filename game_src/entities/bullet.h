@@ -11,11 +11,12 @@ private:
     int id;
     int type;
     const int damage;
+    int range;
     Rabbit& sender;
 
 public:
     Bullet(int id, int type, int init_pos_x, int init_pos_y, int bullet_speed, int damage,
-           Rabbit& sender);
+           int range, Rabbit& sender);
 
 
     void update();

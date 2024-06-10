@@ -2,16 +2,13 @@
 
 #include <string>
 
-
-
 AmmoLeft::AmmoLeft(SDL2pp::Renderer& renderer):
         renderer(renderer),
-        munitionRect(69, 26, 22, 26), //BASIC GUN
+        munitionRect(69, 26, 22, 26),  // BASIC GUN
         munitionTexture(renderer, SDL2pp::Surface(WEAPONS_IMG)),
         currentWeapon(0),
         currentAmmo(1000),
-        numberImages(renderer) 
-         {
+        numberImages(renderer) {
     SDL2pp::Surface surface(WEAPONS_IMG);
     SDL_Color colorKey = {0, 128, 255, 1};
     SDL_SetColorKey(surface.Get(), SDL_TRUE,
@@ -19,7 +16,7 @@ AmmoLeft::AmmoLeft(SDL2pp::Renderer& renderer):
     this->munitionTexture = SDL2pp::Texture(renderer, surface);
 }
 
-void AmmoLeft::setWeapon(int weapon_type) { 
+void AmmoLeft::setWeapon(int weapon_type) {
     switch (weapon_type) {
         case BASIC_GUN:
             munitionRect = SDL2pp::Rect(69, 26, 22, 26);
@@ -46,6 +43,7 @@ void AmmoLeft::render() {
         numberImages.renderNumber(number, offset);
         offset -= 24;  // Move position to the left for the next digit
     }
-    SDL2pp::Rect currentRect(800 + offset - BLOCK_DIVISION, 600 - BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION);
+    SDL2pp::Rect currentRect(800 + offset - BLOCK_DIVISION, 600 - BLOCK_DIVISION, BLOCK_DIVISION,
+                             BLOCK_DIVISION);
     renderer.Copy(munitionTexture, munitionRect, currentRect);
 }
