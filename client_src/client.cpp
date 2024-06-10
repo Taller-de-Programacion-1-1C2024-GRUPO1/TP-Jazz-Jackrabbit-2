@@ -30,7 +30,7 @@ void Client::run(int argc, char* argv[]) {
     } else if (result == -2) {
         // create map
         Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
-                      new_map_info.map_name, 3);
+                      new_map_info.map_name, new_map_info.max_players);
         editor.run();
 
     } else {
