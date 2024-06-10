@@ -30,6 +30,7 @@ void Gun::add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int c
     manager.add_bullet(new Bullet(manager.get_projectile_id(), type, pos_x, pos_y,
                                   direction_variable * bullet_speed, damage, owner));
     fire_cooldown = cooldown;
+    owner.set_action_shoot();
 }
 
 int Gun::get_ammo() { return ammo; }
@@ -66,6 +67,7 @@ bool MachineGun::has_ammo() { return ammo > 0; }
 void MachineGun::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
         Gun::add_bullet_to_map(pos_x, pos_y, direction, MACHINE_GUN, MACHINEGUN_FIRE_COOLDOWN);
+        ammo--;
     }
 }
 
@@ -77,5 +79,6 @@ bool Sniper::has_ammo() { return ammo > 0; }
 void Sniper::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
         Gun::add_bullet_to_map(pos_x, pos_y, direction, SNIPER, SNIPER_FIRE_COOLDOWN);
+        ammo--;
     }
 }
