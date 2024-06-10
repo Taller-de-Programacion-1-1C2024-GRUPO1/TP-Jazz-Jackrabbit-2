@@ -3,8 +3,6 @@
 
 #define ACTIVE 0
 #define INACTIVE 1
-#define OK 0
-#define ERROR 1
 #define INITIAL_ID 1
 
 enum /*Match Status*/ {

@@ -33,6 +33,12 @@ int MonitorMatches::join_match(std::string match_name,
                                std::shared_ptr<ContainerProtocol> cont_protocol, int id,
                                ChampionType character_name) {
     std::lock_guard<std::mutex> lock(mutex);
+    // chequeo si la partida existe
+    auto name = matches.find(match_name);
+    if (name == matches.end()) {
+        return ERROR;
+    }
+    // chequeo si la partida esta viva o terminada
     if (matches[match_name]->status == MATCH_ALIVE || matches[match_name]->status == MATCH_OVER) {
         return ERROR;
     }

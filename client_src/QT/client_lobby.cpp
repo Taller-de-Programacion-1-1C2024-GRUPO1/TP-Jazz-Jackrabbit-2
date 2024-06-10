@@ -80,9 +80,11 @@ void ClientLobby::on_btnJoinMatch_clicked() {
             QApplication::exit(0);
         } else {
             std::cerr << "Error al unirse a partida, joinMatchLobby room falló" << std::endl;
+            QApplication::exit(-1);
         }
     } else {
         std::cerr << "Error al unirse a partida, character selector falló" << std::endl;
+        QApplication::exit(-1);
     }
 }
 

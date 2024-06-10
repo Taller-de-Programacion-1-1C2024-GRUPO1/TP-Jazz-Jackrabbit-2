@@ -66,7 +66,7 @@ void MapSelector::start_match() {
     while (!could_pop) {
         could_pop = q_responses.try_pop(response);
     }
-    if (response == 0) {
+    if (response == OK) {
         hide();
         WaitingRoom waiting_room(q_cmds, q_responses);
         if (waiting_room.exec() == QDialog::Accepted) {
@@ -75,7 +75,7 @@ void MapSelector::start_match() {
             std::cerr << "Error en waiting room" << std::endl;
             this->done(-1);  // Custom exit code for waiting room failure
         }
-    } else if (response == -1) {
+    } else if (response == ERROR) {
         // Couldn't connect
         QMessageBox::warning(this, "Error", "Match name already exists.");
         this->done(-1);  // Custom exit code for existing match name

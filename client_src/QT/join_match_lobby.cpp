@@ -57,7 +57,7 @@ void JoinMatchLobby::on_btnJoin_clicked() {
     while (!could_pop) {
         could_pop = q_responses.try_pop(response);
     }
-    if (response == 0) {
+    if (response == OK) {
         hide();
         WaitingRoom waiting_room(q_cmds, q_responses);
         if (waiting_room.exec() == QDialog::Accepted) {
@@ -65,9 +65,9 @@ void JoinMatchLobby::on_btnJoin_clicked() {
         } else {
             std::cerr << "Error en waiting room" << std::endl;
         }
-    } else if (response == -1) {
+    } else if (response == ERROR) {
         // no pude conectarme
-        QMessageBox::warning(this, "Error", "Match name already exists.");
+        QMessageBox::warning(this, "Error", "Match name does not exists or match has already started.");
         return;
     } else {
         QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");

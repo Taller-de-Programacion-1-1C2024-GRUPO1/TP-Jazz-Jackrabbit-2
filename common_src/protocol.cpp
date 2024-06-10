@@ -78,6 +78,10 @@ void Protocol::send_map(DynamicMap map) {
 
 void Protocol::send_response(int ACK) {
     check_closed();
+    if (ACK == ERROR) {
+        send_uintEight(ERROR_PROT);
+        return;
+    }
     send_uintEight(ACK);
 }
 
@@ -148,6 +152,9 @@ DynamicMap Protocol::receive_map() {
 int Protocol::receive_response() {
     check_closed();
     uint8_t ACK = receive_uintEight();
+    if (ACK == ERROR_PROT) {
+        return ERROR;
+    }
     return ACK;
 }
 

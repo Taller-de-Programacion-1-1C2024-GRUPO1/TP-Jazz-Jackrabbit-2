@@ -43,6 +43,9 @@ enum /*INFO TYPE*/ {
     GAME_MAP_INFO,
 };
 
+#define OK 0
+#define ERROR_PROT 0xFF
+#define ERROR -1
 
 #define WAITING 0
 #define STARTED 1

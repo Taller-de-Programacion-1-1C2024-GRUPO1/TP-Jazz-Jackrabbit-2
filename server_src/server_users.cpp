@@ -35,7 +35,6 @@ void User::run() {
 void User::create_new_match(int number_of_players, const std::string& match_name,
                             const std::string& map_name, ChampionType character_name) {
 
-
     Map map = monitor_matches.get_map(map_name);
     std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> protocols_queue =
             std::make_shared<Queue<std::shared_ptr<PlayerInfo>>>();
@@ -59,6 +58,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
 void User::join_match(const std::string& match_name, ChampionType character_name) {
     // se fija si el match esta vivo
     int ACK = monitor_matches.join_match(match_name, container_protocol, this->id, character_name);
+    std::cout << "ACK ENVIADO: " << ACK << std::endl;
     container_protocol->protocol.send_response(ACK);
     if (ACK == ERROR) {
         return;
