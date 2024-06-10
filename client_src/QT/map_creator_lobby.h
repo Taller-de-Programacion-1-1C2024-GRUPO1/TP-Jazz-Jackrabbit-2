@@ -11,6 +11,7 @@
 
 #include "../../common_src/constants.h"
 #include "../new_map_info.h"
+#include "../client_constants.h"
 
 namespace Ui {
 class MapCreatorLobby;

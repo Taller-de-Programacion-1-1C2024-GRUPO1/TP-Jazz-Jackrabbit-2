@@ -10,7 +10,7 @@ void BroadcasterSnapshots::broadcast(std::shared_ptr<Snapshot> game) {
     std::lock_guard<std::mutex> lock(m);
     for (auto& player_queue: players_queues) {
         try {
-            std::cout << "BROADCASTING SNAPSHOT TO PLAYER: " << player_queue.first << std::endl;
+            // std::cout << "BROADCASTING SNAPSHOT TO PLAYER: " << player_queue.first << std::endl;
             player_queue.second->push(game);
         } catch (const ClosedQueue& err) {
             /*

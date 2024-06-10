@@ -23,17 +23,17 @@ void MapCreatorLobby::closeEvent(QCloseEvent* event) {
 }
 
 void MapCreatorLobby::on_btnTexture1_clicked() {
-    start_creating_map(1);  // ACA SELECCIONO LA TEXTURA
+    start_creating_map(CASTLE); 
 }
 
 
 void MapCreatorLobby::on_btnTexture2_clicked() {
-    start_creating_map(2);  // ACA SELECCIONO LA TEXTURA
+    start_creating_map(CARROTUS); 
 }
 
 
 void MapCreatorLobby::on_btnTexture3_clicked() {
-    start_creating_map(3);  // ACA SELECCIONO LA TEXTURA
+    start_creating_map(CARROTUS);  // ACA SELECCIONO LA TEXTURA
 }
 
 
@@ -45,6 +45,7 @@ void MapCreatorLobby::start_creating_map(int texture) {
     }
     int width = ui->spinWidth->value();
     int height = ui->spinHeight->value();
-    new_map_info = NewMapInfo(map_name, width, height, texture);
+    int max_players = ui->spinMaxPlayers->value();
+    new_map_info = NewMapInfo(map_name, width, height, texture, max_players);
     QApplication::exit(-2);
 }

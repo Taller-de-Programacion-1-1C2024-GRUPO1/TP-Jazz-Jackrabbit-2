@@ -26,7 +26,7 @@ struct MatchInfo {
 
     MatchInfo(const std::string& match_name, const Map& map,
               std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-              bool* playing):
+              bool* playing, int number_of_players):
             map_name(map.get_name()),
             /*
                 Se inicializa el match_starter con un puntero a un objeto Match
@@ -37,7 +37,7 @@ struct MatchInfo {
                 - el puntero a status
             */
             match_starter(std::make_unique<Match>(matches_protocols_players_queue, map, match_name,
-                                                  playing, &status)),
+                                                  playing, &status, number_of_players)),
 
             matches_protocols_players_queue(matches_protocols_players_queue) {}
 
