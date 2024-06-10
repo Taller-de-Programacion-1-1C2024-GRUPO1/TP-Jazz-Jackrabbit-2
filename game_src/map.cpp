@@ -201,20 +201,20 @@ void Map::create_entities() {
                 spawn_points[RABBIT_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map, *this));
     }
     for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(
-                id_counter_enemy, CRAB, spawn_points[CRAB_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+        enemies.push_back(new EnemyCrab(
+                id_counter_enemy, spawn_points[CRAB_SPAWN].at(i).get_x() * BLOCK_DIVISION,
                 spawn_points[CRAB_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[LIZARD_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(
-                id_counter_enemy, LIZARD, spawn_points[LIZARD_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+        enemies.push_back(new EnemyLizard(
+                id_counter_enemy, spawn_points[LIZARD_SPAWN].at(i).get_x() * BLOCK_DIVISION,
                 spawn_points[LIZARD_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[TURTLE_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(
-                id_counter_enemy, TURTLE, spawn_points[TURTLE_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+        enemies.push_back(new EnemyTurtle(
+                id_counter_enemy, spawn_points[TURTLE_SPAWN].at(i).get_x() * BLOCK_DIVISION,
                 spawn_points[TURTLE_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
         id_counter_enemy++;
     }

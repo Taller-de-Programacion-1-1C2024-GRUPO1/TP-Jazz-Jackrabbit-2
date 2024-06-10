@@ -28,6 +28,22 @@ public:
     bool is_killed_by_taking_damage(int damage);
     void update();
     EnemySnapshot get_snapshot();
+    virtual ~Enemy() = default;
+};
+
+class EnemyCrab: public Enemy {
+    public:
+    EnemyCrab(int id,int init_pos_x, int init_pos_y, PhysicalMap& map);
+};
+
+class EnemyLizard: public Enemy {
+    public:
+    EnemyLizard(int id,int init_pos_x, int init_pos_y, PhysicalMap& map);
+};
+
+class EnemyTurtle: public Enemy {
+    public:
+    EnemyTurtle(int id,int init_pos_x, int init_pos_y, PhysicalMap& map);
 };
 
 #endif

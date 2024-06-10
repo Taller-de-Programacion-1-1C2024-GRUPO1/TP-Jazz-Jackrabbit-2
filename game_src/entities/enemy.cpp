@@ -64,3 +64,9 @@ void Enemy::update() {
 EnemySnapshot Enemy::get_snapshot() {
     return EnemySnapshot(id, direction, enemy_type, pos_x, pos_y);
 }
+
+EnemyCrab::EnemyCrab(int id,int init_pos_x, int init_pos_y, PhysicalMap& map):Enemy(id, CRAB, init_pos_x, init_pos_y, map){}
+
+EnemyLizard::EnemyLizard(int id,int init_pos_x, int init_pos_y, PhysicalMap& map):Enemy(id, LIZARD, init_pos_x, init_pos_y, map){}
+
+EnemyTurtle::EnemyTurtle(int id,int init_pos_x, int init_pos_y, PhysicalMap& map):Enemy(id, TURTLE, init_pos_x, init_pos_y, map){}
