@@ -42,7 +42,7 @@ private:
     bool* playing;
     int* status;
 
-    void send_players_ids(); 
+    void send_players_ids();
 
 public:
     Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,

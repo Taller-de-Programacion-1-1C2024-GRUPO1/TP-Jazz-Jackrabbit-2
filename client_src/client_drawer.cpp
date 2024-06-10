@@ -113,7 +113,6 @@ int ClientDrawer::run(int player_id) try {
             initial_snapshot.map_dimensions.map_data, CARROTUS_TILE, mapColor, cameraPosition);
 
     std::string animationsPath;
-    std::string texturePath;
     for (auto& rabbit: initial_snapshot.rabbits) {
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, 64, 64);

@@ -1,16 +1,18 @@
-#include <vector>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <algorithm> // Para std::max
-#include <yaml-cpp/yaml.h> // Para guardar el mapa en un archivo .yml
-#include <fstream> // Para std::ofstream
-#include <map> // Para std::map
-
+#include <algorithm>  // Para std::max
+#include <fstream>    // Para std::ofstream
 #include <iostream>
+#include <map>  // Para std::map
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include <SDL2/SDL_image.h>
+#include <SDL2pp/SDL2pp.hh>
+#include <yaml-cpp/yaml.h>  // Para guardar el mapa en un archivo .yml
+
 #include "../common_src/constants.h"
 #include "../game_src/constants_game.h"
-#include <SDL2pp/SDL2pp.hh>
 
 enum Tool { PAINT, ERASE };
 enum Mode { TEXTURE, ENTITY };
@@ -26,7 +28,7 @@ enum Mode { TEXTURE, ENTITY };
 #define CARROTUS_IMG "../client_src/resources/tiles/carrotus.png"
 #define BEACH_IMG "../client_src/resources/tiles/beach.png"
 
-//Donde se va a colocar el mapa resultante
+// Donde se va a colocar el mapa resultante
 #define DEST_PATH "../external/maps/"
 
 const int SCREEN_WIDTH = 1280;
@@ -39,24 +41,26 @@ struct Entity {
 
 class Editor {
 public:
-    Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser, const int max_players) :
-        sdl(SDL_INIT_VIDEO),
-        image(IMG_INIT_PNG),
-        ttf(),
-        window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
-        renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        width(mapWidth),
-        height(mapHeight),
-        name(nameByUser),
-        maxPlayers(max_players),
-        currentRabbitSpawns(0),
-        font(FONT, 15)
-    {
+    Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser,
+           const int max_players):
+            sdl(SDL_INIT_VIDEO),
+            image(IMG_INIT_PNG),
+            ttf(),
+            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                   SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
+            renderer(window, -1, SDL_RENDERER_ACCELERATED),
+            width(mapWidth),
+            height(mapHeight),
+            name(nameByUser),
+            maxPlayers(max_players),
+            currentRabbitSpawns(0),
+            font(FONT, 15) {
         const char* textureImg[] = {CASTLE_IMG, BEACH_IMG, CARROTUS_IMG};
-        
+
         Surface surface(textureImg[map]);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
-        Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
+        Uint32 mappedColorKey =
+                SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
         SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
 
         for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
@@ -73,14 +77,16 @@ public:
                 textures.push_back(std::make_shared<Texture>(std::move(texture)));
             }
         }
-        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
-        entities_grid = std::vector<std::vector<Entity>>(height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
+        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
+                height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
+                                width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
+        entities_grid = std::vector<std::vector<Entity>>(
+                height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
-        //Cargar texturas de entidades
+        // Cargar texturas de entidades
         std::vector<std::string> imagePaths = {JAZZ, ENEMIES, ENEMIES, ENEMIES, ITEMS, ITEMS};
-        std::vector<Rect> entityRects;
 
-        for (const auto& path : imagePaths) {
+        for (const auto& path: imagePaths) {
             Surface entitySurface(path);
             Texture entityTexture(renderer, entitySurface);
             entitiesTextures.push_back(std::move(entityTexture));
@@ -115,30 +121,25 @@ public:
                     int x, y;
                     SDL_GetMouseState(&x, &y);
 
-                    // Click en el botón de guardar y salir
                     if (x >= 1200 && x < 1280 && y >= 10 && y < 50) {
+                        // Click en el botón de guardar y salir
                         saveMap();
                         running = false;
-                    }
-                    // Click en el botón de texturas
-                    else if (x >= 730 && x < 810 && y >= 10 && y < 50) {
+                    } else if (x >= 730 && x < 810 && y >= 10 &&
+                               y < 50) {  // Click en el botón de texturas
+                        // Click en el botón de texturas
                         mode = TEXTURE;
-                    }
-                    // Click en el botón de entidades
-                    else if (x >= 820 && x < 900 && y >= 10 && y < 50) {
+                    } else if (x >= 820 && x < 900 && y >= 10 && y < 50) {
+                        // Click en el botón de entidades
                         mode = ENTITY;
-                    }
-                    // Click en el botón de pintar
-                    else if (x >= 10 && x < 90 && y >= 10 && y < 50) {
+                    } else if (x >= 10 && x < 90 && y >= 10 && y < 50) {
+                        // Click en el botón de pintar
                         currentTool = PAINT;
-                    }
-                    // Click en el botón de borrar
-                    else if (x >= 100 && x < 180 && y >= 10 && y < 50) {
+                    } else if (x >= 100 && x < 180 && y >= 10 && y < 50) {
+                        // Click en el botón de borrar
                         currentTool = ERASE;
-                    }
-                    // Click en los botones de capas
-
-                    else if (x >= 190 && x < 270 && y >= 10 && y < 50) {
+                    } else if (x >= 190 && x < 270 && y >= 10 && y < 50) {
+                        // Click en los botones de capas
                         currentLayer = BACKGROUND_LAYER;
                     } else if (x >= 280 && x < 360 && y >= 10 && y < 50) {
                         currentLayer = DIAG_LEFT_LAYER;
@@ -148,98 +149,117 @@ public:
                         currentLayer = COLLIDER_LAYER;
                     } else if (x >= 550 && x < 630 && y >= 10 && y < 50) {
                         currentLayer = DECORATION_LAYER;
-                    }
+                    } else if (mode == TEXTURE && (x < 320 && y >= 60 && y < 640)) {
+                        // Click en la grilla de texturas
+                        y += scrollOffset - 60;  // Ajustar para el desplazamiento vertical y la
+                                                 // posición de los botones
 
-                    // Click en la grilla de texturas
-                    else if (mode == TEXTURE && (x < 320 && y >= 60 && y < 640)) {
-                        y += scrollOffset - 60;  // Ajustar para el desplazamiento vertical y la posición de los botones
-
-                        if (x < 32 * 10 && y < 32 * (static_cast<int>((textures.size() + 9) / 10))) {
-                            int index = (y / 32) * 10 + (x / 32);
+                        if (y < BLOCK_DIVISION * (static_cast<int>((textures.size() + 9) / 10))) {
+                            int index = (y / BLOCK_DIVISION) * 10 + (x / BLOCK_DIVISION);
                             if (index < static_cast<int>(textures.size())) {
                                 selectedTextureIndex = index;
                             }
                         }
-                    }
-
-                    else if (mode == ENTITY && x < 320 && y >= 60 && y < 640) {
-                        if (x > jazz_dst.x && x < jazz_dst.x + jazz_dst.w && y > jazz_dst.y && y < jazz_dst.y + jazz_dst.h) {
+                    } else if (mode == ENTITY && x < 320 && y >= 60 && y < 640) {
+                        if (x > jazz_dst.x && x < jazz_dst.x + jazz_dst.w && y > jazz_dst.y &&
+                            y < jazz_dst.y + jazz_dst.h) {
                             selectedEntityIndex = RABBIT_SPAWN;
                             selectedEntityDst = jazz_dst;
-                        } else if (x > crab_dst.x && x < crab_dst.x + crab_dst.w && y > crab_dst.y && y < crab_dst.y + crab_dst.h) {
+                        } else if (x > crab_dst.x && x < crab_dst.x + crab_dst.w &&
+                                   y > crab_dst.y && y < crab_dst.y + crab_dst.h) {
                             selectedEntityIndex = CRAB_SPAWN;
                             selectedEntityDst = crab_dst;
-                        } else if (x > lizard_dst.x && x < lizard_dst.x + lizard_dst.w && y > lizard_dst.y && y < lizard_dst.y + lizard_dst.h) {
+                        } else if (x > lizard_dst.x && x < lizard_dst.x + lizard_dst.w &&
+                                   y > lizard_dst.y && y < lizard_dst.y + lizard_dst.h) {
                             selectedEntityIndex = LIZARD_SPAWN;
                             selectedEntityDst = lizard_dst;
-                        } else if (x > coin_dst.x && x < coin_dst.x + coin_dst.w && y > coin_dst.y && y < coin_dst.y + coin_dst.h) {
+                        } else if (x > coin_dst.x && x < coin_dst.x + coin_dst.w &&
+                                   y > coin_dst.y && y < coin_dst.y + coin_dst.h) {
                             selectedEntityIndex = COIN_SPAWN;
                             selectedEntityDst = coin_dst;
-                        } else if (x > diamond_dst.x && x < diamond_dst.x + diamond_dst.w && y > diamond_dst.y && y < diamond_dst.y + diamond_dst.h) {
+                        } else if (x > diamond_dst.x && x < diamond_dst.x + diamond_dst.w &&
+                                   y > diamond_dst.y && y < diamond_dst.y + diamond_dst.h) {
                             selectedEntityIndex = GEM_SPAWN;
                             selectedEntityDst = diamond_dst;
                         }
-
-                    }
-
-                    // Click en la grilla dibujable
-                    else if (x >= 320 && x < BLOCK_DIVISION* width && y >= 60 && y < SCREEN_HEIGHT) {
-                        //NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y SCREEN_HEIGHT)
-                        if (mode == ENTITY && selectedEntityIndex >= 0 && selectedEntityIndex < static_cast<int>(entitiesTextures.size())) {
+                    } else if (x >= 320 && x < BLOCK_DIVISION * width && y >= 60 &&
+                               y < SCREEN_HEIGHT) {
+                        // Click en la grilla dibujable
+                        // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
+                        // SCREEN_HEIGHT)
+                        if (mode == ENTITY && selectedEntityIndex >= 0 &&
+                            selectedEntityIndex < static_cast<int>(entitiesTextures.size())) {
                             int gridX = (x - 320 + horizontalScrollOffset) / BLOCK_DIVISION;
                             int gridY = (y - 60 + verticalScrollOffset) / BLOCK_DIVISION;
-                            if (currentTool == PAINT){
-                                // Verificar si la celda actual, la celda debajo y la celda a la derecha no tienen una capa de tipo COLISIONABLE, DIAGONAL IZQUIERDA o DIAGONAL DERECHA
+                            if (currentTool == PAINT) {
+                                // Verificar si la celda actual, la celda debajo y la celda a la
+                                // derecha no tienen una capa de tipo COLISIONABLE, DIAGONAL
+                                // IZQUIERDA o DIAGONAL DERECHA
                                 bool canPaint = true;
-                                std::vector<int> restrictedLayers = {COLLIDER_LAYER, DIAG_LEFT_LAYER, DIAG_RIGHT_LAYER};
-                                for (int layer : restrictedLayers) {
-                                    if (grid[gridY][gridX][layer] != nullptr ||
-                                        (gridY + 1 < static_cast<int>(grid.size()) && grid[gridY + 1][gridX][layer] != nullptr) ||
-                                        (gridX + 1 < static_cast<int>(grid[gridY].size()) && grid[gridY][gridX + 1][layer] != nullptr) ||
-                                        (gridY + 1 < static_cast<int>(grid.size()) && gridX + 1 < static_cast<int>(grid[gridY + 1].size()) && grid[gridY + 1][gridX + 1][layer] != nullptr)) {
-                                        canPaint = false;
-                                        break;
-                                        }
-                                }
+                                std::vector<int> restrictedLayers = {
+                                        COLLIDER_LAYER, DIAG_LEFT_LAYER, DIAG_RIGHT_LAYER};
+                                auto isRestrictedLayer = [&](int layer) {
+                                    return grid[gridY][gridX][layer] != nullptr ||
+                                           (gridY + 1 < static_cast<int>(grid.size()) &&
+                                            grid[gridY + 1][gridX][layer] != nullptr) ||
+                                           (gridX + 1 < static_cast<int>(grid[gridY].size()) &&
+                                            grid[gridY][gridX + 1][layer] != nullptr) ||
+                                           (gridY + 1 < static_cast<int>(grid.size()) &&
+                                            gridX + 1 < static_cast<int>(grid[gridY + 1].size()) &&
+                                            grid[gridY + 1][gridX + 1][layer] != nullptr);
+                                };
+
+                                canPaint = !std::any_of(restrictedLayers.begin(),
+                                                        restrictedLayers.end(), isRestrictedLayer);
 
                                 if (canPaint) {
-                                    switch(selectedEntityIndex){
-                                    case RABBIT_SPAWN:
-                                        if (currentRabbitSpawns < maxPlayers) {
-                                            entities_grid[gridY][gridX] = Entity{RABBIT_SPAWN, jazz_src};
-                                            currentRabbitSpawns++;
-                                        }
-                                        break;
-                                    case CRAB_SPAWN:
-                                        entities_grid[gridY][gridX] = Entity{CRAB_SPAWN, crab_src};
-                                        break;
-                                    case LIZARD_SPAWN:
-                                        entities_grid[gridY][gridX] = Entity{LIZARD_SPAWN, lizard_src};
-                                        break;
-                                    case COIN_SPAWN:
-                                        entities_grid[gridY][gridX] = Entity{COIN_SPAWN, coin_src};
-                                        break;
-                                    case GEM_SPAWN:
-                                        entities_grid[gridY][gridX] = Entity{GEM_SPAWN, diamond_src};
-                                        break;
+                                    switch (selectedEntityIndex) {
+                                        case RABBIT_SPAWN:
+                                            if (currentRabbitSpawns < maxPlayers) {
+                                                entities_grid[gridY][gridX] =
+                                                        Entity{RABBIT_SPAWN, jazz_src};
+                                                currentRabbitSpawns++;
+                                            }
+                                            break;
+                                        case CRAB_SPAWN:
+                                            entities_grid[gridY][gridX] =
+                                                    Entity{CRAB_SPAWN, crab_src};
+                                            break;
+                                        case LIZARD_SPAWN:
+                                            entities_grid[gridY][gridX] =
+                                                    Entity{LIZARD_SPAWN, lizard_src};
+                                            break;
+                                        case COIN_SPAWN:
+                                            entities_grid[gridY][gridX] =
+                                                    Entity{COIN_SPAWN, coin_src};
+                                            break;
+                                        case GEM_SPAWN:
+                                            entities_grid[gridY][gridX] =
+                                                    Entity{GEM_SPAWN, diamond_src};
+                                            break;
                                     }
                                 }
-                            }
-                            else if (currentTool == ERASE) {
+                            } else if (currentTool == ERASE) {
                                 entities_grid[gridY][gridX] = {-1, {0, 0, 0, 0}};
                             }
                         } else if (mode == TEXTURE) {
                             int gridX = (x - 320 + horizontalScrollOffset) / BLOCK_DIVISION;
                             int gridY = (y - 60 + verticalScrollOffset) / BLOCK_DIVISION;
-                            if (currentTool == PAINT && selectedTextureIndex >= 0 && selectedTextureIndex < static_cast<int>(textures.size())) {
-                                if (currentLayer == DIAG_LEFT_LAYER || currentLayer == DIAG_RIGHT_LAYER || currentLayer == COLLIDER_LAYER) {
-                                    if (grid[gridY][gridX][DIAG_LEFT_LAYER] != nullptr && currentLayer != DIAG_LEFT_LAYER) {
+                            if (currentTool == PAINT && selectedTextureIndex >= 0 &&
+                                selectedTextureIndex < static_cast<int>(textures.size())) {
+                                if (currentLayer == DIAG_LEFT_LAYER ||
+                                    currentLayer == DIAG_RIGHT_LAYER ||
+                                    currentLayer == COLLIDER_LAYER) {
+                                    if (grid[gridY][gridX][DIAG_LEFT_LAYER] != nullptr &&
+                                        currentLayer != DIAG_LEFT_LAYER) {
                                         grid[gridY][gridX][DIAG_LEFT_LAYER] = nullptr;
                                     }
-                                    if (grid[gridY][gridX][DIAG_RIGHT_LAYER] != nullptr && currentLayer != DIAG_RIGHT_LAYER) {
+                                    if (grid[gridY][gridX][DIAG_RIGHT_LAYER] != nullptr &&
+                                        currentLayer != DIAG_RIGHT_LAYER) {
                                         grid[gridY][gridX][DIAG_RIGHT_LAYER] = nullptr;
                                     }
-                                    if (grid[gridY][gridX][COLLIDER_LAYER] != nullptr && currentLayer != COLLIDER_LAYER) {
+                                    if (grid[gridY][gridX][COLLIDER_LAYER] != nullptr &&
+                                        currentLayer != COLLIDER_LAYER) {
                                         grid[gridY][gridX][COLLIDER_LAYER] = nullptr;
                                     }
                                 }
@@ -255,22 +275,38 @@ public:
 
                     // Scroll solo sobre la grilla de texturas
                     if (x < 320 && y >= 60) {
-                        scrollOffset -= event.wheel.y * 10;  // Se desplaza 10 píxeles por unidad de la rueda
-                        if (scrollOffset < 0) scrollOffset = 0;  // Limito el desplazamiento hacia arriba
-                        int maxScrollOffset = std::max(0, static_cast<int>(((textures.size() + 9) / 10) * 32 - 640));
-                        if (scrollOffset > maxScrollOffset) scrollOffset = maxScrollOffset;  // Limito el desplazamiento hacia abajo
-                    }
-                    // Scroll horizontal para la grilla dibujable
-                    else if (x >= 320 && y >= 60) {
-                        horizontalScrollOffset -= event.wheel.x * 10;  // Se desplaza 10 píxeles por unidad de la rueda
-                        if (horizontalScrollOffset < 0) horizontalScrollOffset = 0;  // Limito el desplazamiento hacia la izquierda
+                        scrollOffset -= event.wheel.y *
+                                        10;  // Se desplaza 10 píxeles por unidad de la rueda
+                        if (scrollOffset < 0)
+                            scrollOffset = 0;  // Limito el desplazamiento hacia arriba
+                        int maxScrollOffset = std::max(
+                                0, static_cast<int>(((textures.size() + 9) / 10) * 32 - 640));
+                        if (scrollOffset > maxScrollOffset)
+                            scrollOffset = maxScrollOffset;  // Limito el desplazamiento hacia abajo
+                    } else if (x >= 320 && y >= 60) {
+                        // Scroll horizontal para la grilla dibujable
+                        horizontalScrollOffset -=
+                                event.wheel.x *
+                                10;  // Se desplaza 10 píxeles por unidad de la rueda
+                        if (horizontalScrollOffset < 0)
+                            horizontalScrollOffset =
+                                    0;  // Limito el desplazamiento hacia la izquierda
                         int maxHorizontalScrollOffset = std::max(0, 32 * width - 960);
-                        if (horizontalScrollOffset > maxHorizontalScrollOffset) horizontalScrollOffset = maxHorizontalScrollOffset;  // Limito el desplazamiento hacia la derecha
+                        if (horizontalScrollOffset > maxHorizontalScrollOffset)
+                            horizontalScrollOffset =
+                                    maxHorizontalScrollOffset;  // Limito el desplazamiento hacia la
+                                                                // derecha
 
-                        verticalScrollOffset -= event.wheel.y * 10;  // Se desplaza 10 píxeles por unidad de la rueda
-                        if (verticalScrollOffset < 0) verticalScrollOffset = 0;  // Limito el desplazamiento hacia arriba
+                        verticalScrollOffset -=
+                                event.wheel.y *
+                                10;  // Se desplaza 10 píxeles por unidad de la rueda
+                        if (verticalScrollOffset < 0)
+                            verticalScrollOffset = 0;  // Limito el desplazamiento hacia arriba
                         int maxVerticalScrollOffset = std::max(0, 32 * height - 640);
-                        if (verticalScrollOffset > maxVerticalScrollOffset) verticalScrollOffset = maxVerticalScrollOffset;  // Limito el desplazamiento hacia abajo
+                        if (verticalScrollOffset > maxVerticalScrollOffset)
+                            verticalScrollOffset =
+                                    maxVerticalScrollOffset;  // Limito el desplazamiento hacia
+                                                              // abajo
                     }
                 }
             }
@@ -294,7 +330,7 @@ public:
 
             // Renderizo la grilla de texturas
             if (mode == TEXTURE) {
-                Rect textureClipRect = { 0, 60, 320, 640 };
+                Rect textureClipRect = {0, 60, 320, 640};
                 renderer.SetClipRect(textureClipRect);
                 for (int i = 0; i < static_cast<int>(textures.size()); ++i) {
                     Rect dst;
@@ -311,7 +347,7 @@ public:
                         renderer.SetDrawColor(255, 0, 0, 255);
                     }
                 }
-                renderer.SetClipRect(SDL2pp::NullOpt);  // Limpiar el recorte
+                renderer.SetClipRect(SDL2pp::NullOpt);  // Limpip el recorte
             } else if (mode == ENTITY) {
                 renderer.Copy(entitiesTextures[RABBIT_SPAWN], jazz_src, jazz_dst);
                 renderer.Copy(entitiesTextures[CRAB_SPAWN], crab_src, crab_dst);
@@ -328,13 +364,13 @@ public:
             }
 
             // Renderizo la grilla dibujable
-            Rect gridClipRect = { 320, 60, 960, 640 };
+            Rect gridClipRect = {320, 60, 960, 640};
             renderer.SetClipRect(gridClipRect);
             for (int i = 0; i < height; ++i) {
                 for (int j = 0; j < width; ++j) {
                     Rect dst;
                     dst.x = 320 + j * 32 - horizontalScrollOffset;
-                    dst.y = 60 + i * 32 - verticalScrollOffset;  // Ajustar para la posición de los botones
+                    dst.y = 60 + i * 32 - verticalScrollOffset;
                     dst.w = 32;
                     dst.h = 32;
 
@@ -370,23 +406,24 @@ private:
 
     int selectedTextureIndex = -1;
     int selectedEntityIndex = -1;
-    int scrollOffset = 0;  // Desplazamiento vertical para la grilla de texturas
+    int scrollOffset = 0;            // Desplazamiento vertical para la grilla de texturas
     int horizontalScrollOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
-    int verticalScrollOffset = 0;  // Desplazamiento vertical para la grilla dibujable
+    int verticalScrollOffset = 0;    // Desplazamiento vertical para la grilla dibujable
     int width;
     int height;
     std::string name;
     int maxPlayers;
     int currentRabbitSpawns;
 
-    Tool currentTool = PAINT;  // Herramienta actual
+    Tool currentTool = PAINT;             // Herramienta actual
     int currentLayer = BACKGROUND_LAYER;  // Capa actual
-    Mode mode = TEXTURE;  // Modo actual
+    Mode mode = TEXTURE;                  // Modo actual
     Font font;
-    Rect jazz_src, jazz_dst, crab_src, crab_dst, lizard_src, lizard_dst, coin_src, coin_dst, diamond_src, diamond_dst;
+    Rect jazz_src, jazz_dst, crab_src, crab_dst, lizard_src, lizard_dst, coin_src, coin_dst,
+            diamond_src, diamond_dst;
 
     void drawButton(int x, int y, int w, int h, const char* label, bool selected) {
-        Rect rect = { x, y, w, h };
+        Rect rect = {x, y, w, h};
         if (selected) {
             renderer.SetDrawColor(0, 255, 0, 255);  // Verde si está seleccionada
         } else {
@@ -402,7 +439,7 @@ private:
         Texture textTexture(renderer, textSurface);
 
         Rect textRect;
-        textRect.x = x + (w - textSurface.GetWidth()) / 2;  // Centrar el texto horizontalmente
+        textRect.x = x + (w - textSurface.GetWidth()) / 2;   // Centrar el texto horizontalmente
         textRect.y = y + (h - textSurface.GetHeight()) / 2;  // Centrar el texto verticalmente
         textRect.w = textSurface.GetWidth();
         textRect.h = textSurface.GetHeight();
@@ -418,7 +455,7 @@ private:
 
         YAML::Emitter out;
         out << YAML::BeginMap;
-        out << YAML::Key << "name" << YAML::Value << name;
+        out << YAML::Key << "name" << YAML::Value << name.c_str();
         out << YAML::Key << "max_players" << YAML::Value << maxPlayers;
         out << YAML::Key << "width" << YAML::Value << width;
         out << YAML::Key << "height" << YAML::Value << height;
@@ -431,9 +468,9 @@ private:
             out << YAML::Key << "id" << YAML::Value << layer;
             out << YAML::Key << "data" << YAML::Value << YAML::BeginSeq;
 
-            for (const auto& row : grid) {
+            for (const auto& row: grid) {
                 std::vector<int> textureRow;
-                for (const auto& cell : row) {
+                for (const auto& cell: row) {
                     // Obtener el índice de la textura
                     std::shared_ptr<SDL2pp::Texture> texture = cell[layer];
                     int index = texture ? textureIndices[texture] : -1;
@@ -446,16 +483,14 @@ private:
             out << YAML::EndMap;
         }
 
-        // Agregar una sexta matriz para las entidades
         out << YAML::BeginMap;
         out << YAML::Key << "id" << YAML::Value << 5;  // ID 5 para la capa de entidades
         out << YAML::Key << "data" << YAML::Value << YAML::BeginSeq;
 
-        for (const auto& row : entities_grid) {
-            std::vector<int> entityRow;
-            for (const auto& entity : row) {
-                entityRow.push_back(entity.who);
-            }
+        for (const auto& row: entities_grid) {
+            std::vector<int> entityRow(row.size());
+            std::transform(row.begin(), row.end(), entityRow.begin(),
+                           [](const auto& entity) { return entity.who; });
             out << YAML::Flow << entityRow;
         }
 
@@ -470,5 +505,3 @@ private:
         fout << out.c_str();
     }
 };
-
-

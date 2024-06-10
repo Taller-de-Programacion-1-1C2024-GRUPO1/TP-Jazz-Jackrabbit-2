@@ -14,6 +14,9 @@ std::string SoundManager::getPathForSound(const std::string& name) {
         return "../client_src/resources/sounds/shooting.wav";
     } else if (name == "Explosion") {
         return "../client_src/resources/sounds/explosion.wav";
+    } else {
+        // Handle the case where the name does not match any known sound
+        throw std::invalid_argument("Unknown sound name: " + name);
     }
 }
 

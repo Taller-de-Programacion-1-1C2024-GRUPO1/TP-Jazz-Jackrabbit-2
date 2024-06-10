@@ -80,9 +80,9 @@ enum RABBIT_STATES { ALIVE, DEAD, RECIEVED_DAMAGE, INTOXICATED };
 #define RABBIT_HEIGHT_DEFAULT PLAYER_SIDE  // modificar
 
 // ENEMY CONSTANTS
-#define ENEMY_INITIAL_HEALTH 3                  // Config
-#define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2  // modificar
-#define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION * 2   // modificar
+#define ENEMY_INITIAL_HEALTH 3                   // Config
+#define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
+#define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
 
 #define GRAVITY 1
 #define MAX_FALLING_SPEED 15

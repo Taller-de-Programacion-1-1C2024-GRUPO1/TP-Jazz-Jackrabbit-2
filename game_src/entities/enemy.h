@@ -7,7 +7,7 @@
 class Enemy: public Character {
 private:
     // MODIFICACION DE POSICION
-    
+
     int damage;
     int id;
     int direction;

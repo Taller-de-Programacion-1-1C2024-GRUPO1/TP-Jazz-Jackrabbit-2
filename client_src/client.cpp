@@ -9,7 +9,8 @@ Client::Client(const std::string& host, const std::string& service):
         q_snapshots(),
         client_sender(protocol, q_cmds),
         client_receiver(protocol, q_responses, q_snapshots, player_id),
-        drawer(q_cmds, q_snapshots) {}
+        drawer(q_cmds, q_snapshots),
+        new_map_info() {}
 
 
 void Client::run(int argc, char* argv[]) {
@@ -19,7 +20,7 @@ void Client::run(int argc, char* argv[]) {
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w(q_cmds, q_responses);
+    ClientLobby w(q_cmds, q_responses, new_map_info);
     w.show();
     int result = a.exec();
 
@@ -28,8 +29,10 @@ void Client::run(int argc, char* argv[]) {
         drawer.run(player_id);
     } else if (result == -2) {
         // create map
-        Editor editor(0, 40, 50, "dipamap", 3);
+        Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
+                      new_map_info.map_name, 3);
         editor.run();
+
     } else {
         std::cerr << "Cerrando QT" << std::endl;
     }

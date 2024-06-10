@@ -4,8 +4,12 @@
 
 
 ClientLobby::ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         QWidget* parent):
-        QMainWindow(parent), ui(new Ui::ClientLobby), q_cmds(q_cmds), q_responses(q_responses) {
+                         NewMapInfo& new_map_info, QWidget* parent):
+        QMainWindow(parent),
+        ui(new Ui::ClientLobby),
+        q_cmds(q_cmds),
+        q_responses(q_responses),
+        new_map_info(new_map_info) {
     ui->setupUi(this);
 
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
@@ -31,11 +35,13 @@ ClientLobby::~ClientLobby() { delete ui; }
 void ClientLobby::on_btnCreateMatch_clicked() {
     hide();
     CharacterSelector characterSelector;
-    connect(&characterSelector, &CharacterSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
-    connect(&characterSelector, &CharacterSelector::characterSelected, this, &ClientLobby::handleCharacterSelected);
+    connect(&characterSelector, &CharacterSelector::windowClosed, this,
+            &ClientLobby::handleWindowClosed);
+    connect(&characterSelector, &CharacterSelector::characterSelected, this,
+            &ClientLobby::handleCharacterSelected);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        MapSelector map_selector(q_cmds, q_responses, selected_character);
+        MapSelector map_selector(q_cmds, q_responses, selected_character, new_map_info);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         int result = map_selector.exec();
         if (result == QDialog::Accepted) {
@@ -89,3 +95,10 @@ void ClientLobby::handleCharacterSelected(ChampionType character) {
 
 
 void ClientLobby::handleWindowClosed() { QApplication::exit(-1); }
+
+
+void ClientLobby::closeEvent(QCloseEvent* event) {
+    qDebug() << "Window is closing";
+    handleWindowClosed();  // Directly calling the slot
+    QMainWindow::closeEvent(event);
+}

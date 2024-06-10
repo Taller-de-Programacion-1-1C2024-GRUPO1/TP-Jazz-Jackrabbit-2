@@ -20,6 +20,8 @@
 #include "client_map_editor.h"
 #include "client_receiver.h"
 #include "client_sender.h"
+#include "new_map_info.h"
+
 //#include "client_config.h"
 
 
@@ -34,10 +36,8 @@ private:
     ClientSender client_sender;
     ClientReceiver client_receiver;
     ClientDrawer drawer;
+    NewMapInfo new_map_info;
 
-
-    // el editor NO TIENE QUE COMUNICArse con el sertver
-    // HACER para el martes un manual de usuario como instalar, jugar, etc..
 
 public:
     Client(const std::string& host, const std::string& service);
