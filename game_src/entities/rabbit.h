@@ -26,7 +26,7 @@ private:
     int action;
     const int spawn_x;
     const int spawn_y;
-    Map& manager;
+    Map& map;
     std::vector<Gun*> gun_inventory;
     int current_gun;
     State* state;
@@ -34,7 +34,8 @@ private:
     std::queue<std::shared_ptr<Command>> events_queue;
 
 public:
-    Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map, Map& manager);
+    Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
+           Map& map);
     void set_rabbit_id(int id);
     void set_champion(uint8_t champion_type);
     int get_rabbit_id();

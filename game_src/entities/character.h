@@ -11,7 +11,7 @@ class Character: public PhysicalObject {
 protected:
     const int acc_y;
     int health;
-    PhysicalMap& map;
+    PhysicalMap& physical_map;
     // MAP COLISION FLAGS
     bool on_floor;
     bool on_roof;
@@ -21,11 +21,12 @@ protected:
     bool on_right_slope;
 
 public:
-    Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& map, int health):
+    Character(int width, int height, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
+              int health):
             PhysicalObject(width, height, init_pos_x, init_pos_y),
             acc_y(GRAVITY),
             health(health),
-            map(map),
+            physical_map(physical_map),
             on_floor(false),
             on_roof(false),
             on_left_wall(false),

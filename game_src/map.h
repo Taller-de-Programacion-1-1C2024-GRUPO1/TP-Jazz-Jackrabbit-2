@@ -27,6 +27,7 @@ private:
     int height;
     int max_players;
     int amount_players;
+    int projectile_id;
 
     // Vectores de Entidades
     std::vector<Rabbit*> players;
@@ -50,6 +51,7 @@ public:
     void add_enemy(Enemy* enemy);
     void add_bullet(Bullet* bullet);
     void add_item(Item* item);
+    int get_projectile_id();
 
     Map(int width, int height, int amount_players, const std::string& map_name);
 

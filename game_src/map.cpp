@@ -5,8 +5,10 @@ Map::Map(int width, int height, int amount_players, const std::string& map_name)
         width(width),
         height(height),
         amount_players(amount_players),
-        max_players(0) {}
+        max_players(0),
+        projectile_id(0) {}
 
+int Map::get_projectile_id() { return projectile_id++; }
 
 void Map::check_colision() {
     for (auto player: players) {

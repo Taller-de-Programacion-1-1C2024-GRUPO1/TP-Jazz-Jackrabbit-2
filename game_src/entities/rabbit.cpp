@@ -15,22 +15,23 @@
 #define PLAYER_SPEED ConfigSingleton::getInstance().getRabbitSpeed()
 #define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
 
-Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& map,
-               Map& manager):
-        Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, map, PLAYER_INITIAL_HEALTH),
+Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
+               Map& map):
+        Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, physical_map,
+                  PLAYER_INITIAL_HEALTH),
         id(NULL_ID),
         champion_type(champion_type),
         spawn_x(init_pos_x),
         spawn_y(init_pos_y),
         action(STAND),
         direction(LEFT),
-        manager(manager),
+        map(map),
         points(0),
         current_gun(0) {
     state = new Alive(*this);
-    gun_inventory.push_back(new BasicGun(*this, manager));
-    gun_inventory.push_back(new MachineGun(*this, manager));
-    gun_inventory.push_back(new Sniper(*this, manager));
+    gun_inventory.push_back(new BasicGun(*this, this->map));
+    gun_inventory.push_back(new MachineGun(*this, this->map));
+    gun_inventory.push_back(new Sniper(*this, this->map));
 }
 
 void Rabbit::set_rabbit_id(int id) { this->id = id; }
@@ -153,7 +154,7 @@ void Rabbit::handle_events() {
 }
 // JUMP
 void Rabbit::execute_jump() {
-    if (map.can_jump(pos_x, pos_y, width, height)) {
+    if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         spe_y = -JUMPING_INITIAL_SPEED;
     }
 }
@@ -221,4 +222,9 @@ RabbitSnapshot Rabbit::get_snapshot() {
                           gun_inventory[current_gun]->get_ammo(), state->get_type(), action);
 }
 
-Rabbit::~Rabbit() { delete state; }
+Rabbit::~Rabbit() {
+    delete state;
+    for (int i = 0; i < gun_inventory.size(); i++) {
+        delete gun_inventory[i];
+    }
+}

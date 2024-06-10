@@ -5,7 +5,7 @@
 // COLISIONES CON MAPA
 void Character::check_colision_with_map() {
     reset_map_colision_flags();
-    map.check_colision_with_map(pos_x, pos_y, width, height, this);
+    physical_map.check_colision_with_map(pos_x, pos_y, width, height, this);
 }
 
 void Character::is_on_floor() { on_floor = true; }
