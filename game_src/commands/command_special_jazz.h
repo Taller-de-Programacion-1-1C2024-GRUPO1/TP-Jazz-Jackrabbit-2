@@ -12,11 +12,11 @@ private:
 
 public:
     explicit SpecialJazz(int playerID);
-    void execute_Command(Rabbit& rabbit) override{};
+    void execute_Command(Rabbit& rabbit) override;
     bool execute_Command(bool* cheatON, bool& needsMove) override;
     void send(Protocol& protocol) override;
     int get_playerId() override;
-    int get_dir();
+    int get_dir() { return 0; }
     int get_commandType() override;
     ~SpecialJazz();
 };

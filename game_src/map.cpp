@@ -30,6 +30,13 @@ void Map::check_colision() {
     for (auto bullet: bullets) {
         bullet->check_colision_with(physical_map);
     }
+    for (auto player_A: players) {
+        for (auto player_B: players) {
+            if (player_A != player_B) {
+                player_A->check_colision_with(player_B);
+            }
+        }
+    }
 }
 
 void Map::update() {

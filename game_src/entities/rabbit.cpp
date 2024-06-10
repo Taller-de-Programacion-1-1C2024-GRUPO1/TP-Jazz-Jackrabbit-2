@@ -14,6 +14,8 @@
 #define POINTS_KILLING_RABBIT ConfigSingleton::getInstance().getKillRabbitPoints()
 #define PLAYER_SPEED ConfigSingleton::getInstance().getRabbitSpeed()
 #define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
+#define PLAYER_DAMAGE 1
+
 
 Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
                Map& map):
@@ -36,8 +38,19 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
 
 
 ////////////////////////////////////////////////////////
-void Rabbit::set_rabbit_id(int id) {
-    this->id = id;
+void Rabbit::set_rabbit_id(int id) { this->id = id; }
+
+void Rabbit::colided_with_enemy(Enemy* enemy, int damage) {
+    receive_damage(damage);
+    if (state->does_damage()) {
+        (enemy->hit_by_rabbit_specialattack(this, PLAYER_DAMAGE));
+    }
+}
+
+void Rabbit::on_colision_with_rabbit(Rabbit* rabbit_2) {
+    if (state->does_damage()) {
+        rabbit_2->receive_damage(PLAYER_DAMAGE);
+    }
 }
 ////////////////////////////////////////////////////////////
 
@@ -215,8 +228,7 @@ void Rabbit::execute_shoot() {
         gun_inventory[current_gun]->fire(pos_x + width, pos_y + (height / 2), direction);
     }
 }
-// SPECIAL ATTACK
-void Rabbit::execute_special_attack() { action = SPECIAL_ATTACK; }
+
 
 // CHANGE_WEAPON
 void Rabbit::execute_change_weapon() {
@@ -233,7 +245,6 @@ void Rabbit::run_fast_right() { state->run_fast_right(); }
 void Rabbit::run_left() { state->run_left(); }
 void Rabbit::run_fast_left() { state->run_fast_left(); }
 void Rabbit::shoot() { state->shoot(); }
-void Rabbit::special_attack() { state->special_attack(); }
 void Rabbit::change_weapon() { state->change_weapon(); }
 
 
@@ -254,5 +265,45 @@ Rabbit::~Rabbit() {
     delete state;
     for (int i = 0; i < gun_inventory.size(); i++) {
         delete gun_inventory[i];
+    }
+}
+void Rabbit::special_attack_jazz() {
+    if (champion_type == Jazz && state->can_do_special_attack()) {
+        execute_special_jazz();
+    }
+}
+void Rabbit::special_attack_spaz(int direction) {
+    if (champion_type == Spaz && state->can_do_special_attack()) {
+        execute_special_spaz(direction);
+    }
+}
+void Rabbit::special_attack_lori() {
+    if (champion_type == Lori && state->can_do_special_attack()) {
+        execute_special_lori();
+    }
+}
+
+void Rabbit::execute_special_jazz() {
+    // punetazo hacia arriba: Salta sin poder moverse lateralmente realizando dano
+    if (physical_map.can_jump(pos_x, pos_y, width, height)) {
+        execute_jump();
+        set_state(new SpecialAttackJazzState(*this));
+        std::cout << "Special JAZZ" << std::endl;
+    }
+}
+void Rabbit::execute_special_spaz(int direction) {
+    // Patada hacia un costado: patada lateral sin poder saltar
+    if (physical_map.can_jump(pos_x, pos_y, width, height)) {
+        // Cuidado con el lado hacia donde se ejecuta el ataque
+        set_state(new SpecialAttackSpazState(*this, direction));
+        std::cout << "Special SPAZ" << std::endl;
+    }
+}
+void Rabbit::execute_special_lori() {
+    // Patada Corto Alcance: Salto generando dano
+    if (physical_map.can_jump(pos_x, pos_y, width, height)) {
+        execute_jump();
+        set_state(new SpecialAttackLoriState(*this));
+        std::cout << "Special lori" << std::endl;
     }
 }

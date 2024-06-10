@@ -1,7 +1,7 @@
 #include "match.h"
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-             Map map_recibido, const std::string& match_name, bool* playing, int* status,
+             const Map& map_recibido, const std::string& match_name, bool* playing, int* status,
              int number_of_players):
         map(map_recibido),
         match_name(match_name),

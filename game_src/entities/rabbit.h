@@ -41,7 +41,6 @@ public:
     int get_rabbit_id();
     void update();
     void update_action();
-    void update_position();
     void update_guns();
     void revive();
     // EVENTS
@@ -53,7 +52,6 @@ public:
     void run_left();
     void run_fast_left();
     void shoot();
-    void special_attack();
     void change_weapon();
 
     // SHOOT
@@ -64,8 +62,8 @@ public:
     // COLISION
     void on_colision_with(PhysicalObject* object) override;
     // void on_colision_with_bullet(Bullet* bullet);
-    // void on_colision_with_enemy(Enemy* object);
-    // void on_colision_with_item(Item* object);
+    void colided_with_enemy(Enemy* object, int damage);
+    void on_colision_with_rabbit(Rabbit* object) override;
     void hit_by_bullet(Bullet* bullet, int damage);
 
     bool is_killed_by_taking_damage(int damage);
@@ -87,11 +85,18 @@ public:
     void execute_run_left();
     void execute_run_fast_left();
     void execute_shoot();
-    void execute_special_attack();
     void execute_change_weapon();
 
     // SNAPSHOTS
     RabbitSnapshot get_snapshot();
+
+    // SPECIAL ATTACKS
+    void special_attack_jazz();
+    void special_attack_spaz(int direction);
+    void special_attack_lori();
+    void execute_special_spaz(int direction);
+    void execute_special_jazz();
+    void execute_special_lori();
 
     Rabbit(const Rabbit&) = delete;
     Rabbit& operator=(const Rabbit&) = delete;

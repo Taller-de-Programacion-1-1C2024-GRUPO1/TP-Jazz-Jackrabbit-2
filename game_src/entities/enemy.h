@@ -23,6 +23,7 @@ public:
     void on_colision_with(PhysicalObject* object) override;
     void on_colision_with_rabbit(Rabbit* rabbit) override;
 
+    void hit_by_rabbit_specialattack(Rabbit* rabbit, int damage);
     void hit_by_bullet(Bullet* bullet, int damage);
     bool is_killed_by_taking_damage(int damage);
     void update();

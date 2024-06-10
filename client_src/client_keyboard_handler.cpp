@@ -26,6 +26,24 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
             q_cmds.push(std::make_unique<Move>(client_id, LEFT));
         }
     }
+    if (state[SDL_SCANCODE_LCTRL]) {
+        if (state[SDL_SCANCODE_UP]) {
+            if (state[SDL_SCANCODE_LSHIFT]) {
+                q_cmds.push(std::make_unique<SpecialLori>(client_id, RIGHT));
+                std::cout << "Special Lori" << std::endl;
+            } else {
+                q_cmds.push(std::make_unique<SpecialJazz>(client_id));
+                std::cout << "Special Jazz" << std::endl;
+            }
+        } else if (state[SDL_SCANCODE_RIGHT]) {
+            q_cmds.push(std::make_unique<SpecialSpaz>(client_id, RIGHT));
+            std::cout << "Special Spaz" << std::endl;
+        } else if (state[SDL_SCANCODE_LEFT]) {
+            q_cmds.push(std::make_unique<SpecialSpaz>(client_id, LEFT));
+            std::cout << "Special Spaz" << std::endl;
+        }
+    }
+
     if (state[SDL_SCANCODE_UP]) {
         q_cmds.push(std::make_unique<Jump>(client_id, LEFT));
     }
@@ -41,40 +59,6 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     }
 
 
-    /*
-    if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RCTRL]) {  // HABILIDAD ESPECIAL JAZZ Y LLORI
-        // q_cmds->push(new UpperHit(client_id, RIGHT));
-        // q_cmds->push(new ShortRangeKick(client_id, LEFT));
-    } else if (state[SDL_SCANCODE_RCTRL] and
-               state[SDL_SCANCODE_RIGHT]) {  // HABILIDAD ESPECIAL SPAZ
-        // q_cmds.try_push(AsideKick(client_id, RIGHT));
-    } else if (state[SDL_SCANCODE_RCTRL] and state[SDL_SCANCODE_LEFT]) {  // HABILIDAD ESPECIAL SPAZ
-        // q_cmds.try_push(AsideKick(client_id, LEFT));
-    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds.push(std::make_unique<MoveFaster>(client_id, RIGHT));
-    } else if (state[SDL_SCANCODE_SPACE] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds.push(std::make_unique<MoveFaster>(client_id, LEFT));
-    } else if (state[SDL_SCANCODE_RIGHT]) {
-        q_cmds.push(std::make_unique<Move>(client_id, RIGHT));
-    } else if (state[SDL_SCANCODE_LEFT]) {
-        q_cmds.push(std::make_unique<Move>(client_id, LEFT));
-    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_RIGHT]) {
-        q_cmds.push(std::make_unique<Jump>(client_id, RIGHT));
-        q_cmds.push(std::make_unique<Move>(client_id, RIGHT));
-    } else if (state[SDL_SCANCODE_UP] and state[SDL_SCANCODE_LEFT]) {
-        q_cmds.push(std::make_unique<Jump>(client_id, LEFT));
-        q_cmds.push(std::make_unique<Move>(client_id, LEFT));
-    } else if (state[SDL_SCANCODE_UP]) {
-        q_cmds.push(std::make_unique<Jump>(client_id, LEFT));
-    } else if (state[SDL_SCANCODE_S]) {
-        q_cmds.push(std::make_unique<Shoot>(client_id));
-    } else if (state[SDL_SCANCODE_W]) {
-        // q_cmds.try_push(ChangeWeapon(client_id));
-    } else if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
-        game_running = false;
-    } else {
-    }
-    */
 }
 
 void KeyboardHandler::setId(int id) { client_id = id; }
