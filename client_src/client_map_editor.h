@@ -55,7 +55,7 @@ public:
             maxPlayers(max_players),
             currentRabbitSpawns(0),
             font(FONT, 15) {
-        const char* textureImg[] = {CASTLE_IMG, BEACH_IMG, CARROTUS_IMG};
+        const char* textureImg[] = {CASTLE_IMG, CARROTUS_IMG, CARROTUS_IMG};
 
         Surface surface(textureImg[map]);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
@@ -455,7 +455,7 @@ private:
 
         YAML::Emitter out;
         out << YAML::BeginMap;
-        out << YAML::Key << "name" << YAML::Value << name.c_str();
+        out << YAML::Key << "name" << YAML::Value << name;
         out << YAML::Key << "max_players" << YAML::Value << maxPlayers;
         out << YAML::Key << "width" << YAML::Value << width;
         out << YAML::Key << "height" << YAML::Value << height;
