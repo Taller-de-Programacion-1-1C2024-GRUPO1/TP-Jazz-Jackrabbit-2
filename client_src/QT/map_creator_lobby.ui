@@ -29,7 +29,7 @@
   <widget class="QSpinBox" name="spinWidth">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>70</x>
      <y>330</y>
      <width>91</width>
      <height>41</height>
@@ -46,16 +46,16 @@ background-color: rgba(255, 255, 255, 100);
 </string>
    </property>
    <property name="minimum">
-    <number>800</number>
+    <number>25</number>
    </property>
    <property name="maximum">
-    <number>2400</number>
+    <number>100</number>
    </property>
   </widget>
   <widget class="QLabel" name="labelMapName">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>440</x>
      <y>270</y>
      <width>400</width>
      <height>61</height>
@@ -136,7 +136,7 @@ font: 20pt;</string>
   <widget class="QPlainTextEdit" name="txtMapName">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>560</x>
      <y>330</y>
      <width>151</width>
      <height>41</height>
@@ -149,7 +149,7 @@ font: 20pt;</string>
   <widget class="QLabel" name="labelWidth">
    <property name="geometry">
     <rect>
-     <x>60</x>
+     <x>10</x>
      <y>270</y>
      <width>200</width>
      <height>61</height>
@@ -167,7 +167,7 @@ font: 20pt;</string>
   <widget class="QLabel" name="labelHeight">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>150</x>
      <y>270</y>
      <width>200</width>
      <height>61</height>
@@ -185,7 +185,7 @@ font: 20pt;</string>
   <widget class="QSpinBox" name="spinHeight">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>210</x>
      <y>330</y>
      <width>91</width>
      <height>41</height>
@@ -202,13 +202,60 @@ background-color: rgba(255, 255, 255, 100);
 </string>
    </property>
    <property name="minimum">
-    <number>600</number>
+    <number>19</number>
    </property>
    <property name="maximum">
-    <number>1800</number>
+    <number>50</number>
    </property>
    <property name="value">
-    <number>600</number>
+    <number>19</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelMaxPlayers">
+   <property name="geometry">
+    <rect>
+     <x>340</x>
+     <y>280</y>
+     <width>200</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;max players:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="spinMaxPlayers">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>330</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">
+background-color: rgba(255, 255, 255, 100); 
+</string>
+   </property>
+   <property name="minimum">
+    <number>1</number>
+   </property>
+   <property name="maximum">
+    <number>5</number>
+   </property>
+   <property name="value">
+    <number>2</number>
    </property>
   </widget>
  </widget>
