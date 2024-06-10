@@ -4,14 +4,19 @@
 #include <vector>
 
 #include "SDL2pp/SDL2pp.hh"
+#include "client_drawable_munition.h"
+#include "client_number_images.h"
+
+#define WEAPONS_IMG "../client_src/resources/items/items.png"
 
 class AmmoLeft {
 private:
     SDL2pp::Renderer& renderer;
-    SDL2pp::Texture weaponTexture;
-    std::vector<SDL2pp::Rect> weaponRects;
+    SDL2pp::Rect munitionRect;
+    SDL2pp::Texture munitionTexture;
     int currentWeapon;
     int currentAmmo;
+    NumberImages numberImages;
 
 public:
     explicit AmmoLeft(SDL2pp::Renderer& renderer);

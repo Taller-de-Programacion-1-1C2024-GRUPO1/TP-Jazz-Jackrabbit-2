@@ -18,17 +18,14 @@ public:
         SDL2pp::Color characterColor = {44, 102, 150, 255};  // Color en formato RGBA
         switch (champion_type) {
             case Jazz:
-                std::cout << "Jazz" << std::endl;
                 this->setTexture(JAZZ_IMG, characterColor);
                 this->loadAnimations("../external/animations/jazz.yml");
                 break;
             case Spaz:
-                std::cout << "Spaz" << std::endl;
                 this->setTexture(SPAZ_IMG, characterColor);
                 this->loadAnimations("../external/animations/spaz.yml");
                 break;
             case Lori:
-                std::cout << "Lori" << std::endl;
                 this->setTexture(LORI_IMG, characterColor);
                 this->loadAnimations("../external/animations/lori.yml");
                 break;

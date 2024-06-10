@@ -175,7 +175,7 @@ Dash:
 Shoot:
   frames: 6
   loop: false
-  sound: ""
+  sound: "Shooting"
   rects:
     - x: 4
       y: 344

@@ -207,7 +207,7 @@ Fall-forward:
 Shoot:
   frames: 10
   loop: false
-  sound: ""
+  sound: "Shooting"
   rects:
     - x: 2
       y: 543

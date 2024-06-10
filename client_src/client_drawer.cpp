@@ -367,7 +367,7 @@ int ClientDrawer::run(int player_id) try {
         }
 
         banner.render();
-        //       ammoLeft.render(); //<--consume muchisimo tiempo
+        ammoLeft.render(); //<--consume muchisimo tiempo
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position
@@ -383,8 +383,8 @@ int ClientDrawer::run(int player_id) try {
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
         Uint32 realFrameTime = SDL_GetTicks() - frameStart;
-        // std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
-        // std::cout << "Frame time: " << realFrameTime << std::endl;
+        std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
+        std::cout << "Frame time: " << realFrameTime << std::endl;
 
         if (realFrameTime > expectedFrameTime) {
             // Calculate how many frames we are behind
