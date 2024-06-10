@@ -15,7 +15,6 @@ Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
 }
 
 void Gameloop::send_initial_snapshots() {
-    // Se debe leer el mapa elegido por el usuario y crearlo
     Snapshot snapshot = map.get_init_snapshot();
 
     // Enviar el snapshot inicial

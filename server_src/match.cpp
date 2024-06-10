@@ -1,13 +1,16 @@
 #include "match.h"
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-             Map map, const std::string& match_name, bool* playing, int* status):
-        map(map),
+             Map map_recibido, const std::string& match_name, bool* playing, int* status,
+             int number_of_players):
+        map(map_recibido),
         match_name(match_name),
         matches_protocols_players_queue(matches_protocols_players_queue),
         playing(playing),
         status(status) {
-    this->number_of_players = map.get_amount_players();
+    this->number_of_players = number_of_players;
+    this->map.set_amount_players(number_of_players);
+    this->map.create_entities();
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
