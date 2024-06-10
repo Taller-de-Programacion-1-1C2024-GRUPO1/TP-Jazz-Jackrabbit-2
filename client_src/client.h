@@ -17,9 +17,9 @@
 #include "QT/client_lobby.h"
 
 #include "client_drawer.h"
+#include "client_map_editor.h"
 #include "client_receiver.h"
 #include "client_sender.h"
-
 //#include "client_config.h"
 
 

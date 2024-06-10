@@ -28,7 +28,8 @@ void Client::run(int argc, char* argv[]) {
         drawer.run(player_id);
     } else if (result == -2) {
         // create map
-        std::cout << "create map" << std::endl;
+        Editor editor(0, 40, 50, "dipamap", 3);
+        editor.run();
     } else {
         std::cerr << "Cerrando QT" << std::endl;
     }
