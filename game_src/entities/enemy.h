@@ -12,6 +12,7 @@ private:
     int id;
     int direction;
     int enemy_type;
+    int position_iterator;
 
 public:
     Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map);
