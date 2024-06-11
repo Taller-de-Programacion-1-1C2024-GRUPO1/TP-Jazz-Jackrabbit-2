@@ -24,13 +24,17 @@ enum ChampionType : uint8_t {
     Lori,
 };
 
-enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, TURTLE };
+enum /*CHARACTERS*/ { RABBIT = 0, CRAB, LIZARD, TURTLE, NULL_ENEMY };
 
 enum SupplyType : uint8_t {
-    HEALTH_CARROT,
-    AMMO,
     GEM,
     COIN,
+    MACHINEGUN_AMMO,
+    SNIPER_AMMO,
+    HEALTH_CARROT,
+    HOTDOG,
+    HAMBURGER,
+    ROTTEN_CHEESE
 };
 
 enum DIRECTIONS { LEFT, RIGHT, UP, DOWN };

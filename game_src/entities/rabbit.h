@@ -24,6 +24,7 @@ private:
     uint8_t champion_type;
     int points;
     int action;
+    int max_health;
     const int spawn_x;
     const int spawn_y;
     Map& map;
@@ -66,9 +67,12 @@ public:
     void on_colision_with_rabbit(Rabbit* object) override;
     void hit_by_bullet(Bullet* bullet, int damage);
 
+
+    // COLIDED
     bool is_killed_by_taking_damage(int damage);
     void receive_damage(int damage) override;
     void add_points(int amount_of_points);
+    void add_health(int amount_of_health);
 
     // TESTING
 
@@ -78,6 +82,8 @@ public:
 
     // ESTADOS
     void set_state(State* state);
+    void set_intoxicated();
+
 
     void execute_jump();
     void execute_run_right();

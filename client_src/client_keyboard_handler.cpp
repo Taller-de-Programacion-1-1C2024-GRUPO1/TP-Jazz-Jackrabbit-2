@@ -57,8 +57,6 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
         game_running = false;
     } else {
     }
-
-
 }
 
 void KeyboardHandler::setId(int id) { client_id = id; }

@@ -23,6 +23,7 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
                   PLAYER_INITIAL_HEALTH),
         id(NULL_ID),
         champion_type(champion_type),
+        max_health(PLAYER_INITIAL_HEALTH),
         spawn_x(init_pos_x),
         spawn_y(init_pos_y),
         action(STAND),
@@ -37,7 +38,6 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
 }
 
 
-////////////////////////////////////////////////////////
 void Rabbit::set_rabbit_id(int id) { this->id = id; }
 
 void Rabbit::colided_with_enemy(Enemy* enemy, int damage) {
@@ -52,7 +52,15 @@ void Rabbit::on_colision_with_rabbit(Rabbit* rabbit_2) {
         rabbit_2->receive_damage(PLAYER_DAMAGE);
     }
 }
-////////////////////////////////////////////////////////////
+
+void Rabbit::set_intoxicated() { set_state(new Intoxicated(*this)); }
+
+void Rabbit::add_health(int amount_health) {
+    health += amount_health;
+    if (health > max_health) {
+        health = max_health;
+    }
+}
 
 void Rabbit::add_machinegun_ammo(int amount_ammo) {
     gun_inventory[MACHINE_GUN]->add_ammo(amount_ammo);
