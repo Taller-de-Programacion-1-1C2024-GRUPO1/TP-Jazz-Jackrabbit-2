@@ -54,7 +54,7 @@ void JoinMatchLobby::on_btnJoin_clicked() {
             }
         } else if (response->get_response() == ERROR) {
             QMessageBox::warning(this, "Error",
-                                "Match name does not exists or match has already started.");
+                                 "Match name does not exists or match has already started.");
             return;
         } else {
             QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
@@ -64,12 +64,10 @@ void JoinMatchLobby::on_btnJoin_clicked() {
         QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
         reject();
 
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
         reject();
     }
-
 }
 
 void JoinMatchLobby::closeEvent(QCloseEvent* event) {
@@ -99,8 +97,7 @@ void JoinMatchLobby::on_btnRefresh_clicked() {
         QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
         reject();
 
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
         reject();
     }

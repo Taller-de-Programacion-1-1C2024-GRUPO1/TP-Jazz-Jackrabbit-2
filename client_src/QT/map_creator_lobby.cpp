@@ -46,5 +46,5 @@ void MapCreatorLobby::start_creating_map(int texture) {
     int max_players = ui->spinMaxPlayers->value();
     new_map_info = NewMapInfo(map_name, width, height, texture, max_players);
     accept();
-    //QApplication::exit(-2);
+    // QApplication::exit(-2);
 }

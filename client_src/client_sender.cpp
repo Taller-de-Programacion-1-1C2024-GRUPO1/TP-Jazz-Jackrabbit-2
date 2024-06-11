@@ -13,7 +13,7 @@ void ClientSender::run() {
             bool could_pop = false;
             std::unique_ptr<Command> cmd;
             while (!could_pop && keep_talking) {
-                could_pop =  q_cmds.try_pop(cmd);
+                could_pop = q_cmds.try_pop(cmd);
             }
             if (could_pop) {
                 cmd->send(this->protocol);
@@ -37,6 +37,4 @@ void ClientSender::run() {
 bool ClientSender::is_dead() { return !this->is_alive; }
 
 
-void ClientSender::kill() {
-    this->keep_talking = false;
-}
+void ClientSender::kill() { this->keep_talking = false; }

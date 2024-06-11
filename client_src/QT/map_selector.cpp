@@ -46,7 +46,7 @@ void MapSelector::on_btnMapCreate_clicked() {
 
     int result = map_creator_lobby.exec();
     if (result == QDialog::Accepted) {
-        //QApplication::exit(OK_MAP_CREATOR);
+        // QApplication::exit(OK_MAP_CREATOR);
         this->done(OK_MAP_CREATOR);
     } else {
         this->done(CLOSE_MAP_CREATOR);
@@ -67,7 +67,7 @@ void MapSelector::start_match() {
     try {
         std::cout << "enviando comando" << std::endl;
         q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
-                                                selected_map, selected_character));
+                                                   selected_map, selected_character));
 
 
         bool could_pop = false;
@@ -97,8 +97,7 @@ void MapSelector::start_match() {
         QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
         reject();
 
-    }
-    catch (const std::exception& e) {
+    } catch (const std::exception& e) {
         QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
         reject();
     }

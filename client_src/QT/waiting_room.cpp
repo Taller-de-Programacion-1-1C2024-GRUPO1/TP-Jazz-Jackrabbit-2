@@ -44,14 +44,15 @@ void WaitingRoom::startWaitingForGame() {
             while (!stop_thread && !could_pop) {
                 could_pop = q_responses.try_pop(player_number);
                 if (!could_pop) {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
+                    std::this_thread::sleep_for(
+                            std::chrono::milliseconds(100));  // Espera de 100 ms
                 }
             }
             if (stop_thread)
                 return;
 
             std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
-                    << std::endl;
+                      << std::endl;
             if (player_number->get_response() < 0) {
                 QMetaObject::invokeMethod(this, [this]() {
                     QMessageBox::warning(this, "Error", "error al iniciar la partida");
@@ -61,18 +62,25 @@ void WaitingRoom::startWaitingForGame() {
             QMetaObject::invokeMethod(this, [this]() { accept(); });
 
         } catch (const ClosedQueue& e) {
-            QMetaObject::invokeMethod(this, [this]() {
-                QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
-                reject();
-            }, Qt::QueuedConnection);
+            QMetaObject::invokeMethod(
+                    this,
+                    [this]() {
+                        QMessageBox::warning(
+                                this, "Error",
+                                "Se cerró la cola de respuestas o la cola de comandos");
+                        reject();
+                    },
+                    Qt::QueuedConnection);
 
         } catch (const std::exception& e) {
-            QMetaObject::invokeMethod(this, [this]() {
-                QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
-                reject();
-            }, Qt::QueuedConnection);
+            QMetaObject::invokeMethod(
+                    this,
+                    [this]() {
+                        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+                        reject();
+                    },
+                    Qt::QueuedConnection);
         }
-
     });
 }
 
