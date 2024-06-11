@@ -26,15 +26,67 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void loadAnimationForItem(std::string& animationsPath, const int supply_id) {
-    switch (supply_id) {
-        case COIN:
-            animationsPath = "../external/animations/valuables/coin.yml";
-            break;
-        case GEM:
-            animationsPath = "../external/animations/valuables/gem.yml";
-            break;
+void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot, Texture &background) {
+    const int initial_offset = 100;
+    Font font(FONT, 24);
+    renderer.SetDrawColor(200, 200, 200);
+    renderer.Clear();
+
+    renderer.Copy(background, NullOpt, NullOpt);
+
+    std::string titleText = "Game Over!";
+    Texture titleTexture(renderer, font.RenderText_Solid(titleText, SDL_Color{255, 255, 255, 255}));
+
+    int titleWidth = titleTexture.GetWidth();
+    int titleHeight = titleTexture.GetHeight();
+
+    Rect titleRect;
+    titleRect.x = (SCREEN_WIDTH - titleWidth) / 2;
+    titleRect.y = initial_offset; // Offset from top of the screen for the title
+    titleRect.w = titleWidth;
+    titleRect.h = titleHeight;
+    
+    renderer.Copy(titleTexture, NullOpt, titleRect);
+
+    // Find the player with the highest score
+    auto winner = std::max_element(snapshot.rabbits.begin(), snapshot.rabbits.end(),
+                                   [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score < b.score; });
+
+    std::string winnerText = "Winner: Player " + std::to_string(winner->id);
+    Texture winnerTexture(renderer, font.RenderText_Solid(winnerText, SDL_Color{255, 255, 255, 255}));
+
+    int winnerWidth = winnerTexture.GetWidth();
+    int winnerHeight = winnerTexture.GetHeight();
+
+    Rect winnerRect;
+    winnerRect.x = (SCREEN_WIDTH - winnerWidth) / 2;
+    winnerRect.y = titleHeight + initial_offset*2; // Offset from title for the winner
+    winnerRect.w = winnerWidth;
+    winnerRect.h = winnerHeight;
+
+    renderer.Copy(winnerTexture, NullOpt, winnerRect);
+
+    int yOffset = titleHeight + winnerHeight + initial_offset*2; // Initial offset from top of the screen for the players
+
+    for (const auto& player : snapshot.rabbits) {
+        std::string playerText = "Player " + std::to_string(player.id) + ": " + std::to_string(player.score) + " points";
+        Texture texture(renderer, font.RenderText_Solid(playerText, SDL_Color{255, 255, 255, 255}));
+
+        int textWidth = texture.GetWidth();
+        int textHeight = texture.GetHeight();
+
+        Rect textRect;
+        textRect.x = (SCREEN_WIDTH - textWidth) / 2;
+        textRect.y = yOffset;
+        textRect.w = textWidth;
+        textRect.h = textHeight;
+
+        renderer.Copy(texture, NullOpt, textRect);
+
+        yOffset += textHeight + 20; // Move offset down for the next player
     }
+
+    renderer.Present();
 }
 
 void ClientDrawer::showLoadingScreen(Renderer& renderer) {
@@ -189,6 +241,7 @@ int ClientDrawer::run(int player_id) try {
 
     // Main loop
 
+    Snapshot snapshot;
     while (game_running) {
 
         // EVENTS HANDLER
@@ -201,7 +254,6 @@ int ClientDrawer::run(int player_id) try {
         cameraPosition.x += (desiredCameraPosition.x - cameraPosition.x) * lerpFactor;
         cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
 
-        Snapshot snapshot;
         // SNAPSHOT RECEIVER
 
         if (q_snapshots.try_pop(snapshot)) {
@@ -499,7 +551,12 @@ int ClientDrawer::run(int player_id) try {
             frameStart += expectedFrameTime;
         }
     }
-
+    auto start = std::chrono::high_resolution_clock::now();
+    auto end = start + std::chrono::seconds(5);
+    while (std::chrono::high_resolution_clock::now() < end) {
+        showFinalScreen(renderer, snapshot, background);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
     return 0;
 } catch (std::exception& e) {
     // If case of error, print it and exit with error

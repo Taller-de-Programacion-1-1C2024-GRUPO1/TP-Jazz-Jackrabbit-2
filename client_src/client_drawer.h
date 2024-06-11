@@ -103,7 +103,7 @@ public:
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void showLoadingScreen(Renderer& renderer);
-
+    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot,  Texture &background);
     //~ClientDrawer();
 };
 
