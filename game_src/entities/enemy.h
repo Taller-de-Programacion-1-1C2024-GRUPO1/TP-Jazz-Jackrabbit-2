@@ -38,6 +38,7 @@ public:
     void hit_by_rabbit_specialattack(Rabbit* rabbit, int damage);
     void hit_by_bullet(Bullet* bullet, int damage);
     bool is_killed_by_taking_damage(int damage);
+    void kill_enemy();
     void update();
     void drop_items();
     EnemySnapshot get_snapshot();

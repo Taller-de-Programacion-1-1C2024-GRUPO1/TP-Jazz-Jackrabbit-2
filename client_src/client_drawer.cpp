@@ -149,7 +149,8 @@ int ClientDrawer::run(int player_id) try {
     }
     for (auto& projectile: initial_snapshot.projectiles) {
         SDL2pp::Rect textureRect(0, 0, 0, 0);
-        SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width/2, rabbit_height/2);
+        SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width / 2,
+                               rabbit_height / 2);
         ShiftingDrawable* newProjectile = new ShiftingDrawable(
                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
         newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
@@ -159,7 +160,7 @@ int ClientDrawer::run(int player_id) try {
     }
     for (auto& valuable: initial_snapshot.supplies) {
         SDL2pp::Rect textureRect(0, 0, 0, 0);
-        SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, rabbit_width/2, rabbit_height/2);
+        SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, rabbit_width / 2, rabbit_height / 2);
         ShiftingDrawable* newValuable = new ShiftingDrawable(renderer, cameraPosition, textureRect,
                                                              onMapRect, soundManager);
         loadAnimationForItem(animationsPath, valuable.supply_type);
@@ -250,16 +251,17 @@ int ClientDrawer::run(int player_id) try {
             for (const auto& enemy: snapshot.enemies) {
                 auto it = enemies.find(enemy.id);
                 if (it != enemies.end()) {
-                    if (enemy.enemy_type != NULL_ENEMY){
+                    if (enemy.enemy_type != NULL_ENEMY) {
                         it->second->setPosition(enemy.pos_x, enemy.pos_y);
                         it->second->setDirection(enemy.direction);
                         enemyIds.erase(enemy.id);
                     }
                 } else {
                     // Creando un nuevo enemigo
-                    if (enemy.enemy_type != NULL_ENEMY){
+                    if (enemy.enemy_type != NULL_ENEMY) {
                         SDL2pp::Rect textureRect(0, 0, 0, 0);
-                        SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width, rabbit_height);
+                        SDL2pp::Rect onMapRect(enemy.pos_x, enemy.pos_y, rabbit_width,
+                                               rabbit_height);
                         DrawableEnemy* newEnemy = new DrawableEnemy(
                                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
                         newEnemy->setEnemyFromSnapshot(enemy.enemy_type);
@@ -287,7 +289,8 @@ int ClientDrawer::run(int player_id) try {
                 } else {
                     // Crear un nuevo proyectil
                     SDL2pp::Rect textureRect(0, 0, 0, 0);
-                    SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width/2, rabbit_height/2);
+                    SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width / 2,
+                                           rabbit_height / 2);
                     ShiftingDrawable* newProjectile = new ShiftingDrawable(
                             renderer, cameraPosition, textureRect, onMapRect, soundManager);
                     newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
@@ -314,7 +317,8 @@ int ClientDrawer::run(int player_id) try {
                 } else {
                     // Crear un nuevo item
                     SDL2pp::Rect textureRect(0, 0, 0, 0);
-                    SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, rabbit_width/2, rabbit_height/2);
+                    SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, rabbit_width / 2,
+                                           rabbit_height / 2);
                     ShiftingDrawable* newValuable = new ShiftingDrawable(
                             renderer, cameraPosition, textureRect, onMapRect, soundManager);
 
@@ -389,8 +393,8 @@ int ClientDrawer::run(int player_id) try {
 
         // Frame limiter: sleep for a little bit to not eat 100% of CPU
         Uint32 realFrameTime = SDL_GetTicks() - frameStart;
-        //std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
-        //std::cout << "Frame time: " << realFrameTime << std::endl;
+        // std::cout << "Expected frame time: " << expectedFrameTime << std::endl;
+        // std::cout << "Frame time: " << realFrameTime << std::endl;
 
         if (realFrameTime > expectedFrameTime) {
             // Calculate how many frames we are behind

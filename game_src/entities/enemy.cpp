@@ -35,43 +35,47 @@ void Enemy::drop_items() {
     int random = rand() % 100;
     if (random < 10) {
         std::cout << "Dropping hotdog" << std::endl;
-        //map.add_item(new Hotdog(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new Hotdog(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 20) {
         std::cout << "Dropping hamburger" << std::endl;
-        //map.add_item(new Hamburger(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new Hamburger(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 30) {
         std::cout << "Dropping carrot" << std::endl;
-        //map.add_item(new HealthCarrot(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new HealthCarrot(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 40) {
         std::cout << "Dropping machine gun ammo" << std::endl;
-        //map.add_item(new MachineGunAmmo(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new MachineGunAmmo(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 50) {
         std::cout << "Dropping coin" << std::endl;
-        //map.add_item(new Coin(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new Coin(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 60) {
         std::cout << "Dropping sniper ammo" << std::endl;
-        //map.add_item(new SniperAmmo(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new SniperAmmo(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 70) {
         std::cout << "Dropping gem" << std::endl;
-        //map.add_item(new Gem(map.get_projectile_id(), pos_x, pos_y));
+        // map.add_item(new Gem(map.get_projectile_id(), pos_x, pos_y));
     }
+}
+
+void Enemy::kill_enemy() {
+    is_alive = false;
+    revive_cooldown = ENEMY_REVIVE_COOLDOWN;
+    drop_items();
+    pos_x = 0;
+    pos_y = 0;
 }
 
 void Enemy::hit_by_bullet(Bullet* bullet, int damage) {
     if (is_killed_by_taking_damage(damage)) {
         bullet->bullet_killed_target(POINTS_KILLING_ENEMY);
-        is_alive = false;
-        revive_cooldown = ENEMY_REVIVE_COOLDOWN;
-        drop_items();
+        kill_enemy();
     }
 }
 
 void Enemy::hit_by_rabbit_specialattack(Rabbit* rabbit, int damage) {
     if (is_killed_by_taking_damage(damage)) {
         rabbit->add_points(POINTS_KILLING_ENEMY);
-        is_alive = false;
-        revive_cooldown = ENEMY_REVIVE_COOLDOWN;
-        drop_items();
+        kill_enemy();
     }
 }
 
@@ -87,12 +91,12 @@ bool Enemy::is_killed_by_taking_damage(int damage) {
 }
 
 void Enemy::update() {
-    if (revive_cooldown > 0) {
+    if (!is_alive) {
         revive_cooldown--;
-        if(revive_cooldown==0){
+        if (revive_cooldown == 0) {
             revive();
         }
-        std::cout <<"Estoy morido"<<std::endl;
+        std::cout << "Estoy morido" << std::endl;
     } else {
         int direction_int = 0;
         (direction == LEFT) ? (direction_int = -1) : (direction_int = 1);
@@ -104,7 +108,6 @@ void Enemy::update() {
         pos_x += ENEMY_SPEED * direction_int;
         Character::update_position();
     }
-
 }
 
 void Enemy::revive() {
@@ -113,13 +116,13 @@ void Enemy::revive() {
     health = ENEMY_INITIAL_HEALTH;
     position_iterator = initial_position_iterator;
     is_alive = true;
-}  
+}
 
 EnemySnapshot Enemy::get_snapshot() {
-    if (is_alive){
+    if (is_alive) {
         return EnemySnapshot(id, direction, enemy_type, pos_x, pos_y);
     } else {
-        //NECESITAMOS QUE NULL_ENEMY SE PROCESSE
+        // NECESITAMOS QUE NULL_ENEMY SE PROCESSE
         return EnemySnapshot(id, direction, NULL_ENEMY, pos_x, pos_y);
     }
 }
