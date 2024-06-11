@@ -324,6 +324,7 @@ int ClientDrawer::run(int player_id) try {
                 foodIds.insert(pair.first);
             }
             for (const auto& supply: snapshot.supplies) {
+                //std::cout << "Supply type: " << supply.supply_type << std::endl;
                 auto it = supplies.find(supply.id);
                 if (it != supplies.end()) {
                     it->second->setPosition(supply.pos_x, supply.pos_y);
@@ -334,7 +335,7 @@ int ClientDrawer::run(int player_id) try {
                     }                    
                 } else {
                     // Crear un nuevo item
-                    for (auto& supply: initial_snapshot.supplies) {
+                    for (auto& supply: snapshot.supplies) {
                         SDL2pp::Rect textureRect(0, 0, 0, 0);
                         SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2, rabbit_height / 2);
                         if (supply.supply_type == COIN || supply.supply_type == GEM) {
@@ -370,7 +371,6 @@ int ClientDrawer::run(int player_id) try {
         }
 
         // UPDATE ENTITIES
-    std::cout << "update a todo" << std::endl;;
 
         for (auto& tilePtr: mapComponents) {
             tilePtr->update();
