@@ -43,7 +43,6 @@ public:
     bool is_alive();
 
     void kill();
-    ~User();
 };
 
 #endif

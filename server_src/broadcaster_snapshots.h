@@ -22,8 +22,6 @@ public:
     void delete_player(int id);
     bool is_empty();
     std::shared_ptr<Snapshot> get_game(int id);
-
-    ~BroadcasterSnapshots();
 };
 
 #endif

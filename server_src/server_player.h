@@ -23,8 +23,7 @@ private:
     Queue<std::shared_ptr<Command>>& client_cmds_queue;
     ServerReceiver server_receiver;
 
-    std::atomic<bool> keep_talking;
-    std::atomic<bool> is_alive;
+    bool keep_talking = true;
 
 public:
     Player(std::shared_ptr<ContainerProtocol> container_protocol, int player_id,
@@ -34,8 +33,8 @@ public:
     void send_player_id();
     int get_id();
     bool is_dead();
+    void join();
     void kill();
-    ~Player();
 };
 
 #endif
