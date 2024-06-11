@@ -28,13 +28,13 @@ MapSelector::~MapSelector() { delete ui; }
 
 void MapSelector::on_btnMap1_clicked() {
     selected_map = DEFAULT_MAP_CARROTUS;  // CASTLE //////////////
-    map_texture = CASTLE;
+    map_texture = CARROTUS;
     start_match();
 }
 
 void MapSelector::on_btnMap2_clicked() {
     selected_map = DEFAULT_MAP_CARROTUS;
-    map_texture = CARROTUS;
+    map_texture = CASTLE;
     start_match();
 }
 

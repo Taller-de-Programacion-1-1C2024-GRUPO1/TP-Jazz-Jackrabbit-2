@@ -85,6 +85,10 @@ void JoinMatchLobby::on_btnRefresh_clicked() {
         }
         if (response->get_info_type() == REFRESH) {
             std::vector<std::string> matches = response->get_matches_available();
+            if (matches.empty()) {
+                QMessageBox::warning(this, "Error", "No hay partidas disponibles");
+                return;
+            }
             for (const std::string& match: matches) {
                 std::cout << "Match: " << match << std::endl;
                 ui->comboBoxMatches->addItem(QString::fromStdString(match));
