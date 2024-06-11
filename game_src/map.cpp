@@ -56,15 +56,6 @@ void Map::update() {
 // FALTA HACER DELETE SI SE USA HEAP
 void Map::reap_dead() {
     int i = 0;
-    while (i < enemies.size()) {
-        if (enemies[i]->is_dead()) {
-            delete enemies[i];
-            enemies.erase(enemies.begin() + i);
-        } else {
-            i++;
-        }
-    }
-    i = 0;
     while (i < bullets.size()) {
         if (bullets[i]->is_dead()) {
             delete bullets[i];
@@ -249,4 +240,17 @@ void Map::add_command(std::shared_ptr<Command> command) {
 }
 
 
-Map::~Map() {}
+Map::~Map() {
+    for (auto player: players) {
+        delete player;
+    }
+    for (auto enemy: enemies) {
+        delete enemy;
+    }
+    for (auto bullet: bullets) {
+        delete bullet;
+    }
+    for (auto item: items) {
+        delete item;
+    }
+}
