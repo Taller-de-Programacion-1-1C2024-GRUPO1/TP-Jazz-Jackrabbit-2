@@ -1,12 +1,13 @@
 #include "match.h"
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-             const Map& map_recibido, const std::string& match_name, bool* playing, int* status,
+             const Map& map_recibido, const std::string& match_name, bool& server_running, int* status,
              int number_of_players):
         map(map_recibido),
         match_name(match_name),
         matches_protocols_players_queue(matches_protocols_players_queue),
-        playing(playing),
+        server_running(server_running),
+        playing(true),
         status(status) {
     this->number_of_players = number_of_players;
     this->map.set_amount_players(number_of_players);
@@ -28,7 +29,6 @@ void Match::run() {
 
             // Desencolo el protocolo de los jugadores que se conectaron
             std::shared_ptr<PlayerInfo> player_info = matches_protocols_players_queue->pop();
-
             // Agrego al jugador al mapa, seteando su id y champion a un rabbit particular
             map.add_player(player_info->get_player_id(), player_info->get_character_name());
             Player* player =
@@ -41,8 +41,7 @@ void Match::run() {
         // Ya se conectaron todos los jugadores, se envian los ids de cada uno
         send_players_ids();
 
-        Gameloop gameloop =
-                Gameloop(clients_cmd_queue, broadcaster_snapshots, players, map, playing);
+        Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, map, server_running, playing);
         *status = MATCH_ALIVE;
         gameloop.send_initial_snapshots();
         gameloop.run();
@@ -65,6 +64,7 @@ void Match::send_players_ids() {
 void Match::delete_players() {
     for (auto& player: players) {
         if (!player->is_dead()) {
+            std::cout << "Killing player" << std::endl;
             player->kill();
         }
         player->join();

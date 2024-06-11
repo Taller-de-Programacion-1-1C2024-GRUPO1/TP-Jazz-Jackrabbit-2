@@ -26,11 +26,11 @@ private:
     std::shared_ptr<ContainerProtocol> container_protocol;
     MonitorMatches& monitor_matches;
 
-    bool* playing;
+    bool& server_running;
 
 public:
     User(int current_id, std::shared_ptr<ContainerProtocol> container_protocol,
-         MonitorMatches& monitor_matches, bool* playing);
+         MonitorMatches& monitor_matches, bool& server_running);
     void run() override;
 
     void create_new_match(int number_of_players, const std::string& match_name,

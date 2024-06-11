@@ -4,11 +4,12 @@
 
 Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
                    BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
-                   Map& map, bool* playing):
+                   Map& map, bool& server_running, bool& playing):
         client_cmds_queue(client_cmds_queue),
         broadcaster_snapshots(broadcaster_snapshots),
         players(players),
         map(map),
+        server_running(server_running),
         playing(playing),
         game_ended(false) {
     srand(static_cast<unsigned int>(time(nullptr)));
@@ -29,9 +30,9 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 void Gameloop::run() {
     // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     auto game_start = std::chrono::high_resolution_clock::now();
-    int segundos = 60 * 4;
+    int segundos = 30;
 
-    while (*playing) {
+    while (playing && server_running) {
         try {
             auto start = std::chrono::high_resolution_clock::now();
             std::shared_ptr<Command> game_command;
@@ -55,27 +56,27 @@ void Gameloop::run() {
                     std::chrono::duration_cast<std::chrono::seconds>(end - game_start).count();
 
             if (elapsed >= segundos) {
-                Snapshot final_snapshot = map.get_snapshot();
-                final_snapshot.set_end_game();
-                push_all_players(final_snapshot);
-                std::cout << "Finalizando juego..." << std::endl;
-                std::this_thread::sleep_for(std::chrono::milliseconds(50));
                 stop();
             }
 
         } catch (ClosedQueue& err) {
-            *playing = false;
+            playing = false;
         } catch (const std::exception& e) {
             std::cerr << "Error in gameloop: " << e.what() << std::endl;
-            *playing = false;
+            playing = false;
         }
     }
+    Snapshot final_snapshot = map.get_snapshot();
+    final_snapshot.set_end_game();
+    push_all_players(final_snapshot);
+    std::cout << "Finalizando juego..." << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
-void Gameloop::stop() { *playing = false; }
+void Gameloop::stop() { playing = false; }
 
 void Gameloop::check_players() {
     if (broadcaster_snapshots.is_empty()) {
-        *playing = false;
+        playing = false;
     }
 }

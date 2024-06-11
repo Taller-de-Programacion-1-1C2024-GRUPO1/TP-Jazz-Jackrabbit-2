@@ -39,14 +39,15 @@ private:
     int number_of_players;
     std::list<Player*> players;
 
-    bool* playing;
+    bool& server_running;
+    bool playing;
     int* status;
 
     void send_players_ids();
 
 public:
     Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-          const Map& map, const std::string& match_name, bool* playing, int* status,
+          const Map& map, const std::string& match_name, bool& server_running, int* status,
           int number_of_players);
     ~Match();
 

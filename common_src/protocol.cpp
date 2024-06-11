@@ -601,6 +601,7 @@ Snapshot Protocol::receive_Snapshot() {
     receive_supplies(snapshot);
     bool end_game = receive_uintEight();
     if (end_game) {
+        std::cout << "GAME ENDED!! PLEASE DO NOT DIE!!" << std::endl;
         snapshot.set_end_game();
     }
     return snapshot;

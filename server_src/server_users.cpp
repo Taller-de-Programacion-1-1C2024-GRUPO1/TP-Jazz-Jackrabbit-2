@@ -1,12 +1,12 @@
 #include "server_users.h"
 
 User::User(int current_id, std::shared_ptr<ContainerProtocol> container_protocol,
-           MonitorMatches& monitor_matches, bool* playing):
+           MonitorMatches& monitor_matches, bool& server_running):
         status(ACTIVE),
         id(current_id),
         container_protocol(container_protocol),
         monitor_matches(monitor_matches),
-        playing(playing) {}
+        server_running(server_running) {}
 
 void User::run() {
     try {
@@ -44,9 +44,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
 
     protocols_queue->push(player_info);
 
-    std::shared_ptr<MatchInfo> new_match = std::make_shared<MatchInfo>(
-            match_name, map, protocols_queue, playing, number_of_players);
-
+    std::shared_ptr<MatchInfo> new_match = std::make_shared<MatchInfo>(match_name, map, protocols_queue, server_running, number_of_players);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
 

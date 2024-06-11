@@ -9,6 +9,7 @@ int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchI
     if (name != matches.end()) {
         return ERROR;
     }
+    std::cout << "Adding new match..." << std::endl;
     matches[match_name] = match_struct;
     return OK;
 }
