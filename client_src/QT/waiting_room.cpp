@@ -40,25 +40,39 @@ void WaitingRoom::startWaitingForGame() {
         std::cout << "Waiting for game to start" << std::endl;
         bool could_pop = false;
         std::unique_ptr<QtResponse> player_number;
-
-        while (!stop_thread && !could_pop) {
-            could_pop = q_responses.try_pop(player_number);
-            if (!could_pop) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
+        try {
+            while (!stop_thread && !could_pop) {
+                could_pop = q_responses.try_pop(player_number);
+                if (!could_pop) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
+                }
             }
-        }
-        if (stop_thread)
-            return;
+            if (stop_thread)
+                return;
 
-        std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
-                  << std::endl;
-        if (player_number->get_response() < 0) {
+            std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
+                    << std::endl;
+            if (player_number->get_response() < 0) {
+                QMetaObject::invokeMethod(this, [this]() {
+                    QMessageBox::warning(this, "Error", "error al iniciar la partida");
+                });
+                return;
+            }
+            QMetaObject::invokeMethod(this, [this]() { accept(); });
+
+        } catch (const ClosedQueue& e) {
             QMetaObject::invokeMethod(this, [this]() {
-                QMessageBox::warning(this, "Error", "error al iniciar la partida");
-            });
-            return;
+                QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
+                reject();
+            }, Qt::QueuedConnection);
+
+        } catch (const std::exception& e) {
+            QMetaObject::invokeMethod(this, [this]() {
+                QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+                reject();
+            }, Qt::QueuedConnection);
         }
-        QMetaObject::invokeMethod(this, [this]() { accept(); });
+
     });
 }
 

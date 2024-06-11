@@ -61,33 +61,43 @@ void MapSelector::start_match() {
         return;
     }
 
-    std::cout << "enviando comando" << std::endl;
-    q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
-                                               selected_map, selected_character));
+    try {
+        std::cout << "enviando comando" << std::endl;
+        q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
+                                                selected_map, selected_character));
 
 
-    bool could_pop = false;
-    std::unique_ptr<QtResponse> response;
-    while (!could_pop) {
-        could_pop = q_responses.try_pop(response);
-    }
-    std::cout << "Response en MAP SELECTOR: " << response->get_response() << std::endl;
-    if (response->get_response() == OK) {
-        hide();
-        WaitingRoom waiting_room(q_cmds, q_responses);
-        if (waiting_room.exec() == QDialog::Accepted) {
-            this->done(QDialog::Accepted);
+        bool could_pop = false;
+        std::unique_ptr<QtResponse> response;
+        while (!could_pop) {
+            could_pop = q_responses.try_pop(response);
+        }
+        std::cout << "Response en MAP SELECTOR: " << response->get_response() << std::endl;
+        if (response->get_response() == OK) {
+            hide();
+            WaitingRoom waiting_room(q_cmds, q_responses);
+            if (waiting_room.exec() == QDialog::Accepted) {
+                this->done(QDialog::Accepted);
+            } else {
+                std::cerr << "Error en waiting room" << std::endl;
+                this->done(ERROR);
+            }
+        } else if (response->get_response() == ERROR) {
+            // Couldn't connect
+            QMessageBox::warning(this, "Error", "Match name already exists.");
+            this->done(ERROR);
         } else {
-            std::cerr << "Error en waiting room" << std::endl;
+            QMessageBox::warning(this, "Error", "Received an unexpected response.");
             this->done(ERROR);
         }
-    } else if (response->get_response() == ERROR) {
-        // Couldn't connect
-        QMessageBox::warning(this, "Error", "Match name already exists.");
-        this->done(ERROR);
-    } else {
-        QMessageBox::warning(this, "Error", "Received an unexpected response.");
-        this->done(ERROR);
+    } catch (const ClosedQueue& e) {
+        QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
+        reject();
+
+    }
+    catch (const std::exception& e) {
+        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+        reject();
     }
 }
 

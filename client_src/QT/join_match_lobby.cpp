@@ -40,25 +40,36 @@ void JoinMatchLobby::on_btnJoin_clicked() {
 
     bool could_pop = false;
     std::unique_ptr<QtResponse> response;
-    while (!could_pop) {
-        could_pop = q_responses.try_pop(response);
-    }
-    if (response->get_response() == OK) {
-        hide();
-        WaitingRoom waiting_room(q_cmds, q_responses);
-        if (waiting_room.exec() == QDialog::Accepted) {
-            accept();
-        } else {
-            std::cerr << "Error en waiting room" << std::endl;
+    try {
+        while (!could_pop) {
+            could_pop = q_responses.try_pop(response);
         }
-    } else if (response->get_response() == ERROR) {
-        QMessageBox::warning(this, "Error",
-                             "Match name does not exists or match has already started.");
-        return;
-    } else {
-        QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
-        return;
+        if (response->get_response() == OK) {
+            hide();
+            WaitingRoom waiting_room(q_cmds, q_responses);
+            if (waiting_room.exec() == QDialog::Accepted) {
+                accept();
+            } else {
+                std::cerr << "Error en waiting room" << std::endl;
+            }
+        } else if (response->get_response() == ERROR) {
+            QMessageBox::warning(this, "Error",
+                                "Match name does not exists or match has already started.");
+            return;
+        } else {
+            QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
+            return;
+        }
+    } catch (const ClosedQueue& e) {
+        QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
+        reject();
+
     }
+    catch (const std::exception& e) {
+        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+        reject();
+    }
+
 }
 
 void JoinMatchLobby::closeEvent(QCloseEvent* event) {
@@ -67,20 +78,30 @@ void JoinMatchLobby::closeEvent(QCloseEvent* event) {
 }
 
 void JoinMatchLobby::on_btnRefresh_clicked() {
-    q_cmds.push(std::make_unique<MatchCommand>(REFRESH, 0, "", "", selected_character));
-    bool could_pop = false;
-    std::unique_ptr<QtResponse> response;
-    while (!could_pop) {
-        could_pop = q_responses.try_pop(response);
-    }
-    if (response->get_info_type() == REFRESH) {
-        std::vector<std::string> matches = response->get_matches_available();
-        for (const std::string& match: matches) {
-            std::cout << "Match: " << match << std::endl;
-            ui->comboBoxMatches->addItem(QString::fromStdString(match));
+    try {
+        q_cmds.push(std::make_unique<MatchCommand>(REFRESH, 0, "", "", selected_character));
+        bool could_pop = false;
+        std::unique_ptr<QtResponse> response;
+        while (!could_pop) {
+            could_pop = q_responses.try_pop(response);
         }
+        if (response->get_info_type() == REFRESH) {
+            std::vector<std::string> matches = response->get_matches_available();
+            for (const std::string& match: matches) {
+                std::cout << "Match: " << match << std::endl;
+                ui->comboBoxMatches->addItem(QString::fromStdString(match));
+            }
 
-    } else {
-        QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
+        } else {
+            QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
+        }
+    } catch (const ClosedQueue& e) {
+        QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
+        reject();
+
+    }
+    catch (const std::exception& e) {
+        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+        reject();
     }
 }
