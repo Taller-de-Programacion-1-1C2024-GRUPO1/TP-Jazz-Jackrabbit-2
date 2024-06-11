@@ -32,9 +32,9 @@
 #include <memory>
 #include <set>
 #include <string>
-#include <vector>
 #include <thread>
 #include <utility>
+#include <vector>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
@@ -70,13 +70,13 @@ using SDL2pp::Texture;
 using SDL2pp::Window;
 
 #include "client_constants.h"
-#include "client_map_loader.h"
+#include "client_drawable.h"
 #include "client_drawable_enemy.h"
 #include "client_drawable_rabbit.h"
 #include "client_drawable_valuable.h"
-#include "client_number_images.h"
-#include "client_drawable.h"
 #include "client_food_provider.h"
+#include "client_map_loader.h"
+#include "client_number_images.h"
 #include "client_sound_manager.h"
 
 

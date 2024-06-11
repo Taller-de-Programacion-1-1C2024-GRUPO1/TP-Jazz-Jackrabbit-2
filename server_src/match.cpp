@@ -1,8 +1,8 @@
 #include "match.h"
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-             const Map& map_recibido, const std::string& match_name, bool& server_running, int* status,
-             int number_of_players):
+             const Map& map_recibido, const std::string& match_name, bool& server_running,
+             int* status, int number_of_players):
         map(map_recibido),
         match_name(match_name),
         matches_protocols_players_queue(matches_protocols_players_queue),
@@ -41,7 +41,8 @@ void Match::run() {
         // Ya se conectaron todos los jugadores, se envian los ids de cada uno
         send_players_ids();
 
-        Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, map, server_running, playing);
+        Gameloop gameloop = Gameloop(clients_cmd_queue, broadcaster_snapshots, players, map,
+                                     server_running, playing);
         *status = MATCH_ALIVE;
         gameloop.send_initial_snapshots();
         gameloop.run();

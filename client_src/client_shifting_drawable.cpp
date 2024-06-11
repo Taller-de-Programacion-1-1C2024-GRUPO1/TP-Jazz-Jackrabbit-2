@@ -100,8 +100,9 @@ void ShiftingDrawable::reajustFrame(int framesToAdvance) {
         } else {
             if (currentAnimation->currentFrame + animationFramesToAdvance >=
                 currentAnimation->frames) {
-                currentAnimation->currentFrame = (currentAnimation->currentFrame + animationFramesToAdvance) %
-                                     currentAnimation->frames;
+                currentAnimation->currentFrame =
+                        (currentAnimation->currentFrame + animationFramesToAdvance) %
+                        currentAnimation->frames;
             } else {
                 currentAnimation->currentFrame += animationFramesToAdvance;
             }

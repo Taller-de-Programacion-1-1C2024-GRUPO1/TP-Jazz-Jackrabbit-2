@@ -136,13 +136,13 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     float lerpFactor = 0.1f;
 
     std::string map_texture_path;
-    switch(map_texture){
+    switch (map_texture) {
         case CASTLE:
             map_texture_path = CASTLE_TILE;
             break;
         case CARROTUS:
             map_texture_path = CARROTUS_TILE;
-            break;       
+            break;
     }
 
     // Number images
@@ -267,7 +267,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             }
             std::cout << "GET ENDGAMNE: " << snapshot.get_end_game() << std::endl;
             if (game_running)
-                // Before updating this variable, 
+                // Before updating this variable,
                 // we need to check if it is true
                 // because user could have pressed ESC, Q or clicked on X
                 // and the snapshot could overwritte the variable

@@ -1,6 +1,7 @@
 #include "server_acceptor.h"
 
-ServerAcceptor::ServerAcceptor(const char* servname, const std::string& map_routes, bool& server_running):
+ServerAcceptor::ServerAcceptor(const char* servname, const std::string& map_routes,
+                               bool& server_running):
         sk(servname),
         sk_was_closed(false),
         id_counter(INITIAL_ID),
@@ -15,7 +16,8 @@ void ServerAcceptor::run() {
         try {
             Socket peer = sk.accept();
             // se podría hacer un unique_ptr
-            User* user = new User(id_counter, std::make_shared<ContainerProtocol>(std::move(peer)), monitor_matches, this->server_running);
+            User* user = new User(id_counter, std::make_shared<ContainerProtocol>(std::move(peer)),
+                                  monitor_matches, this->server_running);
             this->id_counter++;
             std::cout << "New user connected: " << this->id_counter << std::endl;
             user->start();

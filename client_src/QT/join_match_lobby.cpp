@@ -38,11 +38,13 @@ void JoinMatchLobby::on_btnJoin_clicked() {
     std::string match_name = ui->comboBoxMatches->currentText().toStdString();
     q_cmds.push(std::make_unique<MatchCommand>(JOIN, 0, match_name, "", selected_character));
 
-    bool could_pop = false;
     std::unique_ptr<QtResponse> response;
     try {
-        while (!could_pop) {
-            could_pop = q_responses.try_pop(response);
+        while (true) {
+            bool could_pop = q_responses.try_pop(response);
+            if (could_pop) {
+                break;
+            }
         }
         if (response->get_response() == OK) {
             hide();

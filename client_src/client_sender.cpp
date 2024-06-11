@@ -10,15 +10,9 @@ ClientSender::ClientSender(Protocol& protocol, Queue<std::unique_ptr<Command>>& 
 void ClientSender::run() {
     while (keep_talking) {
         try {
-            bool could_pop = false;
-            std::unique_ptr<Command> cmd;
-            while (!could_pop && keep_talking) {
-                could_pop = q_cmds.try_pop(cmd);
-            }
-            if (could_pop) {
-                cmd->send(this->protocol);
-                std::cout << "Client SENDER: Enviando comando" << std::endl;
-            }
+            std::unique_ptr<Command> cmd = q_cmds.pop();
+            cmd->send(this->protocol);
+
         } catch (const ClosedQueue& e) {
             std::cerr << "Se cerró la Command queue" << std::endl;
             break;

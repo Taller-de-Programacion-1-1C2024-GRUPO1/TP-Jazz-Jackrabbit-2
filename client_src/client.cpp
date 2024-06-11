@@ -41,7 +41,7 @@ void Client::run(int argc, char* argv[]) {
 }
 
 Client::~Client() {
-    this->protocol.~Protocol();
+    this->protocol.kill();
     client_sender.kill();
     client_receiver.kill();
     client_receiver.join();

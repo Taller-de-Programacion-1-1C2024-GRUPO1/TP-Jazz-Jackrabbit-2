@@ -38,15 +38,14 @@ WaitingRoom::~WaitingRoom() {
 void WaitingRoom::startWaitingForGame() {
     waiting_thread = std::thread([this]() {
         std::cout << "Waiting for game to start" << std::endl;
-        bool could_pop = false;
         std::unique_ptr<QtResponse> player_number;
         try {
-            while (!stop_thread && !could_pop) {
-                could_pop = q_responses.try_pop(player_number);
-                if (!could_pop) {
-                    std::this_thread::sleep_for(
-                            std::chrono::milliseconds(100));  // Espera de 100 ms
+            while (!stop_thread) {
+                bool could_pop = q_responses.try_pop(player_number);
+                if (could_pop) {
+                    break;
                 }
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
             }
             if (stop_thread)
                 return;

@@ -30,7 +30,8 @@ private:
     bool& server_running;
 
 public:
-    explicit ServerAcceptor(const char* servname, const std::string& map_routes, bool& server_running);
+    explicit ServerAcceptor(const char* servname, const std::string& map_routes,
+                            bool& server_running);
     virtual void run() override;
     void stop() override;
     void reap_dead();

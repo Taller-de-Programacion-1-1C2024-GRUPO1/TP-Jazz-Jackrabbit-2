@@ -29,7 +29,7 @@ private:
     Map& map;
 
     bool& server_running;
-    bool &playing;
+    bool& playing;
     bool game_ended = false;
 
 public:
