@@ -628,7 +628,10 @@ Snapshot Protocol::receive_Snapshot() {
     return snapshot;
 }
 
-Protocol::~Protocol() {
-    this->was_closed = true;
-    this->socket.~Socket();
+void Protocol::kill() {
+    was_closed = true;
+    socket.shutdown(SHUT_RDWR);
+    socket.close();
 }
+
+Protocol::~Protocol() {}

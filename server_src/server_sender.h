@@ -20,16 +20,14 @@ class ServerSender: public Thread {
 private:
     Protocol& protocolo;
     BroadcasterSnapshots& broadcaster_snapshots;
-    std::atomic<bool> keep_talking;
-    std::atomic<bool> is_alive;
+    bool& keep_talking;
+
     int player_id;
 
 public:
-    explicit ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaster_snapshots,
+    explicit ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaster_snapshots, bool& keep_talking,
                           int player_id);
     virtual void run() override;
-    bool is_dead();
-    void kill();
 };
 
 #endif

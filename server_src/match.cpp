@@ -64,9 +64,13 @@ void Match::run() {
         gameloop.send_initial_snapshots();
         gameloop.run();
 
-        clients_cmd_queue.close();
+        std::cout << "SE TERMINO TODOA" << std::endl;
+        // clients_cmd_queue.close();
+        std::cout << "SE TERMINO TODOB" << std::endl;
         *status = MATCH_OVER;
+        std::cout << "SE TERMINO TODOC" << std::endl;
         delete_players();
+        std::cout << "SE TERMINO TODOD" << std::endl;
 
     } catch (const ClosedQueue& err) {
         std::cerr << "Error: " << err.what() << std::endl;
@@ -85,6 +89,7 @@ void Match::delete_players() {
         if (!player->is_dead()) {
             player->kill();
         }
+        player->join();
         delete player;
     }
     players.clear();
