@@ -10,7 +10,7 @@ ServerReceiver::ServerReceiver(Protocol& protocol,
 
 void ServerReceiver::run() {
     try{
-        while (keep_talking) {
+        while (keep_talking ) {
             std::shared_ptr<Command> command = protocol.receive_Command();
             client_cmds_queue.push(command);
         }

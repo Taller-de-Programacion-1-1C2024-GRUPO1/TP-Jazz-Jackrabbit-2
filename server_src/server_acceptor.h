@@ -37,7 +37,6 @@ public:
     virtual void run() override;
     void stop() override;
     void reap_dead();
-    void kill();
     void kill_all();
 };
 

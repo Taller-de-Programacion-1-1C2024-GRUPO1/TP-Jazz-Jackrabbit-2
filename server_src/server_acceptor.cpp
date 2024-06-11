@@ -9,22 +9,22 @@ ServerAcceptor::ServerAcceptor(const char* servname, int number_players,
         server_users(),
         map_routes(map_routes),
         is_alive(true),
-        keep_talking(true),
+        keep_talking(playing),
         playing(playing) {}
 
 void ServerAcceptor::run() {
     MonitorMatches monitor_matches(map_routes);
 
-    while (keep_talking && !sk_was_closed) {
+    while (this->playing) {
         try {
             Socket peer = sk.accept();
             // se podría hacer un unique_ptr
             User* user = new User(id_counter, std::make_shared<ContainerProtocol>(std::move(peer)),
                                   monitor_matches, playing);
             this->id_counter++;
-            user->run();
-            reap_dead();
+            user->start();
             server_users.push_back(user);
+            reap_dead();
         } catch (const std::exception& e) {
             monitor_matches.close_matches();
             break;
@@ -52,12 +52,6 @@ void ServerAcceptor::kill_all() {
         delete c;
     }
     server_users.clear();
-}
-
-void ServerAcceptor::kill() {
-    sk.~Socket();
-    this->keep_talking = false;
-    this->sk_was_closed = true;
 }
 
 void ServerAcceptor::stop() {

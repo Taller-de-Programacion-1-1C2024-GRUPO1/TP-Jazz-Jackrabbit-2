@@ -28,18 +28,13 @@ bool Player::is_dead() {
 
 void Player::join() {
     server_sender.join();
-    std::cout<<"4"<<std::endl;
     server_receiver.join();
-    std::cout<<"5"<<std::endl;
 }
 
 void Player::kill() {
     keep_talking = false;
-    std::cout<<"1"<<std::endl;
-    this->client_cmds_queue.close();
-    std::cout<<"2"<<std::endl;
+    this->snapshots_queue.close();
     this->container_protocol->protocol.kill();
-    std::cout<<"3"<<std::endl;
 }
 
 Player::~Player() {}

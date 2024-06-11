@@ -19,11 +19,16 @@ int main(int argc, char* argv[]) {
         std::string map_routes = "/etc/jazz/maps.txt";
         bool playing = true;
         ServerAcceptor server_acceptor(servname, PLAYER_BASE, map_routes, &playing);
-        server_acceptor.run();
-
-        playing = false;
-        server_acceptor.stop();
-        server_acceptor.join();
+        server_acceptor.start();
+        std::string line;
+        while (std::getline(std::cin, line)) {
+            if (line == "q") {
+                playing = false;
+                server_acceptor.stop();
+                server_acceptor.join();
+                break;
+            }
+        }
 
         ret = 0;
         return ret;
