@@ -264,17 +264,7 @@ void Rabbit::set_state(State* new_state) {
     state = new_state;
 }
 
-RabbitSnapshot Rabbit::get_snapshot() {
-    return RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, points, health, current_gun,
-                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action);
-}
-
-Rabbit::~Rabbit() {
-    delete state;
-    for (int i = 0; i < gun_inventory.size(); i++) {
-        delete gun_inventory[i];
-    }
-}
+// ATAQUE ESPECIAL
 void Rabbit::special_attack_jazz() {
     if (champion_type == Jazz && state->can_do_special_attack()) {
         execute_special_jazz();
@@ -313,5 +303,19 @@ void Rabbit::execute_special_lori() {
         execute_jump();
         set_state(new SpecialAttackLoriState(*this));
         std::cout << "Special lori" << std::endl;
+    }
+}
+
+// SNAPSHOT
+RabbitSnapshot Rabbit::get_snapshot() {
+    return RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, points, health, current_gun,
+                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action);
+}
+
+// DESTRUCTOR
+Rabbit::~Rabbit() {
+    delete state;
+    for (int i = 0; i < gun_inventory.size(); i++) {
+        delete gun_inventory[i];
     }
 }

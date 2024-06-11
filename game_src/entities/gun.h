@@ -31,6 +31,7 @@ public:
     bool can_fire();
     void reset_ammo_amount();
     void add_ammo(int amount_ammo);
+    virtual ~Gun() = default;
 };
 
 #define BASIC_GUN_FIRE_COOLDOWN 20
