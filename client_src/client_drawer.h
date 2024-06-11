@@ -54,6 +54,7 @@
 
 #include "client_drawable_enemy.h"
 #include "client_drawable_rabbit.h"
+#include "client_drawable_valuable.h"
 #include "client_number_images.h"
 
 using SDL2pp::Chunk;
@@ -89,7 +90,8 @@ private:
     std::map<int, DrawableRabbit*> rabbits;
     std::map<int, DrawableEnemy*> enemies;
     std::map<int, ShiftingDrawable*> projectiles;
-    std::map<int, ShiftingDrawable*> supplies;
+    std::map<int, ShiftingDrawable*> valuables;
+    std::map<int, Drawable*> supplies;
     int rabbit_width;
     int rabbit_height;
 

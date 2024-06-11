@@ -95,8 +95,6 @@ int ClientDrawer::run(int player_id) try {
     numberImages.setCorner(0);
 
     // Heart banner
-    WeaponData::initialize();
-    FoodProvider::initialize();
     HeartsBanner banner(renderer);
     AmmoLeft ammoLeft(renderer);
 
@@ -158,16 +156,28 @@ int ClientDrawer::run(int player_id) try {
         newProjectile->setAnimation("Move");
         projectiles.emplace(projectile.id, newProjectile);
     }
-    for (auto& valuable: initial_snapshot.supplies) {
+    for (auto& supply: initial_snapshot.supplies) {
         SDL2pp::Rect textureRect(0, 0, 0, 0);
-        SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, rabbit_width / 2, rabbit_height / 2);
-        ShiftingDrawable* newValuable = new ShiftingDrawable(renderer, cameraPosition, textureRect,
+        SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2, rabbit_height / 2);
+        if (supply.supply_type == COIN || supply.supply_type == GEM) {
+            DrawableValuable* newValuable = new DrawableValuable(renderer, cameraPosition, textureRect,
                                                              onMapRect, soundManager);
-        loadAnimationForItem(animationsPath, valuable.supply_type);
-        newValuable->setTexture(ITEMS_IMG, enemyAndItemsColor);
-        newValuable->loadAnimations(animationsPath);
-        newValuable->setAnimation("Flip");
-        supplies.emplace(valuable.id, newValuable);
+            newValuable->setValuableFromSnapshot(supply.supply_type);
+            newValuable->setAnimation("Flip");
+            supplies.emplace(supply.id, newValuable);
+        } else if (valuable.supply_type == SNIPER_AMMO || valuable.supply_type == MACHINEGUN_AMMO) {
+            Drawable* newAmmo = new Drawable(renderer, cameraPosition, textureRect,
+                                                             onMapRect);
+            newAmmo->setTexture(ITEMS_IMG, enemyAndItemsColor);
+            newAmmo->setSourceRect(WeaponData::getWeapon(valuable.supply_type));
+            supplies.emplace(valuable.id, newAmmo);
+        } else {
+            Drawable* newFood = new Drawable(renderer, cameraPosition, textureRect,
+                                                             onMapRect);
+            newFood->setTexture(ITEMS_IMG, enemyAndItemsColor);
+            newFood->setSourceRect(FoodProvider::getFood(valuable.supply_type));
+            supplies.emplace(valuable.id, newFood);
+        }      
     }
 
     // Game state
@@ -309,24 +319,36 @@ int ClientDrawer::run(int player_id) try {
             for (const auto& pair: supplies) {
                 suppliesIds.insert(pair.first);
             }
-            for (const auto& valuable: snapshot.supplies) {
-                auto it = supplies.find(valuable.id);
+            for (const auto& supply: snapshot.supplies) {
+                auto it = supplies.find(supply.id);
                 if (it != supplies.end()) {
-                    it->second->setPosition(valuable.pos_x, valuable.pos_y);
-                    suppliesIds.erase(valuable.id);
+                    it->second->setPosition(supply.pos_x, supply.pos_y);
+                    suppliesIds.erase(supply.id);
                 } else {
                     // Crear un nuevo item
-                    SDL2pp::Rect textureRect(0, 0, 0, 0);
-                    SDL2pp::Rect onMapRect(valuable.pos_x, valuable.pos_y, rabbit_width / 2,
-                                           rabbit_height / 2);
-                    ShiftingDrawable* newValuable = new ShiftingDrawable(
-                            renderer, cameraPosition, textureRect, onMapRect, soundManager);
-
-                    loadAnimationForItem(animationsPath, valuable.supply_type);
-                    newValuable->setTexture(ITEMS_IMG, enemyAndItemsColor);
-                    newValuable->loadAnimations(animationsPath);
-                    newValuable->setAnimation("Flip");
-                    supplies.emplace(valuable.id, newValuable);
+                    for (auto& supply: initial_snapshot.supplies) {
+                        SDL2pp::Rect textureRect(0, 0, 0, 0);
+                        SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2, rabbit_height / 2);
+                        if (supply.supply_type == COIN || supply.supply_type == GEM) {
+                            DrawableValuable* newValuable = new DrawableValuable(renderer, cameraPosition, textureRect,
+                                                                            onMapRect, soundManager);
+                            newValuable->setValuableFromSnapshot(supply.supply_type);
+                            newValuable->setAnimation("Flip");
+                            supplies.emplace(supply.id, newValuable);
+                        } else if (valuable.supply_type == SNIPER_AMMO || valuable.supply_type == MACHINEGUN_AMMO) {
+                            Drawable* newAmmo = new Drawable(renderer, cameraPosition, textureRect,
+                                                                            onMapRect);
+                            newAmmo->setTexture(ITEMS_IMG, enemyAndItemsColor);
+                            newAmmo->setSourceRect(WeaponData::getWeapon(valuable.supply_type));
+                            supplies.emplace(valuable.id, newAmmo);
+                        } else {
+                            Drawable* newFood = new Drawable(renderer, cameraPosition, textureRect,
+                                                                            onMapRect);
+                            newFood->setTexture(ITEMS_IMG, enemyAndItemsColor);
+                            newFood->setSourceRect(FoodProvider::getFood(valuable.supply_type));
+                            supplies.emplace(valuable.id, newFood);
+                        }      
+                    }
                 }
             }
             for (const auto& id: suppliesIds) {

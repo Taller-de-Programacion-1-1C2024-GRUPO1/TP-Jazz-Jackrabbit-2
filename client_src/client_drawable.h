@@ -27,6 +27,7 @@ public:
     Drawable(const Drawable& other) = delete;
 
     void setTexture(const std::string& path, const SDL2pp::Color& colorKey);
+    void setSourceRect(const SDL2pp::Rect& rect);
     void render();
     void update();
     void setPosition(int x, int y);
