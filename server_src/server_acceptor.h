@@ -21,7 +21,6 @@ private:
     Socket sk;
     bool sk_was_closed;
 
-    int number_players;
     int id_counter;
     std::list<User*> server_users;
 

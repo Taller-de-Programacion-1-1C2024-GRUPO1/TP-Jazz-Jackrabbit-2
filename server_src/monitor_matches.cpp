@@ -14,7 +14,7 @@ int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchI
 }
 
 void MonitorMatches::start_match(std::string match_name) {
-    std::cout << "Starting match" << std::endl;
+    std::cout << "Starting match..." << std::endl;
     matches[match_name]->match_starter->start();
 }
 
@@ -71,7 +71,6 @@ void MonitorMatches::kill_dead_matches() {
     std::vector<std::string> delete_matches;
     for (auto& match: matches) {
         if (match.second->status == MATCH_OVER) {
-            std::cout << "Match " << match.first << " is over" << std::endl;
             match.second->matches_protocols_players_queue->close();
             match.second->match_starter->join();
             delete_matches.push_back(match.first);
