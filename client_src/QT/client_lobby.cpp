@@ -4,12 +4,13 @@
 
 
 ClientLobby::ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         NewMapInfo& new_map_info, QWidget* parent):
+                         NewMapInfo& new_map_info, int& map_texture, QWidget* parent):
         QMainWindow(parent),
         ui(new Ui::ClientLobby),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        new_map_info(new_map_info) {
+        new_map_info(new_map_info),
+        map_texture(map_texture) {
     ui->setupUi(this);
 
     int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
@@ -41,7 +42,8 @@ void ClientLobby::on_btnCreateMatch_clicked() {
             &ClientLobby::handleCharacterSelected);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        MapSelector map_selector(q_cmds, q_responses, selected_character, new_map_info);
+        MapSelector map_selector(q_cmds, q_responses, selected_character, new_map_info,
+                                 map_texture);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         int result = map_selector.exec();
         if (result == QDialog::Accepted) {

@@ -26,7 +26,8 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot, Texture &background) {
+void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
+                                   Texture& background) {
     const int initial_offset = 100;
     Font font(FONT, 24);
     renderer.SetDrawColor(200, 200, 200);
@@ -42,34 +43,38 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
 
     Rect titleRect;
     titleRect.x = (SCREEN_WIDTH - titleWidth) / 2;
-    titleRect.y = initial_offset; // Offset from top of the screen for the title
+    titleRect.y = initial_offset;  // Offset from top of the screen for the title
     titleRect.w = titleWidth;
     titleRect.h = titleHeight;
-    
+
     renderer.Copy(titleTexture, NullOpt, titleRect);
 
     // Find the player with the highest score
-    auto winner = std::max_element(snapshot.rabbits.begin(), snapshot.rabbits.end(),
-                                   [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score < b.score; });
+    auto winner = std::max_element(
+            snapshot.rabbits.begin(), snapshot.rabbits.end(),
+            [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score < b.score; });
 
     std::string winnerText = "Winner: Player " + std::to_string(winner->id);
-    Texture winnerTexture(renderer, font.RenderText_Solid(winnerText, SDL_Color{255, 255, 255, 255}));
+    Texture winnerTexture(renderer,
+                          font.RenderText_Solid(winnerText, SDL_Color{255, 255, 255, 255}));
 
     int winnerWidth = winnerTexture.GetWidth();
     int winnerHeight = winnerTexture.GetHeight();
 
     Rect winnerRect;
     winnerRect.x = (SCREEN_WIDTH - winnerWidth) / 2;
-    winnerRect.y = titleHeight + initial_offset*2; // Offset from title for the winner
+    winnerRect.y = titleHeight + initial_offset * 2;  // Offset from title for the winner
     winnerRect.w = winnerWidth;
     winnerRect.h = winnerHeight;
 
     renderer.Copy(winnerTexture, NullOpt, winnerRect);
 
-    int yOffset = titleHeight + winnerHeight + initial_offset*2; // Initial offset from top of the screen for the players
+    int yOffset = titleHeight + winnerHeight +
+                  initial_offset * 2;  // Initial offset from top of the screen for the players
 
-    for (const auto& player : snapshot.rabbits) {
-        std::string playerText = "Player " + std::to_string(player.id) + ": " + std::to_string(player.score) + " points";
+    for (const auto& player: snapshot.rabbits) {
+        std::string playerText = "Player " + std::to_string(player.id) + ": " +
+                                 std::to_string(player.score) + " points";
         Texture texture(renderer, font.RenderText_Solid(playerText, SDL_Color{255, 255, 255, 255}));
 
         int textWidth = texture.GetWidth();
@@ -83,7 +88,7 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
 
         renderer.Copy(texture, NullOpt, textRect);
 
-        yOffset += textHeight + 20; // Move offset down for the next player
+        yOffset += textHeight + 20;  // Move offset down for the next player
     }
 
     renderer.Present();
@@ -110,10 +115,11 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
     renderer.Present();
 }
 
-int ClientDrawer::run(int player_id) try {
+int ClientDrawer::run(int player_id, int map_texture) try {
     client_id = player_id;
     keyboard_handler.setId(player_id);
     std::cout << "My id is: " << client_id << std::endl;
+    std::cout << "Map texture: " << map_texture << std::endl;
 
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -261,6 +267,8 @@ int ClientDrawer::run(int player_id) try {
                 // Oh, more?
                 // OK, let's keep the last one
             }
+            std::cout << "GET ENDGAMNE: "<< snapshot.get_end_game() << std::endl;
+            game_running = !snapshot.get_end_game();
 
             // RABBITS UPDATE
             std::set<int> rabbitIds;

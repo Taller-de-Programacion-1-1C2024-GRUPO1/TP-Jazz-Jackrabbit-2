@@ -281,7 +281,7 @@ private:
 
 public:
     Queue() {}
-    explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
+    // explicit Queue(const unsigned int max_size): max_size(max_size), closed(false) {}
 
     bool try_push(std::unique_ptr<T> val) {
         std::unique_lock<std::mutex> lck(mtx);

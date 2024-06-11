@@ -31,6 +31,7 @@ private:
     Queue<std::unique_ptr<Command>> q_cmds;
     Queue<int> q_responses;
     int player_id;
+    int map_texture;
     Queue<Snapshot> q_snapshots;  /////////// SI el snapshot no es demasiado grande (200bytes)
                                   ///(copia) esta bien asi, sino hacerlo en el heap (2kbytes)
     ClientSender client_sender;
