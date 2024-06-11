@@ -25,8 +25,8 @@ private:
     int player_id;
 
 public:
-    explicit ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaster_snapshots, bool& keep_talking,
-                          int player_id);
+    explicit ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaster_snapshots,
+                          bool& keep_talking, int player_id);
     virtual void run() override;
 };
 

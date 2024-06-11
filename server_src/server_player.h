@@ -35,7 +35,6 @@ public:
     bool is_dead();
     void join();
     void kill();
-    ~Player();
 };
 
 #endif

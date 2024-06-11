@@ -34,5 +34,3 @@ void BroadcasterSnapshots::delete_player(int id) {
 }
 
 bool BroadcasterSnapshots::is_empty() { return players_queues.size() == 0; }
-
-BroadcasterSnapshots::~BroadcasterSnapshots() {}

@@ -11,7 +11,8 @@ ServerSender::ServerSender(Protocol& protocolo, BroadcasterSnapshots& broadcaste
 void ServerSender::run() {
     try {
         while (keep_talking) {
-            std::shared_ptr<Snapshot> game_snapshot = this->broadcaster_snapshots.get_game(this->player_id);
+            std::shared_ptr<Snapshot> game_snapshot =
+                    this->broadcaster_snapshots.get_game(this->player_id);
             protocolo.send_Snapshot(*game_snapshot);
         }
     } catch (const SocketClosed& e) {

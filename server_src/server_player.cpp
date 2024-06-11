@@ -7,7 +7,8 @@ Player::Player(std::shared_ptr<ContainerProtocol> cont_protocol, int player_id,
         player_id(player_id),
         snapshots_queue(QUEUE_MAX_SIZE),
         broadcaster_snapshots(broadcaster_snapshots),
-        server_sender(container_protocol->protocol, broadcaster_snapshots, this->keep_talking, player_id),
+        server_sender(container_protocol->protocol, broadcaster_snapshots, this->keep_talking,
+                      player_id),
         client_cmds_queue(client_cmds_queue),
         server_receiver(container_protocol->protocol, client_cmds_queue, this->keep_talking) {
     broadcaster_snapshots.add_player(player_id, &snapshots_queue);
@@ -22,9 +23,7 @@ void Player::send_player_id() { container_protocol->protocol.send_response(playe
 
 int Player::get_id() { return player_id; }
 
-bool Player::is_dead() {
-    return !keep_talking;
-}
+bool Player::is_dead() { return !keep_talking; }
 
 void Player::join() {
     server_sender.join();
@@ -36,5 +35,3 @@ void Player::kill() {
     this->snapshots_queue.close();
     this->container_protocol->protocol.kill();
 }
-
-Player::~Player() {}

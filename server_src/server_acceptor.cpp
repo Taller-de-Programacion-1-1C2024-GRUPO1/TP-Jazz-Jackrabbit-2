@@ -1,10 +1,8 @@
 #include "server_acceptor.h"
 
-ServerAcceptor::ServerAcceptor(const char* servname, int number_players,
-                               const std::string& map_routes, bool* playing):
+ServerAcceptor::ServerAcceptor(const char* servname, const std::string& map_routes, bool* playing):
         sk(servname),
         sk_was_closed(false),
-        number_players(number_players),
         id_counter(INITIAL_ID),
         server_users(),
         map_routes(map_routes),
@@ -14,7 +12,6 @@ ServerAcceptor::ServerAcceptor(const char* servname, int number_players,
 
 void ServerAcceptor::run() {
     MonitorMatches monitor_matches(map_routes);
-
     while (this->playing) {
         try {
             Socket peer = sk.accept();
@@ -55,6 +52,7 @@ void ServerAcceptor::kill_all() {
 }
 
 void ServerAcceptor::stop() {
+    *playing = false;
     sk.shutdown(SHUT_RDWR);
     sk.close();
     kill_all();

@@ -15,14 +15,13 @@ class ServerReceiver: public Thread {
 private:
     Protocol& protocol;
     Queue<std::shared_ptr<Command>>& client_cmds_queue;
-    bool& keep_talking;  
+    bool& keep_talking;
 
 public:
-    ServerReceiver(Protocol& protocol, Queue<std::shared_ptr<Command>>& client_cmds_queue, bool& keep_talking);
+    ServerReceiver(Protocol& protocol, Queue<std::shared_ptr<Command>>& client_cmds_queue,
+                   bool& keep_talking);
 
     virtual void run() override;
-
-    ~ServerReceiver();
 };
 
 #endif

@@ -49,11 +49,13 @@ void Gameloop::run() {
                 std::this_thread::sleep_for(
                         std::chrono::milliseconds(FRAME_DELAY - duration.count()));
             }
+
             check_players();
-            auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(end - game_start).count();
+            auto elapsed =
+                    std::chrono::duration_cast<std::chrono::seconds>(end - game_start).count();
 
             if (elapsed >= segundos) {
-                std::cout<< "TERMINO" << std::endl;
+                std::cout << "TERMINO EL JUEGO" << std::endl;
                 stop();
             }
 

@@ -63,7 +63,6 @@ void User::join_match(const std::string& match_name, ChampionType character_name
     if (ACK == ERROR) {
         return;
     }
-    // enviar mensaje de que se unio correctamente
     this->status = INACTIVE;
 }
 
@@ -76,9 +75,9 @@ bool User::is_alive() { return status == ACTIVE; }
 
 void User::kill() {
     try {
-        this->container_protocol->protocol.~Protocol();
-    } catch (const std::exception& e) {}
+        this->container_protocol->protocol.kill();
+    } catch (const std::exception& e) {
+        return;
+    }
     this->status = INACTIVE;
 }
-
-User::~User() {}
