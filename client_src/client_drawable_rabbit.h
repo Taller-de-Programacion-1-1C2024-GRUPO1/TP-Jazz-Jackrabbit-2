@@ -34,7 +34,17 @@ public:
 
     void setAnimationFromSnapshot(const RabbitSnapshot& snapshot) {
         switch (snapshot.state) {
+            case SPECIAL_ATTACK_LORI:
+                this->setAnimation("Special-Attack");
+                break;
+            case SPECIAL_ATTACK_SPAZ:
+                this->setAnimation("Special-Attack");
+                break;
+            case SPECIAL_ATTACK_JAZZ:
+                this->setAnimation("Special-Attack");
+                break;
             case ALIVE:
+                std::cout << "Alive" << std::endl;
                 switch (snapshot.action) {
                     case STAND:
                         this->setAnimation("Stand");
@@ -83,6 +93,10 @@ public:
                 break;
             case DEAD:
                 this->setAnimation("Die");
+                break;
+            default:
+                std::cerr << "Unknown state" << std::endl;
+                this->setAnimation("Stand");
                 break;
         }
     }
