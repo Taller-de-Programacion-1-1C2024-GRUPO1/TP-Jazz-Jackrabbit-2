@@ -13,10 +13,12 @@ void WeaponData::initialize() {
 
 SDL2pp::Rect WeaponData::getWeapon(int id) { 
     switch(id){
-        case MACHINE_GUN:
+        case MACHINEGUN_AMMO:
             return SDL2pp::Rect(91, 341, 18, 17);
-        case SNIPER:
+        case SNIPER_AMMO:
             return SDL2pp::Rect(66, 152, 22, 15);
+        default:
+            throw std::invalid_argument("Invalid weapon id");
     }
 }
 
