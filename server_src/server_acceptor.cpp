@@ -12,7 +12,7 @@ ServerAcceptor::ServerAcceptor(const char* servname, const std::string& map_rout
 
 void ServerAcceptor::run() {
     MonitorMatches monitor_matches(map_routes);
-    while (_keep_running) {
+    while (server_running) {
         try {
             Socket peer = sk.accept();
             // se podría hacer un unique_ptr
@@ -53,7 +53,7 @@ void ServerAcceptor::kill_all() {
 }
 
 void ServerAcceptor::stop() {
-    _keep_running = false;
+    server_running = false;
     sk.shutdown(SHUT_RDWR);
     sk.close();
     kill_all();
