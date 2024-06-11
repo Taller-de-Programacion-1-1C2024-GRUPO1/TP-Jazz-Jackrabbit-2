@@ -1,6 +1,7 @@
 #ifndef GUN_H
 #define GUN_H
 
+
 class Map;
 class Rabbit;
 
@@ -34,11 +35,6 @@ public:
     virtual ~Gun() = default;
 };
 
-#define BASIC_GUN_FIRE_COOLDOWN 20
-#define BASIC_GUN_MAX_AMMO 999
-#define BASIC_GUN_DAMAGE 1
-#define BASIC_GUN_RANGE 40
-#define BASIC_GUN_BULLET_SPEED 10
 
 class BasicGun: public Gun {
 
@@ -48,11 +44,7 @@ public:
     void fire(int pos_x, int pos_y, int direction) override;
 };
 
-#define MACHINEGUN_FIRE_COOLDOWN BASIC_GUN_FIRE_COOLDOWN / 4
-#define MACHINEGUN_MAX_AMMO 300
-#define MACHINEGUN_DAMAGE BASIC_GUN_DAMAGE
-#define MACHINEGUN_RANGE BASIC_GUN_RANGE
-#define MACHINEGUN_BULLET_SPEED BASIC_GUN_BULLET_SPEED
+
 
 class MachineGun: public Gun {
 public:
@@ -61,11 +53,6 @@ public:
     void fire(int pos_x, int pos_y, int direction) override;
 };
 
-#define SNIPER_FIRE_COOLDOWN BASIC_GUN_FIRE_COOLDOWN
-#define SNIPER_MAX_AMMO 10
-#define SNIPER_DAMAGE BASIC_GUN_DAMAGE * 3
-#define SNIPER_RANGE BASIC_GUN_RANGE * 3
-#define SNIPER_BULLET_SPEED BASIC_GUN_BULLET_SPEED * 2
 
 class Sniper: public Gun {
 public:
