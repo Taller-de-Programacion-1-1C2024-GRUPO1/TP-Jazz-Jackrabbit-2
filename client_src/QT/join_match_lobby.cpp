@@ -6,7 +6,8 @@
 #include "ui_join_match_lobby.h"
 
 
-JoinMatchLobby::JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+JoinMatchLobby::JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds,
+                               Queue<std::unique_ptr<QtResponse>>& q_responses,
                                ChampionType selected_character, QWidget* parent):
         QDialog(parent),
         ui(new Ui::JoinMatchLobby),
@@ -33,31 +34,16 @@ JoinMatchLobby::~JoinMatchLobby() { delete ui; }
 
 
 void JoinMatchLobby::on_btnJoin_clicked() {
-    std::string match_name = ui->txtMatchName->toPlainText().toStdString();
-
-
-    // MatchCommand(int type, int number_players, const std::string& match_name,
-    //                         const std::string& map_name):
-
-    // enum match_type {
-    //     NEW_MATCH = 0,
-    //     JOIN,
-    //     REFRESH,
-    // };
-
-
-    // ENVIO COMANDO preguntando por existencia de partida. Si existe acepto para que inicie la
-    // partida
-
-
+    // std::string match_name = ui->txtMatchName->toPlainText().toStdString();
+    std::string match_name = ui->comboBoxMatches->currentText().toStdString();
     q_cmds.push(std::make_unique<MatchCommand>(JOIN, 0, match_name, "", selected_character));
 
     bool could_pop = false;
-    int response;
+    std::unique_ptr<QtResponse> response;
     while (!could_pop) {
         could_pop = q_responses.try_pop(response);
     }
-    if (response == OK) {
+    if (response->get_response() == OK) {
         hide();
         WaitingRoom waiting_room(q_cmds, q_responses);
         if (waiting_room.exec() == QDialog::Accepted) {
@@ -65,8 +51,7 @@ void JoinMatchLobby::on_btnJoin_clicked() {
         } else {
             std::cerr << "Error en waiting room" << std::endl;
         }
-    } else if (response == ERROR) {
-        // no pude conectarme
+    } else if (response->get_response() == ERROR) {
         QMessageBox::warning(this, "Error",
                              "Match name does not exists or match has already started.");
         return;
@@ -79,4 +64,23 @@ void JoinMatchLobby::on_btnJoin_clicked() {
 void JoinMatchLobby::closeEvent(QCloseEvent* event) {
     emit windowClosed();
     QDialog::closeEvent(event);
+}
+
+void JoinMatchLobby::on_btnRefresh_clicked() {
+    q_cmds.push(std::make_unique<MatchCommand>(REFRESH, 0, "", "", selected_character));
+    bool could_pop = false;
+    std::unique_ptr<QtResponse> response;
+    while (!could_pop) {
+        could_pop = q_responses.try_pop(response);
+    }
+    if (response->get_info_type() == REFRESH) {
+        std::vector<std::string> matches = response->get_matches_available();
+        for (const std::string& match: matches) {
+            std::cout << "Match: " << match << std::endl;
+            ui->comboBoxMatches->addItem(QString::fromStdString(match));
+        }
+
+    } else {
+        QMessageBox::warning(this, "Error", "RECIBI UNA RESPUESTA QUE NO DEBERIA RECIBIR");
+    }
 }

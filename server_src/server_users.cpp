@@ -46,8 +46,14 @@ void User::create_new_match(int number_of_players, const std::string& match_name
 
     std::shared_ptr<MatchInfo> new_match = std::make_shared<MatchInfo>(
             match_name, map, protocols_queue, playing, number_of_players);
+
+
     int ACK = monitor_matches.add_new_match(match_name, new_match);
-    container_protocol->protocol.send_response(ACK);
+
+    QtResponse response = QtResponse(ACK, NEW_MATCH);
+    std::cout << "ACK ENVIADO: " << ACK << std::endl;
+    response.send(container_protocol->protocol);
+
     if (ACK == ERROR) {
         return;
     }
@@ -59,7 +65,10 @@ void User::join_match(const std::string& match_name, ChampionType character_name
     // se fija si el match esta vivo
     int ACK = monitor_matches.join_match(match_name, container_protocol, this->id, character_name);
     std::cout << "ACK ENVIADO: " << ACK << std::endl;
-    container_protocol->protocol.send_response(ACK);
+
+    QtResponse response = QtResponse(ACK, JOIN);
+    response.send(container_protocol->protocol);
+
     if (ACK == ERROR) {
         return;
     }
@@ -68,8 +77,9 @@ void User::join_match(const std::string& match_name, ChampionType character_name
 }
 
 void User::refresh() {
-    GameInfo info = GameInfo(monitor_matches.show_matches_availables());
-    info.send(container_protocol->protocol);
+    std::vector<std::string> matches_availables = monitor_matches.show_matches_availables();
+    QtResponse response = QtResponse(matches_availables, REFRESH);
+    response.send(container_protocol->protocol);
 }
 
 bool User::is_alive() { return status == ACTIVE; }

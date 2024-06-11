@@ -32,9 +32,11 @@ enum /*Senders*/ {
 };
 
 enum /*MATCH TYPE*/ {
+    INVALID_MATCH_TYPE = -1,
     NEW_MATCH = 0,
     JOIN,
     REFRESH,
+    PLAYER_CONNECTING,
 };
 
 enum /*INFO TYPE*/ {
@@ -46,10 +48,16 @@ enum /*INFO TYPE*/ {
 #define OK 0
 #define ERROR_PROT 0xFF
 #define ERROR -1
+#define OK_MAP_CREATOR -2
+#define INVALID_QT_RESPONSE -2
+
 
 #define WAITING 0
 #define STARTED 1
 
 #define PLAYING -1
+
+
+#define DEFAULT_MAP_CARROTUS "carrotus"
 
 #endif

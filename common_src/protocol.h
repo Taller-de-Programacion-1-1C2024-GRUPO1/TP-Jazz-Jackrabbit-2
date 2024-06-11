@@ -33,9 +33,9 @@ class SelectChampion;
 class SpecialJazz;
 class SpecialLori;
 class SpecialSpaz;
-class Information;
-class GameInfo;
 class DynamicMap;
+class QtResponse;
+
 
 class Protocol {
 protected:
@@ -90,12 +90,6 @@ private:
 
     std::unique_ptr<SpecialSpaz> receive_SpecialSpaz();
 
-    // ------------------- SEND AND RECEIVE INFO -------------------
-
-    void send_GameInfo(GameInfo* gameInfo);
-
-    GameInfo* receive_GameInfo();
-
     // ------------------- SEND AND RECEIVE SNAPSHOTS -------------------
 
     void send_dimensions(const Snapshot& snapshot);
@@ -133,7 +127,6 @@ public:
     // Envia un Snapshot
     void send_Snapshot(Snapshot& snapshot);
 
-    void send_Info(Information* info);
 
     // ------------------- Funciones para Client -------------------
 
@@ -143,7 +136,15 @@ public:
     // Recibe un Snapshot
     Snapshot receive_Snapshot();
 
-    std::unique_ptr<Information> receive_Info();
+    // ------------------- SEND AND RECEIVE INFO -------------------
+
+    void send_matches_available(std::vector<std::string> matches_available);
+    std::vector<std::string> receive_matches_available();
+
+
+    void send_qt_response(QtResponse* qt_response);
+
+    std::unique_ptr<QtResponse> receive_qt_response();
 
     // ------------------- Funciones para Client y Server -------------------
 
@@ -170,10 +171,6 @@ public:
     // Envia un DynamicMap
     void send_map(DynamicMap map);
     DynamicMap receive_map();
-
-    // Envia un ACK de que un jugador se unio a un match
-    void send_response(int id);
-    int receive_response();
 
     // Chequea si el socket fue cerrado
     bool is_close();

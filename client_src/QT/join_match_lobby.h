@@ -9,8 +9,10 @@
 #include <QMessageBox>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "../../game_src/constants_game.h"
+#include "../../game_src/qt_response.h"
 #include "../client_receiver.h"
 #include "../client_sender.h"
 
@@ -24,7 +26,8 @@ class JoinMatchLobby: public QDialog {
     Q_OBJECT
 
 public:
-    explicit JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+    explicit JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds,
+                            Queue<std::unique_ptr<QtResponse>>& q_responses,
                             ChampionType selected_character, QWidget* parent = nullptr);
     ~JoinMatchLobby();
 
@@ -38,10 +41,12 @@ protected:
 private slots:
     void on_btnJoin_clicked();
 
+    void on_btnRefresh_clicked();
+
 private:
     Ui::JoinMatchLobby* ui;
     Queue<std::unique_ptr<Command>>& q_cmds;
-    Queue<int>& q_responses;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
 };
 

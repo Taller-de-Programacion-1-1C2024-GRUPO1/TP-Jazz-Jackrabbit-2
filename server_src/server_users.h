@@ -10,13 +10,11 @@
 #include "../common_src/protocol.h"
 #include "../common_src/thread.h"
 #include "../game_src/commands/command_match.h"
-#include "../game_src/game_info.h"
+#include "../game_src/qt_response.h"
 
 #include "constants_server.h"
-#include "player_info.h"
-// #include "match.h"
-// #include "match_struct.h"
 #include "monitor_matches.h"
+#include "player_info.h"
 #include "server_player.h"
 
 

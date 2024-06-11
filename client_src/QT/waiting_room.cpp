@@ -6,8 +6,8 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         QWidget* parent):
+WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses, QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),
         q_cmds(q_cmds),
@@ -39,7 +39,7 @@ void WaitingRoom::startWaitingForGame() {
     waiting_thread = std::thread([this]() {
         std::cout << "Waiting for game to start" << std::endl;
         bool could_pop = false;
-        int player_number;
+        std::unique_ptr<QtResponse> player_number;
 
         while (!stop_thread && !could_pop) {
             could_pop = q_responses.try_pop(player_number);
@@ -50,8 +50,9 @@ void WaitingRoom::startWaitingForGame() {
         if (stop_thread)
             return;
 
-        std::cout << "Player number EN WAITING ROOM: " << player_number << std::endl;
-        if (player_number < 0) {
+        std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
+                  << std::endl;
+        if (player_number->get_response() < 0) {
             QMetaObject::invokeMethod(this, [this]() {
                 QMessageBox::warning(this, "Error", "error al iniciar la partida");
             });

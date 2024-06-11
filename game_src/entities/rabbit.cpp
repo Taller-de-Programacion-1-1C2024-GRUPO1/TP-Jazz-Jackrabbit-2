@@ -36,9 +36,7 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
 
 
 ////////////////////////////////////////////////////////
-void Rabbit::set_rabbit_id(int id) {
-    this->id = id;
-}
+void Rabbit::set_rabbit_id(int id) { this->id = id; }
 ////////////////////////////////////////////////////////////
 
 void Rabbit::add_machinegun_ammo(int amount_ammo) {

@@ -16,7 +16,7 @@ Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& map)
         Character(ENEMY_WIDTH_DEFAULT, ENEMY_HEIGHT_DEFAULT, init_pos_x, init_pos_y, map,
                   ENEMY_INITIAL_HEALTH),
         damage(1),
-        position_iterator(ENEMY_MOVE_RANGE/2) {}
+        position_iterator(ENEMY_MOVE_RANGE / 2) {}
 
 void Enemy::receive_damage(int damage) { health -= damage; }
 
@@ -43,15 +43,15 @@ bool Enemy::is_killed_by_taking_damage(int damage) {
 
 void Enemy::update() {
     int direction_int = 0;
-    (direction == LEFT) ? (direction_int=-1) : (direction_int=1);
-    if(position_iterator == 0) {
-        position_iterator = ENEMY_MOVE_RANGE*2;
-        direction==LEFT ? direction=RIGHT : direction=LEFT;
+    (direction == LEFT) ? (direction_int = -1) : (direction_int = 1);
+    if (position_iterator == 0) {
+        position_iterator = ENEMY_MOVE_RANGE * 2;
+        direction == LEFT ? direction = RIGHT : direction = LEFT;
     }
     position_iterator--;
     pos_x += ENEMY_SPEED * direction_int;
     Character::update_position();
-    }
+}
 
 EnemySnapshot Enemy::get_snapshot() {
     return EnemySnapshot(id, direction, enemy_type, pos_x, pos_y);

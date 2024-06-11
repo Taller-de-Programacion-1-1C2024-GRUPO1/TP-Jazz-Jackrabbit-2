@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "../common_src/container_protocol.h"
+#include "../game_src/qt_response.h"
 
 #include "server_receiver.h"
 #include "server_sender.h"

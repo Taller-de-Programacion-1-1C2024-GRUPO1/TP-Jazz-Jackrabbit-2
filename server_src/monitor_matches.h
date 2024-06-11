@@ -33,7 +33,7 @@ public:
     int add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_info);
 
     // Muestra los matches disponibles
-    std::map<std::string, std::string> show_matches_availables();
+    std::vector<std::string> show_matches_availables();
 
     // Un determinado usuario se une a un match
     int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo,

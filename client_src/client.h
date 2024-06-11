@@ -14,6 +14,7 @@
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
 #include "../game_src/commands/command.h"
+#include "../game_src/qt_response.h"
 #include "QT/client_lobby.h"
 
 #include "client_drawer.h"
@@ -29,7 +30,7 @@ class Client {
 private:
     Protocol protocol;
     Queue<std::unique_ptr<Command>> q_cmds;
-    Queue<int> q_responses;
+    Queue<std::unique_ptr<QtResponse>> q_responses;
     int player_id;
     Queue<Snapshot> q_snapshots;  /////////// SI el snapshot no es demasiado grande (200bytes)
                                   ///(copia) esta bien asi, sino hacerlo en el heap (2kbytes)
