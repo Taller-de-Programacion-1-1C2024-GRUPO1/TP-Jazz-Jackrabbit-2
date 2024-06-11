@@ -516,13 +516,13 @@ void Protocol::send_supplies(Snapshot& snapshot) {
     }
 }
 
-
 void Protocol::send_Snapshot(Snapshot& snapshot) {
     send_dimensions(snapshot);
     send_rabbits(snapshot);
     send_enemies(snapshot);
     send_projectiles(snapshot);
     send_supplies(snapshot);
+    send_uintEight(snapshot.get_end_game());
 }
 
 
@@ -625,6 +625,10 @@ Snapshot Protocol::receive_Snapshot() {
     receive_enemies(snapshot);
     receive_projectiles(snapshot);
     receive_supplies(snapshot);
+    bool end_game = receive_uintEight();
+    if (end_game) {
+        snapshot.set_end_game();
+    }
     return snapshot;
 }
 

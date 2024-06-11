@@ -267,7 +267,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 // Oh, more?
                 // OK, let's keep the last one
             }
-            std::cout << "GET ENDGAMNE: "<< snapshot.get_end_game() << std::endl;
+            std::cout << "GET ENDGAMNE: " << snapshot.get_end_game() << std::endl;
             game_running = !snapshot.get_end_game();
 
             // RABBITS UPDATE
