@@ -9,6 +9,7 @@ int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchI
     if (name != matches.end()) {
         return ERROR;
     }
+    std::cout << "Adding new match..." << std::endl;
     matches[match_name] = match_struct;
     return OK;
 }
@@ -18,12 +19,12 @@ void MonitorMatches::start_match(std::string match_name) {
     matches[match_name]->match_starter->start();
 }
 
-std::map<std::string, std::string> MonitorMatches::show_matches_availables() {
-    std::map<std::string, std::string> availableMatches;
+std::vector<std::string> MonitorMatches::show_matches_availables() {
     std::lock_guard<std::mutex> lock(mutex);
+    std::vector<std::string> availableMatches;
     for (auto& match: matches) {
         if (match.second->status == MATCH_WAITING) {
-            availableMatches[match.first] = match.second->map_name;
+            availableMatches.push_back(match.first);
         }
     }
     return availableMatches;

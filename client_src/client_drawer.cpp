@@ -157,6 +157,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Read first snapshot!
     Snapshot initial_snapshot;
     while (!q_snapshots.try_pop(initial_snapshot)) {
+        std::cout << "Waiting for initial snapshot..." << std::endl;
         showLoadingScreen(renderer);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }

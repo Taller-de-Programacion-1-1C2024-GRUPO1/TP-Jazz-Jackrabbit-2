@@ -12,8 +12,7 @@
 #include "../game_src/commands/command_special_jazz.h"
 #include "../game_src/commands/command_special_lori.h"
 #include "../game_src/commands/command_special_spaz.h"
-#include "../game_src/game_info.h"
-#include "../game_src/information.h"
+#include "../game_src/qt_response.h"
 
 // Protocol
 Protocol::Protocol(const std::string& host, const std::string& service):
@@ -23,7 +22,7 @@ Protocol::Protocol(const std::string& host, const std::string& service):
 Protocol::Protocol(Socket peer): socket(std::move(peer)), was_closed(false) {}
 
 
-// ----------------------------- SEND BYTES/STRING/CHAR/ACK -----------------------------
+// ----------------------------- SEND BYTES/STRING/CHAR -----------------------------
 
 void Protocol::send_uintEight(uint8_t num) {
     socket.sendall(&num, sizeof(num), &was_closed);
@@ -76,16 +75,8 @@ void Protocol::send_map(DynamicMap map) {
     check_closed();
 }
 
-void Protocol::send_response(int ACK) {
-    check_closed();
-    if (ACK == ERROR) {
-        send_uintEight(ERROR_PROT);
-        return;
-    }
-    send_uintEight(ACK);
-}
 
-// ----------------------------- RECEIVE BYTES/STRINGS/CHAR/ACK -----------------------------
+// ----------------------------- RECEIVE BYTES/STRINGS/CHAR -----------------------------
 
 uint8_t Protocol::receive_uintEight() {
     uint8_t num;
@@ -144,19 +135,6 @@ DynamicMap Protocol::receive_map() {
     return map;
 }
 
-// Primer Response:
-// recibe un ACK 0 en caso de haberse unido/creado un match
-// recibe un ACK negativo (-1) en caso de no poder unirse/crear un match
-// Segundo response:
-// recibe un ACK positivo (player_id) justo antes de iniciar la match
-int Protocol::receive_response() {
-    check_closed();
-    uint8_t ACK = receive_uintEight();
-    if (ACK == ERROR_PROT) {
-        return ERROR;
-    }
-    return ACK;
-}
 
 bool Protocol::is_close() { return this->was_closed; }
 
@@ -396,54 +374,50 @@ std::unique_ptr<Command> Protocol::receive_Command() {
 
 // ----------------------------- SEND INFO -----------------------------
 
-void Protocol::send_GameInfo(GameInfo* gameInfo) {
+void Protocol::send_matches_available(std::vector<std::string> matches_available) {
     check_closed();
-    send_uintEight(SEND_GAME_INFO);
-    std::map<std::string, std::string> matchesAvailable = gameInfo->getMatchesAvailable();
-    send_uintEight(matchesAvailable.size());
-    for (auto& match: matchesAvailable) {
-        send_string(match.first);
-        send_string(match.second);
+    send_uintEight(matches_available.size());
+    for (auto& match: matches_available) {
+        send_string(match);
     }
 }
 
-void Protocol::send_Info(Information* info) {
+
+void Protocol::send_qt_response(QtResponse* qt_response) {
     check_closed();
-    int type = info->get_infoType();
-    if (type == SELECT_CHARACTER_INFO) {
-        // sendDynamic(dynamic_cast<DynamicMap*>(info));
-    } else if (type == GAME_INFO) {
-        send_GameInfo(dynamic_cast<GameInfo*>(info));
-    } else if (type == GAME_MAP_INFO) {
-        // sendMap(dynamic_cast<Map*>(info));
-    }
+    send_uintEight(qt_response->get_info_type());
+    send_uintEight(qt_response->get_response());
+    send_matches_available(qt_response->get_matches_available());
+    std::cout << "Enviando QTResponse: " << qt_response->get_response() << " "
+              << qt_response->get_info_type() << std::endl;
 }
+
+
+std::unique_ptr<QtResponse> Protocol::receive_qt_response() {
+    check_closed();
+    std::cout << "1" << std::endl;
+    int response_type = receive_uintEight();
+    int response = receive_uintEight();
+    std::vector<std::string> matches_available = receive_matches_available();
+    std::cout << "Recibiendo QTResponse: " << response << " " << response_type << std::endl;
+    if (response_type == REFRESH) {
+        return std::make_unique<QtResponse>(matches_available, response_type);
+    }
+    return std::make_unique<QtResponse>(response, response_type);
+}
+
 
 // ----------------------------- RECEIVE INFO -----------------------------
 
-GameInfo* Protocol::receive_GameInfo() {
-    check_closed();
-    std::map<std::string, std::string> matches_available;
-    int size_map = receive_uintEight();
-    for (int i = 0; i < size_map; i++) {
-        std::string matchName = receive_string();
-        std::string mapName = receive_string();
-        matches_available[matchName] = mapName;
-    }
-    return new GameInfo(matches_available);
-}
 
-std::unique_ptr<Information> Protocol::receive_Info() {
+std::vector<std::string> Protocol::receive_matches_available() {
     check_closed();
-    int type = receive_uintEight();
-    if (type == SELECT_CHARACTER_INFO) {
-        // return receiveDynamic();
-    } else if (type == GAME_INFO) {
-        return std::unique_ptr<Information>(receive_GameInfo());
-    } else if (type == GAME_MAP_INFO) {
-        // return receiveMap();
+    int size = receive_uintEight();
+    std::vector<std::string> matches_available;
+    for (int i = 0; i < size; i++) {
+        matches_available.push_back(receive_string());
     }
-    throw std::runtime_error("Invalid information");
+    return matches_available;
 }
 
 // ----------------------------- SEND SNAPSHOTS -----------------------------
@@ -627,6 +601,7 @@ Snapshot Protocol::receive_Snapshot() {
     receive_supplies(snapshot);
     bool end_game = receive_uintEight();
     if (end_game) {
+        std::cout << "GAME ENDED!! PLEASE DO NOT DIE!!" << std::endl;
         snapshot.set_end_game();
     }
     return snapshot;

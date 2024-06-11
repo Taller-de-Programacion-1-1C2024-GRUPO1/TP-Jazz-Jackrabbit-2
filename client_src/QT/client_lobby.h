@@ -13,6 +13,7 @@
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
 #include "../../game_src/constants_game.h"
+#include "../../game_src/qt_response.h"
 #include "../client_receiver.h"
 #include "../client_sender.h"
 #include "../new_map_info.h"
@@ -29,8 +30,9 @@ class ClientLobby: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         NewMapInfo& new_map_info, int& map_texture, QWidget* parent = nullptr);
+    explicit ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses, NewMapInfo& new_map_info,
+                         int& map_texture, QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
@@ -47,7 +49,7 @@ protected:
 private:
     Ui::ClientLobby* ui;
     Queue<std::unique_ptr<Command>>& q_cmds;
-    Queue<int>& q_responses;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
     NewMapInfo& new_map_info;
     int& map_texture;

@@ -4,7 +4,7 @@
 Client::Client(const std::string& host, const std::string& service):
         protocol(std::move(host), std::move(service)),
         q_cmds(Queue<std::unique_ptr<Command>>()),
-        q_responses(),
+        q_responses(Queue<std::unique_ptr<QtResponse>>()),
         player_id(-1),
         map_texture(CARROTUS),
         q_snapshots(),
@@ -30,8 +30,9 @@ void Client::run(int argc, char* argv[]) {
         drawer.run(player_id, map_texture);
     } else if (result == -2) {
         // create map
+        std::cout << "Creando mapa" << std::endl;
         Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
-                      new_map_info.map_name, 3);
+                      new_map_info.map_name, new_map_info.max_players);
         editor.run();
 
     } else {

@@ -28,13 +28,14 @@ private:
     std::list<Player*>& players;
     Map& map;
 
-    bool* playing;
+    bool& server_running;
+    bool &playing;
     bool game_ended = false;
 
 public:
     Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
              BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players, Map& map,
-             bool* playing);
+             bool& server_running, bool& playing);
 
     void send_initial_snapshots();
 

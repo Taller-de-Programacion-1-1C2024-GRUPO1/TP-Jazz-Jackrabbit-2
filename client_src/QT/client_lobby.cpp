@@ -3,8 +3,9 @@
 #include "./ui_client_lobby.h"
 
 
-ClientLobby::ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         NewMapInfo& new_map_info, int& map_texture, QWidget* parent):
+ClientLobby::ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses, NewMapInfo& new_map_info,
+                         int& map_texture, QWidget* parent):
         QMainWindow(parent),
         ui(new Ui::ClientLobby),
         q_cmds(q_cmds),
@@ -47,23 +48,23 @@ void ClientLobby::on_btnCreateMatch_clicked() {
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         int result = map_selector.exec();
         if (result == QDialog::Accepted) {
-            QApplication::exit(0);
-        } else if (result == -2) {
-            // Map Creator exit case
-            QApplication::exit(-2);
-        } else if (result == -3) {
-            // Map Creator was closed without starting the designer
-            // No action needed
+            QApplication::exit(OK);
+        } else if (result == OK_MAP_CREATOR) {
+            QApplication::exit(OK_MAP_CREATOR);
+        } else if (result == CLOSE_MAP_CREATOR) {
+            std::cout << "Cerrando QT..." << std::endl;
+            QApplication::exit(ERROR);
         } else {
             std::cerr << "Error al crear partida, map_selector falló" << std::endl;
+            QApplication::exit(ERROR);
         }
     } else {
         std::cerr << "Error al crear partida, characterSelector falló" << std::endl;
+        QApplication::exit(ERROR);
     }
 }
 
 void ClientLobby::on_btnJoinMatch_clicked() {
-
     hide();
     CharacterSelector characterSelector;
     connect(&characterSelector, &CharacterSelector::characterSelected, this,
@@ -75,22 +76,19 @@ void ClientLobby::on_btnJoinMatch_clicked() {
         JoinMatchLobby joinMatchLobby(q_cmds, q_responses, selected_character);
         connect(&joinMatchLobby, &JoinMatchLobby::windowClosed, this,
                 &ClientLobby::handleWindowClosed);
-
         if (joinMatchLobby.exec() == QDialog::Accepted) {
-            // ESpero a que se conecten todos los jugadores y se inicie la partida
-
-            QApplication::exit(0);
+            QApplication::exit(OK);
         } else {
             std::cerr << "Error al unirse a partida, joinMatchLobby room falló" << std::endl;
-            QApplication::exit(-1);
+            QApplication::exit(ERROR);
         }
     } else {
         std::cerr << "Error al unirse a partida, character selector falló" << std::endl;
-        QApplication::exit(-1);
+        QApplication::exit(ERROR);
     }
 }
 
-void ClientLobby::on_btnQuit_clicked() { QApplication::exit(-1); }
+void ClientLobby::on_btnQuit_clicked() { QApplication::exit(ERROR); }
 
 
 void ClientLobby::handleCharacterSelected(ChampionType character) {
@@ -98,11 +96,11 @@ void ClientLobby::handleCharacterSelected(ChampionType character) {
 }
 
 
-void ClientLobby::handleWindowClosed() { QApplication::exit(-1); }
+void ClientLobby::handleWindowClosed() { QApplication::exit(ERROR); }
 
 
 void ClientLobby::closeEvent(QCloseEvent* event) {
     qDebug() << "Window is closing";
-    handleWindowClosed();  // Directly calling the slot
+    handleWindowClosed();
     QMainWindow::closeEvent(event);
 }

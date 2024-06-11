@@ -19,7 +19,10 @@ void Player::start() {
     server_receiver.start();
 }
 
-void Player::send_player_id() { container_protocol->protocol.send_response(player_id); }
+void Player::send_player_id() {
+    QtResponse response = QtResponse(player_id, PLAYER_CONNECTING);
+    response.send(container_protocol->protocol);
+}
 
 int Player::get_id() { return player_id; }
 

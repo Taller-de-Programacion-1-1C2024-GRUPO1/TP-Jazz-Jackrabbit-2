@@ -12,6 +12,7 @@
 #include "../../common_src/constants.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
+#include "../../game_src/qt_response.h"
 #include "../client_receiver.h"
 #include "../client_sender.h"
 #include "../new_map_info.h"
@@ -28,7 +29,8 @@ class MapSelector: public QDialog {
     Q_OBJECT
 
 public:
-    explicit MapSelector(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+    explicit MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses,
                          ChampionType selected_character, NewMapInfo& new_map_info,
                          int& map_texture, QWidget* parent = nullptr);
     ~MapSelector();
@@ -54,7 +56,7 @@ protected:
 private:
     Ui::MapSelector* ui;
     Queue<std::unique_ptr<Command>>& q_cmds;
-    Queue<int>& q_responses;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
     std::string selected_map;
     std::string match_name;

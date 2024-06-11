@@ -6,8 +6,8 @@
 
 #include "ui_waiting_room.h"
 
-WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
-                         QWidget* parent):
+WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses, QWidget* parent):
         QDialog(parent),
         ui(new Ui::WaitingRoom),
         q_cmds(q_cmds),
@@ -39,25 +39,48 @@ void WaitingRoom::startWaitingForGame() {
     waiting_thread = std::thread([this]() {
         std::cout << "Waiting for game to start" << std::endl;
         bool could_pop = false;
-        int player_number;
-
-        while (!stop_thread && !could_pop) {
-            could_pop = q_responses.try_pop(player_number);
-            if (!could_pop) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));  // Espera de 100 ms
+        std::unique_ptr<QtResponse> player_number;
+        try {
+            while (!stop_thread && !could_pop) {
+                could_pop = q_responses.try_pop(player_number);
+                if (!could_pop) {
+                    std::this_thread::sleep_for(
+                            std::chrono::milliseconds(100));  // Espera de 100 ms
+                }
             }
-        }
-        if (stop_thread)
-            return;
+            if (stop_thread)
+                return;
 
-        std::cout << "Player number EN WAITING ROOM: " << player_number << std::endl;
-        if (player_number < 0) {
-            QMetaObject::invokeMethod(this, [this]() {
-                QMessageBox::warning(this, "Error", "error al iniciar la partida");
-            });
-            return;
+            std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
+                      << std::endl;
+            if (player_number->get_response() < 0) {
+                QMetaObject::invokeMethod(this, [this]() {
+                    QMessageBox::warning(this, "Error", "error al iniciar la partida");
+                });
+                return;
+            }
+            QMetaObject::invokeMethod(this, [this]() { accept(); });
+
+        } catch (const ClosedQueue& e) {
+            QMetaObject::invokeMethod(
+                    this,
+                    [this]() {
+                        QMessageBox::warning(
+                                this, "Error",
+                                "Se cerró la cola de respuestas o la cola de comandos");
+                        reject();
+                    },
+                    Qt::QueuedConnection);
+
+        } catch (const std::exception& e) {
+            QMetaObject::invokeMethod(
+                    this,
+                    [this]() {
+                        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+                        reject();
+                    },
+                    Qt::QueuedConnection);
         }
-        QMetaObject::invokeMethod(this, [this]() { accept(); });
     });
 }
 

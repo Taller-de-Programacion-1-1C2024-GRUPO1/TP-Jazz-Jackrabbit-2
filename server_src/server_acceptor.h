@@ -27,11 +27,10 @@ private:
     std::string map_routes;
 
     std::atomic<bool> is_alive;
-    std::atomic<bool> keep_talking;
-    bool* playing;
+    bool& server_running;
 
 public:
-    explicit ServerAcceptor(const char* servname, const std::string& map_routes, bool* playing);
+    explicit ServerAcceptor(const char* servname, const std::string& map_routes, bool& server_running);
     virtual void run() override;
     void stop() override;
     void reap_dead();

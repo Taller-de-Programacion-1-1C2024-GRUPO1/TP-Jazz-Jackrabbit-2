@@ -15,13 +15,13 @@ int main(int argc, char* argv[]) {
         std::string config_file = "/etc/jazz/config.yml";
         ConfigSingleton::getInstance(config_file);
         std::string map_routes = "/etc/jazz/maps.txt";
-        bool playing = true;
-        ServerAcceptor server_acceptor(servname, map_routes, &playing);
+        bool server_running = true;
+        ServerAcceptor server_acceptor(servname, map_routes, server_running);
         server_acceptor.start();
         std::string line;
         while (std::getline(std::cin, line)) {
             if (line == "q") {
-                playing = false;
+                server_running = false;
                 server_acceptor.stop();
                 server_acceptor.join();
                 break;

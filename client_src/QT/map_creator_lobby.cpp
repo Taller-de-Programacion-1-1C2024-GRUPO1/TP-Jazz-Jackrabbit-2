@@ -29,7 +29,9 @@ void MapCreatorLobby::on_btnTexture2_clicked() { start_creating_map(CARROTUS); }
 
 
 void MapCreatorLobby::on_btnTexture3_clicked() {
-    start_creating_map(CARROTUS);  // ACA SELECCIONO LA TEXTURA
+    start_creating_map(
+            CARROTUS);  // ACA SELECCIONO LA TEXTURA
+                        // ////////////////////////////////////////////////////////////////////////////////
 }
 
 
@@ -43,5 +45,6 @@ void MapCreatorLobby::start_creating_map(int texture) {
     int height = ui->spinHeight->value();
     int max_players = ui->spinMaxPlayers->value();
     new_map_info = NewMapInfo(map_name, width, height, texture, max_players);
-    QApplication::exit(-2);
+    accept();
+    // QApplication::exit(-2);
 }

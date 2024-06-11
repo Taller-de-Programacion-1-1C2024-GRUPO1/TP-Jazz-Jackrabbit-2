@@ -15,6 +15,7 @@
 #include "../../common_src/constants.h"
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
+#include "../../game_src/qt_response.h"
 #include "../client_receiver.h"
 #include "../client_sender.h"
 
@@ -26,7 +27,8 @@ class WaitingRoom: public QDialog {
     Q_OBJECT
 
 public:
-    explicit WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+    explicit WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses,
                          QWidget* parent = nullptr);
     ~WaitingRoom();
 
@@ -39,7 +41,7 @@ private:
 
     Ui::WaitingRoom* ui;
     Queue<std::unique_ptr<Command>>& q_cmds;
-    Queue<int>& q_responses;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
     std::thread waiting_thread;
     std::atomic<bool> stop_thread;
 };

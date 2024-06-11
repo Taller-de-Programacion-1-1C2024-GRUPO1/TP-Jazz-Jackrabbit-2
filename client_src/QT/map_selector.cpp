@@ -2,7 +2,8 @@
 
 #include "ui_map_selector.h"
 
-MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_responses,
+MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
+                         Queue<std::unique_ptr<QtResponse>>& q_responses,
                          ChampionType selected_character, NewMapInfo& new_map_info,
                          int& map_texture, QWidget* parent):
         QDialog(parent),
@@ -26,14 +27,14 @@ MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds, Queue<int>& q_
 MapSelector::~MapSelector() { delete ui; }
 
 void MapSelector::on_btnMap1_clicked() {
-    selected_map = "carrotus";  // Set the map name
-    map_texture = CASTLE;
+    selected_map = DEFAULT_MAP_CARROTUS;  // CASTLE //////////////
+    map_texture = CARROTUS;
     start_match();
 }
 
 void MapSelector::on_btnMap2_clicked() {
-    selected_map = "carrotus";  // Set the map name
-    map_texture = CARROTUS;
+    selected_map = DEFAULT_MAP_CARROTUS;
+    map_texture = CASTLE;
     start_match();
 }
 
@@ -45,13 +46,15 @@ void MapSelector::on_btnMapCreate_clicked() {
 
     int result = map_creator_lobby.exec();
     if (result == QDialog::Accepted) {
-        QApplication::exit(-2);  // Exit to start the map designer
+        // QApplication::exit(OK_MAP_CREATOR);
+        this->done(OK_MAP_CREATOR);
     } else {
-        this->done(-3);  // Custom exit code for closing the map creator
+        this->done(CLOSE_MAP_CREATOR);
     }
 }
 
-void MapSelector::handleWindowClosed() { QApplication::exit(-1); }
+void MapSelector::handleWindowClosed() { QApplication::exit(ERROR); }
+
 
 void MapSelector::start_match() {
     int number_of_players = ui->spinNumberOfPlayers->value();
@@ -61,30 +64,42 @@ void MapSelector::start_match() {
         return;
     }
 
-    q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
-                                               selected_map, selected_character));
+    try {
+        std::cout << "enviando comando" << std::endl;
+        q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
+                                                   selected_map, selected_character));
 
-    bool could_pop = false;
-    int response;
-    while (!could_pop) {
-        could_pop = q_responses.try_pop(response);
-    }
-    if (response == OK) {
-        hide();
-        WaitingRoom waiting_room(q_cmds, q_responses);
-        if (waiting_room.exec() == QDialog::Accepted) {
-            this->done(QDialog::Accepted);
-        } else {
-            std::cerr << "Error en waiting room" << std::endl;
-            this->done(-1);  // Custom exit code for waiting room failure
+
+        bool could_pop = false;
+        std::unique_ptr<QtResponse> response;
+        while (!could_pop) {
+            could_pop = q_responses.try_pop(response);
         }
-    } else if (response == ERROR) {
-        // Couldn't connect
-        QMessageBox::warning(this, "Error", "Match name already exists.");
-        this->done(-1);  // Custom exit code for existing match name
-    } else {
-        QMessageBox::warning(this, "Error", "Received an unexpected response.");
-        this->done(-1);  // Custom exit code for unexpected response
+        std::cout << "Response en MAP SELECTOR: " << response->get_response() << std::endl;
+        if (response->get_response() == OK) {
+            hide();
+            WaitingRoom waiting_room(q_cmds, q_responses);
+            if (waiting_room.exec() == QDialog::Accepted) {
+                this->done(QDialog::Accepted);
+            } else {
+                std::cerr << "Error en waiting room" << std::endl;
+                this->done(ERROR);
+            }
+        } else if (response->get_response() == ERROR) {
+            // Couldn't connect
+            QMessageBox::warning(this, "Error", "Match name already exists.");
+            this->done(ERROR);
+        } else {
+            QMessageBox::warning(this, "Error", "Received an unexpected response.");
+            this->done(ERROR);
+        }
+    } catch (const ClosedQueue& e) {
+        QMessageBox::warning(this, "Error", "Se cerró la cola de respuestas o la cola de comandos");
+        reject();
+
+    } catch (const std::exception& e) {
+        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+        reject();
     }
 }
 
