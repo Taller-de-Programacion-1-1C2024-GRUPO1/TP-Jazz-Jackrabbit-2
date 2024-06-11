@@ -11,8 +11,8 @@ void WeaponData::initialize() {
     weaponMap[5] = SDL2pp::Rect(91, 341, 18, 17);  // bombita roja*/
 }
 
-SDL2pp::Rect WeaponData::getWeapon(int id) { 
-    switch(id){
+SDL2pp::Rect WeaponData::getWeapon(int id) {
+    switch (id) {
         case MACHINEGUN_AMMO:
             return SDL2pp::Rect(91, 341, 18, 17);
         case SNIPER_AMMO:

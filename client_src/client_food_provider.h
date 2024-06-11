@@ -9,8 +9,8 @@ class FoodProvider {
 
 public:
     FoodProvider() = default;
-    SDL2pp::Rect getFood(int id) { 
-        switch(id){
+    SDL2pp::Rect getFood(int id) {
+        switch (id) {
             case HEALTH_CARROT:
                 return SDL2pp::Rect(310, 322, 32, 27);
             case HOTDOG:

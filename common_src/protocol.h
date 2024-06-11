@@ -181,6 +181,9 @@ public:
     // Chequea si el socket fue cerrado y si es asi, lanza una excepcion
     void check_closed();
 
+    // Rompe de forma adecuada las conexiones con el protocolo
+    void kill();
+
     ~Protocol();
 };
 

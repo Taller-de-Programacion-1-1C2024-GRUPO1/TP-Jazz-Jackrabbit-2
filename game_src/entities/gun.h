@@ -45,7 +45,6 @@ public:
 };
 
 
-
 class MachineGun: public Gun {
 public:
     MachineGun(Rabbit& owner, Map& manager);

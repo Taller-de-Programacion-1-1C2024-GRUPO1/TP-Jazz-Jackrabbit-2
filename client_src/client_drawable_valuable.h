@@ -10,7 +10,7 @@ class DrawableValuable: public ShiftingDrawable {
 
 public:
     DrawableValuable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
-                   SDL2pp::Rect& onMapRect, SoundManager& soundManager):
+                     SDL2pp::Rect& onMapRect, SoundManager& soundManager):
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setValuableFromSnapshot(const int valuable_type) {
