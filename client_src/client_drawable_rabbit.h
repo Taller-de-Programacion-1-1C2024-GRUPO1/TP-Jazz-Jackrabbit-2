@@ -44,7 +44,6 @@ public:
                 this->setAnimation("Special-Attack");
                 break;
             case ALIVE:
-                std::cout << "Alive" << std::endl;
                 switch (snapshot.action) {
                     case STAND:
                         this->setAnimation("Stand");

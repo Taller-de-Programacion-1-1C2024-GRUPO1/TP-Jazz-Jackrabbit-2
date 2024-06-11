@@ -1,15 +1,4 @@
-
 #include "client_drawer.h"
-
-#include <algorithm>
-#include <memory>
-#include <thread>
-#include <utility>
-
-#include "client_drawable.h"
-#include "client_food_provider.h"
-#include "client_map_loader.h"
-#include "client_sound_manager.h"
 
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
@@ -146,7 +135,15 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     SDL2pp::Point desiredCameraPosition(0, 0);
     float lerpFactor = 0.1f;
 
-    const char* CARROTUS_TILE = "../client_src/resources/tiles/carrotus.png";
+    std::string map_texture_path;
+    switch(map_texture){
+        case CASTLE:
+            map_texture_path = CASTLE_TILE;
+            break;
+        case CARROTUS:
+            map_texture_path = CARROTUS_TILE;
+            break;       
+    }
 
     // Number images
     NumberImages numberImages(renderer);
@@ -167,7 +164,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
     game_running = !initial_snapshot.get_end_game();
     std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
-            initial_snapshot.map_dimensions.map_data, CARROTUS_TILE, mapColor, cameraPosition);
+            initial_snapshot.map_dimensions.map_data, map_texture_path, mapColor, cameraPosition);
 
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
@@ -268,7 +265,12 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 // OK, let's keep the last one
             }
             std::cout << "GET ENDGAMNE: " << snapshot.get_end_game() << std::endl;
-            game_running = !snapshot.get_end_game();
+            if (game_running)
+                // Before updating this variable, 
+                // we need to check if it is true
+                // because user could have pressed ESC, Q or clicked on X
+                // and the snapshot could overwritte the variable
+                game_running = !snapshot.get_end_game();
 
             // RABBITS UPDATE
             std::set<int> rabbitIds;
@@ -472,7 +474,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             supply.second->update();
         }
         for (auto& f: food) {
-            std::cout << "Update food" << std::endl;
             f.second->update();
         }
 
@@ -498,7 +499,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             suply.second->render();
         }
         for (auto& f: food) {
-            std::cout << "Render food" << std::endl;
             f.second->render();
         }
 
