@@ -55,6 +55,8 @@ void ShiftingDrawable::update() {
         if (currentAnimation->justOneLoop &&
             currentAnimation->currentFrame == currentAnimation->frames - 1) {
             return;
+        } else if (currentAnimation->currentFrame == currentAnimation->frames - 1) {
+            currentAnimation->currentFrame = 0;
         } else {
             currentAnimation->currentFrame++;
         }
@@ -96,7 +98,13 @@ void ShiftingDrawable::reajustFrame(int framesToAdvance) {
                 currentAnimation->currentFrame = currentAnimation->frames - 1;
             }
         } else {
-            currentAnimation->currentFrame += animationFramesToAdvance;
+            if (currentAnimation->currentFrame + animationFramesToAdvance >=
+                currentAnimation->frames) {
+                currentAnimation->currentFrame = (currentAnimation->currentFrame + animationFramesToAdvance) %
+                                     currentAnimation->frames;
+            } else {
+                currentAnimation->currentFrame += animationFramesToAdvance;
+            }
         }
     }
 }
