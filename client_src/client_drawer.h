@@ -90,8 +90,9 @@ private:
     std::map<int, DrawableRabbit*> rabbits;
     std::map<int, DrawableEnemy*> enemies;
     std::map<int, ShiftingDrawable*> projectiles;
-    std::map<int, ShiftingDrawable*> valuables;
-    std::map<int, Drawable*> supplies;
+    std::map<int, ShiftingDrawable*> supplies;
+    std::map<int, Drawable*> food;
+
     int rabbit_width;
     int rabbit_height;
 

@@ -18,10 +18,10 @@ public:
         this->setTexture(ITEMS_IMG, color);
         switch (valuable_type) {
             case COIN:
-                this->loadAnimations("../external/animations/jazz.yml");
+                this->loadAnimations("../external/animations/valuables/coin.yml");
                 break;
             case GEM:
-                this->loadAnimations("../external/animations/spaz.yml");
+                this->loadAnimations("../external/animations/valuables/gem.yml");
                 break;
         }
     }
