@@ -29,9 +29,7 @@ private:
     Map& map;
 
     bool* playing;
-    bool still_waiting = false;
     bool game_ended = false;
-    bool playing_done = false;
 
 public:
     Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
@@ -47,8 +45,6 @@ public:
     void stop();
 
     void check_players();
-
-    // ~Gameloop();
 };
 
 #endif

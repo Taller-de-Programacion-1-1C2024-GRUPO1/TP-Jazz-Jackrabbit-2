@@ -32,7 +32,7 @@ class ClientLobby: public QMainWindow {
 public:
     explicit ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses, NewMapInfo& new_map_info,
-                         QWidget* parent = nullptr);
+                         int& map_texture, QWidget* parent = nullptr);
     ~ClientLobby();
 
 private slots:
@@ -52,6 +52,7 @@ private:
     Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
     NewMapInfo& new_map_info;
+    int& map_texture;
 };
 
 #endif  // CLIENT_LOBBY_H

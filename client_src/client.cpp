@@ -6,6 +6,7 @@ Client::Client(const std::string& host, const std::string& service):
         q_cmds(Queue<std::unique_ptr<Command>>()),
         q_responses(Queue<std::unique_ptr<QtResponse>>()),
         player_id(-1),
+        map_texture(CARROTUS),
         q_snapshots(),
         client_sender(protocol, q_cmds),
         client_receiver(protocol, q_responses, q_snapshots, player_id),
@@ -20,13 +21,13 @@ void Client::run(int argc, char* argv[]) {
     // QT
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
-    ClientLobby w(q_cmds, q_responses, new_map_info);
+    ClientLobby w(q_cmds, q_responses, new_map_info, map_texture);
     w.show();
     int result = a.exec();
 
     if (result == 0) {
         // SDL
-        drawer.run(player_id);
+        drawer.run(player_id, map_texture);
     } else if (result == -2) {
         // create map
         std::cout << "Creando mapa" << std::endl;

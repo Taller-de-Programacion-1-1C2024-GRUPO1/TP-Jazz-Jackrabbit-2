@@ -22,6 +22,8 @@ void Drawable::setTexture(const std::string& path, const SDL2pp::Color& colorKey
     texture = std::make_unique<SDL2pp::Texture>(renderer, surface);
 }
 
+void Drawable::setSourceRect(const SDL2pp::Rect& rect) { textureRect = rect; }
+
 SDL2pp::Rect Drawable::adjustPosition() {
     SDL2pp::Rect adjustedOnMapRect = onMapRect;
     adjustedOnMapRect.x -= cameraPosition.x;

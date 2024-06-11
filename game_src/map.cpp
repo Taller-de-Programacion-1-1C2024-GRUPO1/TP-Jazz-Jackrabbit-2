@@ -30,6 +30,13 @@ void Map::check_colision() {
     for (auto bullet: bullets) {
         bullet->check_colision_with(physical_map);
     }
+    for (auto player_A: players) {
+        for (auto player_B: players) {
+            if (player_A != player_B) {
+                player_A->check_colision_with(player_B);
+            }
+        }
+    }
 }
 
 void Map::update() {
@@ -49,15 +56,6 @@ void Map::update() {
 // FALTA HACER DELETE SI SE USA HEAP
 void Map::reap_dead() {
     int i = 0;
-    while (i < enemies.size()) {
-        if (enemies[i]->is_dead()) {
-            delete enemies[i];
-            enemies.erase(enemies.begin() + i);
-        } else {
-            i++;
-        }
-    }
-    i = 0;
     while (i < bullets.size()) {
         if (bullets[i]->is_dead()) {
             delete bullets[i];
@@ -194,21 +192,21 @@ void Map::create_entities() {
                 spawn_points[RABBIT_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map, *this));
     }
     for (int i = 0; i < spawn_points[CRAB_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(
-                id_counter_enemy, CRAB, spawn_points[CRAB_SPAWN].at(i).get_x() * BLOCK_DIVISION,
-                spawn_points[CRAB_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
+        enemies.push_back(new EnemyCrab(
+                id_counter_enemy, spawn_points[CRAB_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[CRAB_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map, *this));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[LIZARD_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(
-                id_counter_enemy, LIZARD, spawn_points[LIZARD_SPAWN].at(i).get_x() * BLOCK_DIVISION,
-                spawn_points[LIZARD_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
+        enemies.push_back(new EnemyLizard(
+                id_counter_enemy, spawn_points[LIZARD_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[LIZARD_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map, *this));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[TURTLE_SPAWN].size(); i++) {
-        enemies.push_back(new Enemy(
-                id_counter_enemy, TURTLE, spawn_points[TURTLE_SPAWN].at(i).get_x() * BLOCK_DIVISION,
-                spawn_points[TURTLE_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map));
+        enemies.push_back(new EnemyTurtle(
+                id_counter_enemy, spawn_points[TURTLE_SPAWN].at(i).get_x() * BLOCK_DIVISION,
+                spawn_points[TURTLE_SPAWN].at(i).get_y() * BLOCK_DIVISION, physical_map, *this));
         id_counter_enemy++;
     }
     for (int i = 0; i < spawn_points[COIN_SPAWN].size(); i++) {
@@ -242,4 +240,17 @@ void Map::add_command(std::shared_ptr<Command> command) {
 }
 
 
-Map::~Map() {}
+Map::~Map() {
+    for (auto player: players) {
+        delete player;
+    }
+    for (auto enemy: enemies) {
+        delete enemy;
+    }
+    for (auto bullet: bullets) {
+        delete bullet;
+    }
+    for (auto item: items) {
+        delete item;
+    }
+}

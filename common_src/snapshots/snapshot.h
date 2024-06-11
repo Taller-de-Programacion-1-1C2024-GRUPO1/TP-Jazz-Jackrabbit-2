@@ -69,7 +69,7 @@ public:
         map_dimensions.map_data = map_data;
     }
 
-    void set_end_game() { end_game = true; }
+    void set_end_game() { this->end_game = true; }
 
     bool get_end_game() { return end_game; }
 };

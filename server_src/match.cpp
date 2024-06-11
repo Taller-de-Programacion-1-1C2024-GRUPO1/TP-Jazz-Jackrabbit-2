@@ -1,7 +1,7 @@
 #include "match.h"
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-             Map map_recibido, const std::string& match_name, bool* playing, int* status,
+             const Map& map_recibido, const std::string& match_name, bool* playing, int* status,
              int number_of_players):
         map(map_recibido),
         match_name(match_name),
@@ -16,27 +16,11 @@ Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protoco
 
 uint8_t Match::get_number_of_players() { return this->number_of_players; }
 
-/*
-void Match::send_game_initial(Gameloop game) {
-    std::shared_ptr<Snapshot> init_snapshot = game.get_initial_snapshot();
-    // Enviar a cada jugador su snapshot inicial
-    for (auto& player: players) {
-        Queue<std::shared_ptr<Snapshot>>& player_snapshot_queue = player->get_snapshots_queue();
-        try {
-            player_snapshot_queue.push(init_snapshot);
-        } catch (const ClosedQueue& err) {
-            continue;
-        }
-    }
-}
-*/
-
 void Match::run() {
     Queue<std::shared_ptr<Command>> clients_cmd_queue(QUEUE_MAX_SIZE);
     BroadcasterSnapshots broadcaster_snapshots;
     try {
         for (int cont = 0; cont < number_of_players; cont++) {
-            std::cout << "EL ESTADO DE LA PARTIDA ES" << status << std::endl;
             if (has_started())
                 throw MatchAlreadyStarted();
             if (number_of_players >= map.get_max_players())
@@ -55,7 +39,6 @@ void Match::run() {
             players.push_back(player);
         }
         // Ya se conectaron todos los jugadores, se envian los ids de cada uno
-        std::cout << "SE ENVIAN PLAYER IDS A CADA PLAYER" << std::endl;
         send_players_ids();
 
         Gameloop gameloop =
@@ -75,7 +58,6 @@ void Match::run() {
 
 void Match::send_players_ids() {
     for (auto& player: players) {
-        std::cout << "Player id: " << player->get_id() << std::endl;
         player->send_player_id();
     }
 }
@@ -85,6 +67,7 @@ void Match::delete_players() {
         if (!player->is_dead()) {
             player->kill();
         }
+        player->join();
         delete player;
     }
     players.clear();

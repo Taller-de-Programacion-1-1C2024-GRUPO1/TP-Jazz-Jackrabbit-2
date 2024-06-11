@@ -13,6 +13,8 @@ bool SpecialLori::execute_Command(bool* cheatOn, bool& needsMove) {
     return needsMove;
 }
 
+void SpecialLori::execute_Command(Rabbit& rabbit) { rabbit.special_attack_lori(); }
+
 void SpecialLori::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int SpecialLori::get_playerId() { return this->playerID; }

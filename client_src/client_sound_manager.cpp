@@ -5,6 +5,7 @@ SoundManager::SoundManager():
         music("../client_src/resources/sounds/music.wav") {
     mixer.SetMusicVolume(5);
     mixer.PlayMusic(music, -1);
+    mixer.SetVolume(-1, 3);
 }
 
 std::string SoundManager::getPathForSound(const std::string& name) {

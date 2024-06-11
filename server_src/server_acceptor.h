@@ -21,7 +21,6 @@ private:
     Socket sk;
     bool sk_was_closed;
 
-    int number_players;
     int id_counter;
     std::list<User*> server_users;
 
@@ -32,12 +31,10 @@ private:
     bool* playing;
 
 public:
-    explicit ServerAcceptor(const char* servname, int number_players, const std::string& map_routes,
-                            bool* playing);
+    explicit ServerAcceptor(const char* servname, const std::string& map_routes, bool* playing);
     virtual void run() override;
     void stop() override;
     void reap_dead();
-    void kill();
     void kill_all();
 };
 

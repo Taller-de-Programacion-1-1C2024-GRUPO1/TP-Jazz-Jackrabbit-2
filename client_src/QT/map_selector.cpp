@@ -5,13 +5,14 @@
 MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses,
                          ChampionType selected_character, NewMapInfo& new_map_info,
-                         QWidget* parent):
+                         int& map_texture, QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
         q_cmds(q_cmds),
         q_responses(q_responses),
         selected_character(selected_character),
-        new_map_info(new_map_info) {
+        new_map_info(new_map_info),
+        map_texture(map_texture) {
     ui->setupUi(this);
 
     // Set the background
@@ -27,11 +28,13 @@ MapSelector::~MapSelector() { delete ui; }
 
 void MapSelector::on_btnMap1_clicked() {
     selected_map = DEFAULT_MAP_CARROTUS;  // CASTLE //////////////
+    map_texture = CASTLE;
     start_match();
 }
 
 void MapSelector::on_btnMap2_clicked() {
     selected_map = DEFAULT_MAP_CARROTUS;
+    map_texture = CARROTUS;
     start_match();
 }
 

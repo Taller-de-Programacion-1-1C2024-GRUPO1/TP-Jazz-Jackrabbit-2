@@ -28,8 +28,10 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 
 void Gameloop::run() {
     // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    auto game_start = std::chrono::high_resolution_clock::now();
+    int segundos = 60 * 4;
 
-    while (playing) {
+    while (*playing) {
         try {
             auto start = std::chrono::high_resolution_clock::now();
             std::shared_ptr<Command> game_command;
@@ -47,7 +49,19 @@ void Gameloop::run() {
                 std::this_thread::sleep_for(
                         std::chrono::milliseconds(FRAME_DELAY - duration.count()));
             }
+
             check_players();
+            auto elapsed =
+                    std::chrono::duration_cast<std::chrono::seconds>(end - game_start).count();
+
+            if (elapsed >= segundos) {
+                Snapshot final_snapshot = map.get_snapshot();
+                final_snapshot.set_end_game();
+                push_all_players(final_snapshot);
+                std::cout << "Finalizando juego..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                stop();
+            }
 
         } catch (ClosedQueue& err) {
             *playing = false;

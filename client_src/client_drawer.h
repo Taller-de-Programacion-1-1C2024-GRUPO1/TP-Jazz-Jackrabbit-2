@@ -54,6 +54,7 @@
 
 #include "client_drawable_enemy.h"
 #include "client_drawable_rabbit.h"
+#include "client_drawable_valuable.h"
 #include "client_number_images.h"
 
 using SDL2pp::Chunk;
@@ -90,17 +91,19 @@ private:
     std::map<int, DrawableEnemy*> enemies;
     std::map<int, ShiftingDrawable*> projectiles;
     std::map<int, ShiftingDrawable*> supplies;
+    std::map<int, Drawable*> food;
+
     int rabbit_width;
     int rabbit_height;
 
     KeyboardHandler keyboard_handler;
 
 public:
-    int run(int player_id);
+    int run(int player_id, int map_texture);
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void showLoadingScreen(Renderer& renderer);
-
+    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot, Texture& background);
     //~ClientDrawer();
 };
 

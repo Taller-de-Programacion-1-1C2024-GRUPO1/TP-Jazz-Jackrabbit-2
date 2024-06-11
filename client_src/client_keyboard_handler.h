@@ -10,6 +10,9 @@
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
+#include "../game_src/commands/command_special_jazz.h"
+#include "../game_src/commands/command_special_lori.h"
+#include "../game_src/commands/command_special_spaz.h"
 #include "SDL2pp/SDL2pp.hh"
 
 class KeyboardHandler {

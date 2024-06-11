@@ -14,7 +14,7 @@ int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchI
 }
 
 void MonitorMatches::start_match(std::string match_name) {
-    std::cout << "Starting match" << std::endl;
+    std::cout << "Starting match..." << std::endl;
     matches[match_name]->match_starter->start();
 }
 

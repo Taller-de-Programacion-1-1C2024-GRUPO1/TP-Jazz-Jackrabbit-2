@@ -8,7 +8,8 @@
 
 #define RABBIT_REVIVAL_TIME ConfigSingleton::getInstance().getRabbitRevivalTime()
 #define RABBIT_DEINTOXICATE_TIME ConfigSingleton::getInstance().getRabbitDeintoxicateTime()
-
+#define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
+#define SPECIAL_ATTACK_TIME JUMPING_INITIAL_SPEED / GRAVITY
 class State {
 protected:
     Rabbit& rabbit;
@@ -28,10 +29,11 @@ public:
     virtual void run_left() = 0;
     virtual void run_fast_left() = 0;
     virtual void shoot() = 0;
-    virtual void special_attack() = 0;
     virtual void change_weapon() = 0;
 
+    virtual bool can_do_special_attack() = 0;
     virtual bool can_receive_damage() = 0;
+    virtual bool does_damage() = 0;
 
     virtual ~State() = default;
 };
@@ -51,7 +53,6 @@ public:
     void run_left() override { rabbit.execute_run_left(); }
     void run_fast_left() override { rabbit.execute_run_fast_left(); }
     void shoot() override { rabbit.execute_shoot(); }
-    void special_attack() override { rabbit.execute_special_attack(); }
     bool can_receive_damage() override { return true; }
     void change_weapon() override {
         if (change_weapon_cooldown == 0) {
@@ -59,6 +60,8 @@ public:
             change_weapon_cooldown = CHANGE_WEAPON_COOLDOWN;
         }
     }
+    bool can_do_special_attack() override { return true; }
+    bool does_damage() override { return false; }
 };
 
 class Dead: public State {
@@ -82,10 +85,11 @@ public:
     void run_left() override {}
     void run_fast_left() override {}
     void shoot() override {}
-    void special_attack() override {}
     void change_weapon() override {}
 
+    bool can_do_special_attack() override { return false; }
     bool can_receive_damage() override { return false; }
+    bool does_damage() override { return false; }
 };
 
 class RecievedDamage: public State {
@@ -112,15 +116,15 @@ public:
     void run_left() override { rabbit.execute_run_left(); }
     void run_fast_left() override { rabbit.execute_run_fast_left(); }
     void shoot() override {}
-    void special_attack() override {}
     void change_weapon() override {
         if (change_weapon_cooldown == 0) {
             rabbit.execute_change_weapon();
             change_weapon_cooldown = CHANGE_WEAPON_COOLDOWN;
         }
     }
-
+    bool can_do_special_attack() override { return false; }
     bool can_receive_damage() override { return false; }
+    bool does_damage() override { return false; }
 };
 
 class Intoxicated: public State {
@@ -146,14 +150,101 @@ public:
     void run_left() override { rabbit.execute_run_left(); }
     void run_fast_left() override { rabbit.execute_run_fast_left(); }
     void shoot() override {}
-    void special_attack() override {}
     void change_weapon() override {
         if (change_weapon_cooldown == 0) {
             rabbit.execute_change_weapon();
             change_weapon_cooldown = CHANGE_WEAPON_COOLDOWN;
         }
     }
+    bool can_do_special_attack() override { return false; }
     bool can_receive_damage() override { return true; }
+    bool does_damage() override { return false; }
+};
+
+
+class SpecialAttackJazzState: public State {
+private:
+    int time_to_finish;
+
+public:
+    explicit SpecialAttackJazzState(Rabbit& rabbit):
+            State(SPECIAL_ATTACK_JAZZ, rabbit), time_to_finish(0) {}
+    void update() override {
+        time_to_finish++;
+        printf("Time to SPECIAL_ATTACK: %d\n", time_to_finish);
+        if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
+            rabbit.set_state(new Alive(rabbit));
+        }
+    }
+    void jump() override {}
+    void run_right() override {}
+    void run_fast_right() override {}
+    void run_left() override {}
+    void run_fast_left() override {}
+    void shoot() override {}
+    bool can_do_special_attack() override { return false; }
+    void change_weapon() override {}
+
+    bool can_receive_damage() override { return false; }
+    bool does_damage() override { return true; }
+};
+class SpecialAttackSpazState: public State {
+private:
+    int direction;
+    int time_to_finish;
+
+public:
+    SpecialAttackSpazState(Rabbit& rabbit, int direction):
+            State(SPECIAL_ATTACK_SPAZ, rabbit), direction(direction), time_to_finish(0) {}
+    void update() override {
+        if (direction == RIGHT) {
+            rabbit.execute_run_fast_right();
+        } else {
+            rabbit.execute_run_fast_left();
+        }
+        time_to_finish++;
+        printf("Time to SPECIAL_ATTACK: %d\n", time_to_finish);
+        if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
+            rabbit.set_state(new Alive(rabbit));
+        }
+    }
+    void jump() override {}
+    void run_right() override {}
+    void run_fast_right() override {}
+    void run_left() override {}
+    void run_fast_left() override {}
+    void shoot() override {}
+    bool can_do_special_attack() override { return false; }
+    void change_weapon() override {}
+
+    bool can_receive_damage() override { return false; }
+    bool does_damage() override { return true; }
+};
+class SpecialAttackLoriState: public State {
+private:
+    int time_to_finish;
+
+public:
+    explicit SpecialAttackLoriState(Rabbit& rabbit):
+            State(SPECIAL_ATTACK_LORI, rabbit), time_to_finish(0) {}
+    void update() override {
+        time_to_finish++;
+        printf("Time to SPECIAL_ATTACK: %d\n", time_to_finish);
+        if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
+            rabbit.set_state(new Alive(rabbit));
+        }
+    }
+    void jump() override {}
+    void run_right() override { rabbit.execute_run_right(); }
+    void run_fast_right() override { rabbit.execute_run_right(); }
+    void run_left() override { rabbit.execute_run_left(); }
+    void run_fast_left() override { rabbit.execute_run_left(); }
+    void shoot() override {}
+    bool can_do_special_attack() override { return false; }
+    void change_weapon() override {}
+
+    bool can_receive_damage() override { return false; }
+    bool does_damage() override { return true; }
 };
 
 #endif
