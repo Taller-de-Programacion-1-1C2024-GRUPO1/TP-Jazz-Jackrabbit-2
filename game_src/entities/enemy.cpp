@@ -43,15 +43,18 @@ void Enemy::drop_items() {
         std::cout << "Dropping carrot" << std::endl;
         map.add_item(new HealthCarrot(map.get_projectile_id(), pos_x, pos_y));
     } else if (random < 40) {
+        std::cout << "Dropping cheese" << std::endl;
+        map.add_item(new RottenCheese(map.get_projectile_id(), pos_x, pos_y));
+    } else if (random < 50) {
         std::cout << "Dropping machine gun ammo" << std::endl;
         map.add_item(new MachineGunAmmo(map.get_projectile_id(), pos_x, pos_y));
-    } else if (random < 50) {
+    } else if (random < 60) {
         std::cout << "Dropping coin" << std::endl;
         map.add_item(new Coin(map.get_projectile_id(), pos_x, pos_y));
-    } else if (random < 60) {
+    } else if (random < 70) {
         std::cout << "Dropping sniper ammo" << std::endl;
         map.add_item(new SniperAmmo(map.get_projectile_id(), pos_x, pos_y));
-    } else if (random < 70) {
+    } else if (random < 80) {
         std::cout << "Dropping gem" << std::endl;
         map.add_item(new Gem(map.get_projectile_id(), pos_x, pos_y));
     }
