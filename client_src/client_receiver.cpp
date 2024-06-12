@@ -3,13 +3,14 @@
 #include <chrono>
 
 ClientReceiver::ClientReceiver(Protocol& protocol, Queue<std::unique_ptr<QtResponse>>& q_responses,
-                               Queue<Snapshot>& q_snapshots, int& player_id):
+                               Queue<Snapshot>& q_snapshots, int& player_id, Queue<std::unique_ptr<Command>>& q_cmds) :
         protocol(protocol),
         q_responses(q_responses),
         q_snapshots(q_snapshots),
         keep_talking(true),
         is_alive(true),
-        player_id(player_id) {}
+        player_id(player_id),
+        q_cmds(q_cmds) {}
 
 
 void ClientReceiver::run() {
@@ -43,6 +44,7 @@ void ClientReceiver::run() {
     }
     q_responses.close();
     q_snapshots.close();
+    q_cmds.close();
     this->is_alive = false;
 }
 

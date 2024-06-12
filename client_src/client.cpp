@@ -6,10 +6,10 @@ Client::Client(const std::string& host, const std::string& service):
         q_cmds(Queue<std::unique_ptr<Command>>()),
         q_responses(Queue<std::unique_ptr<QtResponse>>()),
         player_id(-1),
-        map_texture(CARROTUS),
+        map_texture(CASTLE),
         q_snapshots(),
         client_sender(protocol, q_cmds),
-        client_receiver(protocol, q_responses, q_snapshots, player_id),
+        client_receiver(protocol, q_responses, q_snapshots, player_id, q_cmds),
         drawer(q_cmds, q_snapshots),
         new_map_info() {}
 
