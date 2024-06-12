@@ -1,0 +1,82 @@
+#include "gameloop.h"
+
+#define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
+
+Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
+                   BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
+                   Map& map, bool& server_running, bool& playing):
+        client_cmds_queue(client_cmds_queue),
+        broadcaster_snapshots(broadcaster_snapshots),
+        players(players),
+        map(map),
+        server_running(server_running),
+        playing(playing),
+        game_ended(false) {
+    srand(static_cast<unsigned int>(time(nullptr)));
+}
+
+void Gameloop::send_initial_snapshots() {
+    Snapshot snapshot = map.get_init_snapshot();
+
+    // Enviar el snapshot inicial
+    push_all_players(snapshot);
+}
+
+void Gameloop::push_all_players(const Snapshot& snapshot) {
+    // Enviar a cada jugador la snapshot
+    broadcaster_snapshots.broadcast(std::make_shared<Snapshot>(snapshot));
+}
+
+void Gameloop::run() {
+    // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    auto game_start = std::chrono::high_resolution_clock::now();
+    int segundos = 30;
+
+    while (playing && server_running) {
+        try {
+            auto start = std::chrono::high_resolution_clock::now();
+            std::shared_ptr<Command> game_command;
+            while (client_cmds_queue.try_pop(game_command)) {
+                map.add_command(game_command);
+            }
+
+            map.update();
+
+            push_all_players(map.get_snapshot());
+
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+            if (FRAME_DELAY > duration.count()) {
+                std::this_thread::sleep_for(
+                        std::chrono::milliseconds(FRAME_DELAY - duration.count()));
+            }
+
+            check_players();
+            auto elapsed =
+                    std::chrono::duration_cast<std::chrono::seconds>(end - game_start).count();
+
+            if (elapsed >= segundos) {
+                stop();
+            }
+
+        } catch (ClosedQueue& err) {
+            playing = false;
+        } catch (const std::exception& e) {
+            std::cerr << "Error in gameloop: " << e.what() << std::endl;
+            playing = false;
+        }
+    }
+    Snapshot final_snapshot = map.get_snapshot();
+    final_snapshot.set_end_game();
+    push_all_players(final_snapshot);
+    std::cout << "Finalizando juego..." << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+}
+
+void Gameloop::stop() { playing = false; }
+
+void Gameloop::check_players() {
+    if (broadcaster_snapshots.is_empty()) {
+        playing = false;
+    }
+}

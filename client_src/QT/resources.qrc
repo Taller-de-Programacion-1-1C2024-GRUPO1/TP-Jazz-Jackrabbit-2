@@ -1,0 +1,25 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/fonts">
+        <file alias="04B_30__.ttf">../resources/fonts/04B_30__.ttf</file>
+        <file alias="Jazz_Jackrabbit_2.ttf">../resources/fonts/Jazz_Jackrabbit_2.ttf</file>
+    </qresource>
+
+    <qresource prefix="/backgrounds">
+        <file alias="lobby.png">../resources/backgrounds/lobby.png</file>
+        <file alias="match_lobby.png">../resources/backgrounds/match_lobby.png</file>
+    </qresource>
+
+    <qresource prefix="/maps">
+        <file alias="castle.png">../resources/maps/castle.png</file>
+        <file alias="carrotus.png">../resources/maps/carrotus.png</file>
+        <file alias="create_a_map.png">../resources/maps/create_a_map.png</file>
+    </qresource>
+
+    <qresource prefix="/characters">
+        <file alias="jazz_character.png">../resources/characters/jazz_character.png</file>
+        <file alias="lori_character.png">../resources/characters/lori_character.png</file>
+        <file alias="spaz_character.png">../resources/characters/spaz_character.png</file>
+    </qresource>
+
+</RCC>

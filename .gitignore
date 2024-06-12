@@ -1,5 +1,10 @@
 # Prerequisites
 *.d
+*.o
+*.dump
+vscode/
+build/
+*.json
 
 # Compiled Object files
 *.slo
@@ -30,3 +35,16 @@
 *.exe
 *.out
 *.app
+client
+server
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+.*.swp
+*~
+

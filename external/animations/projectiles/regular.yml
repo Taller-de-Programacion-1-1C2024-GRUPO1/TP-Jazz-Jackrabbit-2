@@ -1,0 +1,17 @@
+Move:
+  frames: 3
+  loop: false
+  sound: ""
+  rects:
+    - x: 44
+      y: 33
+      w: 14
+      h: 13
+    - x: 44
+      y: 33
+      w: 14
+      h: 13
+    - x: 44
+      y: 33
+      w: 14
+      h: 13
