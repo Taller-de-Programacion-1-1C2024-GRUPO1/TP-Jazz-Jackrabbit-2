@@ -6,7 +6,7 @@ This report provides a detailed timeline of the project, from the initial task d
 
 For this project, each team member chose to undertake different tasks, involving a progressive allocation of responsibilities and expertise.
 
-### Ignacio Sugai:
+### Ignacio Agustín Sugai:
 
 - **GAME & PHYSICS**: Played a pivotal role in creating the game's physics engine from scratch. He meticulously crafted the game loop, ensuring smooth and consistent gameplay dynamics. Additionally, he developed all types of entities present within the game, meticulously implementing their behaviors, interactions, and physics properties. His expertise in game physics and engine design contributed significantly to the overall immersive experience and realism of the game.
 
