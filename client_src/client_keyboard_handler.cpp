@@ -31,7 +31,7 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
             if (state[SDL_SCANCODE_LSHIFT]) {
                 q_cmds.push(std::make_unique<SpecialLori>(client_id, RIGHT));
             } else {
-                q_cmds.push(std::make_unique<SpecialJazz>(client_id));  
+                q_cmds.push(std::make_unique<SpecialJazz>(client_id));
             }
         } else if (state[SDL_SCANCODE_RIGHT]) {
             q_cmds.push(std::make_unique<SpecialSpaz>(client_id, RIGHT));

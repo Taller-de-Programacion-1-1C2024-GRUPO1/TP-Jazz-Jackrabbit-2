@@ -94,9 +94,7 @@ void Rabbit::receive_damage(int damage) {
     }
 }
 
-void Rabbit::add_points(int amount_of_points) {
-    points += amount_of_points;
-}
+void Rabbit::add_points(int amount_of_points) { points += amount_of_points; }
 
 void Rabbit::on_colision_with(PhysicalObject* object) { object->on_colision_with_rabbit(this); }
 
