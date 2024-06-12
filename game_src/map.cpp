@@ -105,8 +105,6 @@ void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = d
 
 void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
     this->spawn_points = spawn_points;
-    std::cout << "Spawn points inicializados. Cantidad de RABBIT_SPAWN: "
-              << spawn_points.at(RABBIT_SPAWN).size() << std::endl;
 }
 
 void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }

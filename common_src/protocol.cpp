@@ -388,18 +388,14 @@ void Protocol::send_qt_response(QtResponse* qt_response) {
     send_uintEight(qt_response->get_info_type());
     send_uintEight(qt_response->get_response());
     send_matches_available(qt_response->get_matches_available());
-    std::cout << "Enviando QTResponse: " << qt_response->get_response() << " "
-              << qt_response->get_info_type() << std::endl;
 }
 
 
 std::unique_ptr<QtResponse> Protocol::receive_qt_response() {
     check_closed();
-    std::cout << "1" << std::endl;
     int response_type = receive_uintEight();
     int response = receive_uintEight();
     std::vector<std::string> matches_available = receive_matches_available();
-    std::cout << "Recibiendo QTResponse: " << response << " " << response_type << std::endl;
     if (response_type == REFRESH) {
         return std::make_unique<QtResponse>(matches_available, response_type);
     }
@@ -601,7 +597,6 @@ Snapshot Protocol::receive_Snapshot() {
     receive_supplies(snapshot);
     bool end_game = receive_uintEight();
     if (end_game) {
-        std::cout << "GAME ENDED!! PLEASE DO NOT DIE!!" << std::endl;
         snapshot.set_end_game();
     }
     return snapshot;

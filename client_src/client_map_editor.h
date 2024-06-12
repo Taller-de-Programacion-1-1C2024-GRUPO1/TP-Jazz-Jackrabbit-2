@@ -315,7 +315,6 @@ public:
                             // Click en la grilla dibujable
                             // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
                             // SCREEN_HEIGHT)
-                            std::cout << "x: " << x << " y: " << y << std::endl;
                             if (mode == TEXTURE) {
                                 int gridX =
                                         (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /

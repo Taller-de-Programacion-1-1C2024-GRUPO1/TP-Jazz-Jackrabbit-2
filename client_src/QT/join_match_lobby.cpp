@@ -92,7 +92,6 @@ void JoinMatchLobby::on_btnRefresh_clicked() {
                 return;
             }
             for (const std::string& match: matches) {
-                std::cout << "Match: " << match << std::endl;
                 ui->comboBoxMatches->addItem(QString::fromStdString(match));
             }
 

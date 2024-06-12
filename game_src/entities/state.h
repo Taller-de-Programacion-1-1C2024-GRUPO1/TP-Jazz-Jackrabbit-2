@@ -73,8 +73,6 @@ public:
 
     void update() override {
         time_to_revive++;
-        printf("DEAD\n");
-        // printf("Time to revive: %d\n", time_to_revive);
         if (time_to_revive >= (RABBIT_REVIVAL_TIME * 60 /*CAMBIAR POR FPS*/)) {
             rabbit.revive();
         }
@@ -102,7 +100,6 @@ public:
 
     void update() override {
         cooldown_take_damage++;
-        printf("Time to DeDamage: %d\n", cooldown_take_damage);
         if (cooldown_take_damage >= (RABBIT_DEINTOXICATE_TIME * 60 /*CAMBIAR POR FPS*/)) {
             rabbit.set_state(new Alive(rabbit));
         }
@@ -136,7 +133,6 @@ public:
 
     void update() override {
         time_to_deintoxicate++;
-        printf("Time to revive: %d\n", time_to_deintoxicate);
         if (time_to_deintoxicate >= (RABBIT_DEINTOXICATE_TIME * 60 /*CAMBIAR POR FPS*/)) {
             rabbit.set_state(new Alive(rabbit));
         }
@@ -171,7 +167,6 @@ public:
             State(SPECIAL_ATTACK_JAZZ, rabbit), time_to_finish(0) {}
     void update() override {
         time_to_finish++;
-        printf("Time to SPECIAL_ATTACK: %d\n", time_to_finish);
         if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
             rabbit.set_state(new Alive(rabbit));
         }
@@ -203,7 +198,6 @@ public:
             rabbit.execute_run_fast_left();
         }
         time_to_finish++;
-        printf("Time to SPECIAL_ATTACK: %d\n", time_to_finish);
         if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
             rabbit.set_state(new Alive(rabbit));
         }
@@ -229,7 +223,6 @@ public:
             State(SPECIAL_ATTACK_LORI, rabbit), time_to_finish(0) {}
     void update() override {
         time_to_finish++;
-        printf("Time to SPECIAL_ATTACK: %d\n", time_to_finish);
         if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
             rabbit.set_state(new Alive(rabbit));
         }

@@ -18,20 +18,12 @@ void ClientReceiver::run() {
         try {
             if (!game_started) {
                 std::unique_ptr<QtResponse> response = this->protocol.receive_qt_response();
-                std::cout << "RESPONSE: info type: " << response->get_info_type()
-                          << "response: " << response->get_response()
-                          << "matches_available().size: "
-                          << response->get_matches_available().size() << std::endl;
                 if (response->get_response() > 0) {
                     player_id = response->get_response();
                     game_started = true;
                 }
-
-
                 q_responses.push(std::move(response));
-
             } else {
-                std::cout << "Recibiendo Snapshot" << std::endl;
                 Snapshot snap = this->protocol.receive_Snapshot();
                 q_snapshots.push(snap);
             }

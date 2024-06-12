@@ -50,8 +50,6 @@ void WaitingRoom::startWaitingForGame() {
             if (stop_thread)
                 return;
 
-            std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
-                      << std::endl;
             if (player_number->get_response() < 0) {
                 QMetaObject::invokeMethod(this, [this]() {
                     QMessageBox::warning(this, "Error", "error al iniciar la partida");

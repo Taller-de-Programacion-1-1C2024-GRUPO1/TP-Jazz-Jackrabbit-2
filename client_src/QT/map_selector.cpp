@@ -65,7 +65,6 @@ void MapSelector::start_match() {
     }
 
     try {
-        std::cout << "enviando comando" << std::endl;
         q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
                                                    selected_map, selected_character));
 
@@ -75,7 +74,6 @@ void MapSelector::start_match() {
         while (!could_pop) {
             could_pop = q_responses.try_pop(response);
         }
-        std::cout << "Response en MAP SELECTOR: " << response->get_response() << std::endl;
         if (response->get_response() == OK) {
             hide();
             WaitingRoom waiting_room(q_cmds, q_responses);

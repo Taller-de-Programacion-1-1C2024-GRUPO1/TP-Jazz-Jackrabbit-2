@@ -65,7 +65,6 @@ void Match::send_players_ids() {
 void Match::delete_players() {
     for (auto& player: players) {
         if (!player->is_dead()) {
-            std::cout << "Killing player" << std::endl;
             player->kill();
         }
         player->join();

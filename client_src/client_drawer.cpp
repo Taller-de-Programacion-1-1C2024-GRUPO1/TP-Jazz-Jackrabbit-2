@@ -107,8 +107,6 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
 int ClientDrawer::run(int player_id, int map_texture) try {
     client_id = player_id;
     keyboard_handler.setId(player_id);
-    std::cout << "My id is: " << client_id << std::endl;
-    std::cout << "Map texture: " << map_texture << std::endl;
 
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
@@ -265,7 +263,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 // Oh, more?
                 // OK, let's keep the last one
             }
-            std::cout << "GET ENDGAMNE: " << snapshot.get_end_game() << std::endl;
             if (game_running)
                 // Before updating this variable,
                 // we need to check if it is true
