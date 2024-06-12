@@ -24,10 +24,11 @@ private:
     std::atomic<bool> keep_talking;
     std::atomic<bool> is_alive;
     int& player_id;
+    Queue<std::unique_ptr<Command>>& q_cmds;
 
 public:
     explicit ClientReceiver(Protocol& protocol, Queue<std::unique_ptr<QtResponse>>& q_responses,
-                            Queue<Snapshot>& q_snapshots, int& player_id);
+                            Queue<Snapshot>& q_snapshots, int& player_id, Queue<std::unique_ptr<Command>>& q_cmds);
     virtual void run() override;
     bool is_dead();
     void kill();

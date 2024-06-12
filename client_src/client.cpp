@@ -9,7 +9,7 @@ Client::Client(const std::string& host, const std::string& service):
         map_texture(CARROTUS),
         q_snapshots(),
         client_sender(protocol, q_cmds),
-        client_receiver(protocol, q_responses, q_snapshots, player_id),
+        client_receiver(protocol, q_responses, q_snapshots, player_id, q_cmds),
         drawer(q_cmds, q_snapshots),
         new_map_info() {}
 
@@ -41,7 +41,7 @@ void Client::run(int argc, char* argv[]) {
 }
 
 Client::~Client() {
-    this->protocol.kill();
+    this->protocol.~Protocol();
     client_sender.kill();
     client_receiver.kill();
     client_receiver.join();
