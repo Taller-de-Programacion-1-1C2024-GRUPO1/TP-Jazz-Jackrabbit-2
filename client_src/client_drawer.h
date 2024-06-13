@@ -3,7 +3,6 @@
 
 #include "client_constants.h"
 
-// pre-commit run --hook-stage manual --all-files
 #include <algorithm>
 #include <exception>
 #include <iostream>
@@ -57,9 +56,6 @@ using SDL2pp::Window;
 #include "client_map_loader.h"
 #include "client_number_images.h"
 #include "client_sound_manager.h"
-
-
-// pre-commit run --hook-stage manual --all-files
 
 class ClientDrawer {
 private:

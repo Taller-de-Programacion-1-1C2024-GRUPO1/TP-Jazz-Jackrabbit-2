@@ -4,11 +4,6 @@
 #include "client_src/client.h"
 #include "client_src/client_config.h"
 
-/*
-pre-commit run --hook-stage manual --files xxx.cpp
-pre-commit run --hook-stage manual --all-files
-*/
-
 int main(int argc, char* argv[]) {
     try {
         const char* hostname = NULL;
