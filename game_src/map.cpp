@@ -1,11 +1,12 @@
 #include "map.h"
 
-Map::Map(int width, int height, int amount_players, const std::string& map_name):
+Map::Map(int width, int height, int texture_id, int max_players, const std::string& map_name):
         map_name(map_name),
         width(width),
         height(height),
-        amount_players(amount_players),
-        max_players(0),
+        texture_id(texture_id),
+        amount_players(0),
+        max_players(max_players),
         projectile_id(0) {}
 
 int Map::get_projectile_id() { return projectile_id++; }
@@ -91,8 +92,6 @@ void Map::add_bullet(Bullet* bullet) { bullets.push_back(bullet); }
 
 void Map::add_item(Item* item) { items.push_back(item); }
 
-void Map::set_name(const std::string& name) { map_name = name; }
-
 DynamicMap Map::get_dynamic_map() const { return dynamic_map; }
 
 PhysicalMap Map::get_physical_map() const { return physical_map; }
@@ -111,11 +110,17 @@ void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_p
 
 void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }
 
-void Map::set_max_players(int max_players) { this->max_players = max_players; }
-
 int Map::get_max_players() { return this->max_players; }
 
 int Map::get_amount_players() { return this->amount_players; }
+
+int Map::get_texture_id() { return this->texture_id; }
+
+std::string Map::get_name() const { return map_name; }
+
+int Map::get_width() { return width; }
+
+int Map::get_height() { return height; }
 
 Snapshot Map::get_snapshot() {
     // obtengo las snapshots de cada entidad
@@ -185,7 +190,6 @@ void Map::create_entities() {
         amount_players = spawn_points[RABBIT_SPAWN].size();  // Limitar la cantidad de jugadores
     }
 
-
     for (int i = 0; i < amount_players; i++) {
         players.push_back(new Rabbit(
                 NULL_CHAMPION_TYPE, spawn_points[RABBIT_SPAWN].at(i).get_x() * BLOCK_DIVISION,
@@ -222,8 +226,6 @@ void Map::create_entities() {
         id_counter_supply++;
     }
 }
-
-std::string Map::get_name() const { return map_name; }
 
 int Map::get_rabbit_position_by_id(int id) {
     for (int i = 0; i < players.size(); i++) {

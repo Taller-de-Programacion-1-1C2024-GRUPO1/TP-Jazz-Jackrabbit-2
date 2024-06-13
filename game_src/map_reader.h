@@ -85,10 +85,15 @@ private:
                 }
             }
 
-            Map game_map = Map();
-
             std::string game_map_name = map["name"].as<std::string>();
-            game_map.set_name(game_map_name);
+            int max_players = map["max_players"].as<int>();
+            int texture_id = map["texture_id"].as<int>();
+            int width = map["width"].as<int>();
+            int height = map["height"].as<int>();
+
+            Map game_map = Map(width, height, texture_id, max_players, game_map_name);
+
+            // COMO DEFINIMOS UNA MATRIZ int[][] con con valores 
 
             // cargo el mapa fisico
             PhysicalMap physical_map = PhysicalMap();
@@ -101,8 +106,6 @@ private:
             // cargo el mapa dinamico
             DynamicMap dynamic_map = DynamicMap(map_data);
             game_map.set_dynamic_map(dynamic_map);
-
-            game_map.set_max_players(map["max_players"].as<int>());
 
             maps[game_map_name] = game_map;
 
