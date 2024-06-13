@@ -2,11 +2,8 @@
 
 Shoot::Shoot(int id): Command(id) {}
 
-bool Shoot::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_manager.shoot_player(this->playerID);
-    return needsMove;
-}
 void Shoot::execute_Command(Rabbit& rabbit) { rabbit.shoot(); }
+
 void Shoot::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Shoot::get_playerId() { return this->playerID; }

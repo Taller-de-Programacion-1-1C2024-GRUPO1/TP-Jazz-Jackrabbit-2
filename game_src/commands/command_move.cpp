@@ -2,11 +2,6 @@
 
 Move::Move(int id, int dir): Command(id), dir(dir) {}
 
-bool Move::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_world.movePlayer(this->playerID, this->dir);
-    return needsMove;
-}
-
 void Move::execute_Command(Rabbit& rabbit) {
     if (dir == RIGHT) {
         rabbit.run_right();
