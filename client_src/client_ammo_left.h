@@ -6,8 +6,8 @@
 #include "../game_src/constants_game.h"
 #include "SDL2pp/SDL2pp.hh"
 
-#include "client_number_images.h"
 #include "client_constants.h"
+#include "client_number_images.h"
 
 class AmmoLeft {
 private:

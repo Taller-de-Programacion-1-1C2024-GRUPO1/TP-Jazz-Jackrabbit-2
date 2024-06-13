@@ -1,6 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <string>
@@ -54,26 +55,22 @@ public:
     void add_item(Item* item);
     int get_projectile_id();
 
-    Map(int width, int height, int texture_id, int max_players, const std::string& map_name);
+    Map(int width, int height, int texture_id, int max_players, const std::string& map_name,
+        const PhysicalMap& physical_map, const DynamicMap& dynamic_map,
+        const std::map<int, std::vector<SpawnPoint>>& spawn_points);
 
     Map() = default;
-
-    void set_physical_map(const PhysicalMap& physical_map);
-
-    void set_dynamic_map(const DynamicMap& dynamic_map);
-
-    void set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points);
 
     void set_amount_players(int amount_players);
 
     std::string get_name() const;
-    
+
     PhysicalMap get_physical_map() const;
-    
+
     DynamicMap get_dynamic_map() const;
-    
+
     std::map<int, std::vector<SpawnPoint>> get_spawn_points() const;
-    
+
     int get_amount_players();
 
     int get_texture_id();

@@ -1,7 +1,12 @@
 #include "map.h"
 
-Map::Map(int width, int height, int texture_id, int max_players, const std::string& map_name):
+Map::Map(int width, int height, int texture_id, int max_players, const std::string& map_name,
+         const PhysicalMap& physical_map, const DynamicMap& dynamic_map,
+         const std::map<int, std::vector<SpawnPoint>>& spawn_points):
         map_name(map_name),
+        physical_map(physical_map),
+        dynamic_map(dynamic_map),
+        spawn_points(spawn_points),
         width(width),
         height(height),
         texture_id(texture_id),
@@ -98,16 +103,6 @@ PhysicalMap Map::get_physical_map() const { return physical_map; }
 
 std::map<int, std::vector<SpawnPoint>> Map::get_spawn_points() const { return spawn_points; }
 
-void Map::set_physical_map(const PhysicalMap& physical_map) { this->physical_map = physical_map; }
-
-void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = dynamic_map; }
-
-void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
-    this->spawn_points = spawn_points;
-    std::cout << "Spawn points inicializados. Cantidad de RABBIT_SPAWN: "
-              << spawn_points.at(RABBIT_SPAWN).size() << std::endl;
-}
-
 void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }
 
 int Map::get_max_players() { return this->max_players; }
@@ -149,9 +144,12 @@ Snapshot Map::get_init_snapshot() {
 
 std::vector<RabbitSnapshot> Map::get_rabbit_snapshot() {
     std::vector<RabbitSnapshot> rabbit_snapshots;
+    // obtengo las snapshots de cada conejo
+
     for (auto player: players) {
         rabbit_snapshots.push_back(player->get_snapshot());
     }
+
     return rabbit_snapshots;
 }
 

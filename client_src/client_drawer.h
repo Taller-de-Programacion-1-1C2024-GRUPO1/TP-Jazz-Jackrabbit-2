@@ -1,8 +1,6 @@
 #ifndef CLIENT_DRAWER_H
 #define CLIENT_DRAWER_H
 
-#include "client_constants.h"
-
 #include <algorithm>
 #include <exception>
 #include <iostream>
@@ -32,6 +30,8 @@
 #include "../game_src/commands/command_move.h"
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
+
+#include "client_constants.h"
 
 using SDL2pp::Chunk;
 using SDL2pp::Font;

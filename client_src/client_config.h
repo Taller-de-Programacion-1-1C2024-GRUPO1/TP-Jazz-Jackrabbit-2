@@ -37,7 +37,8 @@ public:
 private:
     std::string file_config_path;
 
-    explicit ClientConfigSingleton(const std::string& file_config_path): file_config_path(file_config_path) {
+    explicit ClientConfigSingleton(const std::string& file_config_path):
+            file_config_path(file_config_path) {
         readConfigFromFile();
     }
 

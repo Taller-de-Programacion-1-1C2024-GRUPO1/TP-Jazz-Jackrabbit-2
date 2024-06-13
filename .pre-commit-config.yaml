@@ -19,5 +19,5 @@ repos:
       - id: cppcheck
         files: ^(.*[.]cpp|.*[.]h)$
         exclude: ^(common_src/yaml-cpp|client_src/SDL2pp|external/googletest|common_src/queue.h)/
-        args: ["--inline-suppr", "--enable=all", "--suppress=missingIncludeSystem", "--suppress=missingInclude", "--suppress=unusedFunction", "--suppress=unmatchedSuppression", "--language=c++", "--std=c++20", "--error-exitcode=1"]
+        args: ["--inline-suppr", "--enable=all", "--suppress=missingIncludeSystem", "--suppress=missingInclude", "--suppress=unusedFunction", "--suppress=unmatchedSuppression", "--suppress=useStlAlgorithm", "--language=c++", "--std=c++20", "--error-exitcode=1"]
 

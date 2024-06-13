@@ -18,30 +18,23 @@
 
 #define BASE_MAPS_PATH "/var/jazz/maps/"
 
+
 class MapReader {
 public:
-    explicit MapReader(const std::string& filePath = ""): file_path(filePath) {
+    explicit MapReader(const std::string& filePath = ""): file_path(filePath) { load_maps_files(); }
+
+    ~MapReader() {}
+
+    void get_maps(std::map<std::string, Map>& dicc_maps) { set_maps(dicc_maps); }
+
+    void refresh_load_maps(std::map<std::string, Map>& dicc_maps) {
         load_maps_files();
-        for (const auto& map_path: map_paths) {
-            load_map(map_path);
-        }
-    }
-
-    ~MapReader() = default;
-
-    std::map<std::string, Map> get_maps() { return maps; }
-
-    void refresh_load_maps() {
-        load_maps_files();
-        for (const auto& map_path: map_paths) {
-            load_map(map_path);
-        }
+        set_maps(dicc_maps);
     }
 
 private:
     std::string file_path;
     std::vector<std::string> map_paths;
-    std::map<std::string, Map> maps;
     MapParser map_parser;
 
     void load_maps_files() {
@@ -59,7 +52,13 @@ private:
         }
     }
 
-    void load_map(const std::string& map_path) {
+    void set_maps(std::map<std::string, Map>& dicc_maps) {
+        for (const auto& map_path: map_paths) {
+            load_map(map_path, dicc_maps);
+        }
+    }
+
+    void load_map(const std::string& map_path, std::map<std::string, Map>& dicc_maps) {
         if (map_path.empty()) {
             throw std::runtime_error("Maps file path is not set");
         }
@@ -67,23 +66,7 @@ private:
             throw std::runtime_error("Maps file does not exist: " + map_path);
         }
         try {
-            std::cout << "Reading maps: " << map_path << std::endl;
             YAML::Node map = YAML::LoadFile(map_path);
-            std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data;
-
-            for (const auto& node: map["layers"]) {
-                int id = node["id"].as<int>();
-                const YAML::Node& data = node["data"];
-                if (data.IsSequence()) {
-                    for (std::size_t i = 0; i < data.size(); ++i) {
-                        const YAML::Node& fila = data[i];
-                        for (std::size_t j = 0; j < fila.size(); ++j) {
-                            const YAML::Node& valor = fila[j];
-                            map_data[id][j][i] = valor.as<int>();
-                        }
-                    }
-                }
-            }
 
             std::string game_map_name = map["name"].as<std::string>();
             int max_players = map["max_players"].as<int>();
@@ -91,28 +74,33 @@ private:
             int width = map["width"].as<int>();
             int height = map["height"].as<int>();
 
-            Map game_map = Map(width, height, texture_id, max_players, game_map_name);
+            std::map<int, std::vector<std::vector<int>>> map_data;
 
-            // COMO DEFINIMOS UNA MATRIZ int[][] con con valores 
+            for (const auto& node: map["layers"]) {
+                int id = node["id"].as<int>();
+                const YAML::Node& data = node["data"];
+                if (data.IsSequence()) {
+                    map_data[id] =
+                            std::vector<std::vector<int>>(width, std::vector<int>(height, 0));
+                    // printea la matriz
+                    for (std::size_t y = 0; y < data.size(); ++y) {
+                        const YAML::Node& fila = data[y];
+                        for (std::size_t x = 0; x < fila.size(); ++x) {
+                            const YAML::Node& valor = fila[x];
+                            map_data[id][x][y] = valor.as<int>();
+                        }
+                    }
+                }
+            }
 
-            // cargo el mapa fisico
-            PhysicalMap physical_map = PhysicalMap();
-            map_parser.parse_physical_map(map_data, physical_map);
-            game_map.set_physical_map(physical_map);
-
-            // cargo los spawn points
-            game_map.set_spawn_points(map_parser.parse_spawn_points(map_data));
-
-            // cargo el mapa dinamico
-            DynamicMap dynamic_map = DynamicMap(map_data);
-            game_map.set_dynamic_map(dynamic_map);
-
-            maps[game_map_name] = game_map;
+            map_parser.parse_maps(game_map_name, width, height, max_players, texture_id, map_data,
+                                  dicc_maps);
 
         } catch (const YAML::BadFile& e) {
             throw std::runtime_error("Error reading map file: " + file_path);
         }
     }
 };
+
 
 #endif

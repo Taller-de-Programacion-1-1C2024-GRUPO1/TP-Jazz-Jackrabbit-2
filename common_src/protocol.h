@@ -169,7 +169,7 @@ public:
     char receive_char();
 
     // Envia un DynamicMap
-    void send_map(DynamicMap map);
+    void send_map(int width, int heigth, DynamicMap map);
     DynamicMap receive_map();
 
     // Chequea si el socket fue cerrado

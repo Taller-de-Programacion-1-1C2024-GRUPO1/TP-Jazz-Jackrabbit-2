@@ -2,14 +2,12 @@
 #define CLIENT_CONSTANTS_H
 
 #include <string>
+
 #include "client_config.h"
 
 #define CLOSE_MAP_CREATOR -3
 
-enum /*Map Textures*/ {
-    CASTLE = 0,
-    CARROTUS
-};
+enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 // Music & Game Constants
 #define MUSIC_VOLUME 5
@@ -17,7 +15,7 @@ enum /*Map Textures*/ {
 
 // Paths
 
-#define BASE_PATH ClientConfigSingleton::getInstance().getBasePath() 
+#define BASE_PATH ClientConfigSingleton::getInstance().getBasePath()
 
 #define RESOURCES_PATH ClientConfigSingleton::getInstance().getResourcesPath()
 
@@ -41,7 +39,8 @@ enum /*Map Textures*/ {
 
 #define ANIMATIONS_PATH ClientConfigSingleton::getInstance().getAnimationsPath()
 
-#define PROJECTILES_ANIMATIONS_PATH ClientConfigSingleton::getInstance().getProjectilesAnimationsPath()
+#define PROJECTILES_ANIMATIONS_PATH \
+    ClientConfigSingleton::getInstance().getProjectilesAnimationsPath()
 
 #define VALUABLES_ANIMATIONS_PATH ClientConfigSingleton::getInstance().getValuablesAnimationsPath()
 

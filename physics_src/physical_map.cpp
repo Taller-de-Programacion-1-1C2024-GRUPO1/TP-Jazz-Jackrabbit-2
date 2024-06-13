@@ -1,14 +1,7 @@
 #include "physical_map.h"
 
-PhysicalMap::PhysicalMap(): map() {}
-
-void PhysicalMap::load_map(const int* map_array) {
-    for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
-        for (int i = 0; i < MAP_WIDTH_DEFAULT; i++) {
-            map[i][j] = map_array[j * MAP_WIDTH_DEFAULT + i];
-        }
-    }
-}
+PhysicalMap::PhysicalMap(int width, int height, const std::vector<std::vector<int>>& matrix):
+        width(width), height(height), map(matrix) {}
 
 void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int height,
                                           Bullet* bullet) {

@@ -18,8 +18,8 @@ void ServerAcceptor::run() {
             // se podría hacer un unique_ptr
             User* user = new User(id_counter, std::make_shared<ContainerProtocol>(std::move(peer)),
                                   monitor_matches, this->server_running);
-            this->id_counter++;
             std::cout << "New user connected: " << this->id_counter << std::endl;
+            this->id_counter++;
             user->start();
             server_users.push_back(user);
             reap_dead();

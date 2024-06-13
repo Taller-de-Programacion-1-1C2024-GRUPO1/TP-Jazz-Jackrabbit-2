@@ -10,6 +10,7 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
+#include "../game_src/map_parser.h"
 #include "../game_src/map_reader.h"
 
 #include "constants_server.h"

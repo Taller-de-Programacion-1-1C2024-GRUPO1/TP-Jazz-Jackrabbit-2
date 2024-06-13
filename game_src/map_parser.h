@@ -8,8 +8,6 @@
 #include <utility>
 #include <vector>
 
-#include "../physics_src/physical_map.h"
-
 #include "constants_game.h"
 #include "map.h"
 
@@ -19,11 +17,28 @@ public:
     MapParser() = default;
     ~MapParser() = default;
 
+    void parse_maps(std::string map_name, int width, int height, int max_players, int texture,
+                    const std::map<int, std::vector<std::vector<int>>>& map_data,
+                    std::map<std::string, Map>& maps) {
+
+        std::map<int, std::vector<SpawnPoint>> spawn_points =
+                parse_spawn_points(width, height, map_data);
+
+        PhysicalMap physical_map = parse_physical_map(width, height, map_data);
+
+        DynamicMap dynamic_map = DynamicMap(width, height, map_data);
+
+        Map map = Map(width, height, texture, max_players, map_name, physical_map, dynamic_map,
+                      spawn_points);
+
+        maps[map_name] = map;
+    }
+
     std::map<int, std::vector<SpawnPoint>> parse_spawn_points(
-            std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data) {
+            int width, int height, std::map<int, std::vector<std::vector<int>>> map_data) {
         std::map<int, std::vector<SpawnPoint>> spawn_points;
-        for (int x = 0; x < MAP_WIDTH_DEFAULT; x++) {
-            for (int y = 0; y < MAP_HEIGHT_DEFAULT; y++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 switch (map_data[SPAWN_POINTS_LAYER][x][y]) {
                     case RABBIT_SPAWN:
                         spawn_points[RABBIT_SPAWN].push_back(SpawnPoint(x, y));
@@ -51,49 +66,57 @@ public:
         return spawn_points;
     }
 
-    void parse_physical_map(std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data,
-                            PhysicalMap& physic_map) {
-        if (map_data.empty()) {
-            std::cout << "Map data is empty" << std::endl;
-            return;
-        }
+    PhysicalMap parse_physical_map(int width, int height,
+                                   std::map<int, std::vector<std::vector<int>>> map_data) {
+
+        std::vector<std::vector<int>> physic_map(width, std::vector<int>(height, 0));
+
         for (const auto& [current_layer, layer_data]: map_data) {
             switch (current_layer) {
                 case DIAG_LEFT_LAYER:
-                    override_layer(DIAG_LEFT_OBJ, layer_data, physic_map);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (layer_data[x][y] != UNDEFINED) {
+                                physic_map[x][y] = DIAG_LEFT_OBJ;
+                            }
+                        }
+                    }
                     break;
                 case DIAG_RIGHT_LAYER:
-                    override_layer(DIAG_RIGHT_OBJ, layer_data, physic_map);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (layer_data[x][y] != UNDEFINED) {
+                                physic_map[x][y] = DIAG_RIGHT_OBJ;
+                            }
+                        }
+                    }
                     break;
                 case COLLIDER_LAYER:
-                    override_layer(COLLIDER_OBJ, layer_data, physic_map);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            if (layer_data[x][y] != UNDEFINED) {
+                                physic_map[x][y] = COLLIDER_OBJ;
+                            }
+                        }
+                    }
                     break;
                 default:
                     break;
             }
         }
-        // print physical map
-        for (int y = 0; y < MAP_HEIGHT_DEFAULT; y++) {
-            for (int x = 0; x < MAP_WIDTH_DEFAULT; x++) {
-                std::cout << physic_map.map[x][y] << " ";
+        PhysicalMap physical_map = PhysicalMap(width, height, physic_map);
+
+        // print map
+        std::cout << "PRINTING MAP..." << std::endl;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                std::cout << physical_map.map[x][y] << " ";
             }
             std::cout << std::endl;
         }
-    }
 
-    void override_layer(
-            int layer_variable,
-            const std::__tuple_element_t<
-                    1UL, std::pair<const int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]>>
-                    layer_data,
-            PhysicalMap& physic_map) {
-        for (int x = 0; x < MAP_WIDTH_DEFAULT; x++) {
-            for (int y = 0; y < MAP_HEIGHT_DEFAULT; y++) {
-                if (layer_data[x][y] != UNDEFINED) {
-                    physic_map.map[x][y] = layer_variable;
-                }
-            }
-        }
+        return physical_map;
     }
 };
 

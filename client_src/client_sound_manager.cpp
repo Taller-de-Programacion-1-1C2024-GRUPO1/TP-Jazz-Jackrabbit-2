@@ -10,7 +10,7 @@ SoundManager::SoundManager():
 
 std::string SoundManager::getPathForSound(const std::string& name) {
     if (name == "Jazz-Auch") {
-        return SOUND_AUCH; 
+        return SOUND_AUCH;
     } else if (name == "Shooting") {
         return SOUND_SHOOTING;
     } else if (name == "Explosion") {

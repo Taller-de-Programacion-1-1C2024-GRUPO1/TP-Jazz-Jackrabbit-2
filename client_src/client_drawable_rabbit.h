@@ -1,8 +1,8 @@
 #ifndef CLIENT_RABBIT_H
 #define CLIENT_RABBIT_H
 
-#include "client_shifting_drawable.h"
 #include "client_constants.h"
+#include "client_shifting_drawable.h"
 
 class DrawableRabbit: public ShiftingDrawable {
 
