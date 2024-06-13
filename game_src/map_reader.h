@@ -87,7 +87,7 @@ private:
 
             std::string game_map_name = map["name"].as<std::string>();
             int max_players = map["max_players"].as<int>();
-            int texture_id = map["texture_id"].as<int>();
+            int texture_id = map["texture"].as<int>();
             int width = map["width"].as<int>();
             int height = map["height"].as<int>();
 
