@@ -1,2 +1,19 @@
 # Path
-characters_path: /client_src/resources/characters
+base_path: /var/jazz/client_src
+
+# Resources folder
+resources_path: /var/jazz/client_src/resources
+background_path: /var/jazz/client_src/resources/backgrounds
+characters_path: /var/jazz/client_src/resources/characters
+enemies_path: /var/jazz/client_src/resources/enemies
+fonts_path: /var/jazz/client_src/resources/fonts
+maps_path: /var/jazz/client_src/resources/maps
+projectiles_path: /var/jazz/client_src/resources/projectiles
+sounds_path: /var/jazz/client_src/resources/sounds
+tiles_path: /var/jazz/client_src/resources/tiles
+items_path: /var/jazz/client_src/resources/items
+
+# Animations folder
+animations_path: /var/jazz/client_src/animations
+projectiles_animations_path: /var/jazz/client_src/animations/projectiles
+valuables_animations_path: /var/jazz/client_src/animations/valuables

@@ -5,11 +5,11 @@
 AmmoLeft::AmmoLeft(SDL2pp::Renderer& renderer):
         renderer(renderer),
         munitionRect(69, 26, 22, 26),  // BASIC GUN
-        munitionTexture(renderer, SDL2pp::Surface(WEAPONS_IMG)),
+        munitionTexture(renderer, SDL2pp::Surface(ITEMS_PNG)),
         currentWeapon(0),
         currentAmmo(1000),
         numberImages(renderer) {
-    SDL2pp::Surface surface(WEAPONS_IMG);
+    SDL2pp::Surface surface(ITEMS_PNG);
     SDL_Color colorKey = {0, 128, 255, 1};
     SDL_SetColorKey(surface.Get(), SDL_TRUE,
                     SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));

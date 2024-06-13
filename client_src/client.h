@@ -25,7 +25,6 @@
 
 //#include "client_config.h"
 
-
 class Client {
 private:
     Protocol protocol;
@@ -43,7 +42,6 @@ private:
 
 public:
     Client(const std::string& host, const std::string& service);
-
 
     void run(int argc, char* argv[]);
 

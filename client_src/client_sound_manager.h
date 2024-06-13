@@ -7,6 +7,8 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "client_constants.h"
+
 class SoundManager {
 private:
     SDL2pp::Mixer mixer;

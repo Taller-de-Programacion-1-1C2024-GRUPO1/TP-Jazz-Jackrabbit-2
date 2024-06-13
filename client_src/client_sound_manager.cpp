@@ -2,19 +2,19 @@
 
 SoundManager::SoundManager():
         mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096),
-        music("../client_src/resources/sounds/music.wav") {
-    mixer.SetMusicVolume(5);
+        music(SOUND_MUSIC) {
+    mixer.SetMusicVolume(MUSIC_VOLUME);
     mixer.PlayMusic(music, -1);
     mixer.SetVolume(-1, 3);
 }
 
 std::string SoundManager::getPathForSound(const std::string& name) {
     if (name == "Jazz-Auch") {
-        return "../client_src/resources/sounds/auch.wav";
+        return SOUND_AUCH; 
     } else if (name == "Shooting") {
-        return "../client_src/resources/sounds/shooting.wav";
+        return SOUND_SHOOTING;
     } else if (name == "Explosion") {
-        return "../client_src/resources/sounds/explosion.wav";
+        return SOUND_EXPLOSION;
     } else {
         // Handle the case where the name does not match any known sound
         throw std::invalid_argument("Unknown sound name: " + name);

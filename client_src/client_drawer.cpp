@@ -18,7 +18,7 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
 void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
                                    Texture& background) {
     const int initial_offset = 100;
-    Font font(FONT, 24);
+    Font font(FONT_TTF_04B_30, 24);
     renderer.SetDrawColor(200, 200, 200);
     renderer.Clear();
 
@@ -84,7 +84,7 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
 }
 
 void ClientDrawer::showLoadingScreen(Renderer& renderer) {
-    Font font(FONT, 24);
+    Font font(FONT_TTF_04B_30, 24);
     Texture texture(renderer,
                     font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
 
@@ -124,7 +124,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Background image
-    Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
+    Texture background(renderer, SDL2pp::Surface(FONDO_PNG));
 
     SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
     SDL_Color mapColor = {87, 0, 203, 0};
@@ -138,10 +138,10 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     std::string map_texture_path;
     switch (map_texture) {
         case CASTLE:
-            map_texture_path = CASTLE_TILE;
+            map_texture_path = CASTLE_TILES_PNG;
             break;
         case CARROTUS:
-            map_texture_path = CARROTUS_TILE;
+            map_texture_path = CARROTUS_TILES_PNG;
             break;
     }
 
@@ -208,7 +208,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                                rabbit_height / 2);
         ShiftingDrawable* newProjectile = new ShiftingDrawable(
                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
-        newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
+        newProjectile->setTexture(PROJECTILES_PNG, enemyAndItemsColor);
         WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
         newProjectile->setAnimation("Move");
         projectiles.emplace(projectile.id, newProjectile);
@@ -225,13 +225,13 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO) {
             SDL2pp::Rect textureRect = WeaponData::getWeapon(supply.supply_type);
             Drawable* newAmmo = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newAmmo->setTexture(ITEMS_IMG, enemyAndItemsColor);
+            newAmmo->setTexture(ITEMS_PNG, enemyAndItemsColor);
             food.emplace(supply.id, newAmmo);
         } else if (supply.supply_type == HEALTH_CARROT || supply.supply_type == HOTDOG ||
                    supply.supply_type == HAMBURGER || supply.supply_type == ROTTEN_CHEESE) {
             SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
             Drawable* newFood = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newFood->setTexture(ITEMS_IMG, enemyAndItemsColor);
+            newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
             food.emplace(supply.id, newFood);
         }
     }
@@ -366,7 +366,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                                            rabbit_height / 2);
                     ShiftingDrawable* newProjectile = new ShiftingDrawable(
                             renderer, cameraPosition, textureRect, onMapRect, soundManager);
-                    newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
+                    newProjectile->setTexture(PROJECTILES_PNG, enemyAndItemsColor);
                     WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
                     newProjectile->setAnimation("Move");
                     projectiles.emplace(projectile.id, newProjectile);
@@ -429,7 +429,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                         SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
                         Drawable* newFood =
                                 new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newFood->setTexture(ITEMS_IMG, enemyAndItemsColor);
+                        newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
                         food.emplace(supply.id, newFood);
                     } else {
                         foodIds.erase(supply.id);
@@ -443,7 +443,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                         SDL2pp::Rect textureRect = WeaponData::getWeapon(supply.supply_type);
                         Drawable* newAmmo =
                                 new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newAmmo->setTexture(ITEMS_IMG, enemyAndItemsColor);
+                        newAmmo->setTexture(ITEMS_PNG, enemyAndItemsColor);
                         food.emplace(supply.id, newAmmo);
                     } else {
                         foodIds.erase(supply.id);

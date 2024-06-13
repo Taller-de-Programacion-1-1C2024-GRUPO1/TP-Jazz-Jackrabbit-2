@@ -1,28 +1,7 @@
 #ifndef CLIENT_DRAWER_H
 #define CLIENT_DRAWER_H
 
-
-//#define BACKGROUND_IMG BACKGROUNDS_PATH "/fondo.png"
-//#define MUSIC_FILE DSOUNDS_PATH "/music.wav"
-//#define PLAYER_IMG CHARACTERS_PATH "/Jazz.png"
-//#define FONT FONTS_PATH "/04B_30__.ttf"
-//#define GAME_TITLE "Juego"
-
-//#include "client_config.h"
-//#define CHARACTERS_PATH ClientConfigSingleton::getInstance().getCharactersPath()
-
-
-#define BACKGROUND_IMG "../client_src/resources/backgrounds/fondo.png"
-#define MUSIC_FILE "../client_src/resources/sounds/music.wav"
-
-#define CARROTUS_TILE "../client_src/resources/tiles/castle.png"
-#define CASTLE_TILE "../client_src/resources/tiles/carrotus.png"
-
-#define FONT "../client_src/resources/fonts/04B_30__.ttf"
-#define ITEMS_IMG "../client_src/resources/items/items.png"
-#define PROJECTILES_IMG "../client_src/resources/projectiles/Projectiles.png"
-#define GAME_TITLE "Juego"
-#define MUSIC_VOLUME 5
+#include "client_constants.h"
 
 // pre-commit run --hook-stage manual --all-files
 #include <algorithm>

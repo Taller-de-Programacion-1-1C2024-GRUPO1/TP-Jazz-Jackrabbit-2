@@ -1,11 +1,9 @@
 #include "client_number_images.h"
 
-#define FONT_IMG "../client_src/resources/fonts/Fonts.png"
-
 NumberImages::NumberImages(SDL2pp::Renderer& renderer):
-        x(0), y(0), renderer(renderer), numberTexture(renderer, SDL2pp::Surface(FONT_IMG)) {
+        x(0), y(0), renderer(renderer), numberTexture(renderer, SDL2pp::Surface(FONTS_PNG)) {
 
-    SDL2pp::Surface surface(FONT_IMG);
+    SDL2pp::Surface surface(FONTS_PNG);
     SDL_Color colorKey = {0, 128, 255, 1};
     SDL_SetColorKey(surface.Get(), SDL_TRUE,
                     SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));

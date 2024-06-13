@@ -24,9 +24,8 @@ int main(int argc, char* argv[]) {
             return -1;
         }
 
-        // std::string config_file = "/etc/jazz/client_config.yml";
-        // ClientConfigSingleton::getInstance(config_file);
-
+        std::string config_file = "/etc/jazz/client_config.yml";
+        ClientConfigSingleton::getInstance(config_file);
 
         Client client(std::move(hostname), std::move(servname));
         client.run(argc, argv);

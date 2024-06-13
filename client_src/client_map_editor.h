@@ -60,7 +60,7 @@ public:
             name(nameByUser),
             maxPlayers(max_players),
             currentRabbitSpawns(0),
-            font(FONT, 15) {
+            font(FONT_TTF_04B_30, 15) {
         const char* textureImg[] = {CASTLE_IMG, CARROTUS_IMG, CARROTUS_IMG};
 
         Surface surface(textureImg[map]);
