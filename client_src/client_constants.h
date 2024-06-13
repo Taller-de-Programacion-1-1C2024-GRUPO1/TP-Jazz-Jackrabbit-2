@@ -6,9 +6,8 @@
 
 #define CLOSE_MAP_CREATOR -3
 
-enum  // texture
-{
-    CASTLE,
+enum /*Map Textures*/ {
+    CASTLE = 0,
     CARROTUS
 };
 

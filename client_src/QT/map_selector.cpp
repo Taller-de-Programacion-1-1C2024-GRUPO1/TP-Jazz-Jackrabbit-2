@@ -27,14 +27,14 @@ MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
 MapSelector::~MapSelector() { delete ui; }
 
 void MapSelector::on_btnMap1_clicked() {
-    selected_map = DEFAULT_MAP_CARROTUS;  // CASTLE //////////////
-    map_texture = CARROTUS;
+    selected_map = DEFAULT_MAP_CARROTUS;  // CASTLE //
+    map_texture = CASTLE;
     start_match();
 }
 
 void MapSelector::on_btnMap2_clicked() {
     selected_map = DEFAULT_MAP_CARROTUS;
-    map_texture = CASTLE;
+    map_texture = CARROTUS;
     start_match();
 }
 
@@ -54,7 +54,6 @@ void MapSelector::on_btnMapCreate_clicked() {
 }
 
 void MapSelector::handleWindowClosed() { QApplication::exit(ERROR); }
-
 
 void MapSelector::start_match() {
     int number_of_players = ui->spinNumberOfPlayers->value();

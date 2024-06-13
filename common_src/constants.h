@@ -51,13 +51,12 @@ enum /*INFO TYPE*/ {
 #define OK_MAP_CREATOR -2
 #define INVALID_QT_RESPONSE -2
 
-
 #define WAITING 0
 #define STARTED 1
 
 #define PLAYING -1
 
-
-#define DEFAULT_MAP_CARROTUS "carrotus"
+#define DEFAULT_MAP_CARROTUS "default_carrotus"
+#define DEFAULT_MAP_CASTLE "default_castle"
 
 #endif
