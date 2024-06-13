@@ -37,26 +37,16 @@ void User::create_new_match(int number_of_players, const std::string& match_name
 
     Map map = monitor_matches.get_map(map_name);
 
-    std::cout << "Creating match queue..." << std::endl;
-
     std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> protocols_queue =
             std::make_shared<Queue<std::shared_ptr<PlayerInfo>>>();
-
-    std::cout << "Creating player info..." << std::endl;
 
     std::shared_ptr<PlayerInfo> player_info =
             std::make_shared<PlayerInfo>(this->id, character_name, container_protocol);
 
-    std::cout << "Pushing in protocols_queue..." << std::endl;
-
     protocols_queue->push(player_info);
-
-    std::cout << "Creating match info.." << std::endl;
 
     std::shared_ptr<MatchInfo> new_match = std::make_shared<MatchInfo>(
             match_name, map, protocols_queue, server_running, number_of_players);
-
-    std::cout << "Adding new match..." << std::endl;
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
 

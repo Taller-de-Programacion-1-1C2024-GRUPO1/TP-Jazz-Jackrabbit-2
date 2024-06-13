@@ -57,7 +57,6 @@ int MonitorMatches::join_match(std::string match_name,
 Map MonitorMatches::get_map(std::string map_name) {
     std::lock_guard<std::mutex> lock(mutex);
     map_reader.refresh_load_maps(maps);
-    std::cout << "Getting map: " << map_name << std::endl;
     return maps[map_name];
 }
 
