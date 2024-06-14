@@ -15,5 +15,7 @@ items_path: /var/jazz/client_src/resources/items
 
 # Animations folder
 animations_path: /var/jazz/client_src/animations
+ammo_animations_path: /var/jazz/client_src/animations/ammo
 projectiles_animations_path: /var/jazz/client_src/animations/projectiles
 valuables_animations_path: /var/jazz/client_src/animations/valuables
+
