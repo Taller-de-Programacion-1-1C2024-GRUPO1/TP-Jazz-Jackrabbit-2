@@ -26,6 +26,7 @@ public:
     std::string getTilesPath() const { return tiles_path; }
     std::string getItemsPath() const { return items_path; }
     std::string getAnimationsPath() const { return animations_path; }
+    std::string getAmmoAnimationsPath() const { return ammo_animations_path; }
     std::string getProjectilesAnimationsPath() const { return projectiles_animations_path; }
     std::string getValuablesAnimationsPath() const { return valuables_animations_path; }
 
@@ -64,6 +65,7 @@ private:
             tiles_path = config["tiles_path"].as<std::string>();
             items_path = config["items_path"].as<std::string>();
             animations_path = config["animations_path"].as<std::string>();
+            ammo_animations_path = config["ammo_animations_path"].as<std::string>();
             projectiles_animations_path = config["projectiles_animations_path"].as<std::string>();
             valuables_animations_path = config["valuables_animations_path"].as<std::string>();
 
@@ -89,6 +91,7 @@ private:
     std::string tiles_path;
     std::string items_path;
     std::string animations_path;
+    std::string ammo_animations_path;
     std::string projectiles_animations_path;
     std::string valuables_animations_path;
 };

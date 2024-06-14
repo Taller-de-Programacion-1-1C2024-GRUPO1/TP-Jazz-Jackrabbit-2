@@ -19,16 +19,6 @@ enum Mode { TEXTURE, ENTITY };
 
 // g++ main.cpp -lyaml-cpp -lSDL2 -lSDL2_image -lSDL2_ttf -o myprogram
 
-#define FONT "../client_src/resources/fonts/04B_30__.ttf"
-#define JAZZ "../client_src/resources/characters/Jazz.png"
-#define ITEMS "../client_src/resources/items/items.png"
-#define ENEMIES "../client_src/resources/enemies/Enemies.png"
-#define TURTLE "../client_src/resources/enemies/turtle.png"
-
-#define CASTLE_IMG "../client_src/resources/tiles/castle.png"
-#define CARROTUS_IMG "../client_src/resources/tiles/carrotus.png"
-#define BEACH_IMG "../client_src/resources/tiles/beach.png"
-
 // Donde se va a colocar el mapa resultante
 #define DEST_PATH "../external/maps/"
 
@@ -61,7 +51,7 @@ public:
             maxPlayers(max_players),
             currentRabbitSpawns(0),
             font(FONT_TTF_04B_30, 15) {
-        const char* textureImg[] = {CASTLE_IMG, CARROTUS_IMG, CARROTUS_IMG};
+        std::string textureImg[] = {CASTLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
 
         Surface surface(textureImg[map]);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
@@ -90,7 +80,8 @@ public:
                 height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
         // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ, ENEMIES, ENEMIES, TURTLE, ITEMS, ITEMS};
+        std::vector<std::string> imagePaths = {JAZZ_CHARACTER_PNG, ENEMIES_PNG, ENEMIES_PNG,
+                                               TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
 
         for (const auto& path: imagePaths) {
             Surface entitySurface(path);

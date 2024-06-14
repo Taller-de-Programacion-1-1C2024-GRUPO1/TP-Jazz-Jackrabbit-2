@@ -32,6 +32,7 @@ public:
     void setDirection(int dir);
     void setAnimation(const char* name);
     void reajustFrame(int framesToAdvance);
+    // void playSoundOnDeath(){};
 
     //~ShiftingDrawable();
 };

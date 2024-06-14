@@ -23,9 +23,6 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
         animation.frames = it->second["frames"].as<int>();
         animation.justOneLoop = !it->second["loop"].as<bool>();
         animation.sound = it->second["sound"].as<std::string>();
-        if (!animation.sound.empty()) {
-            soundManager.loadSoundEffect(animation.sound);
-        }
 
         for (size_t i = 0; i < it->second["rects"].size(); i++) {
             SDL2pp::Rect rect;

@@ -31,7 +31,7 @@ void WeaponData::loadAnimationsToProjectile(int id, ShiftingDrawable* projectile
             projectile->loadAnimations(BLUE_RAY_ANIMATIONS);
             break;
         case SNIPER:
-            projectile->loadAnimations(BLUE_RAY_ANIMATIONS);
+            projectile->loadAnimations(ROCKET_ANIMATIONS);
             break;
     }
 }

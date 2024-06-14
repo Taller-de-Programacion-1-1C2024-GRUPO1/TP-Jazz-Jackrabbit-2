@@ -206,10 +206,9 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         SDL2pp::Rect textureRect(0, 0, 0, 0);
         SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width / 2,
                                rabbit_height / 2);
-        ShiftingDrawable* newProjectile = new ShiftingDrawable(
+        DrawableProjectile* newProjectile = new DrawableProjectile(
                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
-        newProjectile->setTexture(PROJECTILES_PNG, enemyAndItemsColor);
-        WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
+        newProjectile->setProjectileFromSnapshot(projectile.weapon);
         newProjectile->setAnimation("Move");
         projectiles.emplace(projectile.id, newProjectile);
     }
@@ -221,12 +220,14 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                     renderer, cameraPosition, textureRect, onMapRect, soundManager);
             newValuable->setValuableFromSnapshot(supply.supply_type);
             newValuable->setAnimation("Flip");
-            supplies.emplace(supply.id, newValuable);
+            valuables.emplace(supply.id, newValuable);
         } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO) {
-            SDL2pp::Rect textureRect = WeaponData::getWeapon(supply.supply_type);
-            Drawable* newAmmo = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newAmmo->setTexture(ITEMS_PNG, enemyAndItemsColor);
-            food.emplace(supply.id, newAmmo);
+            SDL2pp::Rect textureRect(0, 0, 0, 0);
+            DrawableAmmo* newAmmo = new DrawableAmmo(renderer, cameraPosition, textureRect,
+                                                     onMapRect, soundManager);
+            newAmmo->setAmmoFromSnapshot(supply.supply_type);
+            newAmmo->setAnimation("Flip");
+            ammo_drops.emplace(supply.id, newAmmo);
         } else if (supply.supply_type == HEALTH_CARROT || supply.supply_type == HOTDOG ||
                    supply.supply_type == HAMBURGER || supply.supply_type == ROTTEN_CHEESE) {
             SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
@@ -364,32 +365,39 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                     SDL2pp::Rect textureRect(0, 0, 0, 0);
                     SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width / 2,
                                            rabbit_height / 2);
-                    ShiftingDrawable* newProjectile = new ShiftingDrawable(
+                    DrawableProjectile* newProjectile = new DrawableProjectile(
                             renderer, cameraPosition, textureRect, onMapRect, soundManager);
-                    newProjectile->setTexture(PROJECTILES_PNG, enemyAndItemsColor);
-                    WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
+                    newProjectile->setProjectileFromSnapshot(projectile.weapon);
                     newProjectile->setAnimation("Move");
                     projectiles.emplace(projectile.id, newProjectile);
                 }
             }
             for (const auto& id: projectilesIds) {
-                delete projectiles[id];
-                projectiles.erase(id);
+                DrawableProjectile* projectile = projectiles[id];
+                if (projectile->requiresExplosion()) {
+                    soundManager.playSoundEffect("Explosion");
+                    projectile->setAnimation("Explode");
+                    projectile->setRequiresExplosion(false);
+                } else if (projectile->isExploding()) {
+                    projectile->keepExploding();
+                } else {
+                    delete projectiles[id];
+                    projectiles.erase(id);
+                }
             }
 
             // SUPPLIES UPDATE
-            // SUPPLIES UPDATE
-            std::set<int> suppliesIds;
-            for (const auto& pair: supplies) {
-                suppliesIds.insert(pair.first);
+            std::set<int> valuablesIds;
+            for (const auto& pair: valuables) {
+                valuablesIds.insert(pair.first);
             }
 
-            // First loop for resources
+            // VALUABLES (COIN AND GEMS)
             for (const auto& supply: snapshot.supplies) {
                 if (supply.supply_type == COIN || supply.supply_type == GEM) {
-                    auto it = supplies.find(supply.id);
-                    if (it == supplies.end()) {
-                        suppliesIds.erase(supply.id);
+                    auto it = valuables.find(supply.id);
+                    if (it == valuables.end()) {
+                        valuablesIds.erase(supply.id);
                         // Creo un nuevo item
                         SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2,
                                                rabbit_height / 2);
@@ -398,18 +406,49 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
                         newValuable->setValuableFromSnapshot(supply.supply_type);
                         newValuable->setAnimation("Flip");
-                        supplies.emplace(supply.id, newValuable);
+                        valuables.emplace(supply.id, newValuable);
                     } else {
-                        suppliesIds.erase(supply.id);
+                        valuablesIds.erase(supply.id);
                     }
                 }
             }
-            for (const auto& id: suppliesIds) {
-                delete supplies[id];
-                supplies.erase(id);
+            for (const auto& id: valuablesIds) {
+                soundManager.playSoundEffect("Coin-Pickup");
+                delete valuables[id];
+                valuables.erase(id);
             }
 
+            // AMMO
+            std::set<int> ammoIds;
+            for (const auto& pair: ammo_drops) {
+                ammoIds.insert(pair.first);
+            }
+            for (const auto& ammo: snapshot.supplies) {
+                if (ammo.supply_type == MACHINEGUN_AMMO || ammo.supply_type == SNIPER_AMMO) {
+                    auto it = ammo_drops.find(ammo.id);
+                    if (it == ammo_drops.end()) {
+                        ammoIds.erase(ammo.id);
+                        // Creo un nuevo item
+                        SDL2pp::Rect onMapRect(ammo.pos_x, ammo.pos_y, rabbit_width / 2,
+                                               rabbit_height / 2);
+                        SDL2pp::Rect textureRect(0, 0, 0, 0);
+                        DrawableAmmo* newValuable = new DrawableAmmo(
+                                renderer, cameraPosition, textureRect, onMapRect, soundManager);
+                        newValuable->setAmmoFromSnapshot(ammo.supply_type);
+                        newValuable->setAnimation("Flip");
+                        ammo_drops.emplace(ammo.id, newValuable);
+                    } else {
+                        ammoIds.erase(ammo.id);
+                    }
+                }
+            }
+            for (const auto& id: ammoIds) {
+                soundManager.playSoundEffect("Ammo-Pickup");
+                delete ammo_drops[id];
+                ammo_drops.erase(id);
+            }
 
+            // FOOD
             std::set<int> foodIds;
             for (const auto& pair: food) {
                 foodIds.insert(pair.first);
@@ -434,23 +473,10 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                     } else {
                         foodIds.erase(supply.id);
                     }
-                } else if (supply.supply_type == SNIPER_AMMO ||
-                           supply.supply_type == MACHINEGUN_AMMO) {
-                    auto it = food.find(supply.id);
-                    if (it == food.end()) {
-                        SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2,
-                                               rabbit_height / 2);
-                        SDL2pp::Rect textureRect = WeaponData::getWeapon(supply.supply_type);
-                        Drawable* newAmmo =
-                                new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newAmmo->setTexture(ITEMS_PNG, enemyAndItemsColor);
-                        food.emplace(supply.id, newAmmo);
-                    } else {
-                        foodIds.erase(supply.id);
-                    }
                 }
             }
             for (const auto& id: foodIds) {
+                soundManager.playSoundEffect("Eating");
                 delete food[id];
                 food.erase(id);
             }
@@ -471,8 +497,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         for (auto& projectile: projectiles) {
             projectile.second->update();
         }
-        for (auto& supply: supplies) {
-            supply.second->update();
+        for (auto& valuable: valuables) {
+            valuable.second->update();
+        }
+        for (auto& ammo: ammo_drops) {
+            ammo.second->update();
         }
         for (auto& f: food) {
             f.second->update();
@@ -496,8 +525,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         for (auto& projectile: projectiles) {
             projectile.second->render();
         }
-        for (auto& suply: supplies) {
-            suply.second->render();
+        for (auto& valuable: valuables) {
+            valuable.second->render();
+        }
+        for (auto& ammo: ammo_drops) {
+            ammo.second->render();
         }
         for (auto& f: food) {
             f.second->render();
@@ -537,8 +569,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             for (auto& projectile: projectiles) {
                 projectile.second->reajustFrame(framesBehind);
             }
-            for (auto& supply: supplies) {
-                supply.second->reajustFrame(framesBehind);
+            for (auto& valuable: valuables) {
+                valuable.second->reajustFrame(framesBehind);
+            }
+            for (auto& ammo: ammo_drops) {
+                ammo.second->reajustFrame(framesBehind);
             }
 
             // Calculate the next frame start time

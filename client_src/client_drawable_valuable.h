@@ -22,6 +22,10 @@ public:
                 break;
         }
     }
+
+    /*void playSoundOnDeath() override {
+        soundManager.playSoundEffect(SOUND_COIN_PICKUP);
+    }*/
 };
 
 #endif  // CLIENT_VALUABLE_H

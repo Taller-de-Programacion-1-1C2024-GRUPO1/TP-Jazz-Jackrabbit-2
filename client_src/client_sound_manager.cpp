@@ -15,18 +15,25 @@ std::string SoundManager::getPathForSound(const std::string& name) {
         return SOUND_SHOOTING;
     } else if (name == "Explosion") {
         return SOUND_EXPLOSION;
+    } else if (name == "Coin-Pickup") {
+        return SOUND_COIN_PICKUP;
+    } else if (name == "Ammo-Pickup") {
+        return SOUND_AMMO_PICKUP;
+    } else if (name == "Eating") {
+        return SOUND_EATING;
     } else {
-        // Handle the case where the name does not match any known sound
         throw std::invalid_argument("Unknown sound name: " + name);
     }
 }
 
-void SoundManager::loadSoundEffect(const std::string& name) {
-    soundEffects[name] = std::make_unique<SDL2pp::Chunk>(getPathForSound(name));
-}
-
 void SoundManager::playSoundEffect(const std::string& name) {
-    mixer.PlayChannel(-1, *soundEffects[name]);
+    currentSound = std::make_unique<SDL2pp::Chunk>(getPathForSound(name));
+    mixer.PlayChannel(-1, *currentSound);
 }
 
 void SoundManager::stopSound() { mixer.HaltChannel(-1); }
+
+SoundManager::~SoundManager() {
+    mixer.HaltMusic();
+    mixer.HaltChannel(-1);
+}

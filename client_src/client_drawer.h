@@ -49,7 +49,9 @@ using SDL2pp::Window;
 
 #include "client_constants.h"
 #include "client_drawable.h"
+#include "client_drawable_ammo.h"
 #include "client_drawable_enemy.h"
+#include "client_drawable_projectile.h"
 #include "client_drawable_rabbit.h"
 #include "client_drawable_valuable.h"
 #include "client_food_provider.h"
@@ -72,8 +74,9 @@ private:
     // Game data
     std::map<int, DrawableRabbit*> rabbits;
     std::map<int, DrawableEnemy*> enemies;
-    std::map<int, ShiftingDrawable*> projectiles;
-    std::map<int, ShiftingDrawable*> supplies;
+    std::map<int, DrawableProjectile*> projectiles;
+    std::map<int, DrawableValuable*> valuables;
+    std::map<int, DrawableAmmo*> ammo_drops;
     std::map<int, Drawable*> food;
 
     int rabbit_width;

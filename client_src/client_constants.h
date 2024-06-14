@@ -39,6 +39,8 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 #define ANIMATIONS_PATH ClientConfigSingleton::getInstance().getAnimationsPath()
 
+#define AMMO_ANIMATIONS_PATH ClientConfigSingleton::getInstance().getAmmoAnimationsPath()
+
 #define PROJECTILES_ANIMATIONS_PATH \
     ClientConfigSingleton::getInstance().getProjectilesAnimationsPath()
 
@@ -91,6 +93,9 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 #define SOUND_EXPLOSION SOUNDS_PATH + "/explosion.wav"
 #define SOUND_MUSIC SOUNDS_PATH + "/music.wav"
 #define SOUND_SHOOTING SOUNDS_PATH + "/shooting.wav"
+#define SOUND_COIN_PICKUP SOUNDS_PATH + "/coin-pickup.wav"
+#define SOUND_AMMO_PICKUP SOUNDS_PATH + "/ammo-pickup.wav"
+#define SOUND_EATING SOUNDS_PATH + "/eating.wav"
 
 // Tiles
 
@@ -106,10 +111,16 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 #define CRAB_ANIMATIONS ANIMATIONS_PATH + "/crab.yml"
 #define LIZARD_ANIMATIONS ANIMATIONS_PATH + "/lizard.yml"
 
+// Ammo Animations
+
+#define MACHINE_GUN_ANIMATIONS AMMO_ANIMATIONS_PATH + "/machine_gun.yml"
+#define SNIPER_ANIMATIONS AMMO_ANIMATIONS_PATH + "/sniper.yml"
+
 // Projectiles Animations
 
 #define BLUE_RAY_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/blue_ray.yml"
 #define REGULAR_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/regular.yml"
+#define ROCKET_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/rocket.yml"
 
 // Valuables Animations
 

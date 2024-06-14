@@ -28,37 +28,3 @@ Move:
       w: 32
       h: 8
 
-Explode:
-  frames: 7
-  speed: 100
-  loop: false
-  sound: "Explosion"
-  rects:
-  - x: 102
-    y: 248
-    w: 15
-    h: 22
-  - x: 117
-    y: 248
-    w: 22
-    h: 22
-  - x: 139
-    y: 248
-    w: 16
-    h: 22
-  - x: 155
-    y: 248
-    w: 51
-    h: 22
-  - x: 206
-    y: 248
-    w: 32
-    h: 22
-  - x: 238
-    y: 248
-    w: 29
-    h: 22
-  - x: 267
-    y: 248
-    w: 24
-    h: 22

@@ -13,14 +13,14 @@ class SoundManager {
 private:
     SDL2pp::Mixer mixer;
     SDL2pp::Music music;
-    std::map<std::string, std::unique_ptr<SDL2pp::Chunk>> soundEffects;
+    std::unique_ptr<SDL2pp::Chunk> currentSound;
 
 public:
     SoundManager();
     std::string getPathForSound(const std::string& name);
-    void loadSoundEffect(const std::string& name);
     void playSoundEffect(const std::string& name);
     void stopSound();
+    ~SoundManager();
 };
 
 #endif  // CLIENT_SOUND_MANAGER_H
