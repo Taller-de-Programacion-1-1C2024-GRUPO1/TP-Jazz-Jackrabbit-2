@@ -1,15 +1,10 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include "../../server_src/config.h"
 #include "../constants_game.h"
 
 #include "rabbit.h"
 
-#define RABBIT_REVIVAL_TIME ConfigSingleton::getInstance().getRabbitRevivalTime()
-#define RABBIT_DEINTOXICATE_TIME ConfigSingleton::getInstance().getRabbitDeintoxicateTime()
-#define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
-#define SPECIAL_ATTACK_TIME JUMPING_INITIAL_SPEED / GRAVITY
 class State {
 protected:
     Rabbit& rabbit;

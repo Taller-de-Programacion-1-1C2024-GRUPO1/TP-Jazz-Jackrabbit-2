@@ -5,13 +5,7 @@
 #include "../../physics_src/physical_objects.h"
 #include "../constants_game.h"
 class Rabbit;
-#define COIN_POINTS 100
-#define GEM_POINTS 200
-#define MACHINEGUN_AMMO_AMOUNT 10
-#define SNIPER_AMMO_AMOUNT 2
-#define CARROT_HEALTH_AMOUNT 1
-#define HOTDOG_POINTS_AMOUNT 200
-#define HAMBURGER_POINTS_AMOUNT 300
+
 
 class Item: public PhysicalObject {
     int id;

@@ -6,9 +6,7 @@
 #include "bullet.h"
 #include "rabbit.h"
 
-#define POINTS_KILLING_ENEMY 300
-#define ENEMY_SPEED 1
-#define ENEMY_MOVE_RANGE 40
+
 
 Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map, Map& map):
         id(id),

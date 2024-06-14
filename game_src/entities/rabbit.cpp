@@ -1,6 +1,5 @@
 #include "rabbit.h"
 
-#include "../../server_src/config.h"
 #include "../commands/command.h"
 #include "../map.h"
 
@@ -10,11 +9,7 @@
 #include "item.h"
 #include "state.h"
 
-#define PLAYER_INITIAL_HEALTH ConfigSingleton::getInstance().getPlayerStartingLife()
-#define POINTS_KILLING_RABBIT ConfigSingleton::getInstance().getKillRabbitPoints()
-#define PLAYER_SPEED ConfigSingleton::getInstance().getRabbitSpeed()
-#define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
-#define PLAYER_DAMAGE 1
+
 
 
 Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,

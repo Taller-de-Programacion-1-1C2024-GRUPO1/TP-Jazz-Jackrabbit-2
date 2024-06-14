@@ -5,8 +5,6 @@
 
 #include "character.h"
 
-#define ENEMY_REVIVE_COOLDOWN 400
-
 class Map;
 
 class Enemy: public Character {
