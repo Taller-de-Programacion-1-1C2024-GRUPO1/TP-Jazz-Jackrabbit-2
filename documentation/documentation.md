@@ -23,7 +23,9 @@ Depuration:
 - GDB
 - Valgrind
 
-## INTRODUCTION 
+## INTRODUCTION
+
+Jazz Jackrabbit 2, produced by Epic MegaGames in 1998, is a beloved platform game that built upon the success of its predecessor, Jazz Jackrabbit. Both games are side-scrolling platformers that incorporate elements of shooting and platforming. Jazz Jackrabbit 2 introduced enhanced multiplayer options, allowing players to compete or cooperate over a LAN or the Internet, adding a new layer of excitement to the classic gameplay. In this repository, we present a remake of Jazz Jackrabbit 2. Our remake retains the core mechanics of the original game while introducing a new objective: to accumulate the maximum amount of points possible within a set time limit. When the time expires, the player with the most points is declared the winner.
 
 The game is divided into two main parts: Server and Client. The Server contains the game logic while the Client is responsible only for connecting to the Server, sending commands to it, and receiving all necessary information to visualize a game session. These two components communicate via sockets, using a communication protocol. The Server includes an acceptor socket, enabling multiplayer functionality.
 
@@ -50,8 +52,8 @@ By utilizing these queues, the game can effectively manage communication and dat
 For the Lobby interface, we used Qt, a powerful framework for creating cross-platform applications. Qt allowed us to design and implement an intuitive and responsive user interface. In the Lobby, users can interact with several buttons to perform various actions:
 
 - Create a Map: Opens a dialog where users can design and save custom maps for their matches.
-- Create a Game: Allows users to set up a new game by selecting options such as match type, map, and player characters.
-- Join a Game: Provides a list of available matches that users can join, showing details like match name, current players, and map.
+- Create a Game: Allows users to set up a new game by selecting options such as number of players and map.
+- Join a Game: Provides a list of available matches that users can join.
 
 Qt's rich set of widgets and tools enabled us to create these interactive elements efficiently, ensuring a smooth user experience in the Lobby.
 
