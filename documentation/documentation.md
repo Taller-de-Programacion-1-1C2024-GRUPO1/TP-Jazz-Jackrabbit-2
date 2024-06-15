@@ -2,8 +2,6 @@
 
 This documentation provides a straightforward yet comprehensive overview of the project structure, featuring diagrams accompanied by detailed explanations. It covers thread management, the modeling of key and commonly used classes, and the definition of the protocol.
 
------------------
-
 ## SOFTWARE REQUIREMENTS
 
 OS: GNU/Linux
@@ -25,8 +23,6 @@ Depuration:
 - GDB
 - Valgrind
 
------------------
-
 ## INTRODUCTION 
 
 The game is divided into two main parts: Server and Client. The Server contains the game logic while the Client is responsible only for connecting to the Server, sending commands to it, and receiving all necessary information to visualize a game session. These two components communicate via sockets, using a communication protocol. The Server includes an acceptor socket, enabling multiplayer functionality.
@@ -36,8 +32,6 @@ To elaborate further, the Server manages the state of the game world, processes 
 The Client, on the other hand, focuses on user interaction and rendering the game environment based on the data received from the Server. It captures player inputs, such as movements and actions, and transmits them to the Server for processing. Upon receiving updates, the Client updates its display to reflect the current game state, providing a seamless and interactive experience for the player.
 
 Both the Server and Client are designed to be scalable and efficient, capable of handling multiple concurrent connections and providing a smooth gaming experience. The use of a robust communication protocol ensures reliable data transmission and minimizes latency, which is crucial for maintaining game performance and responsiveness.
-
------------------
 
 ## SERVER
 
@@ -58,8 +52,6 @@ Once a Client is accepted, the Acceptor creates a new thread. This new thread's 
 Moreover, when a Client initiates a new match, the Acceptor thread, specifically the MonitorMatches, creates a new thread for each match. The total number of threads can be calculated as: `2 + 2XN`, where `X` is the number of clients and `N` is the number of matches. For example, if there are 2 clients engaged in a single match, the active threads would be: 2 (Main and Acceptor) + (2x2)x1 (each player in a match runs two threads, Sender and Receiver) = 6 threads in total.
 
 By handling both the pre-game setup and the in-game logic, the server plays a pivotal role in maintaining the integrity and functionality of the game, providing a seamless and enjoyable experience for all players.
-
------------------
 
 ## PROTOCOL 
 
@@ -111,8 +103,6 @@ The ServerSender pops the snapshot from the Broadcaster's queue and sends it bac
 
 
 This cycle of sending commands from the client to the server, updating the game state, broadcasting snapshots, and rendering updates on the client side ensures continuous synchronization between the client and server. It maintains a consistent game experience for all players involved, with real-time updates reflecting each player's actions and the overall game state.
-
------------------
 
 ## GAME
 
