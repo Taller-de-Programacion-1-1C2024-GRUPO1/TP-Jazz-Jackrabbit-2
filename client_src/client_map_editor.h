@@ -140,7 +140,7 @@ public:
                     } else if (x >= 100 && x < 180 && y >= 10 && y < 50) {
                         // Click en el botón de borrar
                         currentTool = ERASE;
-                    } else if (x >= 190 && x < 270 && y >= 10 && y < 50) {
+                    } else if (x >= 280 && x < 360 && y >= 10 && y < 50) {
                         // Click en los botones de capas
                         currentLayer = BACKGROUND_LAYER;
                     } else if (x >= 370 && x < 450 && y >= 10 && y < 50) {

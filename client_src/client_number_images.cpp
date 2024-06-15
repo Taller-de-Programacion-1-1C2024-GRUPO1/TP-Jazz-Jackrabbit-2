@@ -22,6 +22,7 @@ void NumberImages::loadNumbers() {
     numberRects.push_back(SDL2pp::Rect(775, 10, 30, 24));  // 7
     numberRects.push_back(SDL2pp::Rect(805, 10, 28, 24));  // 8
     numberRects.push_back(SDL2pp::Rect(21, 42, 27, 28));   // 9
+    numberRects.push_back(SDL2pp::Rect(342, 303, 16, 21));   // X for ammo
 }
 
 void NumberImages::setCorner(int mode) {
@@ -34,9 +35,13 @@ void NumberImages::setCorner(int mode) {
             x = 800 - 32;
             y = 600 - 32;
             break;
+        case 2:  // bottom left
+            x = 0;
+            y = 600 - 32;
+            break;
     }
 }
 
-void NumberImages::renderNumber(int number, int offset) {
-    renderer.Copy(numberTexture, numberRects[number], SDL2pp::Rect(x + offset, y, 32, 32));
+void NumberImages::renderNumber(int number, int offset_x, int offset_y) {
+    renderer.Copy(numberTexture, numberRects[number], SDL2pp::Rect(x + offset_x, y + offset_y, 32, 32));
 }

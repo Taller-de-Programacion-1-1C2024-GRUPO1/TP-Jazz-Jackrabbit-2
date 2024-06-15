@@ -16,7 +16,7 @@ private:
 
 public:
     explicit NumberImages(SDL2pp::Renderer& renderer);
-    void renderNumber(int number, int offset);
+    void renderNumber(int number, int offsetX, int offsetY);
     void loadNumbers();
     void setCorner(int mode);
 };

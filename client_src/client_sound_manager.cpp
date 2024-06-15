@@ -28,7 +28,12 @@ std::string SoundManager::getPathForSound(const std::string& name) {
 
 void SoundManager::playSoundEffect(const std::string& name) {
     currentSound = std::make_unique<SDL2pp::Chunk>(getPathForSound(name));
-    mixer.PlayChannel(-1, *currentSound);
+    try {
+        mixer.PlayChannel(-1, *currentSound);
+    }
+    catch (const SDL2pp::Exception& e) {
+        std::cerr << "All channels are busy" << std::endl;
+    }
 }
 
 void SoundManager::stopSound() { mixer.HaltChannel(-1); }
