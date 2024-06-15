@@ -1,0 +1,289 @@
+@startuml
+abstract class PhysicalObject {
+    const int width
+    const int height
+    int pos_x
+    int pos_y
+    int spe_x
+    int spe_y
+    bool dead
+    virtual void on_colision_with(PhysicalObject* first_object) = 0;
+    virtual void on_colision_with_enemy(Enemy* second_object) {}
+    virtual void on_colision_with_rabbit(Rabbit* second_object) {}
+    virtual void on_colision_with_item(Item* second_object) {}
+    virtual void on_colision_with_bullet(Bullet* second_object) {}
+    bool is_dead()
+    void kill()
+}
+
+abstract class Character {
+    const int acc_y
+    int health
+    PhysicalMap& physical_map
+    bool on_floor
+    bool on_roof
+    bool on_left_wall
+    bool on_right_wall
+    bool on_left_slope
+    bool on_right_slope
+    void check_colision_with_map()
+    void is_on_floor()
+    void is_on_roof()
+    void is_on_left_wall()
+    void is_on_right_wall()
+    void is_on_left_slope()
+    void is_on_right_slope()
+    void reset_map_colision_flags()
+    void check_colision_with_bullet(int bullet_pos_x, int bullet_pos_y, int bullet_width, int bullet_height, int bullet_damage)
+    void update_position()
+    virtual void receive_damage(int damage) = 0
+
+}
+
+class Rabbit {
+    int id
+    uint8_t champion_type
+    int points
+    int action
+    int max_health
+    const int spawn_x
+    const int spawn_y
+    Map& map
+    std::vector<Gun*> gun_inventory
+    int current_gun
+    State* state
+    int direction
+    std::queue<std::shared_ptr<Command>> events_queue
+    void update()
+    void update_action()
+    void update_guns()
+    void revive()
+    void handle_events()
+    void jump()
+    void run_right()
+    void run_fast_right()
+    void run_left()
+    void run_fast_left()
+    void shoot()
+    void change_weapon()
+    void add_machinegun_ammo(int amount_ammo)
+    void add_sniper_ammo(int amount_ammo)
+    void colided_with_enemy(Enemy* object, int damage)
+    void hit_by_bullet(Bullet* bullet, int damage)
+    bool is_killed_by_taking_damage(int damage)
+    void add_points(int amount_of_points)
+    void add_health(int amount_of_health)
+    void execute_jump()
+    void execute_run_right()
+    void execute_run_fast_right()
+    void execute_run_left()
+    void execute_run_fast_left()
+    void execute_shoot()
+    void execute_change_weapon()
+    void special_attack_jazz()
+    void special_attack_spaz(int direction)
+    void special_attack_lori()
+    void execute_special_spaz(int direction)
+    void execute_special_jazz()
+    void execute_special_lori()
+}
+
+class Bullet {
+    int id
+    int type
+    const int damage
+    int range
+    Rabbit& sender
+    void update()
+    void check_colision_with(PhysicalMap& map)
+    void on_colision_with_map()
+    void bullet_killed_target(int amount_points)
+    int get_damage()
+}
+
+abstract class Gun {
+    int ammo
+    int max_ammo
+    Map& manager
+    Rabbit& owner
+    int damage
+    int fire_cooldown
+    int range
+    int bullet_speed
+    virtual bool has_ammo() = 0
+    virtual void fire(int pos_x, int pos_y, int direction) = 0
+    void add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int cooldown)
+    void update()
+    int get_ammo()
+    bool can_fire()
+    void reset_ammo_amount()
+    void add_ammo(int amount_ammo)
+}
+
+class BasicGun {}
+
+class MachineGun {}
+
+class Sniper {}
+
+class Item {
+    int id
+    int type
+}
+
+class Coin {}
+
+class Gem {}
+
+class MachineGunAmmo {}
+
+class SniperAmmo {}
+
+class HealthCarrot {}
+
+class HotDog {}
+
+class Hamburger {}
+
+class RottenCheese {}
+
+class Enemy {
+    int damage
+    int id
+    int initial_pos_x
+    int initial_pos_y
+    int direction
+    int enemy_type
+    int position_iterator
+    int initial_position_iterator
+    bool is_alive
+    int revive_cooldown
+    Map& map
+    void hit_by_rabbit_specialattack(Rabbit* rabbit, int damage)
+    void hit_by_bullet(Bullet* bullet, int damage)
+    bool is_killed_by_taking_damage(int damage)
+    void kill_enemy()
+    void update()
+    void drop_items()
+}
+
+class Map {
+    std::string map_name
+    PhysicalMap physical_map
+    DynamicMap dynamic_map
+    std::map<int, std::vector<SpawnPoint>> spawn_points
+    int width
+    int height
+    int texture_id
+    int max_players
+    int amount_players
+    int projectile_id
+    std::vector<Rabbit*> players
+    std::vector<Enemy*> enemies
+    std::vector<Bullet*> bullets
+    std::vector<Item*> items
+    void check_colision()
+    void reap_dead()
+    void update()
+    void add_player(int PlayerID, ChampionType champion)
+    void add_enemy(Enemy* enemy)
+    void add_bullet(Bullet* bullet)
+    void add_item(Item* item)
+}
+
+class DynamicMap {
+    int width
+    int height
+    std::map<int, std::vector<std::vector<int>>> map_data
+}
+
+class PhysicalMap {
+    int width
+    int height
+    std::vector<std::vector<int>> map
+    void check_colision_with_map(int pos_x, int pos_y, int width, int height, Bullet* bullet)
+    void check_colision_with_map(int pos_x, int pos_y, int width, int height, Character* character)
+    bool can_jump(int pos_x, int pos_y, int width, int height)
+}
+
+class SpawnPoint {
+   int x
+   int y
+}
+
+class EnemyCrab {}
+
+class EnemyLizard {}
+
+class EnemyTurtle {}
+
+abstract class State {
+    Rabbit& rabbit
+    int type
+    int change_weapon_cooldown
+    virtual void update() = 0
+    virtual void jump() = 0
+    virtual void run_right() = 0
+    virtual void run_fast_right() = 0
+    virtual void run_left() = 0
+    virtual void run_fast_left() = 0
+    virtual void shoot() = 0
+    virtual void change_weapon() = 0
+    virtual bool can_do_special_attack() = 0
+    virtual bool can_receive_damage() = 0
+    virtual bool does_damage() = 0
+}
+
+class Alive {}
+
+class Dead {}
+
+class ReceivedDamage {}
+
+class Intoxicated {}
+
+class SpecialAttackLoriState {}
+
+class SpecialAttackJazzState {}
+
+class SpecialAttackSpazState {}
+
+State <|-- Alive
+State <|-- Dead
+State <|-- Intoxicated
+State <|-- ReceivedDamage
+State <|-- SpecialAttackJazzState
+State <|-- SpecialAttackLoriState
+State <|-- SpecialAttackSpazState
+
+Enemy <|-- EnemyCrab
+Enemy <|-- EnemyLizard
+Enemy <|-- EnemyTurtle
+
+Item <|-- Coin
+Item <|-- MachineGunAmmo
+Item <|-- Gem
+Item <|-- SniperAmmo
+Item <|-- HealthCarrot
+Item <|-- HotDog
+Item <|-- Hamburger
+Item <|-- RottenCheese
+
+Rabbit --* State
+PhysicalObject <|-- Item
+PhysicalObject <|-- Bullet
+Gun <|-- Sniper
+Gun <|-- MachineGun
+Gun <|-- BasicGun
+PhysicalObject <|-- Gun
+Character <|-- Enemy
+Character <|-- Rabbit
+Rabbit --* Gun
+Gun --* Bullet
+PhysicalObject <|-- Character
+Map --* PhysicalObject
+Map --> PhysicalMap 
+Map --> DynamicMap
+Map --* SpawnPoint
+
+@enduml

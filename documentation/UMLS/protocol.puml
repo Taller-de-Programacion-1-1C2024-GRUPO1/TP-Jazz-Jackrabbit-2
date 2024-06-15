@@ -1,0 +1,159 @@
+@startuml
+protocol Protocol {
+    Socket sk
+
+    void send_Snapshot(Snapshot& snapshot)
+    Snapshot receive_Snapshot()
+
+    void send_Command(Command* command)
+    std::unique_ptr<Command> receive_Command()
+
+    void send_qt_response(QtResponse* qt_response)
+    std:unique_ptr<QtResponse> receive_qt_response()
+
+    bool is_close()
+    void check_closed()
+    void kill()
+}
+
+abstract class Command {
+    int playerID
+    virtual void executeCommand() = 0
+    virtual void send(Protocol& protocol) = 0
+    virtual int get_playerID() = 0
+    virtual int get_commandType() = 0
+}
+
+class Jump {
+   int commandType
+}
+
+class Move {
+   int commandType
+}
+
+class MoveFaster {
+   int commandType
+}
+
+class ChangeWeapon {
+   int commandType
+}
+
+class Match {
+   int commandType
+   int amount_players
+   std::string match_name
+   std::string match_name
+   ChampionType character_name
+}
+
+class Shoot {
+   int commandType
+}
+
+class SpecialJazz {
+   int commandType
+}
+
+class SpecialSpaz {
+   int commandType
+}
+
+class SpecialLori {
+   int commandType
+}
+
+class Cheat {
+   int cheatID
+   int commandType
+}
+
+struct MapDimensions {
+   int height
+   int width
+   int rabbit_amount
+   int rabbit_width
+   int rabbit_height
+   DynamicMap map_data
+}
+
+class Snapshot {
+    bool end_game
+    std::vector<RabbitSnapshot> rabbits
+    std::vector<EnemySnapshot> enemies
+    std::vector<ProjectileSnapshot> projectiles
+    std::vector<SupplySnapshot> supplies
+    MapDimensions_t map_dimensions
+ 
+    void set_dimensions(...)
+    void set_end_game()
+    int get_end_game()
+}
+
+class RabbitSnapshot {
+    int id
+    int direction
+    int champion_type
+    int pos_x
+    int pos_y
+    int score
+    int lives
+    int weapon
+    int ammo
+    int state
+    int action
+}
+
+class SupplySnapshot {
+    int id
+    int supply_type
+    int pos_x
+    int pos_y
+}
+
+class ProjectileSnapshot {
+    int id
+    int weapon
+    int pos_x
+    int pos_y
+    int state
+}
+
+class EnemySnapshot {
+    int id
+    int direction
+    int enemy_type
+    int pos_x
+    int pos_y
+}
+
+class DynamicMap {
+    int width
+    int height
+    std::map<int, std::vector<std::vector<int>>> map_data
+}
+
+Snapshot --> ProjectileSnapshot
+Snapshot --> RabbitSnapshot
+Snapshot --> EnemySnapshot
+Snapshot --> SupplySnapshot
+Snapshot --> MapDimensions
+
+MapDimensions --> DynamicMap
+
+Command <|-- Cheat
+Command <|-- SpecialLori
+Command <|-- SpecialJazz
+Command <|-- SpecialSpaz
+Command <|-- Shoot
+Command <|-- Move
+Command <|-- MoveFaster
+Command <|-- Jump
+Command <|-- Match
+Command <|-- ChangeWeapon
+
+Protocol --> Snapshot
+Protocol --> Command
+
+@enduml

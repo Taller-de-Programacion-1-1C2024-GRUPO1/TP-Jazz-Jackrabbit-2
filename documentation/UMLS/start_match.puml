@@ -1,0 +1,96 @@
+@startuml
+skinparam sequenceMessageAlign center
+actor Client
+
+Client -> ClientLobby : MatchCommand(NEW_MATCH, n_player, \nmatch_name, map_name, character_selected)
+
+ClientLobby ->x ClientLobby : push(MatchCommand)
+
+participant Drawer
+
+boundary ClientSender
+
+boundary ClientReceiver
+
+ClientSender o-> ClientSender : pop(MatchCommand)
+
+entity PROTOCOL
+
+ClientSender --// PROTOCOL : MatchCommand
+
+collections User
+
+PROTOCOL --// User : MatchCommand
+
+control MonitorMatches
+
+User -> MonitorMatches : createNewMatch()
+
+MonitorMatches -> User: ACK
+
+User --// PROTOCOL : ACK
+
+PROTOCOL --// ClientReceiver : ACK
+
+ClientReceiver -> ClientLobby : ACK
+
+User ->x User : push(peer)
+
+collections Matches
+
+entity Gameloop
+
+participant Broadcaster
+
+collections Player
+
+Matches o-> Matches : pop(peer)
+
+Matches -> Player : createPlayer(peer, playerID)
+
+boundary ServerReceiver
+
+boundary ServerSender
+
+Player ->o ServerReceiver: start()
+
+Player ->o ServerSender : start()
+
+Matches -> Matches : add_player(Player)
+
+User -> MonitorMatches : startMatch(match_name)
+
+MonitorMatches -> Matches : startMatch(match_name)
+
+Matches -> Player : send_ids()
+
+Player -> ServerSender : send_id()
+
+ServerSender --// PROTOCOL : playerID
+
+PROTOCOL --// ClientReceiver: playerID
+
+ClientReceiver -> ClientLobby : playerID
+
+ClientLobby -> ClientLobby : set(playerID)
+
+ClientLobby ->o Drawer : start()
+
+Matches --// Gameloop : send_init_snapshot()
+
+Gameloop --// Broadcaster : broadcast(Snapshot)
+
+Broadcaster ->x Broadcaster : push(Snapshot)
+
+ServerSender o-> ServerSender : pop(Snapshot)
+
+ServerSender --// PROTOCOL : Snapshot
+
+PROTOCOL --// ClientReceiver : Snapshot
+
+ClientReceiver ->x ClientReceiver : push(Snapshot)
+
+Drawer o-> Drawer : pop(Snapshot)
+
+Drawer -> Drawer : draw(Snapshot)
+@enduml
