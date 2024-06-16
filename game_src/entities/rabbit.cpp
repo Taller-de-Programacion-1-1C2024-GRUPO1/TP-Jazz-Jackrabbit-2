@@ -47,6 +47,8 @@ void Rabbit::on_colision_with_rabbit(Rabbit* rabbit_2) {
 }
 
 void Rabbit::set_intoxicated() { set_state(new Intoxicated(*this)); }
+void Rabbit::set_alive() { set_state(new Alive(*this)); }
+void Rabbit::set_godmode() { set_state(new GodMode(*this)); }
 
 void Rabbit::add_health(int amount_health) {
     health += amount_health;
@@ -60,14 +62,26 @@ void Rabbit::add_machinegun_ammo(int amount_ammo) {
 }
 void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[SNIPER]->add_ammo(amount_ammo); }
 
+void Rabbit::receive_max_ammo() {
+    for (int i = 0; i < gun_inventory.size(); i++) {
+        gun_inventory[i]->execute_max_ammo();
+    }
+}
+void Rabbit::receive_max_health() { health = max_health; }
+void Rabbit::receive_god_mode() { state->execute_godmode(); }
+
+void Rabbit::respawn() {
+    pos_x = spawn_x;
+    pos_y = spawn_y;
+    set_state(new Alive(*this));
+}
+
 void Rabbit::revive() {
     health = PLAYER_INITIAL_HEALTH;
     gun_inventory[MACHINE_GUN]->reset_ammo_amount();
     gun_inventory[SNIPER]->reset_ammo_amount();
     current_gun = BASIC_GUN;
-    pos_x = spawn_x;
-    pos_y = spawn_y;
-    set_state(new Alive(*this));
+    respawn();
 }
 
 void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champion_type; }

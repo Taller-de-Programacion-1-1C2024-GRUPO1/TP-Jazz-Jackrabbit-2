@@ -5,6 +5,7 @@
 
 #include "rabbit.h"
 
+
 class State {
 protected:
     Rabbit& rabbit;
@@ -29,6 +30,8 @@ public:
     virtual bool can_do_special_attack() = 0;
     virtual bool can_receive_damage() = 0;
     virtual bool does_damage() = 0;
+
+    virtual void execute_godmode() = 0;
 
     virtual ~State() = default;
 };
@@ -57,6 +60,7 @@ public:
     }
     bool can_do_special_attack() override { return true; }
     bool does_damage() override { return false; }
+    void execute_godmode() override { rabbit.set_godmode(); }
 };
 
 class Dead: public State {
@@ -83,6 +87,7 @@ public:
     bool can_do_special_attack() override { return false; }
     bool can_receive_damage() override { return false; }
     bool does_damage() override { return false; }
+    void execute_godmode() override { rabbit.set_godmode(); }
 };
 
 class RecievedDamage: public State {
@@ -96,7 +101,7 @@ public:
     void update() override {
         cooldown_take_damage++;
         if (cooldown_take_damage >= (RABBIT_DEINTOXICATE_TIME * 60 /*CAMBIAR POR FPS*/)) {
-            rabbit.set_state(new Alive(rabbit));
+            rabbit.set_alive();
         }
         if (change_weapon_cooldown > 0) {
             change_weapon_cooldown--;
@@ -117,6 +122,7 @@ public:
     bool can_do_special_attack() override { return false; }
     bool can_receive_damage() override { return false; }
     bool does_damage() override { return false; }
+    void execute_godmode() override { rabbit.set_godmode(); }
 };
 
 class Intoxicated: public State {
@@ -129,7 +135,7 @@ public:
     void update() override {
         time_to_deintoxicate++;
         if (time_to_deintoxicate >= (RABBIT_DEINTOXICATE_TIME * 60 /*CAMBIAR POR FPS*/)) {
-            rabbit.set_state(new Alive(rabbit));
+            rabbit.set_alive();
         }
         if (change_weapon_cooldown > 0) {
             change_weapon_cooldown--;
@@ -150,6 +156,7 @@ public:
     bool can_do_special_attack() override { return false; }
     bool can_receive_damage() override { return true; }
     bool does_damage() override { return false; }
+    void execute_godmode() override { rabbit.set_godmode(); }
 };
 
 
@@ -163,7 +170,7 @@ public:
     void update() override {
         time_to_finish++;
         if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
-            rabbit.set_state(new Alive(rabbit));
+            rabbit.set_alive();
         }
     }
     void jump() override {}
@@ -177,6 +184,7 @@ public:
 
     bool can_receive_damage() override { return false; }
     bool does_damage() override { return true; }
+    void execute_godmode() override {}
 };
 class SpecialAttackSpazState: public State {
 private:
@@ -194,7 +202,7 @@ public:
         }
         time_to_finish++;
         if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
-            rabbit.set_state(new Alive(rabbit));
+            rabbit.set_alive();
         }
     }
     void jump() override {}
@@ -208,7 +216,9 @@ public:
 
     bool can_receive_damage() override { return false; }
     bool does_damage() override { return true; }
+    void execute_godmode() override {}
 };
+
 class SpecialAttackLoriState: public State {
 private:
     int time_to_finish;
@@ -219,7 +229,7 @@ public:
     void update() override {
         time_to_finish++;
         if (time_to_finish >= (SPECIAL_ATTACK_TIME)) {
-            rabbit.set_state(new Alive(rabbit));
+            rabbit.set_alive();
         }
     }
     void jump() override {}
@@ -233,6 +243,34 @@ public:
 
     bool can_receive_damage() override { return false; }
     bool does_damage() override { return true; }
+    void execute_godmode() override {}
+};
+
+class GodMode: public State {
+public:
+    explicit GodMode(Rabbit& rabbit): State(ALIVE, rabbit) {}
+
+    void update() override {
+        if (change_weapon_cooldown > 0) {
+            change_weapon_cooldown--;
+        }
+    }
+    void jump() override { rabbit.execute_jump(); }
+    void run_right() override { rabbit.execute_run_right(); }
+    void run_fast_right() override { rabbit.execute_run_fast_right(); }
+    void run_left() override { rabbit.execute_run_left(); }
+    void run_fast_left() override { rabbit.execute_run_fast_left(); }
+    void shoot() override { rabbit.execute_shoot(); }
+    bool can_receive_damage() override { return false; }
+    void change_weapon() override {
+        if (change_weapon_cooldown == 0) {
+            rabbit.execute_change_weapon();
+            change_weapon_cooldown = CHANGE_WEAPON_COOLDOWN;
+        }
+    }
+    bool can_do_special_attack() override { return true; }
+    bool does_damage() override { return false; }
+    void execute_godmode() override { rabbit.set_alive(); }
 };
 
 #endif

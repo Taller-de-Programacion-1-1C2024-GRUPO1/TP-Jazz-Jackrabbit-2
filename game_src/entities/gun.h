@@ -27,6 +27,7 @@ public:
 
     void add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int cooldown);
 
+    void execute_max_ammo();
     void update();
     int get_ammo();
     bool can_fire();

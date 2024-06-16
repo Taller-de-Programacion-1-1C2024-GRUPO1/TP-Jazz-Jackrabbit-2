@@ -83,6 +83,8 @@ public:
     // ESTADOS
     void set_state(State* state);
     void set_intoxicated();
+    void set_alive();
+    void set_godmode();
 
 
     void execute_jump();
@@ -103,6 +105,12 @@ public:
     void execute_special_spaz(int direction);
     void execute_special_jazz();
     void execute_special_lori();
+
+    // CHEATS
+    void receive_max_ammo();
+    void receive_max_health();
+    void receive_god_mode();
+    void respawn();
 
     Rabbit(const Rabbit&) = delete;
     Rabbit& operator=(const Rabbit&) = delete;

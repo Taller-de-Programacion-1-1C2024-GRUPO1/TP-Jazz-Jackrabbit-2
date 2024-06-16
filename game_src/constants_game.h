@@ -59,9 +59,7 @@ enum SupplyState : char {
     PICKED,
 };
 
-enum /* CHEATS */ {
-    ADD_HEALTH = 0,
-};
+enum /* CHEATS */ { MAX_AMMO, MAX_HEALTH, RESPAWN, GODMODE };
 
 enum RABBIT_STATES {
     ALIVE,
