@@ -51,7 +51,7 @@ Prepare to dive into the adventurous world of Jazz Jackrabbit 2, where every mat
    ```
    Replace `<host>` with the hostname or IP address of the server you want to connect to, and `<port>` with the port number used by the server, e.g., `jazz_client localhost 8080`.
 
-# Description
+## Description
 
 ## How to create a match
 
@@ -60,6 +60,8 @@ Prepare to dive into the adventurous world of Jazz Jackrabbit 2, where every mat
 ## How to create a map
 
 ## How to configure the game
+
+## Important information
 
 ## HUD
 
