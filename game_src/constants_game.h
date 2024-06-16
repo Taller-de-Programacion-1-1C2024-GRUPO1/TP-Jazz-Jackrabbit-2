@@ -121,11 +121,8 @@ enum /*SPAWN POINTS*/ {
 #define RABBIT_HEIGHT_DEFAULT PLAYER_SIDE
 
 
-
 #define POINTS_KILLING_RABBIT ConfigSingleton::getInstance().getKillRabbitPoints()
 #define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
-
-
 
 
 // PHYSICS
@@ -186,7 +183,7 @@ enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER };
 #define SNIPER_DAMAGE ConfigSingleton::getInstance().getSniperDamage()
 #define SNIPER_RANGE ConfigSingleton::getInstance().getSniperRange()
 #define SNIPER_BULLET_SPEED ConfigSingleton::getInstance().getSniperBulletSpeed()
-#define SNIPER_AMMO_AMOUNT ConfigSingleton::getInstance().getSniperAmmoAmount() 
+#define SNIPER_AMMO_AMOUNT ConfigSingleton::getInstance().getSniperAmmoAmount()
 
 
 #endif

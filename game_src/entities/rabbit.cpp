@@ -10,8 +10,6 @@
 #include "state.h"
 
 
-
-
 Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
                Map& map):
         Character(PLAYER_SIDE, PLAYER_SIDE, init_pos_x, init_pos_y, physical_map,

@@ -24,15 +24,18 @@ void Client::run(int argc, char* argv[]) {
     w.show();
     int result = a.exec();
 
-    if (result == 0) {
+    if (result == OK) {
         // SDL
         drawer.run(player_id, map_texture);
-    } else if (result == -2) {
+    } else if (result == OK_MAP_CREATOR) {
         // create map
         std::cout << "Creando mapa" << std::endl;
         Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
                       new_map_info.map_name, new_map_info.max_players);
         editor.run();
+    } else if (result == EDIT_MAP) {
+        // edit map
+        std::cout << "EDITANDO MAPA" << std::endl;
 
     } else {
         std::cerr << "Cerrando QT" << std::endl;

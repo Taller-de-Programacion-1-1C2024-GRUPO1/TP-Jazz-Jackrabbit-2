@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 
@@ -138,8 +139,9 @@ public:
 
     // ------------------- SEND AND RECEIVE INFO -------------------
 
-    void send_matches_available(std::vector<std::string> matches_available);
-    std::vector<std::string> receive_matches_available();
+    void send_info_available(
+            std::tuple<std::vector<std::string>, std::vector<std::string>> info_available);
+    std::tuple<std::vector<std::string>, std::vector<std::string>> receive_info_available();
 
 
     void send_qt_response(QtResponse* qt_response);

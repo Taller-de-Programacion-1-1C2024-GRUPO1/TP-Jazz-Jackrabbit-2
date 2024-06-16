@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "../common_src/protocol.h"
@@ -14,19 +15,25 @@ private:
     // response = 0 -> success to conect
     // response > 0 -> client_id
     int response = INVALID_QT_RESPONSE;
-    std::vector<std::string> matches_available;
+    std::tuple<std::vector<std::string>, std::vector<std::string>> info_available;
     int response_type = INVALID_MATCH_TYPE;
 
 public:
-    QtResponse(const std::vector<std::string>& matches_available, const int& response_type):
-            matches_available(matches_available), response_type(response_type) {}
+    QtResponse(const std::tuple<std::vector<std::string>, std::vector<std::string>>& info_available,
+               const int& response_type):
+            info_available(info_available), response_type(response_type) {}
 
     QtResponse(const int& response, const int& response_type):
-            response(response), matches_available(), response_type(response_type) {}
+            response(response), info_available(), response_type(response_type) {}
 
     int get_response() const { return response; }
 
-    std::vector<std::string> get_matches_available() { return matches_available; }
+    std::tuple<std::vector<std::string>, std::vector<std::string>> get_info_available() {
+        return info_available;
+    }
+
+    std::vector<std::string> get_matches_available() { return std::get<0>(info_available); }
+    std::vector<std::string> get_maps_available() { return std::get<1>(info_available); }
 
     void send(Protocol& protocol) { protocol.send_qt_response(this); }
 

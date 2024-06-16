@@ -106,3 +106,24 @@ void MapSelector::closeEvent(QCloseEvent* event) {
     emit windowClosed();
     QDialog::closeEvent(event);
 }
+
+void MapSelector::on_btnCustomMaps_clicked() {
+    std::string match_name = ui->txtMatchName->toPlainText().toStdString();
+    if (match_name.empty()) {
+        QMessageBox::warning(this, "Error", "Please enter a match name.");
+        return;
+    }
+    hide();
+    MapEditorLobby map_editor_lobby(q_cmds, q_responses, selected_map);
+    connect(&map_editor_lobby, &MapEditorLobby::windowClosed, this,
+            &MapSelector::handleWindowClosed);
+
+    int result = map_editor_lobby.exec();
+    if (result == PLAY_MAP) {
+        start_match();
+    } else if (result == EDIT_MAP) {
+        this->done(EDIT_MAP);
+    } else {
+        this->done(CLOSE_MAP_CREATOR);
+    }
+}

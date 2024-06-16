@@ -7,7 +7,6 @@
 #include "rabbit.h"
 
 
-
 Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map, Map& map):
         id(id),
         initial_pos_x(init_pos_x),

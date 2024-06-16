@@ -54,6 +54,7 @@ private:
 
     void set_maps(std::map<std::string, Map>& dicc_maps) {
         for (const auto& map_path: map_paths) {
+            std::cout << "Loading map: " << map_path << std::endl;
             load_map(map_path, dicc_maps);
         }
     }
