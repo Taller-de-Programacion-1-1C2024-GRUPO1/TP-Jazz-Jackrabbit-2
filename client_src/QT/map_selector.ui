@@ -29,7 +29,7 @@
   <widget class="QPushButton" name="btnMap1">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>70</x>
      <y>400</y>
      <width>200</width>
      <height>150</height>
@@ -50,7 +50,7 @@ font: 20pt;</string>
   <widget class="QPushButton" name="btnMap2">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>280</x>
      <y>400</y>
      <width>200</width>
      <height>150</height>
@@ -71,10 +71,10 @@ font: 20pt;</string>
   <widget class="QPushButton" name="btnMapCreate">
    <property name="geometry">
     <rect>
-     <x>430</x>
+     <x>490</x>
      <y>400</y>
-     <width>200</width>
-     <height>150</height>
+     <width>251</width>
+     <height>75</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -86,16 +86,14 @@ color: white;
 font: 20pt;</string>
    </property>
    <property name="text">
-    <string>create 
-a 
-map</string>
+    <string>create map</string>
    </property>
   </widget>
   <widget class="QSpinBox" name="spinNumberOfPlayers">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>330</y>
+     <y>320</y>
      <width>71</width>
      <height>61</height>
     </rect>
@@ -121,7 +119,7 @@ background-color: rgba(255, 255, 255, 100);
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>280</y>
+     <y>270</y>
      <width>400</width>
      <height>61</height>
     </rect>
@@ -139,7 +137,7 @@ background-color: rgba(255, 255, 255, 100);
    <property name="geometry">
     <rect>
      <x>400</x>
-     <y>280</y>
+     <y>270</y>
      <width>400</width>
      <height>61</height>
     </rect>
@@ -157,7 +155,7 @@ background-color: rgba(255, 255, 255, 100);
    <property name="geometry">
     <rect>
      <x>520</x>
-     <y>340</y>
+     <y>330</y>
      <width>151</width>
      <height>41</height>
     </rect>
@@ -169,10 +167,10 @@ background-color: rgba(255, 255, 255, 100);
   <widget class="QPushButton" name="btnCustomMaps">
    <property name="geometry">
     <rect>
-     <x>640</x>
-     <y>400</y>
-     <width>200</width>
-     <height>150</height>
+     <x>490</x>
+     <y>480</y>
+     <width>251</width>
+     <height>75</height>
     </rect>
    </property>
    <property name="styleSheet">
