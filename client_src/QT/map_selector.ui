@@ -29,7 +29,7 @@
   <widget class="QPushButton" name="btnMap1">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>10</x>
      <y>400</y>
      <width>200</width>
      <height>150</height>
@@ -50,7 +50,7 @@ font: 20pt;</string>
   <widget class="QPushButton" name="btnMap2">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>220</x>
      <y>400</y>
      <width>200</width>
      <height>150</height>
@@ -71,7 +71,7 @@ font: 20pt;</string>
   <widget class="QPushButton" name="btnMapCreate">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>430</x>
      <y>400</y>
      <width>200</width>
      <height>150</height>
@@ -164,6 +164,27 @@ background-color: rgba(255, 255, 255, 100);
    </property>
    <property name="placeholderText">
     <string>match name</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnCustomMaps">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>400</y>
+     <width>200</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-image: url(:/maps/create_a_map.png);
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+color: white;
+font: 20pt;</string>
+   </property>
+   <property name="text">
+    <string>custom maps</string>
    </property>
   </widget>
  </widget>
