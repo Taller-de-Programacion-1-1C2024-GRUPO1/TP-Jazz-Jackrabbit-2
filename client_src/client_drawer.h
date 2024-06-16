@@ -21,6 +21,7 @@
 #include "../client_src/client_drawable.h"
 #include "../client_src/client_hearts_banner.h"
 #include "../client_src/client_shifting_drawable.h"
+#include "../client_src/client_top_scores.h"
 #include "../client_src/client_weapon_data.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
@@ -89,7 +90,7 @@ public:
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void showLoadingScreen(Renderer& renderer);
-    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot, Texture& background);
+    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot);
     //~ClientDrawer();
 };
 

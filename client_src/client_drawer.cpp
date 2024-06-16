@@ -15,14 +15,11 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
-                                   Texture& background) {
+void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot) {
     const int initial_offset = 100;
     Font font(FONT_TTF_04B_30, 24);
     renderer.SetDrawColor(200, 200, 200);
     renderer.Clear();
-
-    renderer.Copy(background, NullOpt, NullOpt);
 
     std::string titleText = "Game Over!";
     Texture titleTexture(renderer, font.RenderText_Solid(titleText, SDL_Color{255, 255, 255, 255}));
@@ -153,6 +150,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     HeartsBanner banner(renderer);
     AmmoLeft ammoLeft(renderer);
     FoodProvider foodProvider;
+    TopScores topScores(renderer);
 
     // Read first snapshot!
     Snapshot initial_snapshot;
@@ -169,8 +167,9 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
-    std::string animationsPath;
+
     for (auto& rabbit: initial_snapshot.rabbits) {
+        topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width, rabbit_height);
         DrawableRabbit* newRabbit =
@@ -266,7 +265,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 // Oh, more?
                 // OK, let's keep the last one
             }
-            std::cout << "GET ENDGAMNE: " << snapshot.get_end_game() << std::endl;
             if (game_running)
                 // Before updating this variable,
                 // we need to check if it is true
@@ -275,11 +273,14 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 game_running = !snapshot.get_end_game();
 
             // RABBITS UPDATE
+            //topScores.clearCurrentSnapshotScores();
+
             std::set<int> rabbitIds;
             for (const auto& pair: rabbits) {
                 rabbitIds.insert(pair.first);
             }
             for (const auto& rabbit: snapshot.rabbits) {
+                topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
                 if (rabbit.id == client_id) {
                     score = rabbit.score;
                     ammoLeft.setAmmo(rabbit.ammo);
@@ -484,6 +485,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
         // UPDATE ENTITIES
 
+        topScores.update();
+
         for (auto& tilePtr: mapComponents) {
             tilePtr->update();
         }
@@ -536,14 +539,15 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         }
 
         banner.render();
-        ammoLeft.render();  //<--consume muchisimo tiempo
+        ammoLeft.render();  
+        topScores.render();
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position
 
         for (char c: scoreStr) {
             int number = c - '0';  // Convert char to int
-            numberImages.renderNumber(number, offset);
+            numberImages.renderNumber(number, offset, 0, 32);
             offset += 24;  // Move position to the left for the next digit
         }
 
@@ -595,7 +599,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start + std::chrono::seconds(5);
     while (std::chrono::high_resolution_clock::now() < end) {
-        showFinalScreen(renderer, snapshot, background);
+        showFinalScreen(renderer, snapshot);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;
