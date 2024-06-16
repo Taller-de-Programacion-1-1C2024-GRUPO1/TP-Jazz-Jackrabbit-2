@@ -140,12 +140,47 @@ enum /*SPAWN POINTS*/ {
 #define CARROT_HEALTH_AMOUNT ConfigSingleton::getInstance().getCantHealthCarrotLife()
 
 // ENEMY CONSTANTS
-#define ENEMY_INITIAL_HEALTH 3                   // Config
 #define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
 #define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
-#define ENEMY_SPEED 1
-#define ENEMY_MOVE_RANGE 40
-#define ENEMY_REVIVE_COOLDOWN 400
+
+#define CRAB_BLOCKS_RANGE 8
+#define LIZARD_BLOCKS_RANGE 8
+#define TURTLE_BLOCKS_RANGE 4
+#define CRAB_SPEED 4
+#define LIZARD_SPEED 2
+#define TURTLE_SPEED 1
+////////////////////////////////////////////////////////////////////////
+
+#define CRAB_HEALTH 4
+#define LIZARD_HEALTH 3
+#define TURTLE_HEALTH 5
+#define CRAB_DAMAGE 2
+#define LIZARD_DAMAGE 1
+#define TURTLE_DAMAGE 1
+#define CRAB_POINTS 300
+#define LIZARD_POINTS 200
+#define TURTLE_POINTS 100
+#define CRAB_REVIVE_SECONDS 1
+#define LIZARD_REVIVE_SECONDS 4
+#define TURTLE_REVIVE_SECONDS 4
+#define CRAB_DROP_AMOUNT 2
+#define LIZARD_DROP_AMOUNT 1
+#define TURTLE_DROP_AMOUNT 3
+
+
+// ENEMIES DROP PROBABILITIES (NO necesita que la sumatoria sea 100)
+
+#define HOTDOG_DROP_PROBABILITY 1
+#define HAMBURGER_DROP_PROBABILITY 1
+#define HEALTHCARROT_DROP_PROBABILITY 1
+#define COIN_DROP_PROBABILITY 1
+#define GEM_DROP_PROBABILITY 1
+#define ROTTENCHEESE_DROP_PROBABILITY 3
+#define MACHINEGUNAMMO_DROP_PROBABILITY 4
+#define SNIPERAMMO_DROP_PROBABILITY 4
+#define NOTHING_DROP_PROBABILITY 1
+//////////////////////////////////////////////////////////////////////////////
+
 
 //----------------- POINTS CONSTANTS -----------------
 
@@ -177,7 +212,7 @@ enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER };
 #define MACHINEGUN_AMMO_AMOUNT ConfigSingleton::getInstance().getMachinegunAmmoAmount()
 
 
-// SNIPER
+// SNIPER (ROCKET LAUNCHER)
 #define SNIPER_FIRE_COOLDOWN ConfigSingleton::getInstance().getSniperFireCooldown()
 #define SNIPER_MAX_AMMO ConfigSingleton::getInstance().getSniperMaxAmmo()
 #define SNIPER_DAMAGE ConfigSingleton::getInstance().getSniperDamage()

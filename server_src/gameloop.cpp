@@ -35,6 +35,7 @@ void Gameloop::run() {
     while (playing && server_running) {
         try {
             auto start = std::chrono::high_resolution_clock::now();
+
             std::shared_ptr<Command> game_command;
             while (client_cmds_queue.try_pop(game_command)) {
                 map.add_command(game_command);
@@ -46,9 +47,9 @@ void Gameloop::run() {
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-            if (FRAME_DELAY > duration.count()) {
+            if (DELTA_TIME > duration.count()) {
                 std::this_thread::sleep_for(
-                        std::chrono::milliseconds(FRAME_DELAY - duration.count()));
+                        std::chrono::milliseconds(DELTA_TIME - duration.count()));
             }
 
             check_players();

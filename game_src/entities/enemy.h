@@ -21,11 +21,19 @@ private:
     int initial_position_iterator;
     bool is_alive;
     int revive_cooldown;
+    int points_when_killed;
+    int revive_time;
+    int drop_amount;
+    int speed;
+    int range;
+    int initial_health;
 
     Map& map;
 
 public:
-    Enemy(int id, int type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map, Map& map);
+    Enemy(int id, int type, int init_pos_x, int init_pos_y, int health, int damage,
+          int points_when_killed, int revive_time, int drop_amount, int range, int speed,
+          PhysicalMap& physical_map, Map& map);
 
     void revive();
     void receive_damage(int damage) override;

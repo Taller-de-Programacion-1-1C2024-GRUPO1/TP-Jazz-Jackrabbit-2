@@ -87,10 +87,7 @@ void Rabbit::receive_damage(int damage) {
     }
 }
 
-void Rabbit::add_points(int amount_of_points) {
-    points += amount_of_points;
-    printf("Points: %d\n", points);
-}
+void Rabbit::add_points(int amount_of_points) { points += amount_of_points; }
 
 void Rabbit::on_colision_with(PhysicalObject* object) { object->on_colision_with_rabbit(this); }
 
@@ -106,7 +103,6 @@ bool Rabbit::is_killed_by_taking_damage(int damage) {
             set_state(new RecievedDamage(*this));
         }
     }
-    printf("Healtfawefwegfwergergwerfh: %d, damage %d\n", health, damage);
     return killed;
 }
 
@@ -233,7 +229,6 @@ void Rabbit::execute_shoot() {
 
 // CHANGE_WEAPON
 void Rabbit::execute_change_weapon() {
-    std::cout << "Cambiando arma" << std::endl;
     current_gun = (current_gun + 1) % gun_inventory.size();
     while (!gun_inventory[current_gun]->has_ammo()) {
         current_gun = (current_gun + 1) % gun_inventory.size();
@@ -279,7 +274,6 @@ void Rabbit::execute_special_jazz() {
     if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         execute_jump();
         set_state(new SpecialAttackJazzState(*this));
-        std::cout << "Special JAZZ" << std::endl;
     }
 }
 void Rabbit::execute_special_spaz(int direction) {
@@ -287,7 +281,6 @@ void Rabbit::execute_special_spaz(int direction) {
     if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         // Cuidado con el lado hacia donde se ejecuta el ataque
         set_state(new SpecialAttackSpazState(*this, direction));
-        std::cout << "Special SPAZ" << std::endl;
     }
 }
 void Rabbit::execute_special_lori() {
@@ -295,7 +288,6 @@ void Rabbit::execute_special_lori() {
     if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         execute_jump();
         set_state(new SpecialAttackLoriState(*this));
-        std::cout << "Special lori" << std::endl;
     }
 }
 
