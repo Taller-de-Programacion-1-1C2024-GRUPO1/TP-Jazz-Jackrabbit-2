@@ -150,45 +150,43 @@ enum /*SPAWN POINTS*/ {
 #define TURTLE_SPEED 1
 ////////////////////////////////////////////////////////////////////////
 
-#define CRAB_HEALTH 4
-#define LIZARD_HEALTH 3
-#define TURTLE_HEALTH 5
-#define CRAB_DAMAGE 2
-#define LIZARD_DAMAGE 1
-#define TURTLE_DAMAGE 1
-#define CRAB_POINTS 300
-#define LIZARD_POINTS 200
-#define TURTLE_POINTS 100
-#define CRAB_REVIVE_SECONDS 4
-#define LIZARD_REVIVE_SECONDS 6
-#define TURTLE_REVIVE_SECONDS 6
-#define CRAB_DROP_AMOUNT 2
-#define LIZARD_DROP_AMOUNT 1
-#define TURTLE_DROP_AMOUNT 3
+
+#define CRAB_HEALTH ConfigSingleton::getInstance().getEnemyCrabLife()
+#define LIZARD_HEALTH ConfigSingleton::getInstance().getEnemyLizardLife()
+#define TURTLE_HEALTH ConfigSingleton::getInstance().getEnemyTurtleLife()
+
+#define CRAB_DAMAGE ConfigSingleton::getInstance().getEnemyCrabDamage()
+#define LIZARD_DAMAGE ConfigSingleton::getInstance().getEnemyLizardDamage()
+#define TURTLE_DAMAGE ConfigSingleton::getInstance().getEnemyTurtleDamage()
+
+#define CRAB_POINTS ConfigSingleton::getInstance().getEnemyCrabKillPoints()
+#define LIZARD_POINTS ConfigSingleton::getInstance().getEnemyLizardKillPoints()
+#define TURTLE_POINTS ConfigSingleton::getInstance().getEnemyTurtleKillPoints()
+
+#define CRAB_REVIVE_SECONDS ConfigSingleton::getInstance().getEnemyCrabReviveSeconds()
+#define LIZARD_REVIVE_SECONDS ConfigSingleton::getInstance().getEnemyLizardReviveSeconds()
+#define TURTLE_REVIVE_SECONDS ConfigSingleton::getInstance().getEnemyTurtleReviveSeconds()
+
+#define CRAB_DROP_AMOUNT ConfigSingleton::getInstance().getEnemyCrabDropAmount()
+#define LIZARD_DROP_AMOUNT ConfigSingleton::getInstance().getEnemyLizardDropAmount()
+#define TURTLE_DROP_AMOUNT ConfigSingleton::getInstance().getEnemyTurtleDropAmount()
 
 
 // ENEMIES DROP PROBABILITIES (NO necesita que la sumatoria sea 100)
 
-#define HOTDOG_DROP_PROBABILITY 1
-#define HAMBURGER_DROP_PROBABILITY 1
-#define HEALTHCARROT_DROP_PROBABILITY 1
-#define COIN_DROP_PROBABILITY 1
-#define GEM_DROP_PROBABILITY 1
-#define ROTTENCHEESE_DROP_PROBABILITY 3
-#define MACHINEGUNAMMO_DROP_PROBABILITY 4
-#define SNIPERAMMO_DROP_PROBABILITY 1
-#define RAYGUNAMMO_DROP_PROBABILITY 4
-#define NOTHING_DROP_PROBABILITY 1
-
-
-// GUN
-
-#define RAYGUN_FIRE_COOLDOWN 20
-#define RAYGUN_MAX_AMMO 10
-#define RAYGUN_DAMAGE 3
-#define RAYGUN_RANGE 120
-#define RAYGUN_BULLET_SPEED 20
-#define RAYGUN_AMMO_AMOUNT 2
+#define HOTDOG_DROP_PROBABILITY ConfigSingleton::getInstance().getHotdogDropProbability()
+#define HAMBURGER_DROP_PROBABILITY ConfigSingleton::getInstance().getHamburgerDropProbability()
+#define HEALTHCARROT_DROP_PROBABILITY \
+    ConfigSingleton::getInstance().getHealthcarrotDropProbability()
+#define COIN_DROP_PROBABILITY ConfigSingleton::getInstance().getCoinDropProbability()
+#define GEM_DROP_PROBABILITY ConfigSingleton::getInstance().getGemDropProbability()
+#define ROTTENCHEESE_DROP_PROBABILITY \
+    ConfigSingleton::getInstance().getRottencheeseDropProbability()
+#define MACHINEGUNAMMO_DROP_PROBABILITY \
+    ConfigSingleton::getInstance().getMachinegunammoDropProbability()
+#define SNIPERAMMO_DROP_PROBABILITY ConfigSingleton::getInstance().getSniperammoDropProbability()
+#define RAYGUNAMMO_DROP_PROBABILITY ConfigSingleton::getInstance().getRaygunammoDropProbability()
+#define NOTHING_DROP_PROBABILITY ConfigSingleton::getInstance().getNothingDropProbability()
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -232,5 +230,12 @@ enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER, RAYGUN };
 #define SNIPER_BULLET_SPEED ConfigSingleton::getInstance().getSniperBulletSpeed()
 #define SNIPER_AMMO_AMOUNT ConfigSingleton::getInstance().getSniperAmmoAmount()
 
+// RAYGUN
+#define RAYGUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getRaygunFireCooldown()
+#define RAYGUN_MAX_AMMO ConfigSingleton::getInstance().getRaygunMaxAmmo()
+#define RAYGUN_DAMAGE ConfigSingleton::getInstance().getRaygunDamage()
+#define RAYGUN_RANGE ConfigSingleton::getInstance().getRaygunRange()
+#define RAYGUN_BULLET_SPEED ConfigSingleton::getInstance().getRaygunBulletSpeed()
+#define RAYGUN_AMMO_AMOUNT ConfigSingleton::getInstance().getRaygunAmmoAmount()
 
 #endif

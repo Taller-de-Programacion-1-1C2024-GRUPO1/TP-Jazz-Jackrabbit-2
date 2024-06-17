@@ -37,9 +37,7 @@ struct Entity {
 
 class Editor {
 public:
-
-
-    Editor(const std::string map_name) :
+    explicit Editor(const std::string map_name):
 
 
             sdl(SDL_INIT_VIDEO),
@@ -52,7 +50,7 @@ public:
             font(FONT_TTF_04B_30, 15)
 
 
-        {
+    {
         std::string mapPath = "../external/maps/" + map_name + ".yml";
         YAML::Node map = YAML::LoadFile(mapPath);
 
@@ -70,8 +68,8 @@ public:
         Uint32 mappedColorKey =
                 SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
         SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
-        
-       
+
+
         for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
             for (int j = 0; j < surface.GetWidth(); j += BLOCK_DIVISION) {
                 Rect src;
@@ -87,7 +85,7 @@ public:
             }
         }
 
-        std::cout << "CCCCCCCCCCCCCccc: "  << std::endl;
+        std::cout << "CCCCCCCCCCCCCccc: " << std::endl;
 
         grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
                 height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
@@ -95,7 +93,7 @@ public:
         entities_grid = std::vector<std::vector<Entity>>(
                 height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
-      // Cargar texturas de entidades
+        // Cargar texturas de entidades
         std::vector<std::string> imagePaths = {JAZZ_CHARACTER_PNG, ENEMIES_PNG, ENEMIES_PNG,
                                                TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
 
@@ -122,9 +120,9 @@ public:
 
         diamond_src = {147, 1241, 29, 30};
         diamond_dst = {32, 256, 32, 32};
-        
-        std::cout << "DDDDDDDDDDDDDDDDDd: "  << std::endl;
-        //ahora cargamos las matrices de texturas 
+
+        std::cout << "DDDDDDDDDDDDDDDDDd: " << std::endl;
+        // ahora cargamos las matrices de texturas
         for (int layer = 0; layer < 5; ++layer) {
             std::cout << "EEEEEEEEEEEEEEEEEe: " << layer << std::endl;
             for (int i = 0; i < height; ++i) {
@@ -138,8 +136,8 @@ public:
                 }
             }
         }
-        std::cout << "HHHHHHHHHHHHHHHHHHHHHHh: "  << std::endl;
-         //ahora cargamos las matrices de entidades
+        std::cout << "HHHHHHHHHHHHHHHHHHHHHHh: " << std::endl;
+        // ahora cargamos las matrices de entidades
         for (int i = 0; i < height; ++i) {
             std::cout << "IIIIIIIIIIIIIIIIIIIIIIiiiiiiiiii: " << i << std::endl;
             for (int j = 0; j < width; ++j) {
@@ -154,13 +152,7 @@ public:
                 }
             }
         }
-     
-
-
     }
-
-
-
 
 
     Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser,
@@ -234,18 +226,6 @@ public:
         diamond_src = {147, 1241, 29, 30};
         diamond_dst = {32, 256, 32, 32};
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     void run() {
@@ -748,7 +728,5 @@ private:
         } else {
             std::cerr << "Unable to open maps.txt for writing.\n";
         }
-
-
     }
 };
