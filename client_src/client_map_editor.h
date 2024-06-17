@@ -19,16 +19,6 @@ enum Mode { TEXTURE, ENTITY };
 
 // g++ main.cpp -lyaml-cpp -lSDL2 -lSDL2_image -lSDL2_ttf -o myprogram
 
-#define FONT "../client_src/resources/fonts/04B_30__.ttf"
-#define JAZZ "../client_src/resources/characters/Jazz.png"
-#define ITEMS "../client_src/resources/items/items.png"
-#define ENEMIES "../client_src/resources/enemies/Enemies.png"
-#define TURTLE "../client_src/resources/enemies/turtle.png"
-
-#define CASTLE_IMG "../client_src/resources/tiles/castle.png"
-#define CARROTUS_IMG "../client_src/resources/tiles/carrotus.png"
-#define BEACH_IMG "../client_src/resources/tiles/beach.png"
-
 // Donde se va a colocar el mapa resultante
 #define DEST_PATH "../external/maps/"
 
@@ -47,6 +37,123 @@ struct Entity {
 
 class Editor {
 public:
+    explicit Editor(const std::string& map_name):
+
+
+            sdl(SDL_INIT_VIDEO),
+            image(IMG_INIT_PNG),
+            ttf(),
+            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                   SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
+            renderer(window, -1, SDL_RENDERER_ACCELERATED),
+
+            font(FONT_TTF_04B_30, 15)
+
+
+    {
+        std::string mapPath = "../external/maps/" + map_name + ".yml";
+        YAML::Node map = YAML::LoadFile(mapPath);
+
+        name = map["name"].as<std::string>();
+        texture = map["texture"].as<int>();
+        maxPlayers = map["max_players"].as<int>();
+        width = map["width"].as<int>();
+        height = map["height"].as<int>();
+
+
+        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
+
+        Surface surface(textureImg[texture]);
+        SDL2pp::Color colorKey = {87, 0, 203, 0};
+        Uint32 mappedColorKey =
+                SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
+        SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
+
+
+        for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
+            for (int j = 0; j < surface.GetWidth(); j += BLOCK_DIVISION) {
+                Rect src;
+                src.x = j;
+                src.y = i;
+                src.w = BLOCK_DIVISION;
+                src.h = BLOCK_DIVISION;
+
+                Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
+                surface.Blit(src, destSurface, {0, 0, 0, 0});
+                SDL2pp::Texture current_texture(renderer, destSurface);
+                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
+            }
+        }
+
+
+        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
+                height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
+                                width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
+        entities_grid = std::vector<std::vector<Entity>>(
+                height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
+
+        // Cargar texturas de entidades
+        std::vector<std::string> imagePaths = {JAZZ_CHARACTER_PNG, ENEMIES_PNG, ENEMIES_PNG,
+                                               TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
+
+        for (const auto& path: imagePaths) {
+            Surface entitySurface(path);
+            Texture entityTexture(renderer, entitySurface);
+            entitiesTextures.push_back(std::move(entityTexture));
+        }
+
+        jazz_src = {1, 12, 35, 49};
+        jazz_dst = {0, 64, 64, 64};
+
+        crab_src = {734, 310, 40, 32};
+        crab_dst = {0, 128, 64, 64};
+
+        lizard_src = {18, 15, 64, 52};
+        lizard_dst = {64, 128, 64, 64};
+
+        turtle_src = {11, 58, 69, 54};
+        turtle_dst = {128, 128, 64, 64};
+
+        coin_src = {481, 1218, 28, 27};
+        coin_dst = {0, 256, 32, 32};
+
+        diamond_src = {147, 1241, 29, 30};
+        diamond_dst = {32, 256, 32, 32};
+
+        std::cout << "DDDDDDDDDDDDDDDDDd: " << std::endl;
+        // ahora cargamos las matrices de texturas
+        for (int layer = 0; layer < 5; ++layer) {
+            std::cout << "EEEEEEEEEEEEEEEEEe: " << layer << std::endl;
+            for (int i = 0; i < height; ++i) {
+                std::cout << "FFFFFFFFFFFFFFFf: " << i << std::endl;
+                for (int j = 0; j < width; ++j) {
+                    std::cout << "GGGGGGGGGGGGGGGGGGGGGgg: " << j << std::endl;
+                    int index = map["layers"][layer]["data"][i][j].as<int>();
+                    if (index != -1) {
+                        grid[i][j][layer] = textures[index];
+                    }
+                }
+            }
+        }
+        std::cout << "HHHHHHHHHHHHHHHHHHHHHHh: " << std::endl;
+        // ahora cargamos las matrices de entidades
+        for (int i = 0; i < height; ++i) {
+            std::cout << "IIIIIIIIIIIIIIIIIIIIIIiiiiiiiiii: " << i << std::endl;
+            for (int j = 0; j < width; ++j) {
+                std::cout << "JJJJJJJJJJJJJJJ: " << j << std::endl;
+
+                int index = map["layers"][5]["data"][i][j].as<int>();
+                if (index != -1) {
+                    entities_grid[i][j] = {index, {0, 0, 0, 0}};
+                    if (index == RABBIT_SPAWN) {
+                        currentRabbitSpawns++;
+                    }
+                }
+            }
+        }
+    }
+
+
     Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser,
            const int max_players):
             sdl(SDL_INIT_VIDEO),
@@ -59,9 +166,10 @@ public:
             height(mapHeight),
             name(nameByUser),
             maxPlayers(max_players),
+            texture(map),
             currentRabbitSpawns(0),
-            font(FONT, 15) {
-        const char* textureImg[] = {CASTLE_IMG, CARROTUS_IMG, CARROTUS_IMG};
+            font(FONT_TTF_04B_30, 15) {
+        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
 
         Surface surface(textureImg[map]);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
@@ -79,8 +187,8 @@ public:
 
                 Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
                 surface.Blit(src, destSurface, {0, 0, 0, 0});
-                SDL2pp::Texture texture(renderer, destSurface);
-                textures.push_back(std::make_shared<Texture>(std::move(texture)));
+                SDL2pp::Texture current_texture(renderer, destSurface);
+                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
             }
         }
         grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
@@ -90,7 +198,8 @@ public:
                 height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
         // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ, ENEMIES, ENEMIES, TURTLE, ITEMS, ITEMS};
+        std::vector<std::string> imagePaths = {JAZZ_CHARACTER_PNG, ENEMIES_PNG, ENEMIES_PNG,
+                                               TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
 
         for (const auto& path: imagePaths) {
             Surface entitySurface(path);
@@ -116,6 +225,7 @@ public:
         diamond_src = {147, 1241, 29, 30};
         diamond_dst = {32, 256, 32, 32};
     }
+
 
     void run() {
         bool running = true;
@@ -149,7 +259,7 @@ public:
                     } else if (x >= 100 && x < 180 && y >= 10 && y < 50) {
                         // Click en el botón de borrar
                         currentTool = ERASE;
-                    } else if (x >= 190 && x < 270 && y >= 10 && y < 50) {
+                    } else if (x >= 280 && x < 360 && y >= 10 && y < 50) {
                         // Click en los botones de capas
                         currentLayer = BACKGROUND_LAYER;
                     } else if (x >= 370 && x < 450 && y >= 10 && y < 50) {
@@ -492,11 +602,12 @@ private:
     int scrollOffset = 0;            // Desplazamiento vertical para la grilla de texturas
     int horizontalScrollOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
     int verticalScrollOffset = 0;    // Desplazamiento vertical para la grilla dibujable
-    int width;
-    int height;
-    std::string name;
-    int maxPlayers;
-    int currentRabbitSpawns;
+    int width = 0;
+    int height = 0;
+    std::string name = "";
+    int maxPlayers = 0;
+    int texture = CARROTUS;
+    int currentRabbitSpawns = 0;
 
     Tool currentTool = PAINT;             // Herramienta actual
     int currentLayer = BACKGROUND_LAYER;  // Capa actual
@@ -539,6 +650,7 @@ private:
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "name" << YAML::Value << name;
+        out << YAML::Key << "texture" << YAML::Value << texture;
         out << YAML::Key << "max_players" << YAML::Value << maxPlayers;
         out << YAML::Key << "width" << YAML::Value << width;
         out << YAML::Key << "height" << YAML::Value << height;
@@ -555,8 +667,8 @@ private:
                 std::vector<int> textureRow;
                 for (const auto& cell: row) {
                     // Obtener el índice de la textura
-                    std::shared_ptr<SDL2pp::Texture> texture = cell[layer];
-                    int index = texture ? textureIndices[texture] : -1;
+                    std::shared_ptr<SDL2pp::Texture> current_texture = cell[layer];
+                    int index = current_texture ? textureIndices[current_texture] : -1;
                     textureRow.push_back(index);
                 }
                 out << YAML::Flow << textureRow;
@@ -589,8 +701,28 @@ private:
 
         // Agrego el nombre del mapa a maps.txt
         std::ofstream mapsFile("../external/maps/maps.txt", std::ios::app);
+
         if (mapsFile.is_open()) {
-            mapsFile << name << ".yml" << '\n';
+            // Check if the name already exists in the file
+            std::ifstream checkFile("../external/maps/maps.txt");
+            std::string line;
+            bool nameExists = false;
+
+            while (std::getline(checkFile, line)) {
+                if (line == name + ".yml") {
+                    nameExists = true;
+                    break;
+                }
+            }
+
+            checkFile.close();
+
+            // Write the name if it doesn't exist
+            if (!nameExists) {
+                mapsFile << name << ".yml" << '\n';
+            } else {
+                std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
+            }
         } else {
             std::cerr << "Unable to open maps.txt for writing.\n";
         }

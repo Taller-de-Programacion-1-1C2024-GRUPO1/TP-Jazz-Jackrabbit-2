@@ -27,14 +27,14 @@ MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
 MapSelector::~MapSelector() { delete ui; }
 
 void MapSelector::on_btnMap1_clicked() {
-    selected_map = DEFAULT_MAP_CARROTUS;  // CASTLE //////////////
-    map_texture = CARROTUS;
+    selected_map = DEFAULT_MAP_CARROTUS;
+    map_texture = JUNGLE;
     start_match();
 }
 
 void MapSelector::on_btnMap2_clicked() {
     selected_map = DEFAULT_MAP_CARROTUS;
-    map_texture = CASTLE;
+    map_texture = CARROTUS;
     start_match();
 }
 
@@ -54,7 +54,6 @@ void MapSelector::on_btnMapCreate_clicked() {
 }
 
 void MapSelector::handleWindowClosed() { QApplication::exit(ERROR); }
-
 
 void MapSelector::start_match() {
     int number_of_players = ui->spinNumberOfPlayers->value();
@@ -104,4 +103,25 @@ void MapSelector::start_match() {
 void MapSelector::closeEvent(QCloseEvent* event) {
     emit windowClosed();
     QDialog::closeEvent(event);
+}
+
+void MapSelector::on_btnCustomMaps_clicked() {
+    std::string match_name = ui->txtMatchName->toPlainText().toStdString();
+    if (match_name.empty()) {
+        QMessageBox::warning(this, "Error", "Please enter a match name.");
+        return;
+    }
+    hide();
+    MapEditorLobby map_editor_lobby(q_cmds, q_responses, selected_map, new_map_info);
+    connect(&map_editor_lobby, &MapEditorLobby::windowClosed, this,
+            &MapSelector::handleWindowClosed);
+
+    int result = map_editor_lobby.exec();
+    if (result == PLAY_MAP) {
+        start_match();
+    } else if (result == EDIT_MAP) {
+        this->done(EDIT_MAP);
+    } else {
+        this->done(CLOSE_MAP_CREATOR);
+    }
 }

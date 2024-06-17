@@ -57,24 +57,27 @@ void Protocol::send_char(char c) {
 // envia un ACK negativo (-1) en caso de no poder unirse/crear un match
 // Segundo response:
 // envia un ACK positivo (player_id) justo antes de iniciar la match
-void Protocol::send_map(DynamicMap map) {
+void Protocol::send_map(int width, int heigth, DynamicMap map) {
     // enviar el mapa: primero la cantidad de elementos y luego cada uno de ellos
-    // std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data;
     send_uintThirtyTwo(map.map_data.size());
+    // envio las dimensiones del mapa
+    send_uintThirtyTwo(width);
+    send_uintThirtyTwo(heigth);
     // enviar cada key y value del mapa
     for (auto& key_value: map.map_data) {
         // enviar la key
         send_uintEight(key_value.first);
         // enviar el value
-        for (int i = 0; i < MAP_HEIGHT_DEFAULT; i++) {
-            for (int j = 0; j < MAP_WIDTH_DEFAULT; j++) {
-                send_uintSixteen(key_value.second[j][i]);
+        for (int y = 0; y < heigth; y++) {
+            for (int x = 0; x < width; x++) {
+                send_uintSixteen(key_value.second[x][y]);
+                std::cout << key_value.second[x][y] << " ";
             }
+            std::cout << std::endl;
         }
     }
     check_closed();
 }
-
 
 // ----------------------------- RECEIVE BYTES/STRINGS/CHAR -----------------------------
 
@@ -115,22 +118,34 @@ char Protocol::receive_char() {
 }
 
 DynamicMap Protocol::receive_map() {
-    std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data_temp;
+
+    std::map<int, std::vector<std::vector<int>>> map_data_temp;
 
     // recibir la cantidad de elementos del mapa
     uint8_t map_size = receive_uintThirtyTwo();
+    // recibir las dimensiones del mapa
+    uint32_t width = receive_uintThirtyTwo();
+    uint32_t height = receive_uintThirtyTwo();
+
+    // pasar width a int
+    int width_int = static_cast<int>(width);
+    // pasar heigth a int
+    int height_int = static_cast<int>(height);
+
     // recibir cada key y value del mapa
     for (int i = 0; i < map_size; i++) {
         // recibir la key
         uint8_t key = receive_uintEight();
+        map_data_temp[key] = std::vector<std::vector<int>>(width, std::vector<int>(height, 0));
+
         // recibir el value
-        for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
-            for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
-                map_data_temp[key][k][j] = receive_uintSixteen();
+        for (int y = 0; y < height_int; y++) {
+            for (int x = 0; x < width_int; x++) {
+                map_data_temp[key][x][y] = receive_uintSixteen();
             }
         }
     }
-    DynamicMap map(map_data_temp);
+    DynamicMap map(width_int, height_int, map_data_temp);
     check_closed();
     return map;
 }
@@ -374,10 +389,17 @@ std::unique_ptr<Command> Protocol::receive_Command() {
 
 // ----------------------------- SEND INFO -----------------------------
 
-void Protocol::send_matches_available(std::vector<std::string> matches_available) {
+void Protocol::send_info_available(
+        std::tuple<std::vector<std::string>, std::vector<std::string>> info_available) {
     check_closed();
-    send_uintEight(matches_available.size());
-    for (auto& match: matches_available) {
+    std::vector<std::string> maps = std::get<0>(info_available);
+    std::vector<std::string> matches = std::get<1>(info_available);
+    send_uintEight(maps.size());
+    for (auto& map: maps) {
+        send_string(map);
+    }
+    send_uintEight(matches.size());
+    for (auto& match: matches) {
         send_string(match);
     }
 }
@@ -387,7 +409,9 @@ void Protocol::send_qt_response(QtResponse* qt_response) {
     check_closed();
     send_uintEight(qt_response->get_info_type());
     send_uintEight(qt_response->get_response());
-    send_matches_available(qt_response->get_matches_available());
+    send_info_available(qt_response->get_info_available());
+    std::cout << "Enviando QTResponse: " << qt_response->get_response() << " "
+              << qt_response->get_info_type() << std::endl;
 }
 
 
@@ -395,9 +419,11 @@ std::unique_ptr<QtResponse> Protocol::receive_qt_response() {
     check_closed();
     int response_type = receive_uintEight();
     int response = receive_uintEight();
-    std::vector<std::string> matches_available = receive_matches_available();
+    std::tuple<std::vector<std::string>, std::vector<std::string>> info_available =
+            receive_info_available();
+    std::cout << "Recibiendo QTResponse: " << response << " " << response_type << std::endl;
     if (response_type == REFRESH) {
-        return std::make_unique<QtResponse>(matches_available, response_type);
+        return std::make_unique<QtResponse>(info_available, response_type);
     }
     return std::make_unique<QtResponse>(response, response_type);
 }
@@ -406,14 +432,19 @@ std::unique_ptr<QtResponse> Protocol::receive_qt_response() {
 // ----------------------------- RECEIVE INFO -----------------------------
 
 
-std::vector<std::string> Protocol::receive_matches_available() {
+std::tuple<std::vector<std::string>, std::vector<std::string>> Protocol::receive_info_available() {
     check_closed();
-    int size = receive_uintEight();
-    std::vector<std::string> matches_available;
-    for (int i = 0; i < size; i++) {
-        matches_available.push_back(receive_string());
+    std::vector<std::string> maps;
+    std::vector<std::string> matches;
+    uint8_t maps_size = receive_uintEight();
+    for (int i = 0; i < maps_size; i++) {
+        maps.push_back(receive_string());
     }
-    return matches_available;
+    uint8_t matches_size = receive_uintEight();
+    for (int i = 0; i < matches_size; i++) {
+        matches.push_back(receive_string());
+    }
+    return std::make_tuple(maps, matches);
 }
 
 // ----------------------------- SEND SNAPSHOTS -----------------------------
@@ -424,7 +455,8 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_amount);
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_width);
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_height);
-    send_map(snapshot.map_dimensions.map_data);
+    send_map(snapshot.map_dimensions.width, snapshot.map_dimensions.height,
+             snapshot.map_dimensions.map_data);
 }
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
@@ -493,6 +525,7 @@ void Protocol::send_Snapshot(Snapshot& snapshot) {
     send_projectiles(snapshot);
     send_supplies(snapshot);
     send_uintEight(snapshot.get_end_game());
+    send_uintThirtyTwo(snapshot.get_match_time());
 }
 
 
@@ -599,6 +632,8 @@ Snapshot Protocol::receive_Snapshot() {
     if (end_game) {
         snapshot.set_end_game();
     }
+    uint32_t match_time = receive_uintThirtyTwo();
+    snapshot.set_match_time(match_time);
     return snapshot;
 }
 

@@ -1,11 +1,8 @@
 #ifndef CLIENT_RABBIT_H
 #define CLIENT_RABBIT_H
 
+#include "client_constants.h"
 #include "client_shifting_drawable.h"
-
-#define JAZZ_IMG "../client_src/resources/characters/Jazz.png"
-#define LORI_IMG "../client_src/resources/characters/Lori.png"
-#define SPAZ_IMG "../client_src/resources/characters/Spaz.png"
 
 class DrawableRabbit: public ShiftingDrawable {
 
@@ -19,15 +16,15 @@ public:
         switch (champion_type) {
             case Jazz:
                 this->setTexture(JAZZ_IMG, characterColor);
-                this->loadAnimations("../external/animations/jazz.yml");
+                this->loadAnimations(JAZZ_ANIMATIONS);
                 break;
             case Spaz:
                 this->setTexture(SPAZ_IMG, characterColor);
-                this->loadAnimations("../external/animations/spaz.yml");
+                this->loadAnimations(SPAZ_ANIMATIONS);
                 break;
             case Lori:
                 this->setTexture(LORI_IMG, characterColor);
-                this->loadAnimations("../external/animations/lori.yml");
+                this->loadAnimations(LORI_ANIMATIONS);
                 break;
         }
     }

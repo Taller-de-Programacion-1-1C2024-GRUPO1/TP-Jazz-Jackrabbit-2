@@ -1,11 +1,17 @@
 #include "map.h"
 
-Map::Map(int width, int height, int amount_players, const std::string& map_name):
+Map::Map(int width, int height, int texture_id, int max_players, const std::string& map_name,
+         const PhysicalMap& physical_map, const DynamicMap& dynamic_map,
+         const std::map<int, std::vector<SpawnPoint>>& spawn_points):
         map_name(map_name),
+        physical_map(physical_map),
+        dynamic_map(dynamic_map),
+        spawn_points(spawn_points),
         width(width),
         height(height),
-        amount_players(amount_players),
-        max_players(0),
+        texture_id(texture_id),
+        amount_players(0),
+        max_players(max_players),
         projectile_id(0) {}
 
 int Map::get_projectile_id() { return projectile_id++; }
@@ -91,31 +97,27 @@ void Map::add_bullet(Bullet* bullet) { bullets.push_back(bullet); }
 
 void Map::add_item(Item* item) { items.push_back(item); }
 
-void Map::set_name(const std::string& name) { map_name = name; }
-
 DynamicMap Map::get_dynamic_map() const { return dynamic_map; }
 
 PhysicalMap Map::get_physical_map() const { return physical_map; }
 
 std::map<int, std::vector<SpawnPoint>> Map::get_spawn_points() const { return spawn_points; }
 
-void Map::set_physical_map(const PhysicalMap& physical_map) { this->physical_map = physical_map; }
-
-void Map::set_dynamic_map(const DynamicMap& dynamic_map) { this->dynamic_map = dynamic_map; }
-
-void Map::set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points) {
-    this->spawn_points = spawn_points;
-}
-
 void Map::set_amount_players(int amount_players) { this->amount_players = amount_players; }
-
-void Map::set_max_players(int max_players) { this->max_players = max_players; }
 
 int Map::get_max_players() { return this->max_players; }
 
 int Map::get_amount_players() { return this->amount_players; }
 
-Snapshot Map::get_snapshot() {
+int Map::get_texture_id() { return this->texture_id; }
+
+std::string Map::get_name() const { return map_name; }
+
+int Map::get_width() { return width; }
+
+int Map::get_height() { return height; }
+
+Snapshot Map::get_snapshot(uint32_t match_time) {
     // obtengo las snapshots de cada entidad
     std::vector<RabbitSnapshot> rabbit_snapshots = get_rabbit_snapshot();
     std::vector<ProjectileSnapshot> projectile_snapshots = get_projectile_snapshot();
@@ -123,6 +125,7 @@ Snapshot Map::get_snapshot() {
     std::vector<EnemySnapshot> enemy_snapshots = get_enemy_snapshot();
     // creo el snapshot
     Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
+    snapshot.set_match_time(match_time);
     return snapshot;
 }
 
@@ -142,9 +145,12 @@ Snapshot Map::get_init_snapshot() {
 
 std::vector<RabbitSnapshot> Map::get_rabbit_snapshot() {
     std::vector<RabbitSnapshot> rabbit_snapshots;
+    // obtengo las snapshots de cada conejo
+
     for (auto player: players) {
         rabbit_snapshots.push_back(player->get_snapshot());
     }
+
     return rabbit_snapshots;
 }
 
@@ -183,7 +189,6 @@ void Map::create_entities() {
         amount_players = spawn_points[RABBIT_SPAWN].size();  // Limitar la cantidad de jugadores
     }
 
-
     for (int i = 0; i < amount_players; i++) {
         players.push_back(new Rabbit(
                 NULL_CHAMPION_TYPE, spawn_points[RABBIT_SPAWN].at(i).get_x() * BLOCK_DIVISION,
@@ -220,8 +225,6 @@ void Map::create_entities() {
         id_counter_supply++;
     }
 }
-
-std::string Map::get_name() const { return map_name; }
 
 int Map::get_rabbit_position_by_id(int id) {
     for (int i = 0; i < players.size(); i++) {

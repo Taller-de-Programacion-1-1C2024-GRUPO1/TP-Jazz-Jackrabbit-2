@@ -253,7 +253,7 @@ Shoot:
 Hurt:
   frames: 11
   loop: true
-  sound: ""
+  sound: "Jazz-Auch"
   rects:
     - x: 4
       y: 2929

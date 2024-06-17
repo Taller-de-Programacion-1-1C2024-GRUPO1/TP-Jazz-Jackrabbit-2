@@ -19,6 +19,7 @@
 
 #include "character_selector.h"
 #include "map_creator_lobby.h"
+#include "map_editor_lobby.h"
 #include "waiting_room.h"
 
 namespace Ui {
@@ -49,6 +50,8 @@ private slots:
     void start_match();
 
     void handleWindowClosed();
+
+    void on_btnCustomMaps_clicked();
 
 protected:
     void closeEvent(QCloseEvent* event) override;

@@ -5,6 +5,8 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+#include "client_constants.h"
+
 class HeartsBanner {
 private:
     SDL2pp::Renderer& renderer;

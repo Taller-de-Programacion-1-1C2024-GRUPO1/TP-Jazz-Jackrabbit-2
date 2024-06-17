@@ -11,8 +11,8 @@ ShiftingDrawable::ShiftingDrawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp
         currentAnimation(new Animation()),
         angle(0),
         direction(0),
-        soundManager(soundManager),
-        iterationsBeetweenFrames(4) {}
+        iterationsBeetweenFrames(4),
+        soundManager(soundManager) {}
 
 // gets the animations from a yaml file
 void ShiftingDrawable::loadAnimations(const std::string& path) {
@@ -23,9 +23,6 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
         animation.frames = it->second["frames"].as<int>();
         animation.justOneLoop = !it->second["loop"].as<bool>();
         animation.sound = it->second["sound"].as<std::string>();
-        if (!animation.sound.empty()) {
-            soundManager.loadSoundEffect(animation.sound);
-        }
 
         for (size_t i = 0; i < it->second["rects"].size(); i++) {
             SDL2pp::Rect rect;

@@ -36,6 +36,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
                             const std::string& map_name, ChampionType character_name) {
 
     Map map = monitor_matches.get_map(map_name);
+
     std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> protocols_queue =
             std::make_shared<Queue<std::shared_ptr<PlayerInfo>>>();
 
@@ -75,7 +76,10 @@ void User::join_match(const std::string& match_name, ChampionType character_name
 
 void User::refresh() {
     std::vector<std::string> matches_availables = monitor_matches.show_matches_availables();
-    QtResponse response = QtResponse(matches_availables, REFRESH);
+    std::vector<std::string> maps_availables = monitor_matches.show_maps_availables();
+    std::tuple<std::vector<std::string>, std::vector<std::string>> response_tuple =
+            std::make_tuple(matches_availables, maps_availables);
+    QtResponse response = QtResponse(response_tuple, REFRESH);
     response.send(container_protocol->protocol);
 }
 

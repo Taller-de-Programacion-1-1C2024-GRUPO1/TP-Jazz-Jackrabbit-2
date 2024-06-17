@@ -21,6 +21,8 @@ void Gun::update() {
     }
 }
 
+void Gun::execute_max_ammo() { ammo = max_ammo; }
+
 void Gun::add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int cooldown) {
     int direction_variable = 0;
     if (direction == LEFT) {
@@ -82,6 +84,18 @@ bool Sniper::has_ammo() { return ammo > 0; }
 void Sniper::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
         Gun::add_bullet_to_map(pos_x, pos_y, direction, SNIPER, SNIPER_FIRE_COOLDOWN);
+        ammo--;
+    }
+}
+
+RayGun::RayGun(Rabbit& owner, Map& manager):
+        Gun(RAYGUN_MAX_AMMO, RAYGUN_DAMAGE, RAYGUN_RANGE, RAYGUN_BULLET_SPEED, owner, manager) {}
+
+bool RayGun::has_ammo() { return ammo > 0; }
+
+void RayGun::fire(int pos_x, int pos_y, int direction) {
+    if (can_fire()) {
+        Gun::add_bullet_to_map(pos_x, pos_y, direction, RAYGUN, RAYGUN_FIRE_COOLDOWN);
         ammo--;
     }
 }

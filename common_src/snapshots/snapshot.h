@@ -26,6 +26,7 @@ struct MapDimensions {
 
 class Snapshot {
     bool end_game = false;
+    uint32_t match_time = 0;
 
 public:
     /*
@@ -72,6 +73,9 @@ public:
     void set_end_game() { this->end_game = true; }
 
     bool get_end_game() { return end_game; }
+
+    void set_match_time(uint32_t match_time) { this->match_time = match_time; }
+    uint32_t get_match_time() { return match_time; }
 };
 
 #endif

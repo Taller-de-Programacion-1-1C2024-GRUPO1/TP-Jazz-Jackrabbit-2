@@ -4,11 +4,6 @@
 #include "client_src/client.h"
 #include "client_src/client_config.h"
 
-/*
-pre-commit run --hook-stage manual --files xxx.cpp
-pre-commit run --hook-stage manual --all-files
-*/
-
 int main(int argc, char* argv[]) {
     try {
         const char* hostname = NULL;
@@ -24,9 +19,8 @@ int main(int argc, char* argv[]) {
             return -1;
         }
 
-        // std::string config_file = "/etc/jazz/client_config.yml";
-        // ClientConfigSingleton::getInstance(config_file);
-
+        std::string config_file = "/etc/jazz/client_config.yml";
+        ClientConfigSingleton::getInstance(config_file);
 
         Client client(std::move(hostname), std::move(servname));
         client.run(argc, argv);

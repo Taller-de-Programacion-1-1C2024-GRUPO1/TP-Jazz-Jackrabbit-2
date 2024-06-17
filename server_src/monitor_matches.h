@@ -10,6 +10,7 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
+#include "../game_src/map_parser.h"
 #include "../game_src/map_reader.h"
 
 #include "constants_server.h"
@@ -34,6 +35,8 @@ public:
 
     // Muestra los matches disponibles
     std::vector<std::string> show_matches_availables();
+
+    std::vector<std::string> show_maps_availables();
 
     // Un determinado usuario se une a un match
     int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo,

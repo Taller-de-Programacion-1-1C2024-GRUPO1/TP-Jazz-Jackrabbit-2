@@ -1,5 +1,8 @@
-name: "carrotus"
+name: "default_carrotus"
+texture: 1
 max_players: 3
+width: 35
+height: 19
 layers:
   - id: 0
     data:

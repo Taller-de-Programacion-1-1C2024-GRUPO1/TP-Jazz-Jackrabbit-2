@@ -2,12 +2,16 @@
 #define DYNAMIC_MAP_H
 
 #include <map>
+#include <vector>
 
 class DynamicMap {
 
 public:
-    std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]> map_data;
-    explicit DynamicMap(const std::map<int, int[MAP_WIDTH_DEFAULT][MAP_HEIGHT_DEFAULT]>& map_data):
+    int width = MAP_WIDTH_DEFAULT;
+    int height = MAP_HEIGHT_DEFAULT;
+    std::map<int, std::vector<std::vector<int>>> map_data;
+    explicit DynamicMap(int width, int height,
+                        const std::map<int, std::vector<std::vector<int>>>& map_data):
             map_data(map_data) {}
     DynamicMap() = default;
     ~DynamicMap() = default;

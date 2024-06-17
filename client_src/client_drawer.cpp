@@ -15,14 +15,11 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
-                                   Texture& background) {
+void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot) {
     const int initial_offset = 100;
-    Font font(FONT, 24);
+    Font font(FONT_TTF_04B_30, 24);
     renderer.SetDrawColor(200, 200, 200);
     renderer.Clear();
-
-    renderer.Copy(background, NullOpt, NullOpt);
 
     std::string titleText = "Game Over!";
     Texture titleTexture(renderer, font.RenderText_Solid(titleText, SDL_Color{255, 255, 255, 255}));
@@ -84,7 +81,7 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot,
 }
 
 void ClientDrawer::showLoadingScreen(Renderer& renderer) {
-    Font font(FONT, 24);
+    Font font(FONT_TTF_04B_30, 24);
     Texture texture(renderer,
                     font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
 
@@ -122,7 +119,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Background image
-    Texture background(renderer, SDL2pp::Surface(BACKGROUND_IMG));
+    Texture background(renderer, SDL2pp::Surface(FONDO_PNG));
 
     SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
     SDL_Color mapColor = {87, 0, 203, 0};
@@ -135,11 +132,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
     std::string map_texture_path;
     switch (map_texture) {
-        case CASTLE:
-            map_texture_path = CASTLE_TILE;
+        case JUNGLE:
+            map_texture_path = JUNGLE_TILES_PNG;
             break;
         case CARROTUS:
-            map_texture_path = CARROTUS_TILE;
+            map_texture_path = CARROTUS_TILES_PNG;
             break;
     }
 
@@ -151,6 +148,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     HeartsBanner banner(renderer);
     AmmoLeft ammoLeft(renderer);
     FoodProvider foodProvider;
+    TopScores topScores(renderer);
+    Clock clock(renderer);
 
     // Read first snapshot!
     Snapshot initial_snapshot;
@@ -162,13 +161,15 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     showLoadingScreen(renderer);
 
     game_running = !initial_snapshot.get_end_game();
+    clock.update(initial_snapshot.get_match_time());
     std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
             initial_snapshot.map_dimensions.map_data, map_texture_path, mapColor, cameraPosition);
 
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
-    std::string animationsPath;
+
     for (auto& rabbit: initial_snapshot.rabbits) {
+        topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width, rabbit_height);
         DrawableRabbit* newRabbit =
@@ -204,10 +205,9 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         SDL2pp::Rect textureRect(0, 0, 0, 0);
         SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width / 2,
                                rabbit_height / 2);
-        ShiftingDrawable* newProjectile = new ShiftingDrawable(
+        DrawableProjectile* newProjectile = new DrawableProjectile(
                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
-        newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
-        WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
+        newProjectile->setProjectileFromSnapshot(projectile.weapon);
         newProjectile->setAnimation("Move");
         projectiles.emplace(projectile.id, newProjectile);
     }
@@ -219,17 +219,20 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                     renderer, cameraPosition, textureRect, onMapRect, soundManager);
             newValuable->setValuableFromSnapshot(supply.supply_type);
             newValuable->setAnimation("Flip");
-            supplies.emplace(supply.id, newValuable);
-        } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO) {
-            SDL2pp::Rect textureRect = WeaponData::getWeapon(supply.supply_type);
-            Drawable* newAmmo = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newAmmo->setTexture(ITEMS_IMG, enemyAndItemsColor);
-            food.emplace(supply.id, newAmmo);
+            valuables.emplace(supply.id, newValuable);
+        } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO ||
+                   supply.supply_type == RAYGUN_AMMO) {
+            SDL2pp::Rect textureRect(0, 0, 0, 0);
+            DrawableAmmo* newAmmo = new DrawableAmmo(renderer, cameraPosition, textureRect,
+                                                     onMapRect, soundManager);
+            newAmmo->setAmmoFromSnapshot(supply.supply_type);
+            newAmmo->setAnimation("Flip");
+            ammo_drops.emplace(supply.id, newAmmo);
         } else if (supply.supply_type == HEALTH_CARROT || supply.supply_type == HOTDOG ||
                    supply.supply_type == HAMBURGER || supply.supply_type == ROTTEN_CHEESE) {
             SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
             Drawable* newFood = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newFood->setTexture(ITEMS_IMG, enemyAndItemsColor);
+            newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
             food.emplace(supply.id, newFood);
         }
     }
@@ -270,12 +273,16 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 // and the snapshot could overwritte the variable
                 game_running = !snapshot.get_end_game();
 
+            clock.update(snapshot.get_match_time());
+
             // RABBITS UPDATE
+
             std::set<int> rabbitIds;
             for (const auto& pair: rabbits) {
                 rabbitIds.insert(pair.first);
             }
             for (const auto& rabbit: snapshot.rabbits) {
+                topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
                 if (rabbit.id == client_id) {
                     score = rabbit.score;
                     ammoLeft.setAmmo(rabbit.ammo);
@@ -361,32 +368,40 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                     SDL2pp::Rect textureRect(0, 0, 0, 0);
                     SDL2pp::Rect onMapRect(projectile.pos_x, projectile.pos_y, rabbit_width / 2,
                                            rabbit_height / 2);
-                    ShiftingDrawable* newProjectile = new ShiftingDrawable(
+                    DrawableProjectile* newProjectile = new DrawableProjectile(
                             renderer, cameraPosition, textureRect, onMapRect, soundManager);
-                    newProjectile->setTexture(PROJECTILES_IMG, enemyAndItemsColor);
-                    WeaponData::loadAnimationsToProjectile(projectile.weapon, newProjectile);
+                    newProjectile->setProjectileFromSnapshot(projectile.weapon);
                     newProjectile->setAnimation("Move");
                     projectiles.emplace(projectile.id, newProjectile);
                 }
             }
             for (const auto& id: projectilesIds) {
-                delete projectiles[id];
-                projectiles.erase(id);
+                DrawableProjectile* projectile = projectiles[id];
+                if (projectile->requiresExplosion()) {
+                    projectile->resize(BLOCK_DIVISION * 2, BLOCK_DIVISION * 2);
+                    projectile->playSoundOnDeath();
+                    projectile->setAnimation("Explode");
+                    projectile->setRequiresExplosion(false);
+                } else if (projectile->isExploding()) {
+                    projectile->keepExploding();
+                } else {
+                    delete projectiles[id];
+                    projectiles.erase(id);
+                }
             }
 
             // SUPPLIES UPDATE
-            // SUPPLIES UPDATE
-            std::set<int> suppliesIds;
-            for (const auto& pair: supplies) {
-                suppliesIds.insert(pair.first);
+            std::set<int> valuablesIds;
+            for (const auto& pair: valuables) {
+                valuablesIds.insert(pair.first);
             }
 
-            // First loop for resources
+            // VALUABLES (COIN AND GEMS)
             for (const auto& supply: snapshot.supplies) {
                 if (supply.supply_type == COIN || supply.supply_type == GEM) {
-                    auto it = supplies.find(supply.id);
-                    if (it == supplies.end()) {
-                        suppliesIds.erase(supply.id);
+                    auto it = valuables.find(supply.id);
+                    if (it == valuables.end()) {
+                        valuablesIds.erase(supply.id);
                         // Creo un nuevo item
                         SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2,
                                                rabbit_height / 2);
@@ -395,18 +410,50 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
                         newValuable->setValuableFromSnapshot(supply.supply_type);
                         newValuable->setAnimation("Flip");
-                        supplies.emplace(supply.id, newValuable);
+                        valuables.emplace(supply.id, newValuable);
                     } else {
-                        suppliesIds.erase(supply.id);
+                        valuablesIds.erase(supply.id);
                     }
                 }
             }
-            for (const auto& id: suppliesIds) {
-                delete supplies[id];
-                supplies.erase(id);
+            for (const auto& id: valuablesIds) {
+                valuables[id]->playSoundOnDeath();
+                delete valuables[id];
+                valuables.erase(id);
             }
 
+            // AMMO
+            std::set<int> ammoIds;
+            for (const auto& pair: ammo_drops) {
+                ammoIds.insert(pair.first);
+            }
+            for (const auto& ammo: snapshot.supplies) {
+                if (ammo.supply_type == MACHINEGUN_AMMO || ammo.supply_type == SNIPER_AMMO ||
+                    ammo.supply_type == RAYGUN_AMMO) {
+                    auto it = ammo_drops.find(ammo.id);
+                    if (it == ammo_drops.end()) {
+                        ammoIds.erase(ammo.id);
+                        // Creo un nuevo item
+                        SDL2pp::Rect onMapRect(ammo.pos_x, ammo.pos_y, rabbit_width / 2,
+                                               rabbit_height / 2);
+                        SDL2pp::Rect textureRect(0, 0, 0, 0);
+                        DrawableAmmo* newAmmo = new DrawableAmmo(
+                                renderer, cameraPosition, textureRect, onMapRect, soundManager);
+                        newAmmo->setAmmoFromSnapshot(ammo.supply_type);
+                        newAmmo->setAnimation("Flip");
+                        ammo_drops.emplace(ammo.id, newAmmo);
+                    } else {
+                        ammoIds.erase(ammo.id);
+                    }
+                }
+            }
+            for (const auto& id: ammoIds) {
+                ammo_drops[id]->playSoundOnDeath();
+                delete ammo_drops[id];
+                ammo_drops.erase(id);
+            }
 
+            // FOOD
             std::set<int> foodIds;
             for (const auto& pair: food) {
                 foodIds.insert(pair.first);
@@ -426,34 +473,23 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                         SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
                         Drawable* newFood =
                                 new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newFood->setTexture(ITEMS_IMG, enemyAndItemsColor);
+                        newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
                         food.emplace(supply.id, newFood);
-                    } else {
-                        foodIds.erase(supply.id);
-                    }
-                } else if (supply.supply_type == SNIPER_AMMO ||
-                           supply.supply_type == MACHINEGUN_AMMO) {
-                    auto it = food.find(supply.id);
-                    if (it == food.end()) {
-                        SDL2pp::Rect onMapRect(supply.pos_x, supply.pos_y, rabbit_width / 2,
-                                               rabbit_height / 2);
-                        SDL2pp::Rect textureRect = WeaponData::getWeapon(supply.supply_type);
-                        Drawable* newAmmo =
-                                new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newAmmo->setTexture(ITEMS_IMG, enemyAndItemsColor);
-                        food.emplace(supply.id, newAmmo);
                     } else {
                         foodIds.erase(supply.id);
                     }
                 }
             }
             for (const auto& id: foodIds) {
+                soundManager.playSoundEffect("Eating");
                 delete food[id];
                 food.erase(id);
             }
         }
 
         // UPDATE ENTITIES
+
+        topScores.update();
 
         for (auto& tilePtr: mapComponents) {
             tilePtr->update();
@@ -468,8 +504,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         for (auto& projectile: projectiles) {
             projectile.second->update();
         }
-        for (auto& supply: supplies) {
-            supply.second->update();
+        for (auto& valuable: valuables) {
+            valuable.second->update();
+        }
+        for (auto& ammo: ammo_drops) {
+            ammo.second->update();
         }
         for (auto& f: food) {
             f.second->update();
@@ -493,22 +532,27 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         for (auto& projectile: projectiles) {
             projectile.second->render();
         }
-        for (auto& suply: supplies) {
-            suply.second->render();
+        for (auto& valuable: valuables) {
+            valuable.second->render();
+        }
+        for (auto& ammo: ammo_drops) {
+            ammo.second->render();
         }
         for (auto& f: food) {
             f.second->render();
         }
 
         banner.render();
-        ammoLeft.render();  //<--consume muchisimo tiempo
+        ammoLeft.render();
+        topScores.render();
+        clock.render();
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position
 
         for (char c: scoreStr) {
             int number = c - '0';  // Convert char to int
-            numberImages.renderNumber(number, offset);
+            numberImages.renderNumber(number, offset, 0, 32);
             offset += 24;  // Move position to the left for the next digit
         }
 
@@ -534,8 +578,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             for (auto& projectile: projectiles) {
                 projectile.second->reajustFrame(framesBehind);
             }
-            for (auto& supply: supplies) {
-                supply.second->reajustFrame(framesBehind);
+            for (auto& valuable: valuables) {
+                valuable.second->reajustFrame(framesBehind);
+            }
+            for (auto& ammo: ammo_drops) {
+                ammo.second->reajustFrame(framesBehind);
             }
 
             // Calculate the next frame start time
@@ -557,7 +604,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start + std::chrono::seconds(5);
     while (std::chrono::high_resolution_clock::now() < end) {
-        showFinalScreen(renderer, snapshot, background);
+        showFinalScreen(renderer, snapshot);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;

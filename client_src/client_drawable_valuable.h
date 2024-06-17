@@ -3,9 +3,6 @@
 
 #include "client_shifting_drawable.h"
 
-#define ITEMS_IMG "../client_src/resources/items/items.png"
-
-
 class DrawableValuable: public ShiftingDrawable {
 
 public:
@@ -15,16 +12,18 @@ public:
 
     void setValuableFromSnapshot(const int valuable_type) {
         SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
-        this->setTexture(ITEMS_IMG, color);
+        this->setTexture(ITEMS_PNG, color);
         switch (valuable_type) {
             case COIN:
-                this->loadAnimations("../external/animations/valuables/coin.yml");
+                this->loadAnimations(COIN_ANIMATIONS);
                 break;
             case GEM:
-                this->loadAnimations("../external/animations/valuables/gem.yml");
+                this->loadAnimations(GEM_ANIMATIONS);
                 break;
         }
     }
+
+    void playSoundOnDeath() override { soundManager.playSoundEffect("Coin-Pickup"); }
 };
 
 #endif  // CLIENT_VALUABLE_H

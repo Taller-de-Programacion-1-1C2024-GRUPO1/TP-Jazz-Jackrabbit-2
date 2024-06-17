@@ -1,6 +1,8 @@
 #include "monitor_matches.h"
 
-MonitorMatches::MonitorMatches(const std::string& map_routes): map_reader(map_routes) {}
+MonitorMatches::MonitorMatches(const std::string& map_routes): map_reader(map_routes) {
+    map_reader.get_maps(maps);
+}
 
 int MonitorMatches::add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_struct) {
     std::lock_guard<std::mutex> lock(mutex);
@@ -29,6 +31,20 @@ std::vector<std::string> MonitorMatches::show_matches_availables() {
     return availableMatches;
 }
 
+std::vector<std::string> MonitorMatches::show_maps_availables() {
+    std::lock_guard<std::mutex> lock(mutex);
+    std::vector<std::string> availableMaps;
+    for (auto& map: maps) {
+        // no tomar los que comienzen con el prefijo: "DEFAULT"
+        std::cout << "Mapa: " << map.first << std::endl;
+        if (map.first.find("default") != std::string::npos) {
+            continue;
+        }
+        availableMaps.push_back(map.first);
+    }
+    return availableMaps;
+}
+
 int MonitorMatches::join_match(std::string match_name,
                                std::shared_ptr<ContainerProtocol> cont_protocol, int id,
                                ChampionType character_name) {
@@ -53,8 +69,7 @@ int MonitorMatches::join_match(std::string match_name,
 
 Map MonitorMatches::get_map(std::string map_name) {
     std::lock_guard<std::mutex> lock(mutex);
-    map_reader.refresh_load_maps();
-    maps = map_reader.get_maps();
+    map_reader.refresh_load_maps(maps);
     return maps[map_name];
 }
 

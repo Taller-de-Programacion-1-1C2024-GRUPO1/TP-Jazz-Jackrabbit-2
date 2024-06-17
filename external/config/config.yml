@@ -1,9 +1,6 @@
 # Game Settings
 max_players: 3
 
-# World
-null_state: 0
-
 # Physics
 rabbit_speed: 5
 rabbit_jump_speed: 20
@@ -11,34 +8,79 @@ rabbit_revival_time: 5
 rabbit_desintoxicate_time: 1
 
 # Weapons
-blaster_damage: 10
-blaster_speed: 10
-blaster_infinite_ammo: true
+
+# BASIC GUN
+basic_gun_fire_cooldown: 20
+basic_gun_max_ammo: 999
+basic_gun_damage: 1
+basic_gun_range: 40
+basic_gun_bullet_speed: 10
+
+# MACHINE GUN (Flamethrower)
+machinegun_fire_cooldown: 5
+machinegun_max_ammo: 300
+machinegun_damage: 1
+machinegun_range: 40
+machinegun_bullet_speed: 10
+machinegun_ammo_amount: 10
+
+# SNIPER (Rocket Launcher)
+sniper_fire_cooldown: 40
+sniper_max_ammo: 4
+sniper_damage: 9
+sniper_range: 120
+sniper_bullet_speed: 25
+sniper_ammo_amount: 1
+
+# RAYGUN
+raygun_fire_cooldown: 20
+raygun_max_ammo: 10
+raygun_damage: 3
+raygun_range: 120
+raygun_bullet_speed: 20
+raygun_ammo_amount: 2
 
 # Players
 player_starting_life: 5
+player_damage: 1
 
 # Enemies
-# RAT: enemigo que se mueve de izquierda a derecha. Si estas en cierto rango, te ataca.
-enemy_rat_speed: 2
-enemy_rat_damage: 1
-enemy_rat_life: 30
-enemy_rat_attack_range: 20
-enemy_rat_kill_points: 200
+
+# TURTLE: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
+enemy_turtle_life: 10
+enemy_turtle_damage: 1
+enemy_turtle_kill_points: 300
+enemy_turtle_revive_seconds: 6
+enemy_turtle_drop_amount: 3
 
 # LIZARD: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
-enemy_lizard_speed: 1
+
+enemy_lizard_life: 3
 enemy_lizard_damage: 1
-enemy_lizard_life: 50
-enemy_lizard_attack_range: 10
-enemy_lizard_kill_points: 100
+enemy_lizard_kill_points: 200
+enemy_lizard_revive_seconds: 6
+enemy_lizard_drop_amount: 1
 
 # CRAB: enemigo que se mueve de izquierda a derecha, solo hace daño si lo pisas.
-enemy_crab_speed: 3
-enemy_crab_damage: 1
-enemy_crab_life: 50
-enemy_crab_attack_range: 0
+
+enemy_crab_life: 4
+enemy_crab_damage: 2
 enemy_crab_kill_points: 300
+enemy_crab_revive_seconds: 4
+enemy_crab_drop_amount: 2
+
+# Enemy drop probabilities
+
+hotdog_drop_probability: 1
+hamburger_drop_probability: 1
+healthcarrot_drop_probability: 1
+coin_drop_probability: 1
+gem_drop_probability: 1
+rottencheese_drop_probability: 3
+machinegunammo_drop_probability: 4
+sniperammo_drop_probability: 1
+raygunammo_drop_probability: 4
+nothing_drop_probability: 1
 
 # Health Items
 cant_health_carrot_life: 1
@@ -47,3 +89,5 @@ cant_health_carrot_life: 1
 kill_rabbit_points: 1000
 coin_points: 100
 gem_points: 500
+hot_dog_points: 200
+hamburger_points: 300

@@ -44,7 +44,7 @@
     <rect>
      <x>480</x>
      <y>370</y>
-     <width>211</width>
+     <width>55</width>
      <height>55</height>
     </rect>
    </property>
@@ -57,7 +57,7 @@
     <string notr="true">background-color: white; border: 2px solid black; border-radius: 15px; padding: 5px;</string>
    </property>
    <property name="text">
-    <string>Refresh</string>
+    <string>⟳</string>
    </property>
   </widget>
   <widget class="QComboBox" name="comboBoxMatches">

@@ -1,0 +1,59 @@
+Move:
+  frames: 8
+  loop: false
+  sound: ""
+  rects:
+    - x: 347
+      y: 179
+      w: 23
+      h: 11
+    - x: 359
+      y: 179
+      w: 14
+      h: 12
+    - x: 373
+      y: 179
+      w: 14
+      h: 12
+    - x: 387
+      y: 179
+      w: 12
+      h: 12
+    - x: 399
+      y: 179
+      w: 14
+      h: 12
+    - x: 413
+      y: 179
+      w: 12
+      h: 12
+    - x: 425
+      y: 179
+      w: 11
+      h: 12
+    - x: 436
+      y: 179
+      w: 8
+      h: 12
+
+Explode:
+  frames: 4
+  loop: false
+  sound: "Explosion"
+  rects:
+    - x: 421
+      y: 158
+      w: 12
+      h: 18
+    - x: 433
+      y: 158
+      w: 21
+      h: 18
+    - x: 454
+      y: 158
+      w: 14
+      h: 18
+    - x: 468
+      y: 158
+      w: 16
+      h: 18

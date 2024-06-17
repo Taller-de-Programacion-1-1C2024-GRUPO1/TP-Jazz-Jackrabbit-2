@@ -18,8 +18,10 @@ private:
     Animation* currentAnimation;
     double angle;
     int direction;
-    SoundManager& soundManager;
     int iterationsBeetweenFrames;
+
+protected:
+    SoundManager& soundManager;
 
 public:
     ShiftingDrawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& textureRect,
@@ -32,8 +34,9 @@ public:
     void setDirection(int dir);
     void setAnimation(const char* name);
     void reajustFrame(int framesToAdvance);
+    virtual void playSoundOnDeath() {}
 
-    //~ShiftingDrawable();
+    virtual ~ShiftingDrawable() {}
 };
 
 #endif  // CLIENT_SHIFTING_DRAWABLE_H

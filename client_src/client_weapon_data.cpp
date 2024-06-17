@@ -25,13 +25,13 @@ SDL2pp::Rect WeaponData::getWeapon(int id) {
 void WeaponData::loadAnimationsToProjectile(int id, ShiftingDrawable* projectile) {
     switch (id) {
         case BASIC_GUN:
-            projectile->loadAnimations("../external/animations/projectiles/regular.yml");
+            projectile->loadAnimations(REGULAR_ANIMATIONS);
             break;
         case MACHINE_GUN:
-            projectile->loadAnimations("../external/animations/projectiles/blue_ray.yml");
+            projectile->loadAnimations(BLUE_RAY_ANIMATIONS);
             break;
         case SNIPER:
-            projectile->loadAnimations("../external/animations/projectiles/blue_ray.yml");
+            projectile->loadAnimations(ROCKET_ANIMATIONS);
             break;
     }
 }

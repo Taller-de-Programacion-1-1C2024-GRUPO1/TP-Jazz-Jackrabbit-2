@@ -1,0 +1,60 @@
+@startuml
+skinparam sequenceMessageAlign center
+
+actor User
+
+participant KeyboardHandler
+
+participant Drawer
+
+User ->> KeyboardHandler : Move
+
+KeyboardHandler ->x KeyboardHandler : push(MoveCommand(playerID))
+
+boundary ClientSender
+
+boundary ClientReceiver
+
+ClientSender o-> ClientSender : pop(Command)
+
+entity PROTOCOL
+
+ClientSender --// PROTOCOL : Command
+
+boundary ServerReceiver
+
+boundary ServerSender
+participant Broadcaster
+
+PROTOCOL --// ServerReceiver : Command
+
+ServerReceiver ->x ServerReceiver : push(Command)
+
+control Gameloop
+
+Gameloop o-> Gameloop : pop(Command)
+
+entity Map
+
+Gameloop ->X Map : executeCommand(playerID)
+
+Gameloop ->x Map: update()
+
+Map ->o Gameloop : Snapshot
+
+Gameloop --// Broadcaster : broadcast(Snapshot)
+
+Broadcaster ->x Broadcaster : push(Snapshot)
+
+ServerSender o-> ServerSender : pop(Snapshot)
+
+ServerSender --// PROTOCOL : Snapshot
+
+PROTOCOL --// ClientReceiver : Snapshot
+
+ClientReceiver ->x ClientReceiver : push(Snapshot)
+
+Drawer o-> Drawer : pop(Snapshot)
+
+Drawer -> Drawer : draw(Snapshot)
+@enduml

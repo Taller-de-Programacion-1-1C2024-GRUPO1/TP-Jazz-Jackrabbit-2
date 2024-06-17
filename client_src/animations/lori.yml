@@ -205,7 +205,7 @@ Shoot:
 Hurt:
   frames: 11
   loop: false
-  sound: ""
+  sound: "Jazz-Auch"
   rects:
     - x: 2
       y: 2659

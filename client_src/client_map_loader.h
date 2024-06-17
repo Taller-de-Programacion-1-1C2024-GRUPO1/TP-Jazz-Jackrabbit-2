@@ -33,8 +33,8 @@ public:
                 auto& matrix = it->second;
                 int x = 0;
                 int y = 0;
-                for (int j = 0; j < MAP_HEIGHT_DEFAULT; j++) {
-                    for (int k = 0; k < MAP_WIDTH_DEFAULT; k++) {
+                for (int j = 0; j < map.height; j++) {
+                    for (int k = 0; k < map.width; k++) {
                         int id = matrix[k][j];
                         if (id != 65535) {
                             SDL2pp::Rect srcRect;

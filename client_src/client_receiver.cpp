@@ -3,7 +3,8 @@
 #include <chrono>
 
 ClientReceiver::ClientReceiver(Protocol& protocol, Queue<std::unique_ptr<QtResponse>>& q_responses,
-                               Queue<Snapshot>& q_snapshots, int& player_id, Queue<std::unique_ptr<Command>>& q_cmds) :
+                               Queue<Snapshot>& q_snapshots, int& player_id,
+                               Queue<std::unique_ptr<Command>>& q_cmds):
         protocol(protocol),
         q_responses(q_responses),
         q_snapshots(q_snapshots),

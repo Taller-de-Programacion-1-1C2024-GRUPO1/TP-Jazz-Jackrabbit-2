@@ -59,6 +59,7 @@ public:
     void set_action_shoot();
     void add_machinegun_ammo(int amount_ammo);
     void add_sniper_ammo(int amount_ammo);
+    void add_raygun_ammo(int amount_ammo);
 
     // COLISION
     void on_colision_with(PhysicalObject* object) override;
@@ -83,6 +84,8 @@ public:
     // ESTADOS
     void set_state(State* state);
     void set_intoxicated();
+    void set_alive();
+    void set_godmode();
 
 
     void execute_jump();
@@ -103,6 +106,12 @@ public:
     void execute_special_spaz(int direction);
     void execute_special_jazz();
     void execute_special_lori();
+
+    // CHEATS
+    void receive_max_ammo();
+    void receive_max_health();
+    void receive_god_mode();
+    void respawn();
 
     Rabbit(const Rabbit&) = delete;
     Rabbit& operator=(const Rabbit&) = delete;

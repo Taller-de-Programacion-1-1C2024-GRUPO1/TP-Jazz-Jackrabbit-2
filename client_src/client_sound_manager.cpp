@@ -2,31 +2,42 @@
 
 SoundManager::SoundManager():
         mixer(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096),
-        music("../client_src/resources/sounds/music.wav") {
-    mixer.SetMusicVolume(5);
+        music(SOUND_MUSIC) {
+    mixer.SetMusicVolume(MUSIC_VOLUME);
     mixer.PlayMusic(music, -1);
     mixer.SetVolume(-1, 3);
 }
 
 std::string SoundManager::getPathForSound(const std::string& name) {
     if (name == "Jazz-Auch") {
-        return "../client_src/resources/sounds/auch.wav";
+        return SOUND_AUCH;
     } else if (name == "Shooting") {
-        return "../client_src/resources/sounds/shooting.wav";
+        return SOUND_SHOOTING;
     } else if (name == "Explosion") {
-        return "../client_src/resources/sounds/explosion.wav";
+        return SOUND_EXPLOSION;
+    } else if (name == "Coin-Pickup") {
+        return SOUND_COIN_PICKUP;
+    } else if (name == "Ammo-Pickup") {
+        return SOUND_AMMO_PICKUP;
+    } else if (name == "Eating") {
+        return SOUND_EATING;
     } else {
-        // Handle the case where the name does not match any known sound
         throw std::invalid_argument("Unknown sound name: " + name);
     }
 }
 
-void SoundManager::loadSoundEffect(const std::string& name) {
-    soundEffects[name] = std::make_unique<SDL2pp::Chunk>(getPathForSound(name));
-}
-
 void SoundManager::playSoundEffect(const std::string& name) {
-    mixer.PlayChannel(-1, *soundEffects[name]);
+    currentSound = std::make_unique<SDL2pp::Chunk>(getPathForSound(name));
+    try {
+        mixer.PlayChannel(-1, *currentSound);
+    } catch (const SDL2pp::Exception& e) {
+        std::cerr << "All channels are busy" << std::endl;
+    }
 }
 
 void SoundManager::stopSound() { mixer.HaltChannel(-1); }
+
+SoundManager::~SoundManager() {
+    mixer.HaltMusic();
+    mixer.HaltChannel(-1);
+}

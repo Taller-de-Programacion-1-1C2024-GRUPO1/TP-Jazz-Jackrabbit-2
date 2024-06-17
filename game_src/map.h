@@ -1,6 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <algorithm>
 #include <map>
 #include <memory>
 #include <string>
@@ -25,6 +26,7 @@ private:
     std::map<int, std::vector<SpawnPoint>> spawn_points;
     int width;
     int height;
+    int texture_id;
     int max_players;
     int amount_players;
     int projectile_id;
@@ -53,39 +55,37 @@ public:
     void add_item(Item* item);
     int get_projectile_id();
 
-    Map(int width, int height, int amount_players, const std::string& map_name);
+    Map(int width, int height, int texture_id, int max_players, const std::string& map_name,
+        const PhysicalMap& physical_map, const DynamicMap& dynamic_map,
+        const std::map<int, std::vector<SpawnPoint>>& spawn_points);
 
     Map() = default;
 
-    void set_name(const std::string& name);
-
-    void set_physical_map(const PhysicalMap& physical_map);
-
-    void set_dynamic_map(const DynamicMap& dynamic_map);
-
-    void set_spawn_points(const std::map<int, std::vector<SpawnPoint>>& spawn_points);
-
     void set_amount_players(int amount_players);
 
-    void set_max_players(int max_players);
-
-    int get_amount_players();
-
-    DynamicMap get_dynamic_map() const;
+    std::string get_name() const;
 
     PhysicalMap get_physical_map() const;
 
+    DynamicMap get_dynamic_map() const;
+
     std::map<int, std::vector<SpawnPoint>> get_spawn_points() const;
+
+    int get_amount_players();
+
+    int get_texture_id();
 
     int get_max_players();
 
+    int get_width();
+
+    int get_height();
+
     void create_entities();
 
-    Snapshot get_snapshot();
+    Snapshot get_snapshot(uint32_t match_time);
 
     Snapshot get_init_snapshot();
-
-    std::string get_name() const;
 
     int get_rabbit_position_by_id(int id);
 

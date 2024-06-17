@@ -15,6 +15,10 @@ MachineGunAmmo::MachineGunAmmo(int id, int init_pos_x, int init_pos_y):
 SniperAmmo::SniperAmmo(int id, int init_pos_x, int init_pos_y):
         Item(id, SNIPER_AMMO, init_pos_x, init_pos_y) {}
 
+RayGunAmmo::RayGunAmmo(int id, int init_pos_x, int init_pos_y):
+        Item(id, RAYGUN_AMMO, init_pos_x, init_pos_y) {}
+
+
 Gem::Gem(int id, int init_pos_x, int init_pos_y): Item(id, GEM, init_pos_x, init_pos_y) {}
 
 Coin::Coin(int id, int init_pos_x, int init_pos_y): Item(id, COIN, init_pos_x, init_pos_y) {}
@@ -36,6 +40,11 @@ void SniperAmmo::on_colision_with_rabbit(Rabbit* rabbit) {
     rabbit->add_sniper_ammo(SNIPER_AMMO_AMOUNT);
     kill();
 }
+void RayGunAmmo::on_colision_with_rabbit(Rabbit* rabbit) {
+    rabbit->add_raygun_ammo(RAYGUN_AMMO_AMOUNT);
+    kill();
+}
+
 
 HealthCarrot::HealthCarrot(int id, int init_pos_x, int init_pos_y):
         Item(id, HEALTH_CARROT, init_pos_x, init_pos_y) {}

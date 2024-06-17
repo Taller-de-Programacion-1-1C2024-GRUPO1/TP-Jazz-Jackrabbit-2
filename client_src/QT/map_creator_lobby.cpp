@@ -22,7 +22,7 @@ void MapCreatorLobby::closeEvent(QCloseEvent* event) {
     QDialog::closeEvent(event);
 }
 
-void MapCreatorLobby::on_btnTexture1_clicked() { start_creating_map(CASTLE); }
+void MapCreatorLobby::on_btnTexture1_clicked() { start_creating_map(JUNGLE); }
 
 
 void MapCreatorLobby::on_btnTexture2_clicked() { start_creating_map(CARROTUS); }

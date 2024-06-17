@@ -1,0 +1,188 @@
+@startuml
+class ServerAcceptor <<Thread>> {
+    Socket sk;
+    bool sk_was_closed
+    int id_counter
+    std::list<User*> server_users
+    std::string map_routes
+    std::atomic<bool> is_alive
+    bool& server_running
+    void reap_dead()
+    void kill_all()
+}
+
+class GameLoop {
+    Queue<std::shared_ptr<Command>>& client_cmds_queue
+    BroadcasterSnapshots& broadcaster_snapshots
+    std::list<Player*>& players
+    Map& map
+    bool& server_running
+    bool& playing
+    bool game_ended = false;
+    void send_initial_snapshots()
+    void run()
+    void push_all_players(const Snapshot& snapshot)
+    void stop()
+    void check_players()
+}
+
+class Match <<Thread>> {
+    Map map
+    std::string match_name
+    std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue
+    int number_of_players
+    std::list<Player*> players
+    bool& server_running
+    bool playing
+    int* status
+    void send_players_ids();
+    bool has_started()
+    void delete_players()
+    uint8_t get_number_of_players()
+    std::string get_match_name()
+}
+
+class Player {
+    std::shared_ptr<ContainerProtocol> container_protocol
+    int player_id
+    Queue<std::shared_ptr<Snapshot>> snapshots_queue
+    BroadcasterSnapshots& broadcaster_snapshots
+    ServerSender server_sender
+    Queue<std::shared_ptr<Command>>& client_cmds_queue
+    ServerReceiver server_receiver
+    bool keep_talking = true
+    void start()
+    void send_player_id()
+    int get_id()
+    bool is_dead()
+    void join()
+    void kill()
+}
+
+class User <<Thread>> {
+    int status
+    int id
+    std::shared_ptr<ContainerProtocol> container_protocol
+    MonitorMatches& monitor_matches
+    bool& server_running
+    void create_new_match(int number_of_players, const std::string& match_name,
+                          const std::string& map_name, ChampionType character_name)
+    void join_match(const std::string& match_name, ChampionType character_name)
+    void refresh()
+    bool is_alive()
+    void kill()
+}
+
+class MonitorMatches {
+    MapReader map_reader
+    std::map<std::string, std::shared_ptr<MatchInfo>> matches
+    std::map<std::string, Map> maps
+    std::mutex mutex
+    void kill_dead_matches()
+    int add_new_match(std::string match_name, std::shared_ptr<MatchInfo> match_info)
+    std::vector<std::string> show_matches_availables()
+    int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo, int id, ChampionType character_name)
+    void close_matches()
+    void start_match(std::string match_name)
+    Map get_map(std::string map_name)
+}
+
+class ServerReceiver <<Thread>> {
+    Protocol& protocol
+    Queue<std::shared_ptr<Command>>& client_cmds_queue
+    bool& keep_talking
+}
+
+class ServerSender <<Thread>> {
+    Protocol& protocol
+    BroadcasterSnapshots& broadcaster_snapshots
+    bool& keep_talking
+    int player_id
+}
+
+class BroadcasterSnapshots {
+    std::mutex m
+    std::map<int, Queue<std::shared_ptr<Snapshot>>*> players_queues
+    void add_player(int id, Queue<std::shared_ptr<Snapshot>>* player_queue)
+    void broadcast(std::shared_ptr<Snapshot> game)
+    void delete_player(int id)
+    bool is_empty()
+    std::shared_ptr<Snapshot> get_game(int id)
+}
+
+struct PlayerInfo {
+    const int playerID
+    ChampionType character_name
+    std::shared_ptr<ContainerProtocol> container_protocol
+}
+
+struct MatchInfo {
+    const std::string& map_name
+    int status = MATCH_WAITING
+    std::unique_ptr<Match> match_starter
+    std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue
+}
+
+struct ContainerProtocol {
+    Protocol protocol
+}
+
+class MapReader {
+    std::string file_path
+    std::vector<std::string> map_paths
+    MapParser map_parser
+    void get_maps(std::map<std::string, Map>& dicc_maps)
+    void refresh_load_maps(std::map<std::string, Map>& dicc_maps)
+    void load_maps_files()
+    void set_maps(dicc_maps)
+}
+
+class MapParser {
+    std::map<int, std::vector<SpawnPoint>> parse_spawn_points(int width, int height, std::map<int, std::vector<std::vector<int>>> map_data)
+    void parse_maps(std::string map_name, int width, int height, int max_players, int texture, const std::map<int, std::vector<std::vector<int>>>& map_data, std::map<std::string, Map>& maps)
+    PhysicalMap parse_physical_map(int width, int height, std::map<int, std::vector<std::vector<int>>> map_data) 
+}
+
+class Map {
+    std::string map_name
+    PhysicalMap physical_map
+    DynamicMap dynamic_map
+    std::map<int, std::vector<SpawnPoint>> spawn_points
+    int width
+    int height
+    int texture_id
+    int max_players
+    int amount_players
+    int projectile_id
+    std::vector<Rabbit*> players
+    std::vector<Enemy*> enemies
+    std::vector<Bullet*> bullets
+    std::vector<Item*> items
+    void check_colision()
+    void reap_dead()
+    void update()
+    void add_player(int PlayerID, ChampionType champion)
+    void add_enemy(Enemy* enemy)
+    void add_bullet(Bullet* bullet)
+    void add_item(Item* item)
+}
+
+ServerAcceptor --* User 
+User --> ContainerProtocol
+User --> MonitorMatches
+MonitorMatches --> MapReader
+MapReader --> MapParser
+MonitorMatches --* Map
+MonitorMatches --* MatchInfo
+MatchInfo --> Match
+MatchInfo --* PlayerInfo
+PlayerInfo --> ContainerProtocol
+Match --* Player
+Match --> BroadcasterSnapshots
+Player --> ServerSender
+Player --> ServerReceiver
+Match --> GameLoop
+Match --> Map
+GameLoop ..> Map
+
+@enduml

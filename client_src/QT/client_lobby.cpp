@@ -51,6 +51,8 @@ void ClientLobby::on_btnCreateMatch_clicked() {
             QApplication::exit(OK);
         } else if (result == OK_MAP_CREATOR) {
             QApplication::exit(OK_MAP_CREATOR);
+        } else if (result == EDIT_MAP) {
+            QApplication::exit(EDIT_MAP);
         } else if (result == CLOSE_MAP_CREATOR) {
             std::cout << "Cerrando QT..." << std::endl;
             QApplication::exit(ERROR);

@@ -56,3 +56,8 @@ void Drawable::setPosition(int x, int y) {
 }
 
 void Drawable::setCameraPosition(const SDL2pp::Point& position) { cameraPosition = position; }
+
+void Drawable::resize(int w, int h) {
+    onMapRect.w = w;
+    onMapRect.h = h;
+}
