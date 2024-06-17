@@ -377,6 +377,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             for (const auto& id: projectilesIds) {
                 DrawableProjectile* projectile = projectiles[id];
                 if (projectile->requiresExplosion()) {
+                    projectile->resize(BLOCK_DIVISION*2, BLOCK_DIVISION*2);
                     projectile->playSoundOnDeath();
                     projectile->setAnimation("Explode");
                     projectile->setRequiresExplosion(false);

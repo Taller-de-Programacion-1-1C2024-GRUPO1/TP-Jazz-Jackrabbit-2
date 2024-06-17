@@ -32,6 +32,7 @@ public:
     void update();
     void setPosition(int x, int y);
     void setCameraPosition(const SDL2pp::Point& cameraPosition);
+    void resize(int w, int h);
 };
 
 #endif  // CLIENT_DRAWABLE_H
