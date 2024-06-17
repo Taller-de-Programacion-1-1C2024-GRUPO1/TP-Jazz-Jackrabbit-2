@@ -63,7 +63,7 @@ public:
         height = map["height"].as<int>();
 
 
-        std::string textureImg[] = {CASTLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
+        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
 
         Surface surface(textureImg[texture]);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
@@ -178,7 +178,7 @@ public:
             texture(map),
             currentRabbitSpawns(0),
             font(FONT_TTF_04B_30, 15) {
-        std::string textureImg[] = {CASTLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
+        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
 
         Surface surface(textureImg[map]);
         SDL2pp::Color colorKey = {87, 0, 203, 0};

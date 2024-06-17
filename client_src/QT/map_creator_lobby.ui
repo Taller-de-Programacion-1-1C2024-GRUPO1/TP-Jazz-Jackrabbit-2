@@ -122,7 +122,7 @@ font: 20pt;</string>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/maps/castle.png);
+    <string notr="true">background-image: url(:/maps/jungle.png);
 background-repeat: no-repeat;
 background-position: center;
 background-size: cover;

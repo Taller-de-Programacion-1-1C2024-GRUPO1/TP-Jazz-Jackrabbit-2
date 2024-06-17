@@ -11,7 +11,7 @@
     </qresource>
 
     <qresource prefix="/maps">
-        <file alias="castle.png">../resources/maps/castle.png</file>
+        <file alias="jungle.png">../resources/maps/jungle.png</file>
         <file alias="carrotus.png">../resources/maps/carrotus.png</file>
         <file alias="create_a_map.png">../resources/maps/create_a_map.png</file>
     </qresource>

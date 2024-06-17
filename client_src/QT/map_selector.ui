@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/maps/castle.png);
+    <string notr="true">background-image: url(:/maps/jungle.png);
 background-repeat: no-repeat;
 background-position: center;
 background-size: cover;
@@ -44,7 +44,7 @@ color: white;
 font: 20pt;</string>
    </property>
    <property name="text">
-    <string>castle</string>
+    <string>jungle</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnMap2">

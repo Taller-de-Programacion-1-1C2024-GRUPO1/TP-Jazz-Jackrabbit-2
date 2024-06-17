@@ -57,6 +57,6 @@ enum /*INFO TYPE*/ {
 #define PLAYING -1
 
 #define DEFAULT_MAP_CARROTUS "default_carrotus"
-#define DEFAULT_MAP_CASTLE "default_castle"
+#define DEFAULT_MAP_JUNGLE "default_jungle"
 
 #endif

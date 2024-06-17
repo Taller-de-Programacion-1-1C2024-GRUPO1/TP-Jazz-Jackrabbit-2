@@ -134,8 +134,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
     std::string map_texture_path;
     switch (map_texture) {
-        case CASTLE:
-            map_texture_path = CASTLE_TILES_PNG;
+        case JUNGLE:
+            map_texture_path = JUNGLE_TILES_PNG;
             break;
         case CARROTUS:
             map_texture_path = CARROTUS_TILES_PNG;

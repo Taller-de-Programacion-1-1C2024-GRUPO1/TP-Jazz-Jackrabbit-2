@@ -9,7 +9,7 @@
 #define PLAY_MAP -4
 #define EDIT_MAP -5
 
-enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
+enum /*Map Textures*/ { JUNGLE = 0, CARROTUS };
 
 
 // Music & Game Constants
@@ -86,7 +86,7 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 // Maps
 
 #define CARROTUS_MAP MAPS_PATH + "/carrotus.png"
-#define CASTLE_MAP MAPS_PATH + "/castle.png"
+#define JUNGLE_MAP MAPS_PATH + "/jungle.png"
 #define CREATE_A_MAP MAPS_PATH + "/create_a_map.png"
 
 // Projectiles
@@ -107,7 +107,7 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 // Tiles
 
 #define CARROTUS_TILES_PNG TILES_PATH + "/carrotus.png"
-#define CASTLE_TILES_PNG TILES_PATH + "/castle.png"
+#define JUNGLE_TILES_PNG TILES_PATH + "/jungle.png"
 
 // Animations
 
