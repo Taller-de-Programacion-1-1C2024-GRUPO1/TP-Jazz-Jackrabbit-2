@@ -36,7 +36,7 @@ public:
     void reajustFrame(int framesToAdvance);
     virtual void playSoundOnDeath() {}
 
-    //~ShiftingDrawable();
+    virtual ~ShiftingDrawable() {}
 };
 
 #endif  // CLIENT_SHIFTING_DRAWABLE_H

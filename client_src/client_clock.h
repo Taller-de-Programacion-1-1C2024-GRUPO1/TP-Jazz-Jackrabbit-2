@@ -1,8 +1,11 @@
 #ifndef CLIENT_CLOCK
 #define CLIENT_CLOCK
 
-#include "client_number_images.h"
+#include <string>
+
 #include "SDL2pp/SDL2pp.hh"
+
+#include "client_number_images.h"
 
 class Clock {
 private:
@@ -11,7 +14,7 @@ private:
     NumberImages numberImages;
 
 public:
-    Clock(SDL2pp::Renderer& renderer): numberImages(renderer) {};
+    explicit Clock(SDL2pp::Renderer& renderer): numberImages(renderer) {}
 
     void update(uint32_t current_time) {
         minutes = current_time / 60;
@@ -19,10 +22,12 @@ public:
     }
 
     void render() {
-        std::string timeMin = minutes < 10 ? "0" + std::to_string(minutes) : std::to_string(minutes);
-        std::string timeSec = seconds < 10 ? "0" + std::to_string(seconds) : std::to_string(seconds);
-        int offset_x = 0;                             // Start position
-        numberImages.setCorner(3);                     
+        std::string timeMin =
+                minutes < 10 ? "0" + std::to_string(minutes) : std::to_string(minutes);
+        std::string timeSec =
+                seconds < 10 ? "0" + std::to_string(seconds) : std::to_string(seconds);
+        int offset_x = 0;  // Start position
+        numberImages.setCorner(3);
 
         for (char c: timeMin) {
             int number = c - '0';  // Convert char to int
@@ -39,4 +44,4 @@ public:
     }
 };
 
-#endif //CLIENT_CLOCK
+#endif  // CLIENT_CLOCK

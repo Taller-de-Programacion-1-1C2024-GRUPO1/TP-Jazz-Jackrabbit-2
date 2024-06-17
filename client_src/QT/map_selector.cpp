@@ -27,7 +27,7 @@ MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
 MapSelector::~MapSelector() { delete ui; }
 
 void MapSelector::on_btnMap1_clicked() {
-    selected_map = DEFAULT_MAP_CARROTUS;  
+    selected_map = DEFAULT_MAP_CARROTUS;
     map_texture = JUNGLE;
     start_match();
 }

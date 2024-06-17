@@ -32,8 +32,8 @@
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
 
-#include "client_constants.h"
 #include "client_clock.h"
+#include "client_constants.h"
 
 using SDL2pp::Chunk;
 using SDL2pp::Font;

@@ -37,7 +37,7 @@ struct Entity {
 
 class Editor {
 public:
-    explicit Editor(const std::string map_name):
+    explicit Editor(const std::string& map_name):
 
 
             sdl(SDL_INIT_VIDEO),
@@ -80,12 +80,11 @@ public:
 
                 Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
                 surface.Blit(src, destSurface, {0, 0, 0, 0});
-                SDL2pp::Texture texture(renderer, destSurface);
-                textures.push_back(std::make_shared<Texture>(std::move(texture)));
+                SDL2pp::Texture current_texture(renderer, destSurface);
+                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
             }
         }
 
-        std::cout << "CCCCCCCCCCCCCccc: " << std::endl;
 
         grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
                 height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
@@ -188,8 +187,8 @@ public:
 
                 Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
                 surface.Blit(src, destSurface, {0, 0, 0, 0});
-                SDL2pp::Texture texture(renderer, destSurface);
-                textures.push_back(std::make_shared<Texture>(std::move(texture)));
+                SDL2pp::Texture current_texture(renderer, destSurface);
+                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
             }
         }
         grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
@@ -604,12 +603,12 @@ private:
     int scrollOffset = 0;            // Desplazamiento vertical para la grilla de texturas
     int horizontalScrollOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
     int verticalScrollOffset = 0;    // Desplazamiento vertical para la grilla dibujable
-    int width;
-    int height;
-    std::string name;
-    int maxPlayers;
-    int texture;
-    int currentRabbitSpawns;
+    int width = 0;
+    int height = 0;
+    std::string name = "";
+    int maxPlayers = 0;
+    int texture = CARROTUS;
+    int currentRabbitSpawns = 0;
 
     Tool currentTool = PAINT;             // Herramienta actual
     int currentLayer = BACKGROUND_LAYER;  // Capa actual
@@ -669,8 +668,8 @@ private:
                 std::vector<int> textureRow;
                 for (const auto& cell: row) {
                     // Obtener el índice de la textura
-                    std::shared_ptr<SDL2pp::Texture> texture = cell[layer];
-                    int index = texture ? textureIndices[texture] : -1;
+                    std::shared_ptr<SDL2pp::Texture> current_texture = cell[layer];
+                    int index = current_texture ? textureIndices[current_texture] : -1;
                     textureRow.push_back(index);
                 }
                 out << YAML::Flow << textureRow;

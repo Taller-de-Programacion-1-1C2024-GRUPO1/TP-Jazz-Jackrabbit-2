@@ -47,7 +47,7 @@ void NumberImages::setCorner(int mode) {
             x = 0;
             y = 600 - 32;
             break;
-        case 3: //middle up
+        case 3:  // middle up
             x = 800 / 2 - 16;
             y = 0;
             break;

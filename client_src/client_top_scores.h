@@ -52,8 +52,8 @@ public:
             numberImages.renderNumber(11, offset_x, -offset_y, 24);
             offset_x += 24;
             // Print "PLAYER"
-            for (int i = 12; i < 18; i++) {
-                numberImages.renderNumber(i, offset_x, -offset_y, 24);
+            for (int j = 12; j < 18; j++) {
+                numberImages.renderNumber(j, offset_x, -offset_y, 24);
                 offset_x += 12;
             }
             // Print id
