@@ -220,7 +220,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             newValuable->setValuableFromSnapshot(supply.supply_type);
             newValuable->setAnimation("Flip");
             valuables.emplace(supply.id, newValuable);
-        } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO) {
+        } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO
+                   || supply.supply_type == RAYGUN_AMMO) {
             SDL2pp::Rect textureRect(0, 0, 0, 0);
             DrawableAmmo* newAmmo = new DrawableAmmo(renderer, cameraPosition, textureRect,
                                                      onMapRect, soundManager);
@@ -425,7 +426,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 ammoIds.insert(pair.first);
             }
             for (const auto& ammo: snapshot.supplies) {
-                if (ammo.supply_type == MACHINEGUN_AMMO || ammo.supply_type == SNIPER_AMMO) {
+                if (ammo.supply_type == MACHINEGUN_AMMO || ammo.supply_type == SNIPER_AMMO 
+                || ammo.supply_type == RAYGUN_AMMO) {
                     auto it = ammo_drops.find(ammo.id);
                     if (it == ammo_drops.end()) {
                         ammoIds.erase(ammo.id);
@@ -433,11 +435,11 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                         SDL2pp::Rect onMapRect(ammo.pos_x, ammo.pos_y, rabbit_width / 2,
                                                rabbit_height / 2);
                         SDL2pp::Rect textureRect(0, 0, 0, 0);
-                        DrawableAmmo* newValuable = new DrawableAmmo(
+                        DrawableAmmo* newAmmo = new DrawableAmmo(
                                 renderer, cameraPosition, textureRect, onMapRect, soundManager);
-                        newValuable->setAmmoFromSnapshot(ammo.supply_type);
-                        newValuable->setAnimation("Flip");
-                        ammo_drops.emplace(ammo.id, newValuable);
+                        newAmmo->setAmmoFromSnapshot(ammo.supply_type);
+                        newAmmo->setAnimation("Flip");
+                        ammo_drops.emplace(ammo.id, newAmmo);
                     } else {
                         ammoIds.erase(ammo.id);
                     }

@@ -26,12 +26,17 @@ public:
                 this->loadAnimations(BLUE_RAY_ANIMATIONS);
                 break;
             case SNIPER:
-                //this->loadAnimations(ROCKET_ANIMATIONS);
+                this->loadAnimations(ROCKET_ANIMATIONS);
+                this->requires_explosion = true;
+                this->is_exploding = true;
+                break;
+            case RAYGUN:
                 this->loadAnimations(RAY_ANIMATIONS);
                 this->requires_explosion = true;
                 this->is_exploding = true;
                 break;
             default:
+                std::cout << "Tipo: " << projectile_type << std::endl;
                 throw std::invalid_argument("Invalid projectile type");
         }
     }
@@ -50,7 +55,7 @@ public:
     bool isExploding() { return is_exploding; }
 
     void playSoundOnDeath() override {
-        soundManager.playSoundEffect("Explode");
+        soundManager.playSoundEffect("Explosion");
     }
 };
 
