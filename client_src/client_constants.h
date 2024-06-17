@@ -15,8 +15,8 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 #define GAME_TITLE "Jack Jazzrabbit 2"
 
 // Maps
-#define MAPS ClientConfigSingleton::getInstance().getMapsPath()
-#define MAPS_TXT MAPS + "/maps.txt" 
+//#define MAPS ClientConfigSingleton::getInstance().getMapsPath()
+//#define MAPS_TXT MAPS + "/maps.txt" 
 
 // Paths
 
@@ -34,7 +34,7 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 #define FONTS_PATH ClientConfigSingleton::getInstance().getFontPath()
 
-#define MAPS_TEXTURES_PATH ClientConfigSingleton::getInstance().getMapsTexturePath()
+#define MAPS_PATH ClientConfigSingleton::getInstance().getMapsPath()
 
 #define PROJECTILES_PATH ClientConfigSingleton::getInstance().getProjectilesPath()
 
