@@ -35,7 +35,7 @@ void Client::run(int argc, char* argv[]) {
         editor.run();
     } else if (result == EDIT_MAP) {
         // edit map
-        std::cout << "EDITANDO MAPA" << std::endl;
+        std::cout << "EDITANDO MAPA: " << new_map_info.map_name << std::endl;
 
     } else {
         std::cerr << "Cerrando QT" << std::endl;

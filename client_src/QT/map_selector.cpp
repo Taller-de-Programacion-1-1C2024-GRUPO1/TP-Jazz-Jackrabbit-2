@@ -114,7 +114,7 @@ void MapSelector::on_btnCustomMaps_clicked() {
         return;
     }
     hide();
-    MapEditorLobby map_editor_lobby(q_cmds, q_responses, selected_map);
+    MapEditorLobby map_editor_lobby(q_cmds, q_responses, selected_map, new_map_info);
     connect(&map_editor_lobby, &MapEditorLobby::windowClosed, this,
             &MapSelector::handleWindowClosed);
 
