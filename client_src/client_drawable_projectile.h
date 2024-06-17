@@ -26,7 +26,8 @@ public:
                 this->loadAnimations(BLUE_RAY_ANIMATIONS);
                 break;
             case SNIPER:
-                this->loadAnimations(ROCKET_ANIMATIONS);
+                //this->loadAnimations(ROCKET_ANIMATIONS);
+                this->loadAnimations(RAY_ANIMATIONS);
                 this->requires_explosion = true;
                 this->is_exploding = true;
                 break;
@@ -48,9 +49,9 @@ public:
 
     bool isExploding() { return is_exploding; }
 
-    /*void playSoundOnDeath() override {
-        soundManager.playSoundEffect(SOUND_EXPLOSION);
-    }*/
+    void playSoundOnDeath() override {
+        soundManager.playSoundEffect("Explode");
+    }
 };
 
 

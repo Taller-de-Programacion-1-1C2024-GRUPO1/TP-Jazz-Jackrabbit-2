@@ -376,7 +376,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             for (const auto& id: projectilesIds) {
                 DrawableProjectile* projectile = projectiles[id];
                 if (projectile->requiresExplosion()) {
-                    soundManager.playSoundEffect("Explosion");
+                    projectile->playSoundOnDeath();
                     projectile->setAnimation("Explode");
                     projectile->setRequiresExplosion(false);
                 } else if (projectile->isExploding()) {
@@ -414,7 +414,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 }
             }
             for (const auto& id: valuablesIds) {
-                soundManager.playSoundEffect("Coin-Pickup");
+                valuables[id]->playSoundOnDeath();
                 delete valuables[id];
                 valuables.erase(id);
             }
@@ -444,7 +444,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 }
             }
             for (const auto& id: ammoIds) {
-                soundManager.playSoundEffect("Ammo-Pickup");
+                ammo_drops[id]->playSoundOnDeath();
                 delete ammo_drops[id];
                 ammo_drops.erase(id);
             }

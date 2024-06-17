@@ -9,13 +9,20 @@
 
 enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
+
 // Music & Game Constants
 #define MUSIC_VOLUME 5
 #define GAME_TITLE "Jack Jazzrabbit 2"
 
+// Maps
+#define MAPS ClientConfigSingleton::getInstance().getMapsPath()
+#define MAPS_TXT MAPS + "/maps.txt" 
+
 // Paths
 
 #define BASE_PATH ClientConfigSingleton::getInstance().getBasePath()
+
+#define MAPS_PATH ClientConfigSingleton::getInstance().getMapsPath()
 
 #define RESOURCES_PATH ClientConfigSingleton::getInstance().getResourcesPath()
 
@@ -27,7 +34,7 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 #define FONTS_PATH ClientConfigSingleton::getInstance().getFontPath()
 
-#define MAPS_PATH ClientConfigSingleton::getInstance().getMapsPath()
+#define MAPS_TEXTURES_PATH ClientConfigSingleton::getInstance().getMapsTexturePath()
 
 #define PROJECTILES_PATH ClientConfigSingleton::getInstance().getProjectilesPath()
 
@@ -115,12 +122,14 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 #define MACHINE_GUN_ANIMATIONS AMMO_ANIMATIONS_PATH + "/machine_gun.yml"
 #define SNIPER_ANIMATIONS AMMO_ANIMATIONS_PATH + "/sniper.yml"
+#define RAY_GUN_ANIMATIONS AMMO_ANIMATIONS_PATH + "/ray_gun.yml"
 
 // Projectiles Animations
 
 #define BLUE_RAY_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/blue_ray.yml"
 #define REGULAR_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/regular.yml"
 #define ROCKET_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/rocket.yml"
+#define RAY_ANIMATIONS PROJECTILES_ANIMATIONS_PATH + "/ray.yml"
 
 // Valuables Animations
 

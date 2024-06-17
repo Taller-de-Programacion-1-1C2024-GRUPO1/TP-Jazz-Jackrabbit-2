@@ -14,7 +14,7 @@ public:
         this->setTexture(PROJECTILES_PNG, color);
         switch (ammo_type) {
             case SNIPER_AMMO:
-                this->loadAnimations(SNIPER_ANIMATIONS);
+                this->loadAnimations(RAY_GUN_ANIMATIONS);
                 break;
             case MACHINEGUN_AMMO:
                 this->loadAnimations(MACHINE_GUN_ANIMATIONS);
@@ -22,6 +22,10 @@ public:
             default:
                 throw std::invalid_argument("Invalid ammo type");
         }
+    }
+
+    void playSoundOnDeath() override {
+        this->soundManager.playSoundEffect("Ammo-Pickup");
     }
 };
 

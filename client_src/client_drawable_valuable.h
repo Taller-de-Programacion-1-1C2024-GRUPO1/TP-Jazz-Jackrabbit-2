@@ -23,9 +23,9 @@ public:
         }
     }
 
-    /*void playSoundOnDeath() override {
-        soundManager.playSoundEffect(SOUND_COIN_PICKUP);
-    }*/
+    void playSoundOnDeath() override {
+        soundManager.playSoundEffect("Coin-Pickup");
+    }
 };
 
 #endif  // CLIENT_VALUABLE_H
