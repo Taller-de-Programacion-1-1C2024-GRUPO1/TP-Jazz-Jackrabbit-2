@@ -1,0 +1,14 @@
+Flip:
+  frames: 2
+  loop: true
+  sound: ""
+  rects:
+    - x: 347
+      y: 179
+      w: 10
+      h: 11
+    - x: 344
+      y: 176
+      w: 15
+      h: 16
+   

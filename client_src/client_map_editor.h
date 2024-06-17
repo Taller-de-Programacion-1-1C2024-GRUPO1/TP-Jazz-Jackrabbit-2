@@ -49,6 +49,7 @@ public:
             height(mapHeight),
             name(nameByUser),
             maxPlayers(max_players),
+            texture(map),
             currentRabbitSpawns(0),
             font(FONT_TTF_04B_30, 15) {
         std::string textureImg[] = {CASTLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
@@ -488,6 +489,7 @@ private:
     int height;
     std::string name;
     int maxPlayers;
+    int texture;
     int currentRabbitSpawns;
 
     Tool currentTool = PAINT;             // Herramienta actual
@@ -531,6 +533,7 @@ private:
         YAML::Emitter out;
         out << YAML::BeginMap;
         out << YAML::Key << "name" << YAML::Value << name;
+        out << YAML::Key << "texture" << YAML::Value << texture;
         out << YAML::Key << "max_players" << YAML::Value << maxPlayers;
         out << YAML::Key << "width" << YAML::Value << width;
         out << YAML::Key << "height" << YAML::Value << height;
