@@ -6,6 +6,8 @@
 #include "client_config.h"
 
 #define CLOSE_MAP_CREATOR -3
+#define PLAY_MAP -4
+#define EDIT_MAP -5
 
 enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 

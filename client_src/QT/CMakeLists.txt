@@ -32,6 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         waiting_room.h waiting_room.cpp waiting_room.ui
         waiting_room.h waiting_room.cpp waiting_room.ui
         map_creator_lobby.h map_creator_lobby.cpp map_creator_lobby.ui
+        map_editor_lobby.h map_editor_lobby.cpp map_editor_lobby.ui
 
     )
 # Define target properties for Android with Qt 6 as:

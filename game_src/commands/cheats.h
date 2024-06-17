@@ -12,13 +12,12 @@ private:
 
 public:
     Cheats(int playerID, int cheatID);
-    bool execute_Command(bool* cheatON, bool& needsMove) override;
-    void execute_Command(Rabbit& rabbit) override{};
+    bool execute_Command(bool* cheatON, bool& needsMove) override { return false; };
+    void execute_Command(Rabbit& rabbit) override;
     void send(Protocol& protocol) override;
     int get_playerId() override;
     int get_cheatID();
     int get_commandType() override;
-    ~Cheats();
 };
 
 #endif

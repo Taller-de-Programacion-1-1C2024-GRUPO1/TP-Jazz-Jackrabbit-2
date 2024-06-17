@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include "../server_src/config.h"
+
 enum /*COMMAND TYPE*/ {
     COMMAND_MOVE,
     COMMAND_MOVE_FASTER,
@@ -34,7 +36,8 @@ enum SupplyType : uint8_t {
     HEALTH_CARROT,
     HOTDOG,
     HAMBURGER,
-    ROTTEN_CHEESE
+    ROTTEN_CHEESE,
+    RAYGUN_AMMO
 };
 
 enum DIRECTIONS { LEFT, RIGHT, UP, DOWN };
@@ -57,9 +60,7 @@ enum SupplyState : char {
     PICKED,
 };
 
-enum /* CHEATS */ {
-    ADD_HEALTH = 0,
-};
+enum /* CHEATS */ { MAX_AMMO, MAX_HEALTH, RESPAWN, GODMODE };
 
 enum RABBIT_STATES {
     ALIVE,
@@ -76,30 +77,6 @@ enum RABBIT_STATES {
 #define PLAYING -1
 
 #define NULL_ID -1
-
-
-// ----------------- Messurements -----------------
-// GAME CONSTANTS
-#define BLOCK_DIVISION 32
-#define MAP_WIDTH_DEFAULT 35     // modificar
-#define MAP_HEIGHT_DEFAULT 19    // modificar
-#define RABBIT_AMOUNT_DEFAULT 1  // modificar
-
-// PHYSICS
-#define GRAVITY 1
-#define MAX_FALLING_SPEED 15
-
-// PLAYER CONSTANTS
-#define PLAYER_SIDE BLOCK_DIVISION * 2
-#define RABBIT_COOLDOWN_TAKE_DAMAGE 3
-
-#define RABBIT_WIDTH_DEFAULT PLAYER_SIDE   // modificar
-#define RABBIT_HEIGHT_DEFAULT PLAYER_SIDE  // modificar
-
-// ENEMY CONSTANTS
-#define ENEMY_INITIAL_HEALTH 3                   // Config
-#define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
-#define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
 
 enum /*MAP LAYERS*/ {
     BACKGROUND_LAYER = 0,
@@ -128,31 +105,132 @@ enum /*SPAWN POINTS*/ {
 
 #define UNDEFINED -1
 
+// ----------------- Messurements -----------------
+
+// GAME CONSTANTS
+#define BLOCK_DIVISION 32
+#define MAP_WIDTH_DEFAULT 35     // modificar
+#define MAP_HEIGHT_DEFAULT 19    // modificar
+#define RABBIT_AMOUNT_DEFAULT 1  // modificar
+
+#define PLAYER_SIDE BLOCK_DIVISION * 2
+#define RABBIT_COOLDOWN_TAKE_DAMAGE 3
+
+#define RABBIT_WIDTH_DEFAULT PLAYER_SIDE
+#define RABBIT_HEIGHT_DEFAULT PLAYER_SIDE
+
+
+#define POINTS_KILLING_RABBIT ConfigSingleton::getInstance().getKillRabbitPoints()
+#define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
+
+
+// PHYSICS
+#define GRAVITY 1
+#define MAX_FALLING_SPEED 15
+#define PLAYER_SPEED ConfigSingleton::getInstance().getRabbitSpeed()
+#define RABBIT_REVIVAL_TIME ConfigSingleton::getInstance().getRabbitRevivalTime()
+#define RABBIT_DEINTOXICATE_TIME ConfigSingleton::getInstance().getRabbitDeintoxicateTime()
+#define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
+#define SPECIAL_ATTACK_TIME JUMPING_INITIAL_SPEED / GRAVITY
+
+// PLAYER CONSTANTS
+#define PLAYER_INITIAL_HEALTH ConfigSingleton::getInstance().getPlayerStartingLife()
+#define PLAYER_DAMAGE ConfigSingleton::getInstance().getPlayerDamage()
+#define CARROT_HEALTH_AMOUNT ConfigSingleton::getInstance().getCantHealthCarrotLife()
+
+// ENEMY CONSTANTS
+#define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
+#define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
+
+#define CRAB_BLOCKS_RANGE 8
+#define LIZARD_BLOCKS_RANGE 8
+#define TURTLE_BLOCKS_RANGE 4
+#define CRAB_SPEED 4
+#define LIZARD_SPEED 2
+#define TURTLE_SPEED 1
+////////////////////////////////////////////////////////////////////////
+
+#define CRAB_HEALTH 4
+#define LIZARD_HEALTH 3
+#define TURTLE_HEALTH 5
+#define CRAB_DAMAGE 2
+#define LIZARD_DAMAGE 1
+#define TURTLE_DAMAGE 1
+#define CRAB_POINTS 300
+#define LIZARD_POINTS 200
+#define TURTLE_POINTS 100
+#define CRAB_REVIVE_SECONDS 4
+#define LIZARD_REVIVE_SECONDS 6
+#define TURTLE_REVIVE_SECONDS 6
+#define CRAB_DROP_AMOUNT 2
+#define LIZARD_DROP_AMOUNT 1
+#define TURTLE_DROP_AMOUNT 3
+
+
+// ENEMIES DROP PROBABILITIES (NO necesita que la sumatoria sea 100)
+
+#define HOTDOG_DROP_PROBABILITY 1
+#define HAMBURGER_DROP_PROBABILITY 1
+#define HEALTHCARROT_DROP_PROBABILITY 1
+#define COIN_DROP_PROBABILITY 1
+#define GEM_DROP_PROBABILITY 1
+#define ROTTENCHEESE_DROP_PROBABILITY 3
+#define MACHINEGUNAMMO_DROP_PROBABILITY 4
+#define SNIPERAMMO_DROP_PROBABILITY 1
+#define RAYGUNAMMO_DROP_PROBABILITY 4
+#define NOTHING_DROP_PROBABILITY 1
+
+
+// GUN
+
+#define RAYGUN_FIRE_COOLDOWN 20
+#define RAYGUN_MAX_AMMO 10
+#define RAYGUN_DAMAGE 3
+#define RAYGUN_RANGE 120
+#define RAYGUN_BULLET_SPEED 20
+#define RAYGUN_AMMO_AMOUNT 2
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+//----------------- POINTS CONSTANTS -----------------
+
+#define COIN_POINTS ConfigSingleton::getInstance().getCoinPoints()
+#define GEM_POINTS ConfigSingleton::getInstance().getGemPoints()
+#define POINTS_KILLING_ENEMY ConfigSingleton::getInstance().getEnemyKillPoints()
+#define HOTDOG_POINTS_AMOUNT ConfigSingleton::getInstance().getHotDogPoints()
+#define HAMBURGER_POINTS_AMOUNT ConfigSingleton::getInstance().getHamburgerPoints()
+
 //----------------- GUN CONSTANTS -----------------
 
 #define CHANGE_WEAPON_COOLDOWN 10
 
-enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER };
+enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER, RAYGUN };
 
 // BASIC GUN
-#define BASIC_GUN_FIRE_COOLDOWN 20
-#define BASIC_GUN_MAX_AMMO 999
-#define BASIC_GUN_DAMAGE 1
-#define BASIC_GUN_RANGE 40
-#define BASIC_GUN_BULLET_SPEED 10
+#define BASIC_GUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getBasicGunFireCooldown()
+#define BASIC_GUN_MAX_AMMO ConfigSingleton::getInstance().getBasicGunMaxAmmo()
+#define BASIC_GUN_DAMAGE ConfigSingleton::getInstance().getBasicGunDamage()
+#define BASIC_GUN_RANGE ConfigSingleton::getInstance().getBasicGunRange()
+#define BASIC_GUN_BULLET_SPEED ConfigSingleton::getInstance().getBasicGunBulletSpeed()
 
 // MACHINE GUN (FLAMETHROWER)
-#define MACHINEGUN_FIRE_COOLDOWN BASIC_GUN_FIRE_COOLDOWN / 4
-#define MACHINEGUN_MAX_AMMO 300
-#define MACHINEGUN_DAMAGE BASIC_GUN_DAMAGE
-#define MACHINEGUN_RANGE BASIC_GUN_RANGE
-#define MACHINEGUN_BULLET_SPEED BASIC_GUN_BULLET_SPEED
+#define MACHINEGUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getMachinegunFireCooldown()
+#define MACHINEGUN_MAX_AMMO ConfigSingleton::getInstance().getMachinegunMaxAmmo()
+#define MACHINEGUN_DAMAGE ConfigSingleton::getInstance().getMachinegunDamage()
+#define MACHINEGUN_RANGE ConfigSingleton::getInstance().getMachinegunRange()
+#define MACHINEGUN_BULLET_SPEED ConfigSingleton::getInstance().getMachinegunBulletSpeed()
+#define MACHINEGUN_AMMO_AMOUNT ConfigSingleton::getInstance().getMachinegunAmmoAmount()
 
-// SNIPER
-#define SNIPER_FIRE_COOLDOWN BASIC_GUN_FIRE_COOLDOWN
-#define SNIPER_MAX_AMMO 10
-#define SNIPER_DAMAGE BASIC_GUN_DAMAGE * 3
-#define SNIPER_RANGE BASIC_GUN_RANGE * 3
-#define SNIPER_BULLET_SPEED BASIC_GUN_BULLET_SPEED * 2
+
+// SNIPER (ROCKET LAUNCHER)
+#define SNIPER_FIRE_COOLDOWN ConfigSingleton::getInstance().getSniperFireCooldown()
+#define SNIPER_MAX_AMMO ConfigSingleton::getInstance().getSniperMaxAmmo()
+#define SNIPER_DAMAGE ConfigSingleton::getInstance().getSniperDamage()
+#define SNIPER_RANGE ConfigSingleton::getInstance().getSniperRange()
+#define SNIPER_BULLET_SPEED ConfigSingleton::getInstance().getSniperBulletSpeed()
+#define SNIPER_AMMO_AMOUNT ConfigSingleton::getInstance().getSniperAmmoAmount()
+
 
 #endif

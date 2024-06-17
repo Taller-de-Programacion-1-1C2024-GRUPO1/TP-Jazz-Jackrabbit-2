@@ -28,13 +28,13 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 }
 
 void Gameloop::run() {
-    // std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     auto game_start = std::chrono::high_resolution_clock::now();
-    int segundos = 30;
+    int game_duration_seconds = 3 * 60;
 
     while (playing && server_running) {
         try {
             auto start = std::chrono::high_resolution_clock::now();
+
             std::shared_ptr<Command> game_command;
             while (client_cmds_queue.try_pop(game_command)) {
                 map.add_command(game_command);
@@ -42,20 +42,23 @@ void Gameloop::run() {
 
             map.update();
 
+            uint32_t match_time =
+                    std::chrono::duration_cast<std::chrono::seconds>(start - game_start).count();
+
             push_all_players(map.get_snapshot());
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-            if (FRAME_DELAY > duration.count()) {
+            if (DELTA_TIME > duration.count()) {
                 std::this_thread::sleep_for(
-                        std::chrono::milliseconds(FRAME_DELAY - duration.count()));
+                        std::chrono::milliseconds(DELTA_TIME - duration.count()));
             }
 
             check_players();
             auto elapsed =
                     std::chrono::duration_cast<std::chrono::seconds>(end - game_start).count();
 
-            if (elapsed >= segundos) {
+            if (elapsed >= game_duration_seconds) {
                 stop();
             }
 

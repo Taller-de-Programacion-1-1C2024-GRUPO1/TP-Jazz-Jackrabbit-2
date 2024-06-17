@@ -1,9 +1,6 @@
 # Game Settings
 max_players: 3
 
-# World
-null_state: 0
-
 # Physics
 rabbit_speed: 5
 rabbit_jump_speed: 20
@@ -11,20 +8,43 @@ rabbit_revival_time: 5
 rabbit_desintoxicate_time: 1
 
 # Weapons
-blaster_damage: 10
-blaster_speed: 10
-blaster_infinite_ammo: true
+
+# BASIC GUN
+basic_gun_fire_cooldown: 20
+basic_gun_max_ammo: 999
+basic_gun_damage: 1
+basic_gun_range: 40
+basic_gun_bullet_speed: 10
+
+# MACHINE GUN (Flamethrower)
+machinegun_fire_cooldown: 5
+machinegun_max_ammo: 300
+machinegun_damage: 1
+machinegun_range: 40
+machinegun_bullet_speed: 10
+machinegun_ammo_amount: 10
+
+# SNIPER (Rocket Launcher)
+sniper_fire_cooldown: 40
+sniper_max_ammo: 4
+sniper_damage: 9
+sniper_range: 120
+sniper_bullet_speed: 25
+sniper_ammo_amount: 1
 
 # Players
 player_starting_life: 5
+player_damage: 1
 
 # Enemies
-# RAT: enemigo que se mueve de izquierda a derecha. Si estas en cierto rango, te ataca.
-enemy_rat_speed: 2
-enemy_rat_damage: 1
-enemy_rat_life: 30
-enemy_rat_attack_range: 20
-enemy_rat_kill_points: 200
+enemy_revive_cooldown: 400
+
+# TURTLE: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
+enemy_turtle_speed: 2
+enemy_turtle_damage: 1
+enemy_turtle_life: 30
+enemy_turtle_attack_range: 20
+enemy_turtle_kill_points: 200
 
 # LIZARD: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
 enemy_lizard_speed: 1
@@ -45,5 +65,8 @@ cant_health_carrot_life: 1
 
 # Points
 kill_rabbit_points: 1000
+enemy_kill_points: 100
 coin_points: 100
 gem_points: 500
+hot_dog_points: 200
+hamburger_points: 300

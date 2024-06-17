@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "../common_src/queue.h"
+#include "../game_src/commands/cheats.h"
 #include "../game_src/commands/command.h"
 #include "../game_src/commands/command_change_weapon.h"
 #include "../game_src/commands/command_jump.h"

@@ -1,0 +1,55 @@
+@startuml
+participant ServerMain
+
+entity Config
+
+ServerMain -> Config : create_instance()
+
+participant ServerAcceptor
+
+ServerMain --// ServerAcceptor : start()
+
+collections User
+loop for every new User
+  ServerAcceptor -> User : new_user()
+
+  User ->o User : ACTIVE
+
+  User -> ServerAcceptor : list_users(User)
+
+  ServerAcceptor --// User : start()
+
+  control MonitorMatches
+
+  collections Match
+
+  alt create_new_match
+
+     User -> MonitorMatches: create_new_match(match_name)
+
+     MonitorMatches --// Match : start()
+
+  else join_match
+     
+    User -> MonitorMatches: join_match(match_name)
+
+    MonitorMatches --// User : ACK
+    
+    User --// User : send_response(ACK)
+
+  else refresh
+   
+    User -> MonitorMatches: get_matches_available()
+
+    MonitorMatches -> User : list_matches
+
+    User --// User : send(list_matches)
+
+  end
+
+  User ->x User : INACTIVE
+
+  ServerAcceptor --// ServerAcceptor : reap_INACTIVES()
+
+end
+@enduml

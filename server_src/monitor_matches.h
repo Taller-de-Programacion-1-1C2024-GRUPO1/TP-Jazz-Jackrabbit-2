@@ -36,6 +36,8 @@ public:
     // Muestra los matches disponibles
     std::vector<std::string> show_matches_availables();
 
+    std::vector<std::string> show_maps_availables();
+
     // Un determinado usuario se une a un match
     int join_match(std::string match_name, std::shared_ptr<ContainerProtocol> container_protocolo,
                    int id, ChampionType character_name);

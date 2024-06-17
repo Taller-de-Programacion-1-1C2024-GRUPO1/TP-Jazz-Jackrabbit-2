@@ -1,6 +1,5 @@
 #include "rabbit.h"
 
-#include "../../server_src/config.h"
 #include "../commands/command.h"
 #include "../map.h"
 
@@ -9,12 +8,6 @@
 #include "gun.h"
 #include "item.h"
 #include "state.h"
-
-#define PLAYER_INITIAL_HEALTH ConfigSingleton::getInstance().getPlayerStartingLife()
-#define POINTS_KILLING_RABBIT ConfigSingleton::getInstance().getKillRabbitPoints()
-#define PLAYER_SPEED ConfigSingleton::getInstance().getRabbitSpeed()
-#define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
-#define PLAYER_DAMAGE 1
 
 
 Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
@@ -35,6 +28,7 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
     gun_inventory.push_back(new BasicGun(*this, this->map));
     gun_inventory.push_back(new MachineGun(*this, this->map));
     gun_inventory.push_back(new Sniper(*this, this->map));
+    gun_inventory.push_back(new RayGun(*this, this->map));
 }
 
 
@@ -54,6 +48,8 @@ void Rabbit::on_colision_with_rabbit(Rabbit* rabbit_2) {
 }
 
 void Rabbit::set_intoxicated() { set_state(new Intoxicated(*this)); }
+void Rabbit::set_alive() { set_state(new Alive(*this)); }
+void Rabbit::set_godmode() { set_state(new GodMode(*this)); }
 
 void Rabbit::add_health(int amount_health) {
     health += amount_health;
@@ -67,14 +63,28 @@ void Rabbit::add_machinegun_ammo(int amount_ammo) {
 }
 void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[SNIPER]->add_ammo(amount_ammo); }
 
+void Rabbit::add_raygun_ammo(int amount_ammo) { gun_inventory[RAYGUN]->add_ammo(amount_ammo); }
+
+void Rabbit::receive_max_ammo() {
+    for (int i = 0; i < gun_inventory.size(); i++) {
+        gun_inventory[i]->execute_max_ammo();
+    }
+}
+void Rabbit::receive_max_health() { health = max_health; }
+void Rabbit::receive_god_mode() { state->execute_godmode(); }
+
+void Rabbit::respawn() {
+    pos_x = spawn_x;
+    pos_y = spawn_y;
+    set_state(new Alive(*this));
+}
+
 void Rabbit::revive() {
     health = PLAYER_INITIAL_HEALTH;
     gun_inventory[MACHINE_GUN]->reset_ammo_amount();
     gun_inventory[SNIPER]->reset_ammo_amount();
     current_gun = BASIC_GUN;
-    pos_x = spawn_x;
-    pos_y = spawn_y;
-    set_state(new Alive(*this));
+    respawn();
 }
 
 void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champion_type; }
@@ -94,10 +104,7 @@ void Rabbit::receive_damage(int damage) {
     }
 }
 
-void Rabbit::add_points(int amount_of_points) {
-    points += amount_of_points;
-    printf("Points: %d\n", points);
-}
+void Rabbit::add_points(int amount_of_points) { points += amount_of_points; }
 
 void Rabbit::on_colision_with(PhysicalObject* object) { object->on_colision_with_rabbit(this); }
 
@@ -113,7 +120,6 @@ bool Rabbit::is_killed_by_taking_damage(int damage) {
             set_state(new RecievedDamage(*this));
         }
     }
-    printf("Healtfawefwegfwergergwerfh: %d, damage %d\n", health, damage);
     return killed;
 }
 
@@ -240,7 +246,6 @@ void Rabbit::execute_shoot() {
 
 // CHANGE_WEAPON
 void Rabbit::execute_change_weapon() {
-    std::cout << "Cambiando arma" << std::endl;
     current_gun = (current_gun + 1) % gun_inventory.size();
     while (!gun_inventory[current_gun]->has_ammo()) {
         current_gun = (current_gun + 1) % gun_inventory.size();
@@ -286,7 +291,6 @@ void Rabbit::execute_special_jazz() {
     if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         execute_jump();
         set_state(new SpecialAttackJazzState(*this));
-        std::cout << "Special JAZZ" << std::endl;
     }
 }
 void Rabbit::execute_special_spaz(int direction) {
@@ -294,7 +298,6 @@ void Rabbit::execute_special_spaz(int direction) {
     if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         // Cuidado con el lado hacia donde se ejecuta el ataque
         set_state(new SpecialAttackSpazState(*this, direction));
-        std::cout << "Special SPAZ" << std::endl;
     }
 }
 void Rabbit::execute_special_lori() {
@@ -302,7 +305,6 @@ void Rabbit::execute_special_lori() {
     if (physical_map.can_jump(pos_x, pos_y, width, height)) {
         execute_jump();
         set_state(new SpecialAttackLoriState(*this));
-        std::cout << "Special lori" << std::endl;
     }
 }
 
