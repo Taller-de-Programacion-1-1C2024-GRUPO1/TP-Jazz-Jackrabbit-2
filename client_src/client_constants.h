@@ -18,7 +18,7 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 // Maps
 //#define MAPS ClientConfigSingleton::getInstance().getMapsPath()
-//#define MAPS_TXT MAPS + "/maps.txt" 
+//#define MAPS_TXT MAPS + "/maps.txt"
 
 // Paths
 

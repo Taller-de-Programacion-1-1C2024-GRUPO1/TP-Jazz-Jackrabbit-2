@@ -54,9 +54,7 @@ public:
 
     bool isExploding() { return is_exploding; }
 
-    void playSoundOnDeath() override {
-        soundManager.playSoundEffect("Explosion");
-    }
+    void playSoundOnDeath() override { soundManager.playSoundEffect("Explosion"); }
 };
 
 

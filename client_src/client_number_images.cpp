@@ -23,14 +23,14 @@ void NumberImages::loadNumbers() {
     numberRects.push_back(SDL2pp::Rect(805, 10, 28, 24));   // 8
     numberRects.push_back(SDL2pp::Rect(21, 42, 27, 28));    // 9
     numberRects.push_back(SDL2pp::Rect(342, 303, 16, 21));  // X for ammo
-    numberRects.push_back(SDL2pp::Rect(450, 12, 21, 20));  // -
-    numberRects.push_back(SDL2pp::Rect(780, 43, 23, 26));  // P
-    numberRects.push_back(SDL2pp::Rect(648, 43, 22, 26));  // L
-    numberRects.push_back(SDL2pp::Rect(286, 43, 25, 26));  // A
-    numberRects.push_back(SDL2pp::Rect(256, 79, 23, 24));  // Y
-    numberRects.push_back(SDL2pp::Rect(418, 43, 25, 26));  // E
-    numberRects.push_back(SDL2pp::Rect(24, 79, 25, 24));  // R
-    numberRects.push_back(SDL2pp::Rect(55, 46, 16, 23));  // :
+    numberRects.push_back(SDL2pp::Rect(450, 12, 21, 20));   // -
+    numberRects.push_back(SDL2pp::Rect(780, 43, 23, 26));   // P
+    numberRects.push_back(SDL2pp::Rect(648, 43, 22, 26));   // L
+    numberRects.push_back(SDL2pp::Rect(286, 43, 25, 26));   // A
+    numberRects.push_back(SDL2pp::Rect(256, 79, 23, 24));   // Y
+    numberRects.push_back(SDL2pp::Rect(418, 43, 25, 26));   // E
+    numberRects.push_back(SDL2pp::Rect(24, 79, 25, 24));    // R
+    numberRects.push_back(SDL2pp::Rect(55, 46, 16, 23));    // :
 }
 
 void NumberImages::setCorner(int mode) {

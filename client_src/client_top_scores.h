@@ -1,7 +1,9 @@
 #ifndef TOP_SCORES_H
 #define TOP_SCORES_H
 
+#include <algorithm>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "client_number_images.h"
@@ -12,15 +14,16 @@ private:
     std::vector<std::pair<int, int>> current_snapshot_scores;
 
 public:
-    TopScores(SDL2pp::Renderer& renderer): numberImages(renderer) { numberImages.setCorner(2); }
+    explicit TopScores(SDL2pp::Renderer& renderer): numberImages(renderer) {
+        numberImages.setCorner(2);
+    }
     void clearCurrentSnapshotScores() { current_snapshot_scores.clear(); }
 
     void addCurrentSnapshotScore(int player_id, int score) {
-        //Find the player_id in vector
-        auto it = std::find_if(current_snapshot_scores.begin(), current_snapshot_scores.end(),
-                               [player_id](const std::pair<int, int>& pair) {
-                                   return pair.first == player_id;
-                               });
+        // Find the player_id in vector
+        auto it = std::find_if(
+                current_snapshot_scores.begin(), current_snapshot_scores.end(),
+                [player_id](const std::pair<int, int>& pair) { return pair.first == player_id; });
         if (it != current_snapshot_scores.end()) {
             it->second = score;
         } else {
@@ -40,23 +43,23 @@ public:
         int offset_x = 0;
         int offset_y = 0;
         for (int i = 2; i >= 0; i--) {
-            if (i >= static_cast<int>(current_snapshot_scores.size())){
+            if (i >= static_cast<int>(current_snapshot_scores.size())) {
                 continue;
             }
-            //Print "i-"
-            numberImages.renderNumber(i+1, offset_x, -offset_y, 24);
+            // Print "i-"
+            numberImages.renderNumber(i + 1, offset_x, -offset_y, 24);
             offset_x += 18;
             numberImages.renderNumber(11, offset_x, -offset_y, 24);
             offset_x += 24;
-            //Print "PLAYER"
-            for (int i= 12; i < 18; i++) {
+            // Print "PLAYER"
+            for (int i = 12; i < 18; i++) {
                 numberImages.renderNumber(i, offset_x, -offset_y, 24);
                 offset_x += 12;
             }
-            //Print id
+            // Print id
             offset_x += 10;
             numberImages.renderNumber(current_snapshot_scores[i].first, offset_x, -offset_y, 24);
-            //Print :
+            // Print :
             offset_x += 12;
             numberImages.renderNumber(18, offset_x, -offset_y, 24);
             // render each number on score

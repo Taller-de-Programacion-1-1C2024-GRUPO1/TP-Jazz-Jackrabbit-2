@@ -47,7 +47,7 @@ void AmmoLeft::render() {
         offset -= 24;  // Move position to the left for the next digit
     }
     numberImages.renderNumber(10, offset, 0, 32);  // Render X for ammo
-    offset -= 24;                              // Move position to the left for the munition icon
+    offset -= 24;  // Move position to the left for the munition icon
     SDL2pp::Rect currentRect(800 + offset - BLOCK_DIVISION, 600 - BLOCK_DIVISION, BLOCK_DIVISION,
                              BLOCK_DIVISION);
     renderer.Copy(munitionTexture, munitionRect, currentRect);

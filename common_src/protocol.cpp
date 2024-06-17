@@ -525,6 +525,7 @@ void Protocol::send_Snapshot(Snapshot& snapshot) {
     send_projectiles(snapshot);
     send_supplies(snapshot);
     send_uintEight(snapshot.get_end_game());
+    send_uintThirtyTwo(snapshot.get_match_time());
 }
 
 
@@ -629,9 +630,10 @@ Snapshot Protocol::receive_Snapshot() {
     receive_supplies(snapshot);
     bool end_game = receive_uintEight();
     if (end_game) {
-        std::cout << "GAME ENDED!! PLEASE DO NOT DIE!!" << std::endl;
         snapshot.set_end_game();
     }
+    uint32_t match_time = receive_uintThirtyTwo();
+    snapshot.set_match_time(match_time);
     return snapshot;
 }
 

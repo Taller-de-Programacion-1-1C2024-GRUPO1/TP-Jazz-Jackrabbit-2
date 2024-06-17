@@ -45,7 +45,7 @@ void Gameloop::run() {
             uint32_t match_time =
                     std::chrono::duration_cast<std::chrono::seconds>(start - game_start).count();
 
-            push_all_players(map.get_snapshot());
+            push_all_players(map.get_snapshot(match_time));
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -69,7 +69,7 @@ void Gameloop::run() {
             playing = false;
         }
     }
-    Snapshot final_snapshot = map.get_snapshot();
+    Snapshot final_snapshot = map.get_snapshot(game_duration_seconds);
     final_snapshot.set_end_game();
     push_all_players(final_snapshot);
     std::cout << "Finalizando juego..." << std::endl;

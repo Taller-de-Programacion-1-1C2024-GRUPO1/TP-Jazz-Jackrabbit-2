@@ -28,9 +28,7 @@ public:
         }
     }
 
-    void playSoundOnDeath() override {
-        this->soundManager.playSoundEffect("Ammo-Pickup");
-    }
+    void playSoundOnDeath() override { this->soundManager.playSoundEffect("Ammo-Pickup"); }
 };
 
 #endif  // CLIENT_DRAWABLE_AMMO_H

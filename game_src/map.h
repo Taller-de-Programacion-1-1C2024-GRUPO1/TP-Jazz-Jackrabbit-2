@@ -83,7 +83,7 @@ public:
 
     void create_entities();
 
-    Snapshot get_snapshot();
+    Snapshot get_snapshot(uint32_t match_time);
 
     Snapshot get_init_snapshot();
 

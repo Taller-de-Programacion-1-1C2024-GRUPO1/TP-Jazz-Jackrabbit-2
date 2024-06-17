@@ -23,9 +23,7 @@ public:
         }
     }
 
-    void playSoundOnDeath() override {
-        soundManager.playSoundEffect("Coin-Pickup");
-    }
+    void playSoundOnDeath() override { soundManager.playSoundEffect("Coin-Pickup"); }
 };
 
 #endif  // CLIENT_VALUABLE_H

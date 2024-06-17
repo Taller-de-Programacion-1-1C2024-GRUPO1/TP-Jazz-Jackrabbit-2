@@ -19,6 +19,7 @@ private:
     double angle;
     int direction;
     int iterationsBeetweenFrames;
+
 protected:
     SoundManager& soundManager;
 
@@ -33,7 +34,7 @@ public:
     void setDirection(int dir);
     void setAnimation(const char* name);
     void reajustFrame(int framesToAdvance);
-    virtual void playSoundOnDeath(){}
+    virtual void playSoundOnDeath() {}
 
     //~ShiftingDrawable();
 };

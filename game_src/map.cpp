@@ -117,7 +117,7 @@ int Map::get_width() { return width; }
 
 int Map::get_height() { return height; }
 
-Snapshot Map::get_snapshot() {
+Snapshot Map::get_snapshot(uint32_t match_time) {
     // obtengo las snapshots de cada entidad
     std::vector<RabbitSnapshot> rabbit_snapshots = get_rabbit_snapshot();
     std::vector<ProjectileSnapshot> projectile_snapshots = get_projectile_snapshot();
@@ -125,6 +125,7 @@ Snapshot Map::get_snapshot() {
     std::vector<EnemySnapshot> enemy_snapshots = get_enemy_snapshot();
     // creo el snapshot
     Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
+    snapshot.set_match_time(match_time);
     return snapshot;
 }
 

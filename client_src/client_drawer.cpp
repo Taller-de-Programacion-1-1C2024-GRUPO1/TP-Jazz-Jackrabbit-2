@@ -220,8 +220,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             newValuable->setValuableFromSnapshot(supply.supply_type);
             newValuable->setAnimation("Flip");
             valuables.emplace(supply.id, newValuable);
-        } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO
-                   || supply.supply_type == RAYGUN_AMMO) {
+        } else if (supply.supply_type == SNIPER_AMMO || supply.supply_type == MACHINEGUN_AMMO ||
+                   supply.supply_type == RAYGUN_AMMO) {
             SDL2pp::Rect textureRect(0, 0, 0, 0);
             DrawableAmmo* newAmmo = new DrawableAmmo(renderer, cameraPosition, textureRect,
                                                      onMapRect, soundManager);
@@ -274,7 +274,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 game_running = !snapshot.get_end_game();
 
             // RABBITS UPDATE
-            //topScores.clearCurrentSnapshotScores();
+            // topScores.clearCurrentSnapshotScores();
 
             std::set<int> rabbitIds;
             for (const auto& pair: rabbits) {
@@ -377,7 +377,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             for (const auto& id: projectilesIds) {
                 DrawableProjectile* projectile = projectiles[id];
                 if (projectile->requiresExplosion()) {
-                    projectile->resize(BLOCK_DIVISION*2, BLOCK_DIVISION*2);
+                    projectile->resize(BLOCK_DIVISION * 2, BLOCK_DIVISION * 2);
                     projectile->playSoundOnDeath();
                     projectile->setAnimation("Explode");
                     projectile->setRequiresExplosion(false);
@@ -427,8 +427,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 ammoIds.insert(pair.first);
             }
             for (const auto& ammo: snapshot.supplies) {
-                if (ammo.supply_type == MACHINEGUN_AMMO || ammo.supply_type == SNIPER_AMMO 
-                || ammo.supply_type == RAYGUN_AMMO) {
+                if (ammo.supply_type == MACHINEGUN_AMMO || ammo.supply_type == SNIPER_AMMO ||
+                    ammo.supply_type == RAYGUN_AMMO) {
                     auto it = ammo_drops.find(ammo.id);
                     if (it == ammo_drops.end()) {
                         ammoIds.erase(ammo.id);
@@ -542,7 +542,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         }
 
         banner.render();
-        ammoLeft.render();  
+        ammoLeft.render();
         topScores.render();
 
         std::string scoreStr = std::to_string(score);
