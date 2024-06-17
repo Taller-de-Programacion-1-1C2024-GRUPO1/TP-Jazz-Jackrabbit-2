@@ -151,6 +151,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     AmmoLeft ammoLeft(renderer);
     FoodProvider foodProvider;
     TopScores topScores(renderer);
+    Clock clock(renderer);
 
     // Read first snapshot!
     Snapshot initial_snapshot;
@@ -162,6 +163,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     showLoadingScreen(renderer);
 
     game_running = !initial_snapshot.get_end_game();
+    clock.update(initial_snapshot.get_match_time());
     std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
             initial_snapshot.map_dimensions.map_data, map_texture_path, mapColor, cameraPosition);
 
@@ -273,8 +275,9 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 // and the snapshot could overwritte the variable
                 game_running = !snapshot.get_end_game();
 
+            clock.update(snapshot.get_match_time());
+
             // RABBITS UPDATE
-            // topScores.clearCurrentSnapshotScores();
 
             std::set<int> rabbitIds;
             for (const auto& pair: rabbits) {
@@ -544,6 +547,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         banner.render();
         ammoLeft.render();
         topScores.render();
+        clock.render();
 
         std::string scoreStr = std::to_string(score);
         int offset = 32;  // Start position

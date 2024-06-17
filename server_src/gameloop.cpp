@@ -45,7 +45,7 @@ void Gameloop::run() {
             uint32_t match_time =
                     std::chrono::duration_cast<std::chrono::seconds>(start - game_start).count();
 
-            push_all_players(map.get_snapshot(match_time));
+            push_all_players(map.get_snapshot(game_duration_seconds - match_time));
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

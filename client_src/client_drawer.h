@@ -33,6 +33,7 @@
 #include "../game_src/commands/command_shoot.h"
 
 #include "client_constants.h"
+#include "client_clock.h"
 
 using SDL2pp::Chunk;
 using SDL2pp::Font;
