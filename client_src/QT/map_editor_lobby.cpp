@@ -4,13 +4,14 @@
 
 MapEditorLobby::MapEditorLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                                Queue<std::unique_ptr<QtResponse>>& q_responses,
-                               std::string& selected_map, QWidget* parent):
+                               std::string& selected_map, NewMapInfo& new_map_info, QWidget* parent):
 
         QDialog(parent),
         ui(new Ui::MapEditorLobby),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        selected_map(selected_map) {
+        selected_map(selected_map),
+        new_map_info(new_map_info) {
     ui->setupUi(this);
     QPixmap pixmap(":/backgrounds/match_lobby.png");
     QPalette palette;
@@ -68,6 +69,7 @@ void MapEditorLobby::on_btnEdit_clicked() {
         return;
     }
     selected_map = map_name;
+    new_map_info = NewMapInfo(map_name, 0, 0, 0, 0);
     done(EDIT_MAP);
 }
 
