@@ -22,7 +22,7 @@ void Match::run() {
     BroadcasterSnapshots broadcaster_snapshots;
     try {
         for (int cont = 0; cont < number_of_players; cont++) {
-            std::cout  << "CANTIDAD DE JUGADORES: " << number_of_players << " " << cont << std::endl;
+            std::cout << "CANTIDAD DE JUGADORES: " << number_of_players << " " << cont << std::endl;
             if (has_started())
                 throw MatchAlreadyStarted();
             if (number_of_players > map.get_max_players())

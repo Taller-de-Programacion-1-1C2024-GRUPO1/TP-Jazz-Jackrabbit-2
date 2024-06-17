@@ -4,7 +4,8 @@
 
 MapEditorLobby::MapEditorLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                                Queue<std::unique_ptr<QtResponse>>& q_responses,
-                               std::string& selected_map, NewMapInfo& new_map_info, QWidget* parent):
+                               std::string& selected_map, NewMapInfo& new_map_info,
+                               QWidget* parent):
 
         QDialog(parent),
         ui(new Ui::MapEditorLobby),

@@ -30,7 +30,8 @@ class MapEditorLobby: public QDialog {
 public:
     explicit MapEditorLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                             Queue<std::unique_ptr<QtResponse>>& q_responses,
-                            std::string& selected_map,  NewMapInfo& new_map_info, QWidget* parent = nullptr);
+                            std::string& selected_map, NewMapInfo& new_map_info,
+                            QWidget* parent = nullptr);
     ~MapEditorLobby();
 
 
