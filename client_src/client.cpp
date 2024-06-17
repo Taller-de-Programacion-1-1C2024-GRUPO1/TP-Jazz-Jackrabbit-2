@@ -34,8 +34,9 @@ void Client::run(int argc, char* argv[]) {
                       new_map_info.map_name, new_map_info.max_players);
         editor.run();
     } else if (result == EDIT_MAP) {
-        // edit map
         std::cout << "EDITANDO MAPA: " << new_map_info.map_name << std::endl;
+        Editor editor(new_map_info.map_name);
+        editor.run();
 
     } else {
         std::cerr << "Cerrando QT" << std::endl;
