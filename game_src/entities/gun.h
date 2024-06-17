@@ -61,4 +61,11 @@ public:
     void fire(int pos_x, int pos_y, int direction) override;
 };
 
+class RayGun: public Gun {
+public:
+    RayGun(Rabbit& owner, Map& manager);
+    bool has_ammo() override;
+    void fire(int pos_x, int pos_y, int direction) override;
+};
+
 #endif

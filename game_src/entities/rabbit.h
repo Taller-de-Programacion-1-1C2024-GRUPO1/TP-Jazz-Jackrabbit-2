@@ -59,6 +59,7 @@ public:
     void set_action_shoot();
     void add_machinegun_ammo(int amount_ammo);
     void add_sniper_ammo(int amount_ammo);
+    void add_raygun_ammo(int amount_ammo);
 
     // COLISION
     void on_colision_with(PhysicalObject* object) override;

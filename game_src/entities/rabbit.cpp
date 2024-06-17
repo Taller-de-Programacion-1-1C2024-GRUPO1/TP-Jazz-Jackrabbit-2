@@ -28,6 +28,7 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
     gun_inventory.push_back(new BasicGun(*this, this->map));
     gun_inventory.push_back(new MachineGun(*this, this->map));
     gun_inventory.push_back(new Sniper(*this, this->map));
+    gun_inventory.push_back(new RayGun(*this, this->map));
 }
 
 
@@ -61,6 +62,8 @@ void Rabbit::add_machinegun_ammo(int amount_ammo) {
     gun_inventory[MACHINE_GUN]->add_ammo(amount_ammo);
 }
 void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[SNIPER]->add_ammo(amount_ammo); }
+
+void Rabbit::add_raygun_ammo(int amount_ammo) { gun_inventory[RAYGUN]->add_ammo(amount_ammo); }
 
 void Rabbit::receive_max_ammo() {
     for (int i = 0; i < gun_inventory.size(); i++) {

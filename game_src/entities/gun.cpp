@@ -87,3 +87,15 @@ void Sniper::fire(int pos_x, int pos_y, int direction) {
         ammo--;
     }
 }
+
+RayGun::RayGun(Rabbit& owner, Map& manager):
+        Gun(RAYGUN_MAX_AMMO, RAYGUN_DAMAGE, RAYGUN_RANGE, RAYGUN_BULLET_SPEED, owner, manager) {}
+
+bool RayGun::has_ammo() { return ammo > 0; }
+
+void RayGun::fire(int pos_x, int pos_y, int direction) {
+    if (can_fire()) {
+        Gun::add_bullet_to_map(pos_x, pos_y, direction, RAYGUN, RAYGUN_FIRE_COOLDOWN);
+        ammo--;
+    }
+}

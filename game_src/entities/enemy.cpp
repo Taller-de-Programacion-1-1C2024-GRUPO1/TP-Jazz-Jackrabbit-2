@@ -17,7 +17,9 @@ static const int MACHINEGUNAMMO_DROP_CONSTANT =
         ROTTENCHEESE_DROP_CONSTANT + MACHINEGUNAMMO_DROP_PROBABILITY;
 static const int SNIPERAMMO_DROP_CONSTANT =
         MACHINEGUNAMMO_DROP_CONSTANT + SNIPERAMMO_DROP_PROBABILITY;
-static const int NOTHING_DROP_CONSTANT = SNIPERAMMO_DROP_CONSTANT + NOTHING_DROP_PROBABILITY;
+
+static const int RAYGUNAMMO_DROP_CONSTANT = SNIPERAMMO_DROP_CONSTANT + RAYGUNAMMO_DROP_PROBABILITY;
+static const int NOTHING_DROP_CONSTANT = RAYGUNAMMO_DROP_CONSTANT + NOTHING_DROP_PROBABILITY;
 
 static const int TOTAL_PROBABILITY = NOTHING_DROP_CONSTANT;
 
@@ -71,6 +73,8 @@ void Enemy::drop_items() {
             map.add_item(new MachineGunAmmo(map.get_projectile_id(), position_x, pos_y));
         } else if (random < SNIPERAMMO_DROP_CONSTANT) {
             map.add_item(new SniperAmmo(map.get_projectile_id(), position_x, pos_y));
+        } else if (random < RAYGUNAMMO_DROP_CONSTANT) {
+            map.add_item(new RayGunAmmo(map.get_projectile_id(), position_x, pos_y));
         } else if (random < NOTHING_DROP_CONSTANT) {
             // DROP NOTHING
         } else {

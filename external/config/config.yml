@@ -16,7 +16,7 @@ basic_gun_damage: 1
 basic_gun_range: 40
 basic_gun_bullet_speed: 10
 
-# MACHINE GUN
+# MACHINE GUN (Flamethrower)
 machinegun_fire_cooldown: 5
 machinegun_max_ammo: 300
 machinegun_damage: 1
@@ -24,13 +24,13 @@ machinegun_range: 40
 machinegun_bullet_speed: 10
 machinegun_ammo_amount: 10
 
-# SNIPER 
-sniper_fire_cooldown: 20
-sniper_max_ammo: 10
-sniper_damage: 3
+# SNIPER (Rocket Launcher)
+sniper_fire_cooldown: 40
+sniper_max_ammo: 4
+sniper_damage: 9
 sniper_range: 120
-sniper_bullet_speed: 20
-sniper_ammo_amount: 2
+sniper_bullet_speed: 25
+sniper_ammo_amount: 1
 
 # Players
 player_starting_life: 5

@@ -65,5 +65,11 @@ public:
     void on_colision_with_rabbit(Rabbit* rabbit) override;
 };
 
+class RayGunAmmo: public Item {
+public:
+    RayGunAmmo(int id, int init_pos_x, int init_pos_y);
+    void on_colision_with_rabbit(Rabbit* rabbit) override;
+};
+
 
 #endif
