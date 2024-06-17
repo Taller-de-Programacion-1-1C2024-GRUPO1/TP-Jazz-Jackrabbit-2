@@ -10,6 +10,7 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "../common_src/clock.h"
 #include "../common_src/common_errors.h"
 #include "../common_src/constants.h"
 #include "../common_src/container_protocol.h"

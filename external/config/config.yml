@@ -32,61 +32,40 @@ sniper_range: 120
 sniper_bullet_speed: 25
 sniper_ammo_amount: 1
 
-# RAYGUN
-raygun_fire_cooldown: 20
-raygun_max_ammo: 10
-raygun_damage: 3
-raygun_range: 120
-raygun_bullet_speed: 20
-raygun_ammo_amount: 2
-
 # Players
 player_starting_life: 5
 player_damage: 1
 
 # Enemies
+enemy_revive_cooldown: 400
 
 # TURTLE: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
-enemy_turtle_life: 10
+enemy_turtle_speed: 2
 enemy_turtle_damage: 1
-enemy_turtle_kill_points: 300
-enemy_turtle_revive_seconds: 6
-enemy_turtle_drop_amount: 3
+enemy_turtle_life: 30
+enemy_turtle_attack_range: 20
+enemy_turtle_kill_points: 200
 
 # LIZARD: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
-
-enemy_lizard_life: 3
+enemy_lizard_speed: 1
 enemy_lizard_damage: 1
-enemy_lizard_kill_points: 200
-enemy_lizard_revive_seconds: 6
-enemy_lizard_drop_amount: 1
+enemy_lizard_life: 50
+enemy_lizard_attack_range: 10
+enemy_lizard_kill_points: 100
 
 # CRAB: enemigo que se mueve de izquierda a derecha, solo hace daño si lo pisas.
-
-enemy_crab_life: 4
-enemy_crab_damage: 2
+enemy_crab_speed: 3
+enemy_crab_damage: 1
+enemy_crab_life: 50
+enemy_crab_attack_range: 0
 enemy_crab_kill_points: 300
-enemy_crab_revive_seconds: 4
-enemy_crab_drop_amount: 2
-
-# Enemy drop probabilities
-
-hotdog_drop_probability: 1
-hamburger_drop_probability: 1
-healthcarrot_drop_probability: 1
-coin_drop_probability: 1
-gem_drop_probability: 1
-rottencheese_drop_probability: 3
-machinegunammo_drop_probability: 4
-sniperammo_drop_probability: 1
-raygunammo_drop_probability: 4
-nothing_drop_probability: 1
 
 # Health Items
 cant_health_carrot_life: 1
 
 # Points
 kill_rabbit_points: 1000
+enemy_kill_points: 100
 coin_points: 100
 gem_points: 500
 hot_dog_points: 200

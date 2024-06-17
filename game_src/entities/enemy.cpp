@@ -23,6 +23,7 @@ static const int NOTHING_DROP_CONSTANT = RAYGUNAMMO_DROP_CONSTANT + NOTHING_DROP
 
 static const int TOTAL_PROBABILITY = NOTHING_DROP_CONSTANT;
 
+
 Enemy::Enemy(int id, int type, int init_pos_x, int init_pos_y, int health, int damage,
              int points_when_killed, int revive_time, int drop_amount, int range, int speed,
              PhysicalMap& physical_map, Map& map):

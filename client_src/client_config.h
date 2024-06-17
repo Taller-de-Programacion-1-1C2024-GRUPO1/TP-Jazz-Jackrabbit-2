@@ -20,7 +20,7 @@ public:
     std::string getCharactersPath() const { return characters_path; }
     std::string getEnemiesPath() const { return enemies_path; }
     std::string getFontPath() const { return font_path; }
-    std::string getMapsPath() const { return maps_path; }
+    std::string getTexturesMapsPath() const { return maps_textures_path; }
     std::string getProjectilesPath() const { return projectiles_path; }
     std::string getSoundsPath() const { return sounds_path; }
     std::string getTilesPath() const { return tiles_path; }
@@ -59,7 +59,7 @@ private:
             characters_path = config["characters_path"].as<std::string>();
             enemies_path = config["enemies_path"].as<std::string>();
             font_path = config["fonts_path"].as<std::string>();
-            maps_path = config["maps_path"].as<std::string>();
+            maps_textures_path = config["maps_textures_path"].as<std::string>();
             projectiles_path = config["projectiles_path"].as<std::string>();
             sounds_path = config["sounds_path"].as<std::string>();
             tiles_path = config["tiles_path"].as<std::string>();
@@ -85,7 +85,7 @@ private:
     std::string characters_path;
     std::string enemies_path;
     std::string font_path;
-    std::string maps_path;
+    std::string maps_textures_path;
     std::string projectiles_path;
     std::string sounds_path;
     std::string tiles_path;

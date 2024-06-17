@@ -24,7 +24,7 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 
 #define BASE_PATH ClientConfigSingleton::getInstance().getBasePath()
 
-#define MAPS_PATH ClientConfigSingleton::getInstance().getMapsPath()
+#define MAPS_TEXTURES_PATH ClientConfigSingleton::getInstance().getMapsPath()
 
 #define RESOURCES_PATH ClientConfigSingleton::getInstance().getResourcesPath()
 
@@ -35,8 +35,6 @@ enum /*Map Textures*/ { CASTLE = 0, CARROTUS };
 #define ENEMIES_PATH ClientConfigSingleton::getInstance().getEnemiesPath()
 
 #define FONTS_PATH ClientConfigSingleton::getInstance().getFontPath()
-
-#define MAPS_PATH ClientConfigSingleton::getInstance().getMapsPath()
 
 #define PROJECTILES_PATH ClientConfigSingleton::getInstance().getProjectilesPath()
 
