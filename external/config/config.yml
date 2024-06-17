@@ -32,12 +32,18 @@ sniper_range: 120
 sniper_bullet_speed: 25
 sniper_ammo_amount: 1
 
+# RAYGUN
+raygun_fire_cooldown: 20
+raygun_max_ammo: 10
+raygun_damage: 3
+raygun_range: 120
+raygun_bullet_speed: 20
+raygun_ammo_amount: 2
+
 # Players
 player_starting_life: 5
 player_damage: 1
 
-# Enemies
-enemy_revive_cooldown: 400
 
 # TURTLE: enemigo que se mueve de izquierda a derecha, solo hace daño si lo tocas.
 enemy_turtle_speed: 2
