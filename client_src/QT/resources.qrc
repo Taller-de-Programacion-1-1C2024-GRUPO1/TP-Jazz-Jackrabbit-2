@@ -14,6 +14,8 @@
         <file alias="jungle.png">../resources/maps/jungle.png</file>
         <file alias="carrotus.png">../resources/maps/carrotus.png</file>
         <file alias="create_a_map.png">../resources/maps/create_a_map.png</file>
+        <file alias="custom.png">../resources/maps/custom.png</file>
+
     </qresource>
 
     <qresource prefix="/characters">

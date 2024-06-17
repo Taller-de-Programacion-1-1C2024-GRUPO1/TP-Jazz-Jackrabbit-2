@@ -174,7 +174,7 @@ background-color: rgba(255, 255, 255, 100);
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image: url(:/maps/create_a_map.png);
+    <string notr="true">background-image: url(:/maps/custom.png);
 background-repeat: no-repeat;
 background-position: center;
 background-size: cover;
