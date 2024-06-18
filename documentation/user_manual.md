@@ -2,9 +2,7 @@
   <img src=utils_png/game_logo.png>
 </p>
 
-<center> <h1>JAZZ JACKRABBIT 2</h1> </center>
-<center> <h1><i>User Manual</i></h1> </center>
-
+<center> <h1>JAZZ JACKRABBIT 2 - User Manual</h1> </center>
 
 ## Introduction
 
@@ -265,22 +263,11 @@ These cheats add an extra element of fun and surprise for players, giving you an
 
 ## Enemies
 
-<style>
-    .centered-img {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .centered-img img {
-        width: 50%; /* Ajusta el tamaño de la imagen */
-    }
-</style>
-
 | Enemy | Description |
 |-------|--------|
-|<div class="centered-img"><img src="utils_png/crab.png" alt="Crab"></div> | Watch out for Mr. Crab, scuttling sideways with those big, menacing claws! The crab is small and fast, making it a nimble adversary. If you accidentally step on him, he'll give you a "friendly" pinch, just to say hello! |
-| <div class="centered-img"><img src="utils_png/lizard.png" alt="Lizard"></div> | Here comes the lazy lizard, it might seem harmless but be careful not to bump into it, though, it's not the friendliest of creatures! Keep your distance and take it out before it gets too close! |
-| <div class="centered-img"><img src="utils_png/turtle.png" alt="Turtle"></div> | The turtle is a tough nut to crack with its high health. It moves slowly, but don’t be fooled by its pace. If you touch the turtle, it will take away some of your health. Approach with caution and be ready to chip away at its defenses! |
+| <img src=utils_png/crab.png style="width:70%;"> | Watch out for Mr. Crab, scuttling sideways with those big, menacing claws! The crab is small and fast, making it a nimble adversary. If you accidentally step on him, he'll give you a "friendly" pinch, just to say hello! |
+| <img src=utils_png/lizard.png style="width:70%;"> | Here comes the lazy lizard, it might seem harmless but be careful not to bump into it, though, it's not the friendliest of creatures! Keep your distance and take it out before it gets too close! |
+| <img src=utils_png/turtle.png style="width:70%;"> | The turtle is a tough nut to crack with its high health. It moves slowly, but don’t be fooled by its pace. If you touch the turtle, it will take away some of your health. Approach with caution and be ready to chip away at its defenses! |
 
 Enemies in this game add a dash of danger and a sprinkle of humor to your adventure. Every time you defeat one of them, you earn a lot of points. Keep your wits about you and don't let their quirky antics catch you off guard!
 
@@ -327,6 +314,4 @@ When the game session ends, either because it's finished or because you have dec
 
 ### **Congratulations, you have now got all the tools and tips you need to master Jazz Jackrabbit 2! From understanding the controls and special ammos to knowing your enemies and collecting valuable points, you're well-prepared to jump into the action. Remember, practice makes perfect, so keep honing your skills and discovering all the secrets the game has to offer. Whether you are playing solo or challenging friends, may your adventures be filled with high scores, epic victories, and endless fun. Now, go out there and show the world what a true Jazz Jackrabbit hero looks like! Happy hopping!**
 
-<p align="center">
-  <img src=utils_png/final_congrats.jpg style="width:80%;">
-</p>
+<p align="center"><img src=utils_png/final_congrats.jpg style="width:80%;"></p>
