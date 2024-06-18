@@ -70,32 +70,12 @@ background-color: rgba(255, 255, 255, 100);
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Map name:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnTexture3">
-   <property name="geometry">
-    <rect>
-     <x>510</x>
-     <y>390</y>
-     <width>200</width>
-     <height>150</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/maps/create_a_map.png);
-background-repeat: no-repeat;
-background-position: center;
-color: white;
-font: 20pt;</string>
-   </property>
-   <property name="text">
-    <string>texture 3</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnTexture2">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>410</x>
      <y>390</y>
-     <width>200</width>
+     <width>305</width>
      <height>150</height>
     </rect>
    </property>
@@ -104,7 +84,9 @@ font: 20pt;</string>
 background-repeat: no-repeat;
 background-position: center;
 color: white;
-font: 20pt;</string>
+font: 20pt;
+min-width: 100px;
+min-height: 100px;</string>
    </property>
    <property name="text">
     <string>carrotus
@@ -116,7 +98,7 @@ Texture</string>
     <rect>
      <x>90</x>
      <y>390</y>
-     <width>200</width>
+     <width>305</width>
      <height>150</height>
     </rect>
    </property>
