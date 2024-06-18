@@ -247,7 +247,7 @@ This setup allows players to move around, perform various actions, activate chea
 
 ## Cheats and Secrets
 
-Surprise! If you've made it to this point of the manual, you're in for a treat. "Jazz Jackrabbit 2" includes some hidden cheats that can enhance your gameplay experience. Here's how to activate them:
+Surprise! If you have made it to this point of the manual, you are in for a treat. "Jazz Jackrabbit 2" includes some hidden cheats that can enhance your gameplay experience. Here is how to activate them:
 
 1. **Maximum Ammo**:
    - Press `F1` to get maximum ammo for all type of weapon. Do not tell your friends how did you get this secret!
@@ -256,7 +256,7 @@ Surprise! If you've made it to this point of the manual, you're in for a treat. 
    - Press `F2` to instantly restore your health to its maximum. Keep the action going without fear of getting knocked out!
 
 3. **Invincibility**:
-   - Press `F3` to become invincible! You're practically untouchable with this cheat activated.
+   - Press `F3` to become invincible! You are practically untouchable with this cheat activated.
 
 4. **Instant Respawn**:
    - Press `F4` to instantly respawn at a safe location. Get back into the action without delay!
@@ -265,11 +265,22 @@ These cheats add an extra element of fun and surprise for players, giving you an
 
 ## Enemies
 
+<style>
+    .centered-img {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .centered-img img {
+        width: 50%; /* Ajusta el tamaño de la imagen */
+    }
+</style>
+
 | Enemy | Description |
 |-------|--------|
-|![IMG](utils_png/crab.png) | Watch out for Mr. Crab, scuttling sideways with those big, menacing claws! If you accidentally step on him, he'll give you a "friendly" pinch, just to say hello! |
-| ![IMG](utils_png/lizard.png) | Here comes the lazy lizard, darting back and forth like it's late for a reptilian party! Careful not to bump into it, though, it's not the friendliest of creatures! |
-| ![IMG](utils_png/turtle.png) | Meet the turtle, your slow but steady foe. It's not much of a sprinter, but if you touch it, it might just give you a little love nibble! |
+|<div class="centered-img"><img src="utils_png/crab.png" alt="Crab"></div> | Watch out for Mr. Crab, scuttling sideways with those big, menacing claws! The crab is small and fast, making it a nimble adversary. If you accidentally step on him, he'll give you a "friendly" pinch, just to say hello! |
+| <div class="centered-img"><img src="utils_png/lizard.png" alt="Lizard"></div> | Here comes the lazy lizard, it might seem harmless but be careful not to bump into it, though, it's not the friendliest of creatures! Keep your distance and take it out before it gets too close! |
+| <div class="centered-img"><img src="utils_png/turtle.png" alt="Turtle"></div> | The turtle is a tough nut to crack with its high health. It moves slowly, but don’t be fooled by its pace. If you touch the turtle, it will take away some of your health. Approach with caution and be ready to chip away at its defenses! |
 
 Enemies in this game add a dash of danger and a sprinkle of humor to your adventure. Every time you defeat one of them, you earn a lot of points. Keep your wits about you and don't let their quirky antics catch you off guard!
 
@@ -279,13 +290,13 @@ Whether you're facing off against friends or competing with strangers, remember 
 
 #### Weapons and Ammo
 
-> NOTE: To change your current weapon in a match, press the `W` key
+> REMEMBER: To change your current weapon in a match, press the `W` key.
 
 | Ammo | Description |
 |-------|--------|
-|![IMG]() |  |
-| ![IMG]() |  |
-| ![IMG]() |  |
+|![IMG](utils_png/flamethrower.png) | This fiery weapon unleashes a continuous stream of scorching flames, causing constant damage to anything in its path. Perfect for dealing with multiple enemies at once, the flamethrower turns up the heat and leaves a trail of destruction. Just hold down the trigger and watch your foes burn! |
+| ![IMG](utils_png/sniper.png) | The raygun packs a powerful punch in a short-range blast. This high-tech weapon delivers a burst of energy that does a lot of damage, making it ideal for close encounters. When enemies get too close for comfort, the raygun's intense firepower ensures they won't stay there for long. |
+| ![IMG](utils_png/raygun.png) | For those who prefer to take out enemies from a distance, the sniper rifle is the perfect choice. This long-range weapon deals a significant amount of damage, allowing you to pick off foes before they even know what's hit them. With pinpoint accuracy and devastating power, the sniper rifle turns you into a lethal sharpshooter. |
 
 #### Food
 
@@ -311,3 +322,11 @@ Now, there are three ways the party can wrap up:
 - **Empty Nest**: If everyone decides to hit the road, the party's officially over.
 
 When the game session ends, either because it's finished or because you have decided to leave, you will see the scoreboard pop up. It is a summary of everyone's performance during the game. You can see who scored the most points, who got the most kills, or any other achievements earned during the match. It is a cool way to see how everyone did and celebrate the winners before you head out.
+
+-------
+
+### **Congratulations, you have now got all the tools and tips you need to master Jazz Jackrabbit 2! From understanding the controls and special ammos to knowing your enemies and collecting valuable points, you're well-prepared to jump into the action. Remember, practice makes perfect, so keep honing your skills and discovering all the secrets the game has to offer. Whether you are playing solo or challenging friends, may your adventures be filled with high scores, epic victories, and endless fun. Now, go out there and show the world what a true Jazz Jackrabbit hero looks like! Happy hopping!**
+
+<p align="center">
+  <img src=utils_png/final_congrats.jpg style="width:80%;">
+</p>
