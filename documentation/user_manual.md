@@ -61,9 +61,13 @@ Join Jazz & friends! Jazz is the coolest, fastest, and most daring green rabbit 
    <img src="utils_png/three_characters.jpg" alt="IMG" style="width:60%;">
 </p>
 
-But that's not all – the game also boasts an exceptional multiplayer mode, where you can team up with friends or compete against them in a variety of exciting game modes. Whether you're a seasoned gamer looking for a nostalgic trip or a newcomer eager for a fresh, exhilarating experience, "Jazz Jackrabbit 2" offers endless entertainment. Don't miss out on this classic gem that has captivated gamers for decades – grab your copy today and embark on an unforgettable adventure!
+But that's not all – the game also boasts an exceptional multiplayer mode, where you can team up with friends or compete against them in a variety of exciting game modes. Whether you're a seasoned gamer looking for a nostalgic trip or a newcomer eager for a fresh, exhilarating experience, Jazz Jackrabbit 2 offers endless entertainment. Don't miss out on this classic gem that has captivated gamers for decades – grab your copy today and embark on an unforgettable adventure!
 
-In this repository, we present a remake of Jazz Jackrabbit 2. Our remake retains the core mechanics of the original game while introducing a new objective: to accumulate the maximum amount of points possible within a set time limit. When the time expires, the player with the most points is declared the winner.
+In this epic world, victory is all about racking up those sweet, sweet points! It's like collecting gems while dodging enemies and blasting through levels, but this time, you're competing against other players.
+
+To come out on top, you gotta hustle and earn as many points as you can. Whether you're snatching up carrots, taking down enemies, or pulling off epic moves, every action gets you closer to victory. When the dust settles and the game ends, the player with the most points takes home the crown!
+
+So, grab your blaster, keep your eyes peeled for goodies, and show off your skills to become the ultimate champion of the Jazz Jackrabbit 2 universe!
 
 ## Select a character
 
@@ -204,40 +208,40 @@ This HUD layout is designed to provide you with all the necessary information at
 
 ## Controls
 
-- **Movement**: Left/Right Arrows
-- **Sprint**: Left Shift + Left/Right Arrows
-- **Jump**: Up Arrow
+- **Movement**: `←` or `→`
+- **Sprint**: `Left Shift` + `←` or `→` 
+- **Jump**: `↑`
 - **Special Abilities**:
-  - Lori: Left Ctrl + Left Shift + Up Arrow
-  - Spaz: Left Ctrl + Left/Right Arrow
-  - Jazz: Left Ctrl + Up Arrow
-- **Shoot**: Space
-- **Change Weapon**: W
-- **Quit Game**: Q or Escape
+  - Jazz: `Left Ctrl` + `↑`
+  - Lori: `Left Ctrl` + `Left Shift` + `↑`
+  - Spaz: `Left Ctrl` + `←` / `→` 
+- **Shoot**: `Space`
+- **Change Weapon**: `W`
+- **Quit Game**: `Q` or `Escape`
 
 1. **Movement**:
-   - Pressing the right arrow key moves the character right.
-   - Pressing the left arrow key moves the character left.
-   - Holding Left Shift while moving makes the character move faster.
+   - Pressing the `→` key moves the character right.
+   - Pressing the `←` key moves the character left.
+   - Holding `Left Shift` while moving makes the character move faster.
 
 2. **Jumping**:
-   - Pressing the Up Arrow key makes the character jump.
+   - Pressing the `↑` key makes the character jump.
 
 3. **Special Actions**:
-   - Holding Left Control enables special actions based on the character chosen:
-     - Pressing Up Arrow and Left Shift activates "Special Lori".
-     - Pressing Right Arrow initiates "Special Spaz" facing right.
-     - Pressing Left Arrow initiates "Special Spaz" facing left.
-     - Pressing Up Arrow without Left Shift initiates "Special Jazz".
+   - Holding `Left Ctrl` enables special actions based on the character chosen:
+     - Pressing `↑` and `Left Shift` activates "Special Lori".
+     - Pressing `→` initiates "Special Spaz" facing right.
+     - Pressing `←` initiates "Special Spaz" facing left.
+     - Pressing `↑` without `Left Shift` initiates "Special Jazz".
 
 4. **Shooting**:
-   - Pressing the Space key makes the character shoot.
+   - Pressing the `Space` key makes the character shoot.
 
 5. **Weapon Change**:
-   - Pressing the W key changes the weapon.
+   - Pressing the `W` key changes the weapon.
 
 6. **Quit Game**:
-   - Pressing Q or Escape key quits the game.
+   - Pressing `Q` or `Escape` key quits the game.
 
 This setup allows players to move around, perform various actions, activate cheats, and use special abilities in the game.
 
@@ -293,18 +297,10 @@ However, **be cautious**: not all food is created equal! `Carrots`, for example,
 
 | Item | Description |
 |-------|--------|
-|![IMG]() |  |
-| ![IMG]() |  |
+|![IMG](utils_png/gold_coin.png) | Snagging a gold coin is like striking it rich, instantly boosting your score and filling your pockets with riches. But watch out, they're often guarded by tough enemies or hidden behind tricky obstacles. Only the most daring and skilled players can claim the coveted gold coins and prove themselves as true treasure hunters! |
+| ![IMG](utils_png/gem.png) | Glittering treasures scattered throughout the levels, tempting players with their mesmerizing glow. These sparkling jewels do not just look pretty, they are your ticket to boosting your score! Each gem you collect adds precious points to your tally, making them essential for climbing the leaderboard and claiming victory. Keep your eyes peeled for these shimmering beauties as you dash, jump, and blast your way through the game, because every gem you grab brings you one step closer to triumph! |
 
-## How to win a match
-
-In the epic world of Jazz Jackrabbit 2, victory is all about racking up those sweet, sweet points! It's like collecting gems while dodging enemies and blasting through levels, but this time, you're competing against other players.
-
-To come out on top, you gotta hustle and earn as many points as you can. Whether you're snatching up carrots, taking down enemies, or pulling off epic moves, every action gets you closer to victory. When the dust settles and the game ends, the player with the most points takes home the crown!
-
-So, grab your blaster, keep your eyes peeled for goodies, and show off your skills to become the ultimate champion of the Jazz Jackrabbit 2 universe!
-
-## How to close a match
+## How to close the game
 
 When you are in the game groove with your crew, but suddenly decide it is time to peace out, you can click that little `X` up in the top-right corner.
 
