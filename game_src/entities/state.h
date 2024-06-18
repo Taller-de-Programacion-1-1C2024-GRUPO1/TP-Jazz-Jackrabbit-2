@@ -81,7 +81,7 @@ public:
 
     void update() override {
         time_to_revive++;
-        if (time_to_revive >= (RABBIT_REVIVAL_TIME * 60 /*CAMBIAR POR FPS*/)) {
+        if (time_to_revive >= (RABBIT_REVIVAL_TIME * UPDATE_RATE)) {
             rabbit.revive();
         }
         if (change_status_cooldown > 0) {
@@ -116,7 +116,7 @@ public:
 
     void update() override {
         cooldown_take_damage++;
-        if (cooldown_take_damage >= (RABBIT_DEINTOXICATE_TIME * 60 /*CAMBIAR POR FPS*/)) {
+        if (cooldown_take_damage >= (RABBIT_DEINTOXICATE_TIME * UPDATE_RATE)) {
             rabbit.set_alive();
         }
         if (change_weapon_cooldown > 0) {
@@ -157,7 +157,7 @@ public:
 
     void update() override {
         time_to_deintoxicate++;
-        if (time_to_deintoxicate >= (RABBIT_DEINTOXICATE_TIME * 60 /*CAMBIAR POR FPS*/)) {
+        if (time_to_deintoxicate >= (RABBIT_DEINTOXICATE_TIME * UPDATE_RATE)) {
             rabbit.set_alive();
         }
         if (change_weapon_cooldown > 0) {
