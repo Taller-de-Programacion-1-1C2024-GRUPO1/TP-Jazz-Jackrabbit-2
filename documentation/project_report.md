@@ -36,7 +36,6 @@ For this project, each team member chose to undertake different tasks, involving
 
 - **CLIENT**: Designed and implemented the logic for clients, orchestrating their connection to the server and enabling them to receive game snapshots while sending commands seamlessly. He ensured a smooth and responsive gameplay experience by managing the flow of data between clients and the server, facilitating real-time interactions within the game environment.
 
-
 In addition to the specific responsibilities assigned to each team member, we all applied optimal object-oriented programming logic to ensure a modular and scalable software design. We efficiently employed concepts such as inheritance, encapsulation, polymorphism, and abstraction to create clean and maintainable code.
 
 Throughout the project development, we extensively used core technologies such as sockets for client-server communication, queues for real-time data management, smart pointers for safe memory management, and threads for implementing concurrent operations and maximizing system performance.

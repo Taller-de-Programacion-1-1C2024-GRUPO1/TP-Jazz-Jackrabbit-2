@@ -43,12 +43,11 @@ This project is the final group assignment for the subject 'Taller de Programaci
    Replace `<port>` with the port number you want to use for the server, e.g., `jazz_server 8080`.
 
    *Start a Client*:
-   > **NOTE**: To run the client, due to a temporary issue, you need to run it in the `build` folder.
+   > **NOTE**: For each new player, you will need to open a new terminal and start a new client.
    ```
-   cd build
-   ./jazz_client <host> <port>
+   jazz_client <host> <port>
    ```
-   Replace `<host>` with the hostname or IP address of the server you want to connect to, and `<port>` with the port number used by the server, e.g., `./jazz_client localhost 8080`.
+   Replace `<host>` with the hostname or IP address of the server you want to connect to, and `<port>` with the port number used by the server, e.g., `jazz_client localhost 8080`.
 
 -----------------
 ### Testing
