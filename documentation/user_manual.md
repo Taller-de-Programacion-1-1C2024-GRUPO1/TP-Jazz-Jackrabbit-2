@@ -2,7 +2,7 @@
   <img src=utils_png/game_logo.png>
 </p>
 
-<center> <h1>JAZZ JACKRABBIT 2 - User Manual</h1> </center>
+# USER MANUAL
 
 ## Introduction
 
