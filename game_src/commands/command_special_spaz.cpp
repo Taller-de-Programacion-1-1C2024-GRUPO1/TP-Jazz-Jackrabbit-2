@@ -2,16 +2,6 @@
 
 SpecialSpaz::SpecialSpaz(int id, int dir): Command(id), dir(dir) {}
 
-bool SpecialSpaz::execute_Command(bool* cheatOn, bool& needsMove) {
-    if (dir == RIGHT) {
-        // game_manager.special_lori(this->playerID, this->dir);
-    } else if (dir == LEFT) {
-        // game_manager.special_lori(this->playerID, this->dir);
-    } else {
-        throw std::runtime_error("Invalid direction!");
-    }
-    return needsMove;
-}
 
 void SpecialSpaz::execute_Command(Rabbit& rabbit) { rabbit.special_attack_spaz(dir); }
 

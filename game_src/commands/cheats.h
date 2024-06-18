@@ -12,7 +12,6 @@ private:
 
 public:
     Cheats(int playerID, int cheatID);
-    bool execute_Command(bool* cheatON, bool& needsMove) override { return false; };
     void execute_Command(Rabbit& rabbit) override;
     void send(Protocol& protocol) override;
     int get_playerId() override;

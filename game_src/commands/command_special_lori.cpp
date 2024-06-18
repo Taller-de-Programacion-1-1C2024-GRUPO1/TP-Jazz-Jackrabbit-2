@@ -2,16 +2,6 @@
 
 SpecialLori::SpecialLori(int id, int dir): Command(id), dir(dir) {}
 
-bool SpecialLori::execute_Command(bool* cheatOn, bool& needsMove) {
-    if (dir == UP) {
-        // game_manager.special_lori(playerID);
-    } else if (dir == DOWN) {
-        // game_manager.special_lori(playerID);
-    } else {
-        throw std::runtime_error("Invalid direction!");
-    }
-    return needsMove;
-}
 
 void SpecialLori::execute_Command(Rabbit& rabbit) { rabbit.special_attack_lori(); }
 

@@ -200,8 +200,6 @@ TEST(ProtocolTest, SendAndReceiveSpecialLoriRightERROR) {
     EXPECT_EQ(special_lori->get_playerId(), received_special_lori->get_playerId());
     EXPECT_EQ(special_lori->get_dir(), received_special_lori->get_dir());
     EXPECT_EQ(special_lori->get_commandType(), received_special_lori->get_commandType());
-    EXPECT_ANY_THROW(special_lori->execute_Command(&offCheat, needsMove));
-    EXPECT_ANY_THROW(special_lori->execute_Command(&offCheat, needsMove));
     delete special_lori;
 }
 

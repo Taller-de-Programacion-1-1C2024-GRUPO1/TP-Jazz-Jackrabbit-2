@@ -2,10 +2,6 @@
 
 MoveFaster::MoveFaster(int id, int dir): Command(id), dir(dir) {}
 
-bool MoveFaster::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_manager.moveFasterPlayer(this->playerID, this->dir);
-    return needsMove;
-}
 
 void MoveFaster::execute_Command(Rabbit& rabbit) {
     if (dir == RIGHT) {

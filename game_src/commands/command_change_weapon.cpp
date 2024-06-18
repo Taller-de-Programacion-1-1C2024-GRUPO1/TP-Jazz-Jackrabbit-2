@@ -2,11 +2,6 @@
 
 ChangeWeapon::ChangeWeapon(int id): Command(id) {}
 
-bool ChangeWeapon::execute_Command(bool* cheatOn, bool& needsMove) {
-    // game_world.change_weapon(this->playerID);
-    return needsMove;
-}
-
 void ChangeWeapon::execute_Command(Rabbit& rabbit) { rabbit.change_weapon(); }
 
 void ChangeWeapon::send(Protocol& protocol) { protocol.send_Command(this); }
