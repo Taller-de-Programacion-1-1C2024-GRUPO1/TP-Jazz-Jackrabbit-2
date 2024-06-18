@@ -215,7 +215,7 @@ This HUD layout is designed to provide you with all the necessary information at
   - Spaz: `Left Ctrl` + `←` / `→` 
 - **Shoot**: `Space`
 - **Change Weapon**: `Left Alt`
-- **Quit Game**: `Q` or `Escape`
+- **Quit Game**: `Escape`
 
 1. **Movement**:
    - Pressing the `→` key moves the character right.
@@ -239,7 +239,7 @@ This HUD layout is designed to provide you with all the necessary information at
    - Pressing the `Left Alt` key changes the weapon.
 
 6. **Quit Game**:
-   - Pressing `Q` or `Escape` key quits the game.
+   - Pressing `Escape` key quits the game.
 
 This setup allows players to move around, perform various actions, activate cheats, and use special abilities in the game.
 

@@ -36,7 +36,6 @@ public:
                 this->is_exploding = true;
                 break;
             default:
-                std::cout << "Tipo: " << projectile_type << std::endl;
                 throw std::invalid_argument("Invalid projectile type");
         }
     }

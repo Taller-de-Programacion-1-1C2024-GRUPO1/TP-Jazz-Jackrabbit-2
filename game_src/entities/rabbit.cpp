@@ -76,7 +76,6 @@ void Rabbit::receive_god_mode() { state->execute_godmode(); }
 void Rabbit::respawn() {
     pos_x = spawn_x;
     pos_y = spawn_y;
-    set_state(new Alive(*this));
 }
 
 void Rabbit::revive() {
@@ -84,6 +83,7 @@ void Rabbit::revive() {
     gun_inventory[MACHINE_GUN]->reset_ammo_amount();
     gun_inventory[SNIPER]->reset_ammo_amount();
     current_gun = BASIC_GUN;
+    set_state(new Alive(*this));
     respawn();
 }
 
@@ -142,17 +142,6 @@ void Rabbit::update() {
 
     // NO HAY INERCIA EN EJE X
     spe_x = 0;
-
-    /*
-    printf(action == STAND          ? "STAND\n" :
-           action == RUN            ? "RUN\n" :
-           action == RUN_FAST       ? "RUN_FAST\n" :
-           action == JUMPING        ? "JUMPING\n" :
-           action == FALLING        ? "FALLING\n" :
-           action == SHOOT          ? "SHOOT\n" :
-           action == SPECIAL_ATTACK ? "SPECIAL_ATTACK\n" :
-                                      "DIE\n");
-    */
 }
 
 

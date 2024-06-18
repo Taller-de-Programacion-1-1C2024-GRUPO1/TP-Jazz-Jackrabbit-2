@@ -51,7 +51,6 @@ void User::create_new_match(int number_of_players, const std::string& match_name
     int ACK = monitor_matches.add_new_match(match_name, new_match);
 
     QtResponse response = QtResponse(ACK, NEW_MATCH);
-    std::cout << "ACK ENVIADO: " << ACK << std::endl;
     response.send(container_protocol->protocol);
 
     if (ACK == ERROR) {
@@ -64,7 +63,6 @@ void User::create_new_match(int number_of_players, const std::string& match_name
 void User::join_match(const std::string& match_name, ChampionType character_name) {
     // se fija si el match esta vivo
     int ACK = monitor_matches.join_match(match_name, container_protocol, this->id, character_name);
-    std::cout << "ACK ENVIADO: " << ACK << std::endl;
 
     QtResponse response = QtResponse(ACK, JOIN);
     response.send(container_protocol->protocol);
