@@ -23,7 +23,6 @@
 #include "client_sender.h"
 #include "new_map_info.h"
 
-//#include "client_config.h"
 
 class Client {
 private:
@@ -32,8 +31,7 @@ private:
     Queue<std::unique_ptr<QtResponse>> q_responses;
     int player_id;
     int map_texture;
-    Queue<Snapshot> q_snapshots;  /////////// SI el snapshot no es demasiado grande (200bytes)
-                                  ///(copia) esta bien asi, sino hacerlo en el heap (2kbytes)
+    Queue<Snapshot> q_snapshots;
     ClientSender client_sender;
     ClientReceiver client_receiver;
     ClientDrawer drawer;

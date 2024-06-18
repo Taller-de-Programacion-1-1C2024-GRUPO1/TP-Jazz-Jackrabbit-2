@@ -1,23 +1,10 @@
 #ifndef WAITING_ROOM_H
 #define WAITING_ROOM_H
 
-#include <QApplication>
-#include <QDebug>
-#include <QDialog>
-#include <QFontDatabase>
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QWidget>
-#include <atomic>
-#include <memory>
-#include <thread>
 
-#include "../../common_src/constants.h"
-#include "../../game_src/commands/command.h"
-#include "../../game_src/commands/command_match.h"
-#include "../../game_src/qt_response.h"
-#include "../client_receiver.h"
-#include "../client_sender.h"
+#include <memory>
+
+#include "qt_common_init.h"
 
 namespace Ui {
 class WaitingRoom;
@@ -46,4 +33,4 @@ private:
     std::atomic<bool> stop_thread;
 };
 
-#endif  // WAITING_ROOM_H
+#endif

@@ -38,6 +38,8 @@ public:
     void send(Protocol& protocol) { protocol.send_qt_response(this); }
 
     int get_info_type() const { return response_type; }
+
+    int get_map_texture() const { return response; }
 };
 
 #endif

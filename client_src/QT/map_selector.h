@@ -1,21 +1,9 @@
 #ifndef MAP_SELECTOR_H
 #define MAP_SELECTOR_H
-#include <QApplication>
-#include <QDebug>
-#include <QDialog>
-#include <QFontDatabase>
-#include <QMainWindow>
-#include <QMessageBox>
+
+
 #include <memory>
 #include <string>
-
-#include "../../common_src/constants.h"
-#include "../../game_src/commands/command.h"
-#include "../../game_src/commands/command_match.h"
-#include "../../game_src/qt_response.h"
-#include "../client_receiver.h"
-#include "../client_sender.h"
-#include "../new_map_info.h"
 
 #include "character_selector.h"
 #include "map_creator_lobby.h"

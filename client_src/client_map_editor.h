@@ -120,14 +120,10 @@ public:
         diamond_src = {147, 1241, 29, 30};
         diamond_dst = {32, 256, 32, 32};
 
-        std::cout << "DDDDDDDDDDDDDDDDDd: " << std::endl;
         // ahora cargamos las matrices de texturas
         for (int layer = 0; layer < 5; ++layer) {
-            std::cout << "EEEEEEEEEEEEEEEEEe: " << layer << std::endl;
             for (int i = 0; i < height; ++i) {
-                std::cout << "FFFFFFFFFFFFFFFf: " << i << std::endl;
                 for (int j = 0; j < width; ++j) {
-                    std::cout << "GGGGGGGGGGGGGGGGGGGGGgg: " << j << std::endl;
                     int index = map["layers"][layer]["data"][i][j].as<int>();
                     if (index != -1) {
                         grid[i][j][layer] = textures[index];
@@ -135,13 +131,9 @@ public:
                 }
             }
         }
-        std::cout << "HHHHHHHHHHHHHHHHHHHHHHh: " << std::endl;
         // ahora cargamos las matrices de entidades
         for (int i = 0; i < height; ++i) {
-            std::cout << "IIIIIIIIIIIIIIIIIIIIIIiiiiiiiiii: " << i << std::endl;
             for (int j = 0; j < width; ++j) {
-                std::cout << "JJJJJJJJJJJJJJJ: " << j << std::endl;
-
                 int index = map["layers"][5]["data"][i][j].as<int>();
                 if (index != -1) {
                     entities_grid[i][j] = {index, {0, 0, 0, 0}};

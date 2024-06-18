@@ -22,24 +22,21 @@ void Client::run(int argc, char* argv[]) {
     Q_INIT_RESOURCE(resources);
     ClientLobby w(q_cmds, q_responses, new_map_info, map_texture);
     w.show();
-    int result = a.exec();
+    int qt_result = a.exec();
 
-    if (result == OK) {
-        // SDL
+    // SDL
+    if (qt_result == OK) {
         drawer.run(player_id, map_texture);
-    } else if (result == OK_MAP_CREATOR) {
-        // create map
-        std::cout << "Creando mapa" << std::endl;
+    } else if (qt_result == OK_MAP_CREATOR) {
         Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
                       new_map_info.map_name, new_map_info.max_players);
         editor.run();
-    } else if (result == EDIT_MAP) {
-        std::cout << "EDITANDO MAPA: " << new_map_info.map_name << std::endl;
+    } else if (qt_result == EDIT_MAP) {
         Editor editor(new_map_info.map_name);
         editor.run();
 
     } else {
-        std::cerr << "Cerrando QT" << std::endl;
+        std::cerr << "Closing Lobby" << std::endl;
     }
 }
 

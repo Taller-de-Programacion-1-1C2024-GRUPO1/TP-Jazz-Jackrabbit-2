@@ -6,14 +6,7 @@
 CharacterSelector::CharacterSelector(QWidget* parent):
         QDialog(parent), ui(new Ui::CharacterSelector) {
     ui->setupUi(this);
-
-    // Establecer el fondo
-    QPixmap originalPixmap(":/backgrounds/match_lobby.png");
-    QSize windowSize = this->size();
-    QPixmap scaledPixmap = originalPixmap.scaled(windowSize, Qt::KeepAspectRatioByExpanding);
-    QPalette palette;
-    palette.setBrush(QPalette::Window, scaledPixmap);
-    this->setPalette(palette);
+    qt_common_init(this, ":/backgrounds/match_lobby.png");
 }
 
 CharacterSelector::~CharacterSelector() { delete ui; }

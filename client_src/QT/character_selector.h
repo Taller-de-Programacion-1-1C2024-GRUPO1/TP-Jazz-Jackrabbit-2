@@ -1,6 +1,7 @@
 #ifndef CHARACTER_SELECTOR_H
 #define CHARACTER_SELECTOR_H
 
+
 #include <QApplication>
 #include <QDebug>
 #include <QDialog>
@@ -15,8 +16,8 @@
 #include "../../game_src/commands/command.h"
 #include "../../game_src/commands/command_match.h"
 #include "../../game_src/constants_game.h"
-#include "../client_receiver.h"
-#include "../client_sender.h"
+
+#include "qt_common_init.h"
 
 namespace Ui {
 class CharacterSelector;
@@ -50,4 +51,4 @@ private:
     Ui::CharacterSelector* ui;
 };
 
-#endif  // CHARACTER_SELECTOR_H
+#endif

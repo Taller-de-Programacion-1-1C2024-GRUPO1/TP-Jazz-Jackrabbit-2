@@ -1,9 +1,5 @@
 #include "waiting_room.h"
 
-#include <chrono>
-#include <iostream>
-#include <thread>
-
 #include "ui_waiting_room.h"
 
 WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds,
@@ -14,14 +10,7 @@ WaitingRoom::WaitingRoom(Queue<std::unique_ptr<Command>>& q_cmds,
         q_responses(q_responses),
         stop_thread(false) {
     ui->setupUi(this);
-
-    // Establecer el fondo
-    QPixmap originalPixmap(":/backgrounds/match_lobby.png");
-    QSize windowSize = this->size();
-    QPixmap scaledPixmap = originalPixmap.scaled(windowSize, Qt::KeepAspectRatioByExpanding);
-    QPalette palette;
-    palette.setBrush(QPalette::Window, scaledPixmap);
-    this->setPalette(palette);
+    qt_common_init(this, ":/backgrounds/match_lobby.png");
 
     // Inicia el hilo para esperar la respuesta
     startWaitingForGame();
@@ -49,12 +38,9 @@ void WaitingRoom::startWaitingForGame() {
             }
             if (stop_thread)
                 return;
-
-            std::cout << "Player number EN WAITING ROOM: " << player_number->get_response()
-                      << std::endl;
             if (player_number->get_response() < 0) {
                 QMetaObject::invokeMethod(this, [this]() {
-                    QMessageBox::warning(this, "Error", "error al iniciar la partida");
+                    QMessageBox::warning(this, "WaitingRoom Error: ", "Error starting the match");
                 });
                 return;
             }
@@ -64,9 +50,8 @@ void WaitingRoom::startWaitingForGame() {
             QMetaObject::invokeMethod(
                     this,
                     [this]() {
-                        QMessageBox::warning(
-                                this, "Error",
-                                "Se cerró la cola de respuestas o la cola de comandos");
+                        QMessageBox::warning(this, "WaitingRoom Error: ",
+                                             "The response queue or command queue was closed");
                         reject();
                     },
                     Qt::QueuedConnection);
@@ -75,7 +60,8 @@ void WaitingRoom::startWaitingForGame() {
             QMetaObject::invokeMethod(
                     this,
                     [this]() {
-                        QMessageBox::warning(this, "Error", "No se pudo conectar con el servidor");
+                        QMessageBox::warning(
+                                this, "WaitingRoom Error: ", "Could not connect to the server");
                         reject();
                     },
                     Qt::QueuedConnection);

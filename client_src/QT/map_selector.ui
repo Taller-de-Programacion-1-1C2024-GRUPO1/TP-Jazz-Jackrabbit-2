@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>TP Jazz Jackrabbit 2</string>
   </property>
   <widget class="QLabel" name="labelSelectMap">
    <property name="geometry">
