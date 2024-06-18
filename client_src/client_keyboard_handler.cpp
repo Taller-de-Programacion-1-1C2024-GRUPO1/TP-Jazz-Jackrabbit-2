@@ -18,11 +18,11 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     } else if (state[SDL_SCANCODE_F2]) {
         q_cmds.push(std::make_unique<Cheats>(client_id, MAX_HEALTH));
     } else if (state[SDL_SCANCODE_F3]) {
-        q_cmds.push(std::make_unique<Cheats>(client_id, GODMODE));
-    } else if (state[SDL_SCANCODE_F4]) {
         q_cmds.push(std::make_unique<Cheats>(client_id, RESPAWN));
+    } else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_I] && state[SDL_SCANCODE_P] &&
+               state[SDL_SCANCODE_A]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, GODMODE));
     }
-
 
     if (state[SDL_SCANCODE_RIGHT]) {
         if (state[SDL_SCANCODE_LSHIFT]) {

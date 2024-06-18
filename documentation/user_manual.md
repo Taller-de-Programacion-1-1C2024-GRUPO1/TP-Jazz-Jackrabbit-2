@@ -253,11 +253,8 @@ Surprise! If you have made it to this point of the manual, you are in for a trea
 2. **Instant Health Restore**:
    - Press `F2` to instantly restore your health to its maximum. Keep the action going without fear of getting knocked out!
 
-3. **God Mode**:
-   - Press `F3` to become literaly god! You are practically untouchable with this cheat activated.
-
-4. **Instant Respawn**:
-   - Press `F4` to instantly respawn at a safe location. Get back into the action without delay!
+3. **Instant Respawn**:
+   - Press `F3` to instantly respawn at a safe location. Get back into the action without delay!
 
 These cheats add an extra element of fun and surprise for players, giving you an edge or allowing you to experiment with the game's mechanics in unexpected ways. Enjoy the adventure and make the most of these hidden secrets!
 
@@ -312,6 +309,6 @@ When the game session ends, either because it's finished or because you have dec
 
 -------
 
-### **Congratulations, you have now got all the tools and tips you need to master Jazz Jackrabbit 2! From understanding the controls and special ammos to knowing your enemies and collecting valuable points, you're well-prepared to jump into the action. Remember, practice makes perfect, so keep honing your skills and discovering all the secrets the game has to offer. Whether you are playing solo or challenging friends, may your adventures be filled with high scores, epic victories, and endless fun. Now, go out there and show the world what a true Jazz Jackrabbit hero looks like! Happy hopping!**
+### **Congratulations, you have now got all the tools and tips you need to master Jazz Jackrabbit 2! From understanding the controls and special ammos to knowing your enemies and collecting valuable points, you're well-prepared to jump into the action. Remember, practice makes perfect, so keep honing your skills and discovering all the secrets the game has to offer. Whether you are playing solo or challenging friends, may your adventures be filled with high scores, epic victories, and endless fun. Thank you very much for reading the entire manual. Here's a gift from the developers: "DIPA". Now, go out there and show the world what a true Jazz Jackrabbit hero looks like! Happy hopping!**
 
 <p align="center"><img src=utils_png/final_congrats.jpg style="width:80%;"></p>
