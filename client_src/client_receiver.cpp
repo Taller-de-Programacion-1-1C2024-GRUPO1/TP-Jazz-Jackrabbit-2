@@ -29,13 +29,14 @@ void ClientReceiver::run() {
                 q_snapshots.push(snap);
             }
         } catch (const ClosedQueue& e) {
-            std::cerr << "Client Receiver: Snapshot queue or Responses queue closed" << std::endl;
+            // std::cerr << "Client Receiver: Snapshot queue or Responses queue closed" <<
+            // std::endl;
             break;
         } catch (const SocketClosed& e) {
-            std::cerr << "Client Receiver: The socket was closed" << std::endl;
+            // std::cerr << "Client Receiver: The socket was closed" << std::endl;
             break;
         } catch (const std::exception& e) {
-            std::cerr << "Client Receiver: error receiving snapshot or response" << std::endl;
+            // std::cerr << "Client Receiver: error receiving snapshot or response" << std::endl;
             break;
         }
     }

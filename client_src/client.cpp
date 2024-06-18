@@ -36,7 +36,7 @@ void Client::run(int argc, char* argv[]) {
         editor.run();
 
     } else {
-        std::cerr << "Closing Lobby" << std::endl;
+        std::cerr << "Closing Lobby..." << std::endl;
     }
 }
 

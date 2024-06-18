@@ -44,7 +44,6 @@ private:
         if (file.is_open()) {
             while (std::getline(file, line)) {
                 map_paths.push_back(BASE_MAPS_PATH + line);
-                std::cout << "Map file: " << line << std::endl;
             }
             file.close();
         } else {

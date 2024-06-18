@@ -12,7 +12,7 @@ public:
     void setAmmoFromSnapshot(const int ammo_type) {
         SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
         this->setTexture(PROJECTILES_PNG, color);
-        std::cout << "Ammo type: " << ammo_type << "\n";
+        // std::cout << "Ammo type: " << ammo_type << "\n";
         switch (ammo_type) {
             case SNIPER_AMMO:
                 this->loadAnimations(SNIPER_ANIMATIONS);

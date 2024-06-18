@@ -37,7 +37,6 @@ std::vector<std::string> MonitorMatches::show_maps_availables() {
     std::vector<std::string> availableMaps;
     for (auto& map: maps) {
         // no tomar los que comienzen con el prefijo: "DEFAULT"
-        std::cout << "Mapa: " << map.first << std::endl;
         if (map.first.find("default") != std::string::npos) {
             continue;
         }

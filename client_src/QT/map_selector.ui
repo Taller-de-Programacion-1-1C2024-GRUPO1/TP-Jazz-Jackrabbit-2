@@ -39,7 +39,6 @@
     <string notr="true">background-image: url(:/maps/jungle.png);
 background-repeat: no-repeat;
 background-position: center;
-background-size: cover;
 color: white;
 font: 20pt;</string>
    </property>
@@ -60,7 +59,6 @@ font: 20pt;</string>
     <string notr="true">background-image: url(:/maps/carrotus.png);
 background-repeat: no-repeat;
 background-position: center;
-background-size: cover;
 color: white;
 font: 20pt;</string>
    </property>
@@ -81,7 +79,6 @@ font: 20pt;</string>
     <string notr="true">background-image: url(:/maps/create_a_map.png);
 background-repeat: no-repeat;
 background-position: center;
-background-size: cover;
 color: white;
 font: 20pt;</string>
    </property>
@@ -177,7 +174,6 @@ background-color: rgba(255, 255, 255, 100);
     <string notr="true">background-image: url(:/maps/custom.png);
 background-repeat: no-repeat;
 background-position: center;
-background-size: cover;
 color: white;
 font: 20pt;</string>
    </property>

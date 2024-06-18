@@ -72,7 +72,7 @@ void Gameloop::run() {
     Snapshot final_snapshot = map.get_snapshot(game_duration_seconds);
     final_snapshot.set_end_game();
     push_all_players(final_snapshot);
-    std::cout << "Finalizando juego..." << std::endl;
+    std::cout << "Closing match..." << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 

@@ -107,6 +107,7 @@ public:
         PhysicalMap physical_map = PhysicalMap(width, height, physic_map);
 
         // print map
+        /*
         std::cout << "PRINTING MAP..." << std::endl;
 
         for (int y = 0; y < height; y++) {
@@ -115,6 +116,7 @@ public:
             }
             std::cout << std::endl;
         }
+        */
 
         return physical_map;
     }

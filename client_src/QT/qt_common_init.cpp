@@ -1,9 +1,10 @@
 #include "qt_common_init.h"
-#include <QFontDatabase>
+
 #include <QApplication>
-#include <QPixmap>
-#include <QPalette>
 #include <QDebug>
+#include <QFontDatabase>
+#include <QPalette>
+#include <QPixmap>
 
 QString qt_common_init(QWidget* widget, const QString& backgroundPath) {
     QPixmap pixmap(backgroundPath);
@@ -20,9 +21,8 @@ QString qt_common_init(QWidget* widget, const QString& backgroundPath) {
         QApplication::setFont(font);
         return fontFamily;
     } else {
-        qWarning() << "Could not load font: " << "04B_30__.ttf";
+        qWarning() << "Could not load font: "
+                   << "04B_30__.ttf";
         return "";
     }
 }
-
-

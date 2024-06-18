@@ -417,7 +417,7 @@ public:
                             // Click en la grilla dibujable
                             // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
                             // SCREEN_HEIGHT)
-                            std::cout << "x: " << x << " y: " << y << std::endl;
+                            // std::cout << "x: " << x << " y: " << y << std::endl;
                             if (mode == TEXTURE) {
                                 int gridX =
                                         (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
@@ -714,7 +714,7 @@ private:
             if (!nameExists) {
                 mapsFile << name << ".yml" << '\n';
             } else {
-                std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
+                // std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
             }
         } else {
             std::cerr << "Unable to open maps.txt for writing.\n";

@@ -104,8 +104,6 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
 int ClientDrawer::run(int player_id, int map_texture) try {
     client_id = player_id;
     keyboard_handler.setId(player_id);
-    std::cout << "My id is: " << client_id << std::endl;
-    std::cout << "Map texture: " << map_texture << std::endl;
 
     // Initialize SDL library
     SDL sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO);

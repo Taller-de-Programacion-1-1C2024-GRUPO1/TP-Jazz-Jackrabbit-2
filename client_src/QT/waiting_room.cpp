@@ -26,7 +26,6 @@ WaitingRoom::~WaitingRoom() {
 
 void WaitingRoom::startWaitingForGame() {
     waiting_thread = std::thread([this]() {
-        std::cout << "Waiting for game to start" << std::endl;
         std::unique_ptr<QtResponse> player_number;
         try {
             while (!stop_thread) {

@@ -410,8 +410,6 @@ void Protocol::send_qt_response(QtResponse* qt_response) {
     send_uintEight(qt_response->get_info_type());
     send_uintEight(qt_response->get_response());
     send_info_available(qt_response->get_info_available());
-    std::cout << "Enviando QTResponse: " << qt_response->get_response() << " "
-              << qt_response->get_info_type() << std::endl;
 }
 
 
@@ -421,7 +419,6 @@ std::unique_ptr<QtResponse> Protocol::receive_qt_response() {
     int response = receive_uintEight();
     std::tuple<std::vector<std::string>, std::vector<std::string>> info_available =
             receive_info_available();
-    std::cout << "Recibiendo QTResponse: " << response << " " << response_type << std::endl;
     if (response_type == REFRESH) {
         return std::make_unique<QtResponse>(info_available, response_type);
     }

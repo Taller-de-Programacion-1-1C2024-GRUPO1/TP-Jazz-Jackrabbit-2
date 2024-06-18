@@ -12,11 +12,11 @@ void ClientSender::run() {
             cmd->send(this->protocol);
 
         } catch (const ClosedQueue& e) {
-            std::cerr << "Command queue was closed" << std::endl;
+            // std::cerr << "Command queue was closed" << std::endl;
             break;
         } catch (const std::exception& e) {
-            std::cerr << "Client SENDER: error sending command or the server was forcibly closed"
-                      << std::endl;
+            // std::cerr << "Client SENDER: error sending command or the server was forcibly closed"
+            // << std::endl;
             break;
         }
     }

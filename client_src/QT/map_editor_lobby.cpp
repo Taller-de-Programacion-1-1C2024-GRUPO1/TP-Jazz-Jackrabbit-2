@@ -36,7 +36,6 @@ void MapEditorLobby::on_btnRefresh_clicked() {
             }
             ui->comboBoxMaps->clear();
             for (const std::string& map: maps) {
-                std::cout << "Maps: " << map << std::endl;
                 ui->comboBoxMaps->addItem(QString::fromStdString(map));
             }
 
