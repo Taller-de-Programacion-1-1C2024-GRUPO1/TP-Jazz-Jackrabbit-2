@@ -26,8 +26,6 @@ private slots:
 
     void on_btnTexture2_clicked();
 
-    void on_btnTexture3_clicked();
-
 private:
     NewMapInfo& new_map_info;
     Ui::MapCreatorLobby* ui;

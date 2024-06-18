@@ -22,13 +22,6 @@ void MapCreatorLobby::on_btnTexture1_clicked() { start_creating_map(JUNGLE); }
 void MapCreatorLobby::on_btnTexture2_clicked() { start_creating_map(CARROTUS); }
 
 
-void MapCreatorLobby::on_btnTexture3_clicked() {
-    start_creating_map(
-            CARROTUS);  // ACA SELECCIONO LA TEXTURA
-                        // ////////////////////////////////////////////////////////////////////////////////
-}
-
-
 void MapCreatorLobby::start_creating_map(int texture) {
     std::string map_name = ui->txtMapName->toPlainText().toStdString();
     if (map_name.empty()) {
