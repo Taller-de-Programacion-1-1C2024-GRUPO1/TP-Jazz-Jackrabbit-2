@@ -214,7 +214,7 @@ This HUD layout is designed to provide you with all the necessary information at
   - Lori: `Left Ctrl` + `Left Shift` + `↑`
   - Spaz: `Left Ctrl` + `←` / `→` 
 - **Shoot**: `Space`
-- **Change Weapon**: `W`
+- **Change Weapon**: `Left Alt`
 - **Quit Game**: `Q` or `Escape`
 
 1. **Movement**:
@@ -236,7 +236,7 @@ This HUD layout is designed to provide you with all the necessary information at
    - Pressing the `Space` key makes the character shoot.
 
 5. **Weapon Change**:
-   - Pressing the `W` key changes the weapon.
+   - Pressing the `Left Alt` key changes the weapon.
 
 6. **Quit Game**:
    - Pressing `Q` or `Escape` key quits the game.
@@ -253,8 +253,8 @@ Surprise! If you have made it to this point of the manual, you are in for a trea
 2. **Instant Health Restore**:
    - Press `F2` to instantly restore your health to its maximum. Keep the action going without fear of getting knocked out!
 
-3. **Invincibility**:
-   - Press `F3` to become invincible! You are practically untouchable with this cheat activated.
+3. **God Mode**:
+   - Press `F3` to become literaly god! You are practically untouchable with this cheat activated.
 
 4. **Instant Respawn**:
    - Press `F4` to instantly respawn at a safe location. Get back into the action without delay!

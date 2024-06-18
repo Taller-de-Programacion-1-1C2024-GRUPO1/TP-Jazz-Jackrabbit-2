@@ -13,17 +13,16 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
     // CHECK CHEATS
-    if (state[SDL_SCANCODE_GRAVE]) {
-        if (state[SDL_SCANCODE_1]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, MAX_AMMO));
-        } else if (state[SDL_SCANCODE_2]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, MAX_HEALTH));
-        } else if (state[SDL_SCANCODE_3]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, GODMODE));
-        } else if (state[SDL_SCANCODE_4]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, RESPAWN));
-        }
+    if (state[SDL_SCANCODE_F1]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, MAX_AMMO));
+    } else if (state[SDL_SCANCODE_F2]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, MAX_HEALTH));
+    } else if (state[SDL_SCANCODE_F3]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, GODMODE));
+    } else if (state[SDL_SCANCODE_F4]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, RESPAWN));
     }
+
 
     if (state[SDL_SCANCODE_RIGHT]) {
         if (state[SDL_SCANCODE_LSHIFT]) {
@@ -42,17 +41,17 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
         if (state[SDL_SCANCODE_UP]) {
             if (state[SDL_SCANCODE_LSHIFT]) {
                 q_cmds.push(std::make_unique<SpecialLori>(client_id, RIGHT));
-                std::cout << "Special Lori" << std::endl;
+                // std::cout << "Special Lori" << std::endl;
             } else {
                 q_cmds.push(std::make_unique<SpecialJazz>(client_id));
-                std::cout << "Special Jazz" << std::endl;
+                // std::cout << "Special Jazz" << std::endl;
             }
         } else if (state[SDL_SCANCODE_RIGHT]) {
             q_cmds.push(std::make_unique<SpecialSpaz>(client_id, RIGHT));
-            std::cout << "Special Spaz" << std::endl;
+            // std::cout << "Special Spaz" << std::endl;
         } else if (state[SDL_SCANCODE_LEFT]) {
             q_cmds.push(std::make_unique<SpecialSpaz>(client_id, LEFT));
-            std::cout << "Special Spaz" << std::endl;
+            // std::cout << "Special Spaz" << std::endl;
         }
     }
 
@@ -62,7 +61,7 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     if (state[SDL_SCANCODE_SPACE]) {
         q_cmds.push(std::make_unique<Shoot>(client_id));
     }
-    if (state[SDL_SCANCODE_W]) {
+    if (state[SDL_SCANCODE_LALT]) {
         q_cmds.push(std::make_unique<ChangeWeapon>(client_id));
     }
     if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {

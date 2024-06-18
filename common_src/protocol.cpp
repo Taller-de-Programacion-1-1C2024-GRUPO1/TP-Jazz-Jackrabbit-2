@@ -71,9 +71,7 @@ void Protocol::send_map(int width, int heigth, DynamicMap map) {
         for (int y = 0; y < heigth; y++) {
             for (int x = 0; x < width; x++) {
                 send_uintSixteen(key_value.second[x][y]);
-                std::cout << key_value.second[x][y] << " ";
             }
-            std::cout << std::endl;
         }
     }
     check_closed();
