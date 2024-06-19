@@ -10,6 +10,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include "client_drawable.h"
+#include "client_textures_provider.h"
 
 const int TILE_WIDTH = 10;
 const int BLOCK_SIZE = 32;
@@ -17,13 +18,23 @@ const int BLOCK_SIZE = 32;
 class MapLoader {
 private:
     Renderer& renderer;
+    std::shared_ptr<SDL2pp::Texture> texture;
 
 public:
-    explicit MapLoader(Renderer& renderer): renderer(renderer) {}
+    explicit MapLoader(Renderer& renderer, const int map_texture): renderer(renderer) {
+        switch (map_texture) {
+            case JUNGLE:
+                texture = TexturesProvider::getTexture("Jungle");
+                break;
+            case CARROTUS:
+                texture = TexturesProvider::getTexture("Carrotus");
+                break;
+            default:
+                throw std::invalid_argument("Invalid map texture");
+        }
+    }
 
     std::vector<std::unique_ptr<Drawable>> loadMap(const DynamicMap& map,
-                                                   const std::string& texturePath,
-                                                   const SDL2pp::Color& colorKey,
                                                    SDL2pp::Point& cameraPosition) {
         std::vector<std::unique_ptr<Drawable>> tiles;
         const auto& data = map.map_data;
@@ -51,7 +62,7 @@ public:
 
                             std::unique_ptr<Drawable> drawable = std::make_unique<Drawable>(
                                     renderer, cameraPosition, srcRect, destRect);
-                            drawable->setTexture(texturePath, colorKey);
+                            drawable->setTexture(texture);
                             tiles.push_back(std::move(drawable));
                         }
                         x++;

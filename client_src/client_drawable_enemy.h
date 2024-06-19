@@ -2,6 +2,7 @@
 #define CLIENT_DRAWABLE_ENEMY_H
 
 #include "client_shifting_drawable.h"
+#include "client_textures_provider.h"
 
 class DrawableEnemy: public ShiftingDrawable {
 public:
@@ -10,18 +11,17 @@ public:
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setEnemyFromSnapshot(const int enemy_type) {
-        SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
         switch (enemy_type) {
             case CRAB:
-                this->setTexture(ENEMIES_PNG, color);
+                this->setTexture(TexturesProvider::getTexture("Enemies"));
                 this->loadAnimations(CRAB_ANIMATIONS);
                 break;
             case LIZARD:
-                this->setTexture(ENEMIES_PNG, color);
+                this->setTexture(TexturesProvider::getTexture("Enemies"));
                 this->loadAnimations(LIZARD_ANIMATIONS);
                 break;
             case TURTLE:
-                this->setTexture(TURTLE_PNG, color);
+                this->setTexture(TexturesProvider::getTexture("Turtle"));
                 this->loadAnimations(TURTLE_ANIMATIONS);
                 break;
         }
