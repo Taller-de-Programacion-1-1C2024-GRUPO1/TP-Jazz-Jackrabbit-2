@@ -55,11 +55,14 @@ void PhysicalMap::check_colision_with_map(int pos_x, int pos_y, int width, int h
         }
     }
 
-
     if ((map[x0][y2]) == DIAG_LEFT_OBJ) {
-        character->is_on_left_slope();
+        if ((pos_x % BLOCK_DIVISION) <= pos_y % BLOCK_DIVISION) {
+            character->is_on_left_slope();
+        }
     } else if ((map[x2][y2]) == DIAG_RIGHT_OBJ) {
-        character->is_on_right_slope();
+        if (pos_y % BLOCK_DIVISION >= (BLOCK_DIVISION - (pos_x % BLOCK_DIVISION))) {
+            character->is_on_right_slope();
+        }
     }
 
     /*
