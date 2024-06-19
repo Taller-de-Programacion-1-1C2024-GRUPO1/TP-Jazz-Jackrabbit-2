@@ -60,6 +60,7 @@ using SDL2pp::Window;
 #include "client_map_loader.h"
 #include "client_number_images.h"
 #include "client_sound_manager.h"
+#include "client_textures_provider.h"
 
 class ClientDrawer {
 private:

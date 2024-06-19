@@ -3,6 +3,7 @@
 
 #include "client_constants.h"
 #include "client_shifting_drawable.h"
+#include "client_textures_provider.h"
 
 class DrawableProjectile: public ShiftingDrawable {
 private:
@@ -16,8 +17,7 @@ public:
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setProjectileFromSnapshot(const int projectile_type) {
-        SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
-        this->setTexture(PROJECTILES_PNG, color);
+        this->setTexture(TexturesProvider::getTexture("Projectiles"));
         switch (projectile_type) {
             case BASIC_GUN:
                 this->loadAnimations(REGULAR_ANIMATIONS);

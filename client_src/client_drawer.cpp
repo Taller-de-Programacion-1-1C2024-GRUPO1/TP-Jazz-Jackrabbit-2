@@ -101,6 +101,7 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
     renderer.Present();
 }
 
+
 int ClientDrawer::run(int player_id, int map_texture) try {
     client_id = player_id;
     keyboard_handler.setId(player_id);
@@ -119,26 +120,17 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Background image
+    TexturesProvider::init(renderer);
+
     Texture background(renderer, SDL2pp::Surface(FONDO_PNG));
 
-    SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
-    SDL_Color mapColor = {87, 0, 203, 0};
-    MapLoader mapLoader(renderer);
+    MapLoader mapLoader(renderer, map_texture);
+
 
     SDL2pp::Point playerPosition(10, 10);
     SDL2pp::Point cameraPosition(0, 0);
     SDL2pp::Point desiredCameraPosition(0, 0);
     float lerpFactor = 0.1f;
-
-    std::string map_texture_path;
-    switch (map_texture) {
-        case JUNGLE:
-            map_texture_path = JUNGLE_TILES_PNG;
-            break;
-        case CARROTUS:
-            map_texture_path = CARROTUS_TILES_PNG;
-            break;
-    }
 
     // Number images
     NumberImages numberImages(renderer);
@@ -162,8 +154,8 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
     game_running = !initial_snapshot.get_end_game();
     clock.update(initial_snapshot.get_match_time());
-    std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
-            initial_snapshot.map_dimensions.map_data, map_texture_path, mapColor, cameraPosition);
+    std::vector<std::unique_ptr<Drawable>> mapComponents =
+            mapLoader.loadMap(initial_snapshot.map_dimensions.map_data, cameraPosition);
 
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
@@ -232,7 +224,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                    supply.supply_type == HAMBURGER || supply.supply_type == ROTTEN_CHEESE) {
             SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
             Drawable* newFood = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
+            newFood->setTexture(TexturesProvider::getTexture("Items"));
             food.emplace(supply.id, newFood);
         }
     }
@@ -473,7 +465,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                         SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
                         Drawable* newFood =
                                 new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
+                        newFood->setTexture(TexturesProvider::getTexture("Items"));
                         food.emplace(supply.id, newFood);
                     } else {
                         foodIds.erase(supply.id);

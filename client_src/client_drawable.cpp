@@ -15,12 +15,7 @@ Drawable::Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& 
         textureRect(textureRect),
         onMapRect(onMapRect) {}
 
-void Drawable::setTexture(const std::string& path, const SDL2pp::Color& colorKey) {
-    SDL2pp::Surface surface(path);
-    Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
-    texture = std::make_unique<SDL2pp::Texture>(renderer, surface);
-}
+void Drawable::setTexture(std::shared_ptr<SDL2pp::Texture> texture) { this->texture = texture; }
 
 void Drawable::setSourceRect(const SDL2pp::Rect& rect) { textureRect = rect; }
 

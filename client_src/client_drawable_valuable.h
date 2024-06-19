@@ -2,6 +2,7 @@
 #define CLIENT_VALUABLE_H
 
 #include "client_shifting_drawable.h"
+#include "client_textures_provider.h"
 
 class DrawableValuable: public ShiftingDrawable {
 
@@ -11,8 +12,7 @@ public:
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setValuableFromSnapshot(const int valuable_type) {
-        SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
-        this->setTexture(ITEMS_PNG, color);
+        this->setTexture(TexturesProvider::getTexture("Items"));
         switch (valuable_type) {
             case COIN:
                 this->loadAnimations(COIN_ANIMATIONS);

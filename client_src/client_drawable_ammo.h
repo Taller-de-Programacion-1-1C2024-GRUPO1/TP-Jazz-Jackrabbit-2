@@ -2,6 +2,7 @@
 #define CLIENT_DRAWABLE_AMMO_H
 
 #include "client_shifting_drawable.h"
+#include "client_textures_provider.h"
 
 class DrawableAmmo: public ShiftingDrawable {
 public:
@@ -10,9 +11,7 @@ public:
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setAmmoFromSnapshot(const int ammo_type) {
-        SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
-        this->setTexture(PROJECTILES_PNG, color);
-        // std::cout << "Ammo type: " << ammo_type << "\n";
+        this->setTexture(TexturesProvider::getTexture("Items"));
         switch (ammo_type) {
             case SNIPER_AMMO:
                 this->loadAnimations(SNIPER_ANIMATIONS);
