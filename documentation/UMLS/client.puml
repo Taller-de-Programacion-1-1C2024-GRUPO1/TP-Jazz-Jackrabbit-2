@@ -1,0 +1,133 @@
+https://www.plantuml.com/plantuml/png/fLPVJniv47_Ffx3w4544xTqzabnK2g55fK2JS7zqEgqcwqbYyDfRsviGq7ttcrrxwsLJLaBa8HwFVpEU_zuFre5nHIPxgGHhsOaKg1nxx37wNHljTAebomCngDZV2YnmQ1q_EYgK-5vWaZipFD5P1egFHknxacRSTc6_kGdQN2kB5To4JP0Hoh5SmXPD8dXaPP0d3kzTOR2fUweWjoljIaKsq46HTsQAYgDXQRL9RBLhdaymHR6E21FsJSofWGqXE2trmILkla9-hXQQATmafNM2DWFs_ZsxiSZPV1k4B_HylkrLGcijE3E5sYiT0hDC3rYw0hDVqkj__dqxwFtNYvc8nW-7ivL1eEYsKjD_MMxwJv9JmS3fJAJ3kTPonEuGASWWxuHQFeSHDW590HgqN7hh1KfGYU48d7WHSoUat6jx6CF_2XVR9TLlrTHkhVJRnVBwO8GoxSVIVM56NX_DMAYFBow6xWX5MvQGOK86AXyKxtJTEirsjQas6BTba8AUqaQOIvp0V2xSVYrigcqZqDHIGn8zQ0kCc8VQBknOORObAD8gi1DAXNQBgHCI2P_NcswPFq0Mj9OIwq1sue-pJ1CMQ4cuqNadc80BhMCiWx_9Hd2tsk6kK2nN8MvVS3lNOFXdK5oYONTXdwmyOz2BqduAnN8zQ4_PPhbH6MmkD73A-ZGrY6flKaqcD7rc0jN6dma5ybaqJJwjh6DrnVMP3LIxgiC4VLbHls9MnCdUVphQdtsAeizrZz8Z09mB9xG2oS0v8-Q5Gyj0SPQXMsbkASccwM3qEbh07cETM6Se_DNb2h96RxNg8XQ4tpSj3URV9pxjmUFeGsu84EuEuoNOD2PlT3rPfgSNl-NvqH6jp78vQ3FFCrWY4-N_pjbiTiQSMtZ-dq9nlM6RQl6ikbH-L4gZLTQOEcryGkqA3F8geRNscVTqDAfzjhkodNINJjAwD8BlQgmH39KJJg2TrPTNTV3922c1SQpEEN2qdKQDIotRKLIN-6lZP4L9IEJXcdF5yPxzpWv_7Un0lAwV8bAZfRnQB2mwElfbmC8lLEyfsbp20sHbUMgsHkD42fBbO819OClQgn1giB7-j14FMZbg_jrBTbL7-8vowfdRSY3MgcipTXLtMzsfEBPGgQdTHe7Nwi6o_-ZapPidJNNjUogAnEuhqIV7aydLx6OQpzB265JElslJ73Og25U8cTQoXfGq7LqVdr_E1goLgyzeZ7SP6AIk0Dc-uQ8qZEG_7fzy-JIvkhayJIwE_nvFV49E87yY-5LpP1dzaSHi_DViPZ8ETxOk9g1k2fvfkd91VtKdfuxTmiD3Oarwu2bk7Kr-0_EIvodFa-813FTSJti-1Sz9zFn0b_nUqvHK2-KH9UNbk81Cgw2mtj091RUtywqLzzp0vcFXdFQluxr_5RT-sVXb5TwkyEqkOOxom7yUrOtNL6bXZJHIwt7g9pxRFpny-er_n5A3uD2s4V4RkO6fGTg3ugSVGSfc4kg7ddVlHirdXX25ZRSS7euQxmqTwaqG3VWs8eX_GCMBJFuF
+
+@startuml
+class Client {
+    Protocol protocol;
+    Queue<std::unique_ptr<Command>> q_cmds;
+    Queue<std::unique_ptr<QtResponse>> q_responses;
+    int player_id;
+    int map_texture;
+    Queue<Snapshot> q_snapshots;
+    ClientSender client_sender;
+    ClientReceiver client_receiver;
+    ClientDrawer drawer;
+    NewMapInfo new_map_info; // Used by ClientLobby
+
+    void run(int argc, char* argv[]);
+}
+
+class ClientSender <<Thread>> {
+    Protocol& protocol;
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    std::atomic<bool> keep_talking;
+    std::atomic<bool> is_alive;
+
+    void run();
+    bool is_dead();
+    void kill();
+}
+
+class ClientReceiver<<Thread>> {
+    Protocol& protocol;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    Queue<Snapshot>& q_snapshots;
+    std::atomic<bool> keep_talking;
+    std::atomic<bool> is_alive;
+    int& player_id;
+    Queue<std::unique_ptr<Command>>& q_cmds;
+
+    void run();
+    bool is_dead();
+    void kill();
+}
+
+class ClientDrawer {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<Snapshot>& q_snapshots;
+    bool game_running;
+    int client_id;
+    int score;
+    int lives;
+    DrawableRabbit* client_rabbit;
+    std::map<int, DrawableRabbit*> rabbits;
+    std::map<int, DrawableEnemy*> enemies;
+    std::map<int, DrawableProjectile*> projectiles;
+    std::map<int, DrawableValuable*> valuables;
+    std::map<int, DrawableAmmo*> ammo_drops;
+    std::map<int, Drawable*> food;
+    int rabbit_width;
+    int rabbit_height;
+    KeyboardHandler keyboard_handler;
+
+    int run(int player_id, int map_texture);
+    void showLoadingScreen(Renderer& renderer);
+    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot);
+}
+
+class ClientLobby {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    NewMapInfo& new_map_info;
+    int map_texture;
+    void show();
+    // additional attributes and methods for ClientLobby
+}
+
+class NewMapInfo {
+    std::string map_name;
+    int width;
+    int height;
+    int texture;
+    int max_players;
+    
+    void printMapInfo();
+}
+
+
+class Editor {
+    SDL2pp::SDL sdl;
+    SDL2pp::SDLImage image;
+    SDL2pp::SDLTTF ttf;
+    Window window;
+    Renderer renderer;
+    std::vector<std::shared_ptr<SDL2pp::Texture>> textures;
+    std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>> grid;
+    std::vector<Texture> entitiesTextures;  // Grilla de entidades
+    std::vector<std::vector<Entity>> entities_grid;
+
+    int selectedTextureIndex = -1;
+    int selectedEntityIndex = -1;
+    int scrollOffset = 0;            // Desplazamiento vertical para la grilla de texturas
+    int horizontalScrollOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
+    int verticalScrollOffset = 0;    // Desplazamiento vertical para la grilla dibujable
+    int width = 0;
+    int height = 0;
+    std::string name = "";
+    int maxPlayers = 0;
+    int texture = CARROTUS;
+    int currentRabbitSpawns = 0;
+
+    Tool currentTool = PAINT;             // Herramienta actual
+    int currentLayer = BACKGROUND_LAYER;  // Capa actual
+    Mode mode = TEXTURE;                  // Modo actual
+    Font font;
+    Rect jazz_src, jazz_dst, crab_src, crab_dst, lizard_src, lizard_dst, turtle_src, turtle_dst,
+            coin_src, coin_dst, diamond_src, diamond_dst;
+
+
+
+
+    void run();
+    void drawButton(int x, int y, int w, int h, const char* label, bool selected);
+    void saveMap();
+}
+
+
+Client *-- ClientSender : creates
+Client *-- ClientReceiver : creates
+
+Client o-- ClientDrawer : contains
+Client ..> ClientLobby : uses
+Client --> NewMapInfo : owns
+ClientLobby --> NewMapInfo : uses
+@enduml

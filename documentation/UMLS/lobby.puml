@@ -1,0 +1,80 @@
+https://www.plantuml.com/plantuml/png/pLMnRjim4Dtr5PoCTl3GZh8X170pD8YBsZ6GKJYBbvYeo5D8ggvTzDyhYtQhd0Yso134aybx9xx7UtUySXwiRtMTLJKu9nQrGkDlQRizYFbyjGHbxfMHj2yAyJCJtM_LOejpvsMUjqOzjLWstiuNf3KOMHGJyLHMMhfP0hpoQtGD6OS1Ry-hSz9Y1xfHP3Q71eN36YkFignsOA7xPmFe2-wNq7ms3pGH1lUbXgPKtIf4bV4JSTho-CEt5cTPl_sTb1Haogqt2ulWSGc-sfLLhQflAD-zdt7K3IdpByogLNuO_fLTxlB2-AxNG3O_NUad1JKzXkjab2xu6pWUemSot2rPzJ-ukmQEKOP_vFK5v_JUKBLPIHAYr_XWqUsYSkz1UMKUrqHwe7MwsLa4-OgIUxZlJnNxmAaCoq4SF6bLpRT4TT7jK7E63FGieM7MUeEr2sgSjvtAlnWDpJYg-qupeF55FSwjqEL-O4vXuO_fS9WHgGvhdIVT8LqKrC_MibTrsXyMBdoRRApnqjevXqrGpvJ684ErpxXSIyMel9wFk0ac4OyaxoBT_1pnjOP38dmjHxDy-29EfyLugeiyzQJm_D2qB3Fop6H3N9St75uYVswj4Kass9FdCEZugDZOpJBEZtiw9CRxYESo3ueyqLuPmyRvya9dLsXag-lV
+
+@startuml
+class ClientLobby <<QMainWindow>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    ChampionType selected_character;
+    NewMapInfo& new_map_info;
+    int& map_texture;
+
+    void on_btnCreateMatch_clicked();
+    void on_btnJoinMatch_clicked();
+    void on_btnQuit_clicked();
+}
+
+class CharacterSelector: <<QDialog>> {
+    void on_btnCharacterJazz_clicked();
+    void on_btnCharacterLori_clicked();
+    void on_btnCharacterSpaz_clicked();
+}
+
+class JoinMatchLobby: <<QDialog>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    ChampionType selected_character;
+    void on_btnJoin_clicked();
+    void on_btnRefresh_clicked();
+}
+
+class WaitingRoom: <<QDialog-Thread>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    std::thread waiting_thread;
+    std::atomic<bool> stop_thread;
+}
+
+class MapSelector: <<QDialog>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    ChampionType selected_character;
+    std::string selected_map;
+    std::string match_name;
+    NewMapInfo& new_map_info;
+    int& map_texture;
+    void on_btnMap1_clicked();
+    void on_btnMap2_clicked();
+    void on_btnMapCreate_clicked();
+    void on_btnCustomMaps_clicked();
+    void start_match();
+
+}
+
+class MapCreatorLobby: <<QDialog>> {
+    NewMapInfo& new_map_info;
+    void on_btnTexture1_clicked();
+    void on_btnTexture2_clicked();
+}
+
+class MapEditorLobby: <<QDialog>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    std::string& selected_map;
+    NewMapInfo& new_map_info;
+    void on_btnRefresh_clicked();
+    void on_btnPlay_clicked();
+    void on_btnEdit_clicked();
+}
+
+ClientLobby --> CharacterSelector : on_btnCreateMatch_clicked()
+ClientLobby --> MapSelector : on_btnJoinMatch_clicked()
+MapSelector --> WaitingRoom : start_match()
+
+ClientLobby --> JoinMatchLobby : on_btnJoinMatch_clicked()
+JoinMatchLobby --> WaitingRoom : on_btnJoin_clicked()
+
+
+MapSelector --> MapCreatorLobby : on_btnMapCreate_clicked()
+MapSelector --> MapEditorLobby : on_btnCustomMaps_clicked()
+MapEditorLobby --> WaitingRoom : on_btnPlay_clicked()
+@enduml
