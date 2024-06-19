@@ -50,6 +50,15 @@ This project is the final group assignment for the subject 'Taller de Programaci
    Replace `<host>` with the hostname or IP address of the server you want to connect to, and `<port>` with the port number used by the server, e.g., `jazz_client localhost 8080`.
 
 -----------------
+### Create or edit a map
+After building the game, if you want to create a new map and play with it, you will have to start the client from the `build` folder. 
+```
+   cd build
+   ./jazz_client <host> <port>
+```
+Replace `<host>` with the hostname or IP address of the server you want to connect to, and `<port>` with the port number used by the server, e.g., `jazz_client localhost 8080`.
+
+-----------------
 ### Testing
 After building the game, to run the tests you will have to execute:
 ```
