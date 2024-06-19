@@ -8,7 +8,7 @@ void TexturesProvider::init(SDL2pp::Renderer& renderer) {
     loadTexture(renderer, "Spaz", SPAZ_IMG, characterColor);
     loadTexture(renderer, "Lori", LORI_IMG, characterColor);
 
-    SDL2pp::Color elseColor = {0, 128, 255, 1}; //enemies, items, projectiles, etc
+    SDL2pp::Color elseColor = {0, 128, 255, 1};  // enemies, items, projectiles, etc
     loadTexture(renderer, "Enemies", ENEMIES_PNG, elseColor);
     loadTexture(renderer, "Turtle", TURTLE_PNG, elseColor);
     loadTexture(renderer, "Items", ITEMS_PNG, elseColor);
@@ -19,14 +19,14 @@ void TexturesProvider::init(SDL2pp::Renderer& renderer) {
     loadTexture(renderer, "Jungle", JUNGLE_TILES_PNG, mapColor);
 }
 
-void TexturesProvider::loadTexture(SDL2pp::Renderer &renderer, const std::string &name, const std::string& path, SDL2pp::Color colorKey) {
+void TexturesProvider::loadTexture(SDL2pp::Renderer& renderer, const std::string& name,
+                                   const std::string& path, SDL2pp::Color colorKey) {
     SDL2pp::Surface surface(path);
     Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
     SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
     textures[name] = std::make_shared<SDL2pp::Texture>(renderer, surface);
 }
 
-std::shared_ptr<SDL2pp::Texture> TexturesProvider::getTexture(const std::string &name) {
+std::shared_ptr<SDL2pp::Texture> TexturesProvider::getTexture(const std::string& name) {
     return textures[name];
 }
-

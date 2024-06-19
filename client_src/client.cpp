@@ -30,7 +30,7 @@ void Client::run(int argc, char* argv[]) {
             drawer.run(player_id, map_texture);
         } else if (qt_result == OK_MAP_CREATOR) {
             Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
-                        new_map_info.map_name, new_map_info.max_players);
+                          new_map_info.map_name, new_map_info.max_players);
             editor.run();
         } else if (qt_result == EDIT_MAP) {
             Editor editor(new_map_info.map_name);
@@ -38,13 +38,12 @@ void Client::run(int argc, char* argv[]) {
 
         } else {
             std::cerr << "Closing Lobby..." << std::endl;
-        }   
-        
+        }
+
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return;
     }
-
 }
 
 Client::~Client() {
