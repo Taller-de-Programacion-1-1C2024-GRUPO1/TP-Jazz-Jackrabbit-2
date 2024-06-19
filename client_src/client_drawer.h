@@ -93,7 +93,6 @@ public:
 
     void showLoadingScreen(Renderer& renderer);
     void showFinalScreen(Renderer& renderer, const Snapshot& snapshot);
-    //~ClientDrawer();
 };
 
 #endif

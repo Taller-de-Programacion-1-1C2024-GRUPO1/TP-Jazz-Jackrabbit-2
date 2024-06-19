@@ -20,7 +20,6 @@ private:
 
 public:
     explicit AmmoLeft(SDL2pp::Renderer& renderer);
-    void loadWeapons();
     void setWeapon(int weapon);
     void setAmmo(int ammo);
     void render();
