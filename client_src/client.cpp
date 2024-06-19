@@ -14,30 +14,37 @@ Client::Client(const std::string& host, const std::string& service):
 
 
 void Client::run(int argc, char* argv[]) {
-    client_sender.start();
-    client_receiver.start();
+    try {
+        client_sender.start();
+        client_receiver.start();
 
-    // QT
-    QApplication a(argc, argv);
-    Q_INIT_RESOURCE(resources);
-    ClientLobby w(q_cmds, q_responses, new_map_info, map_texture);
-    w.show();
-    int qt_result = a.exec();
+        // QT
+        QApplication a(argc, argv);
+        Q_INIT_RESOURCE(resources);
+        ClientLobby w(q_cmds, q_responses, new_map_info, map_texture);
+        w.show();
+        int qt_result = a.exec();
 
-    // SDL
-    if (qt_result == OK) {
-        drawer.run(player_id, map_texture);
-    } else if (qt_result == OK_MAP_CREATOR) {
-        Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
-                      new_map_info.map_name, new_map_info.max_players);
-        editor.run();
-    } else if (qt_result == EDIT_MAP) {
-        Editor editor(new_map_info.map_name);
-        editor.run();
+        // SDL
+        if (qt_result == OK) {
+            drawer.run(player_id, map_texture);
+        } else if (qt_result == OK_MAP_CREATOR) {
+            Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
+                        new_map_info.map_name, new_map_info.max_players);
+            editor.run();
+        } else if (qt_result == EDIT_MAP) {
+            Editor editor(new_map_info.map_name);
+            editor.run();
 
-    } else {
-        std::cerr << "Closing Lobby..." << std::endl;
+        } else {
+            std::cerr << "Closing Lobby..." << std::endl;
+        }   
+        
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return;
     }
+
 }
 
 Client::~Client() {
