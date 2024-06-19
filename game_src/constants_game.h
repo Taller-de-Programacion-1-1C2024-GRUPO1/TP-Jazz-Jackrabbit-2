@@ -210,7 +210,7 @@ enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER, RAYGUN };
 
 // BASIC GUN
 #define BASIC_GUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getBasicGunFireCooldown()
-#define BASIC_GUN_MAX_AMMO ConfigSingleton::getInstance().getBasicGunMaxAmmo()
+#define BASIC_GUN_MAX_AMMO 999
 #define BASIC_GUN_DAMAGE ConfigSingleton::getInstance().getBasicGunDamage()
 #define BASIC_GUN_RANGE ConfigSingleton::getInstance().getBasicGunRange()
 #define BASIC_GUN_BULLET_SPEED ConfigSingleton::getInstance().getBasicGunBulletSpeed()

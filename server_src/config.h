@@ -20,7 +20,6 @@ public:
     int getRabbitRevivalTime() const { return rabbit_revival_time; }
     int getRabbitDeintoxicateTime() const { return rabbit_desintoxicate_time; }
     int getBasicGunFireCooldown() const { return basic_gun_fire_cooldown; }
-    int getBasicGunMaxAmmo() const { return basic_gun_max_ammo; }
     int getBasicGunDamage() const { return basic_gun_damage; }
     int getBasicGunRange() const { return basic_gun_range; }
     int getBasicGunBulletSpeed() const { return basic_gun_bullet_speed; }
@@ -104,7 +103,6 @@ private:
             rabbit_revival_time = config["rabbit_revival_time"].as<int>();
             rabbit_desintoxicate_time = config["rabbit_desintoxicate_time"].as<int>();
             basic_gun_fire_cooldown = config["basic_gun_fire_cooldown"].as<int>();
-            basic_gun_max_ammo = config["basic_gun_max_ammo"].as<int>();
             basic_gun_damage = config["basic_gun_damage"].as<int>();
             basic_gun_range = config["basic_gun_range"].as<int>();
             basic_gun_bullet_speed = config["basic_gun_bullet_speed"].as<int>();
@@ -181,7 +179,6 @@ private:
 
     // Basic gun
     int basic_gun_fire_cooldown;
-    int basic_gun_max_ammo;
     int basic_gun_damage;
     int basic_gun_range;
     int basic_gun_bullet_speed;

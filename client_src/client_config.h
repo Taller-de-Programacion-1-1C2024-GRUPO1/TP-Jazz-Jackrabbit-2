@@ -29,6 +29,7 @@ public:
     std::string getAmmoAnimationsPath() const { return ammo_animations_path; }
     std::string getProjectilesAnimationsPath() const { return projectiles_animations_path; }
     std::string getValuablesAnimationsPath() const { return valuables_animations_path; }
+    int getMusicVolume() const { return music_volume; }
 
     ClientConfigSingleton(ClientConfigSingleton const&) = delete;
     void operator=(ClientConfigSingleton const&) = delete;
@@ -68,6 +69,7 @@ private:
             ammo_animations_path = config["ammo_animations_path"].as<std::string>();
             projectiles_animations_path = config["projectiles_animations_path"].as<std::string>();
             valuables_animations_path = config["valuables_animations_path"].as<std::string>();
+            music_volume = config["music_volume"].as<int>();
 
         } catch (const YAML::Exception& e) {
             std::cerr << "Error reading YAML file: " << e.what() << std::endl;
@@ -94,6 +96,7 @@ private:
     std::string ammo_animations_path;
     std::string projectiles_animations_path;
     std::string valuables_animations_path;
+    int music_volume;
 };
 
 #endif

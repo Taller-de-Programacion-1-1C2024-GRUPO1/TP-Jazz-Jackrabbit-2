@@ -11,7 +11,6 @@ rabbit_desintoxicate_time: 1
 
 # BASIC GUN
 basic_gun_fire_cooldown: 20
-basic_gun_max_ammo: 999
 basic_gun_damage: 1
 basic_gun_range: 40
 basic_gun_bullet_speed: 10

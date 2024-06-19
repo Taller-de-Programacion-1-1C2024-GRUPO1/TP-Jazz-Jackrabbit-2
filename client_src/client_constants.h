@@ -13,7 +13,8 @@ enum /*Map Textures*/ { JUNGLE = 0, CARROTUS };
 
 
 // Music & Game Constants
-#define MUSIC_VOLUME 5
+
+#define MUSIC_VOLUME ClientConfigSingleton::getInstance().getMusicVolume()
 #define GAME_TITLE "Jack Jazzrabbit 2"
 
 // Maps
