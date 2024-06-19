@@ -109,6 +109,7 @@ enum /*SPAWN POINTS*/ {
 // ----------------- Messurements -----------------
 
 // GAME CONSTANTS
+#define GAME_DURATION_MINUTES ConfigSingleton::getInstance().getGameDurationMinutes()
 #define BLOCK_DIVISION 32
 #define MAP_WIDTH_DEFAULT 35     // modificar
 #define MAP_HEIGHT_DEFAULT 19    // modificar

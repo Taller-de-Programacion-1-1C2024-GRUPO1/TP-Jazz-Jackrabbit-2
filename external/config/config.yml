@@ -1,5 +1,5 @@
 # Game Settings
-max_players: 3
+game_duration_minutes: 5
 
 # Physics
 rabbit_speed: 5

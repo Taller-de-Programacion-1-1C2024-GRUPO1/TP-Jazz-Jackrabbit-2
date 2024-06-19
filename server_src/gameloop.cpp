@@ -29,7 +29,7 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 
 void Gameloop::run() {
     auto game_start = std::chrono::high_resolution_clock::now();
-    int game_duration_seconds = 3 * 60;
+    int game_duration_seconds = GAME_DURATION_MINUTES * UPDATE_RATE;
 
     while (playing && server_running) {
         try {

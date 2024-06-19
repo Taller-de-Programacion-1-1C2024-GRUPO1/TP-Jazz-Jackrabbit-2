@@ -14,7 +14,7 @@ public:
         return instance;
     }
 
-    int getMaxPlayers() const { return max_players; }
+    int getGameDurationMinutes() const { return game_duration_minutes; }
     int getRabbitSpeed() const { return rabbit_speed; }
     int getRabbitJumpSpeed() const { return rabbit_jump_speed; }
     int getRabbitRevivalTime() const { return rabbit_revival_time; }
@@ -98,7 +98,7 @@ private:
         try {
             std::cout << "Reading config file: " << file_path << std::endl;
             YAML::Node config = YAML::LoadFile(file_path);
-            max_players = config["max_players"].as<int>();
+            game_duration_minutes = config["game_duration_minutes"].as<int>();
             rabbit_speed = config["rabbit_speed"].as<int>();
             rabbit_jump_speed = config["rabbit_jump_speed"].as<int>();
             rabbit_revival_time = config["rabbit_revival_time"].as<int>();
@@ -170,7 +170,7 @@ private:
         }
     }
     // Game
-    int max_players;
+    int game_duration_minutes;
 
     // Physics
     int rabbit_speed;

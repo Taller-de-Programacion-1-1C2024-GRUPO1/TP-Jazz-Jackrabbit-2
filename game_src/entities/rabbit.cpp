@@ -24,8 +24,8 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
         map(map),
         points(0),
         current_gun(0),
-        state_needs_change(false) {
-    state = new Alive(*this);
+        state_needs_change(false),
+        state(new Alive(*this)) {
     gun_inventory.push_back(new BasicGun(*this, this->map));
     gun_inventory.push_back(new MachineGun(*this, this->map));
     gun_inventory.push_back(new Sniper(*this, this->map));
@@ -79,6 +79,7 @@ void Rabbit::revive() {
     health = PLAYER_INITIAL_HEALTH;
     gun_inventory[MACHINE_GUN]->reset_ammo_amount();
     gun_inventory[SNIPER]->reset_ammo_amount();
+    gun_inventory[RAYGUN]->reset_ammo_amount();
     current_gun = BASIC_GUN;
     set_state(ALIVE);
     respawn();
