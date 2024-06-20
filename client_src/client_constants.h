@@ -124,6 +124,7 @@ enum /*Map Textures*/ { JUNGLE = 0, CARROTUS };
 #define MACHINE_GUN_ANIMATIONS AMMO_ANIMATIONS_PATH + "/machine_gun.yml"
 #define SNIPER_ANIMATIONS AMMO_ANIMATIONS_PATH + "/sniper.yml"
 #define RAY_GUN_ANIMATIONS AMMO_ANIMATIONS_PATH + "/ray_gun.yml"
+#define ROCKET_LAUCHER_ANIMATIONS AMMO_ANIMATIONS_PATH + "/rocket_launcher.yml"
 
 // Projectiles Animations
 

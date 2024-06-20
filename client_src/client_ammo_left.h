@@ -8,12 +8,13 @@
 
 #include "client_constants.h"
 #include "client_number_images.h"
+#include "client_textures_provider.h"
 
 class AmmoLeft {
 private:
     SDL2pp::Renderer& renderer;
     SDL2pp::Rect munitionRect;
-    SDL2pp::Texture munitionTexture;
+    std::shared_ptr<SDL2pp::Texture> munitionTexture;
     int currentWeapon;
     int currentAmmo;
     NumberImages numberImages;

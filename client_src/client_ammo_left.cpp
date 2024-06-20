@@ -5,16 +5,10 @@
 AmmoLeft::AmmoLeft(SDL2pp::Renderer& renderer):
         renderer(renderer),
         munitionRect(69, 26, 22, 26),  // BASIC GUN
-        munitionTexture(renderer, SDL2pp::Surface(ITEMS_PNG)),
+        munitionTexture(TexturesProvider::getTexture("Items")),
         currentWeapon(0),
         currentAmmo(1000),
-        numberImages(renderer) {
-    SDL2pp::Surface surface(ITEMS_PNG);
-    SDL_Color colorKey = {0, 128, 255, 1};
-    SDL_SetColorKey(surface.Get(), SDL_TRUE,
-                    SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b));
-    this->munitionTexture = SDL2pp::Texture(renderer, surface);
-}
+        numberImages(renderer) {}
 
 void AmmoLeft::setWeapon(int weapon_type) {
     switch (weapon_type) {
@@ -22,10 +16,10 @@ void AmmoLeft::setWeapon(int weapon_type) {
             munitionRect = SDL2pp::Rect(69, 26, 22, 26);
             break;
         case MACHINE_GUN:
-            munitionRect = SDL2pp::Rect(91, 341, 18, 17);
+            munitionRect = SDL2pp::Rect(66, 152, 22, 15);
             break;
         case SNIPER:
-            munitionRect = SDL2pp::Rect(66, 152, 22, 15);
+            munitionRect = SDL2pp::Rect(112,220,21,24);
             break;
         case RAYGUN:
             munitionRect = SDL2pp::Rect(485, 410, 18, 17);
@@ -50,5 +44,5 @@ void AmmoLeft::render() {
     offset -= 24;  // Move position to the left for the munition icon
     SDL2pp::Rect currentRect(800 + offset - BLOCK_DIVISION, 600 - BLOCK_DIVISION, BLOCK_DIVISION,
                              BLOCK_DIVISION);
-    renderer.Copy(munitionTexture, munitionRect, currentRect);
+    renderer.Copy(*munitionTexture, munitionRect, currentRect);
 }
