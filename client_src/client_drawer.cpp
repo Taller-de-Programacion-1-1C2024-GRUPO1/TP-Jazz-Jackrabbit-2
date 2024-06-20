@@ -15,10 +15,10 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot) {
+void ClientDrawer::showFinalScreen(Renderer& renderer, const std::vector<std::pair<int, int>>& top_scores) {
     const int initial_offset = 100;
     Font font(FONT_TTF_04B_30, 24);
-    renderer.SetDrawColor(200, 200, 200);
+    //renderer.SetDrawColor(200, 200, 200);
     renderer.Clear();
 
     std::string titleText = "Game Over!";
@@ -36,14 +36,16 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot)
     renderer.Copy(titleTexture, NullOpt, titleRect);
 
     // Find the player with the highest score
-    auto winner = std::max_element(
-            snapshot.rabbits.begin(), snapshot.rabbits.end(),
-            [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score < b.score; });
-
-    std::string winnerText = "Winner: Player " + std::to_string(winner->id);
+    int winner = top_scores[0].first;
+    std::string winnerText;
+    if (winner == client_id) {
+        // If the winner is the client, show a different message
+        winnerText = "Winner: YOU! Congratulations";
+    } else { 
+        winnerText = "Winner: Player " + std::to_string(winner);
+    }
     Texture winnerTexture(renderer,
                           font.RenderText_Solid(winnerText, SDL_Color{255, 255, 255, 255}));
-
     int winnerWidth = winnerTexture.GetWidth();
     int winnerHeight = winnerTexture.GetHeight();
 
@@ -58,9 +60,16 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot)
     int yOffset = titleHeight + winnerHeight +
                   initial_offset * 2;  // Initial offset from top of the screen for the players
 
-    for (const auto& player: snapshot.rabbits) {
-        std::string playerText = "Player " + std::to_string(player.id) + ": " +
-                                 std::to_string(player.score) + " points";
+    for (int i = 0; i < top_scores.size(); i++) {
+        std::string playerText;
+        if (top_scores[i].first == client_id) {
+            // If the player ID matches client_id, customize the message
+            playerText = std::to_string(i + 1) + ". You: " + std::to_string(top_scores[i].second) + " points";
+        } else {
+            // Default message for other players
+            playerText = std::to_string(i + 1) + ". Player " + std::to_string(top_scores[i].first) + ": " +
+                        std::to_string(top_scores[i].second) + " points";
+        }
         Texture texture(renderer, font.RenderText_Solid(playerText, SDL_Color{255, 255, 255, 255}));
 
         int textWidth = texture.GetWidth();
@@ -76,7 +85,6 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot)
 
         yOffset += textHeight + 20;  // Move offset down for the next player
     }
-
     renderer.Present();
 }
 
@@ -599,10 +607,13 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             frameStart += expectedFrameTime;
         }
     }
+    std::vector<std::pair<int, int>> final_top_scores;
+    topScores.getTopScores(final_top_scores);
+
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start + std::chrono::seconds(5);
     while (std::chrono::high_resolution_clock::now() < end) {
-        showFinalScreen(renderer, snapshot);
+        showFinalScreen(renderer, final_top_scores);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;

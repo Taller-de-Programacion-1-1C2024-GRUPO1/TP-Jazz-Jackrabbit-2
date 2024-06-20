@@ -90,6 +90,10 @@ public:
             offset_x = 0;
         }
     }
+
+    void getTopScores(std::vector<std::pair<int, int>>& top_scores) {
+        top_scores = current_snapshot_scores;
+    }
 };
 
 #endif  // TOP_SCORES_H

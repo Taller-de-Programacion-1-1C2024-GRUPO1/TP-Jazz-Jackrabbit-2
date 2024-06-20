@@ -92,7 +92,7 @@ public:
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void showLoadingScreen(Renderer& renderer);
-    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot);
+    void showFinalScreen(Renderer& renderer, const std::vector<std::pair<int, int>>& top_scores);
 };
 
 #endif
