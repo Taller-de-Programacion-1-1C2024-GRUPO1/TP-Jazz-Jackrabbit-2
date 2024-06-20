@@ -140,7 +140,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     HeartsBanner banner(renderer);
     AmmoLeft ammoLeft(renderer);
     FoodProvider foodProvider;
-    TopScores topScores(renderer);
+    TopScores topScores(renderer, player_id);
     Clock clock(renderer);
 
     // Read first snapshot!

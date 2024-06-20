@@ -31,6 +31,8 @@ void NumberImages::loadNumbers() {
     numberRects.push_back(SDL2pp::Rect(418, 43, 25, 26));   // E
     numberRects.push_back(SDL2pp::Rect(24, 79, 25, 24));    // R
     numberRects.push_back(SDL2pp::Rect(55, 46, 16, 23));    // :
+    numberRects.push_back(SDL2pp::Rect(747, 45, 25, 23));    // O
+    numberRects.push_back(SDL2pp::Rect(123, 80, 25, 24));    // U
 }
 
 void NumberImages::setCorner(int mode) {

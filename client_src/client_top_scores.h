@@ -8,13 +8,18 @@
 
 #include "client_number_images.h"
 
+#define SPACE_BETWEEN_LETTERS 12
+#define SPACE_BETWEEN_WORDS 24
+#define LETTERS_SIZE 24
+
 class TopScores {
 private:
     NumberImages numberImages;
     std::vector<std::pair<int, int>> current_snapshot_scores;
+    int player_id;
 
 public:
-    explicit TopScores(SDL2pp::Renderer& renderer): numberImages(renderer) {
+    explicit TopScores(SDL2pp::Renderer& renderer, int player_id): numberImages(renderer), player_id(player_id) {
         numberImages.setCorner(2);
     }
     void clearCurrentSnapshotScores() { current_snapshot_scores.clear(); }
@@ -47,28 +52,39 @@ public:
                 continue;
             }
             // Print "i-"
-            numberImages.renderNumber(i + 1, offset_x, -offset_y, 24);
+            numberImages.renderNumber(i + 1, offset_x, -offset_y, LETTERS_SIZE);
             offset_x += 18;
-            numberImages.renderNumber(11, offset_x, -offset_y, 24);
-            offset_x += 24;
-            // Print "PLAYER"
-            for (int j = 12; j < 18; j++) {
-                numberImages.renderNumber(j, offset_x, -offset_y, 24);
-                offset_x += 12;
+            numberImages.renderNumber(11, offset_x, -offset_y, LETTERS_SIZE);
+            offset_x += SPACE_BETWEEN_WORDS;
+
+            if (current_snapshot_scores[i].first == player_id){
+                // Print "YOU"
+                numberImages.renderNumber(15, offset_x, -offset_y, LETTERS_SIZE);
+                offset_x += SPACE_BETWEEN_LETTERS;
+                numberImages.renderNumber(19, offset_x, -offset_y, LETTERS_SIZE);
+                offset_x += SPACE_BETWEEN_LETTERS;
+                numberImages.renderNumber(20, offset_x, -offset_y, LETTERS_SIZE);
+            } else {
+                // Print "PLAYER"
+                for (int j = 12; j < 18; j++) {
+                    numberImages.renderNumber(j, offset_x, -offset_y, LETTERS_SIZE);
+                    offset_x += SPACE_BETWEEN_LETTERS;
+                }
+                // Print id
+                offset_x += 10;
+                numberImages.renderNumber(current_snapshot_scores[i].first, offset_x, -offset_y, LETTERS_SIZE);
+              
             }
-            // Print id
-            offset_x += 10;
-            numberImages.renderNumber(current_snapshot_scores[i].first, offset_x, -offset_y, 24);
             // Print :
-            offset_x += 12;
-            numberImages.renderNumber(18, offset_x, -offset_y, 24);
+            offset_x += SPACE_BETWEEN_LETTERS;
+            numberImages.renderNumber(18, offset_x, -offset_y, LETTERS_SIZE);
             // render each number on score
-            offset_x += 24;
+            offset_x += SPACE_BETWEEN_WORDS;
             std::string scoreStr = std::to_string(current_snapshot_scores[i].second);
             for (char c: scoreStr) {
                 int number = c - '0';
-                numberImages.renderNumber(number, offset_x, -offset_y, 24);
-                offset_x += 24;
+                numberImages.renderNumber(number, offset_x, -offset_y, LETTERS_SIZE);
+                offset_x += SPACE_BETWEEN_LETTERS;
             }
             offset_y += 32;
             offset_x = 0;
