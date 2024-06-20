@@ -19,7 +19,7 @@ void AmmoLeft::setWeapon(int weapon_type) {
             munitionRect = SDL2pp::Rect(66, 152, 22, 15);
             break;
         case SNIPER:
-            munitionRect = SDL2pp::Rect(112,220,21,24);
+            munitionRect = SDL2pp::Rect(112, 220, 21, 24);
             break;
         case RAYGUN:
             munitionRect = SDL2pp::Rect(485, 410, 18, 17);
