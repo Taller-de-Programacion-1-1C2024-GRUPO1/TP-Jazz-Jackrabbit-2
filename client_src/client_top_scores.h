@@ -19,7 +19,8 @@ private:
     int player_id;
 
 public:
-    explicit TopScores(SDL2pp::Renderer& renderer, int player_id): numberImages(renderer), player_id(player_id) {
+    explicit TopScores(SDL2pp::Renderer& renderer, int player_id):
+            numberImages(renderer), player_id(player_id) {
         numberImages.setCorner(2);
     }
     void clearCurrentSnapshotScores() { current_snapshot_scores.clear(); }
@@ -57,7 +58,7 @@ public:
             numberImages.renderNumber(11, offset_x, -offset_y, LETTERS_SIZE);
             offset_x += SPACE_BETWEEN_WORDS;
 
-            if (current_snapshot_scores[i].first == player_id){
+            if (current_snapshot_scores[i].first == player_id) {
                 // Print "YOU"
                 numberImages.renderNumber(15, offset_x, -offset_y, LETTERS_SIZE);
                 offset_x += SPACE_BETWEEN_LETTERS;
@@ -72,8 +73,8 @@ public:
                 }
                 // Print id
                 offset_x += 10;
-                numberImages.renderNumber(current_snapshot_scores[i].first, offset_x, -offset_y, LETTERS_SIZE);
-              
+                numberImages.renderNumber(current_snapshot_scores[i].first, offset_x, -offset_y,
+                                          LETTERS_SIZE);
             }
             // Print :
             offset_x += SPACE_BETWEEN_LETTERS;

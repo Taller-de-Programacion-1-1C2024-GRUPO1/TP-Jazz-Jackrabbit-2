@@ -15,10 +15,11 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer, const std::vector<std::pair<int, int>>& top_scores) {
+void ClientDrawer::showFinalScreen(Renderer& renderer,
+                                   const std::vector<std::pair<int, int>>& top_scores) {
     const int initial_offset = 100;
     Font font(FONT_TTF_04B_30, 24);
-    //renderer.SetDrawColor(200, 200, 200);
+    // renderer.SetDrawColor(200, 200, 200);
     renderer.Clear();
 
     std::string titleText = "Game Over!";
@@ -41,7 +42,7 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const std::vector<std::pa
     if (winner == client_id) {
         // If the winner is the client, show a different message
         winnerText = "Winner: YOU! Congratulations";
-    } else { 
+    } else {
         winnerText = "Winner: Player " + std::to_string(winner);
     }
     Texture winnerTexture(renderer,
@@ -60,15 +61,16 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const std::vector<std::pa
     int yOffset = titleHeight + winnerHeight +
                   initial_offset * 2;  // Initial offset from top of the screen for the players
 
-    for (int i = 0; i < top_scores.size(); i++) {
+    for (int i = 0; i < static_cast<int>(top_scores.size()); i++) {
         std::string playerText;
         if (top_scores[i].first == client_id) {
             // If the player ID matches client_id, customize the message
-            playerText = std::to_string(i + 1) + ". You: " + std::to_string(top_scores[i].second) + " points";
+            playerText = std::to_string(i + 1) + ". You: " + std::to_string(top_scores[i].second) +
+                         " points";
         } else {
             // Default message for other players
-            playerText = std::to_string(i + 1) + ". Player " + std::to_string(top_scores[i].first) + ": " +
-                        std::to_string(top_scores[i].second) + " points";
+            playerText = std::to_string(i + 1) + ". Player " + std::to_string(top_scores[i].first) +
+                         ": " + std::to_string(top_scores[i].second) + " points";
         }
         Texture texture(renderer, font.RenderText_Solid(playerText, SDL_Color{255, 255, 255, 255}));
 

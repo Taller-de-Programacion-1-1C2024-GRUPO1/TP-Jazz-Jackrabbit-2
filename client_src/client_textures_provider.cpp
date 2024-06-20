@@ -13,6 +13,7 @@ void TexturesProvider::init(SDL2pp::Renderer& renderer) {
     loadTexture(renderer, "Turtle", TURTLE_PNG, elseColor);
     loadTexture(renderer, "Items", ITEMS_PNG, elseColor);
     loadTexture(renderer, "Projectiles", PROJECTILES_PNG, elseColor);
+    loadTexture(renderer, "Font", FONTS_PNG, elseColor);
 
     SDL2pp::Color mapColor = {87, 0, 203, 0};
     loadTexture(renderer, "Carrotus", CARROTUS_TILES_PNG, mapColor);
