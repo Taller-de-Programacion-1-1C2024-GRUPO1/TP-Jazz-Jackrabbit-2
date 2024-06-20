@@ -1,6 +1,7 @@
 #ifndef CLIENT_WEAPON_INFO_H
 #define CLIENT_WEAPON_INFO_H
 
+#include <memory>
 #include <vector>
 
 #include "../game_src/constants_game.h"

@@ -16,12 +16,8 @@ void Character::is_on_left_wall() { on_left_wall = true; }
 
 void Character::is_on_right_wall() { on_right_wall = true; }
 
-void Character::is_on_left_slope() {
-    on_left_slope = true;
-}
-void Character::is_on_right_slope() {
-    on_right_slope = true;
-}
+void Character::is_on_left_slope() { on_left_slope = true; }
+void Character::is_on_right_slope() { on_right_slope = true; }
 void Character::update_position() {
     // GRAVITY
     if (!on_floor && spe_y < MAX_FALLING_SPEED) {
