@@ -64,8 +64,8 @@ void BasicGun::fire(int pos_x, int pos_y, int direction) {
 }
 
 FlameThrower::FlameThrower(Rabbit& owner, Map& manager):
-        Gun(FLAMETHROWER_MAX_AMMO, FLAMETHROWER_DAMAGE, FLAMETHROWER_RANGE, FLAMETHROWER_BULLET_SPEED,
-            owner, manager) {}
+        Gun(FLAMETHROWER_MAX_AMMO, FLAMETHROWER_DAMAGE, FLAMETHROWER_RANGE,
+            FLAMETHROWER_BULLET_SPEED, owner, manager) {}
 
 bool FlameThrower::has_ammo() { return ammo > 0; }
 
@@ -77,13 +77,15 @@ void FlameThrower::fire(int pos_x, int pos_y, int direction) {
 }
 
 RocketLauncher::RocketLauncher(Rabbit& owner, Map& manager):
-        Gun(ROCKETLAUNCHER_MAX_AMMO, ROCKETLAUNCHER_DAMAGE, ROCKETLAUNCHER_RANGE, ROCKETLAUNCHER_BULLET_SPEED, owner, manager) {}
+        Gun(ROCKETLAUNCHER_MAX_AMMO, ROCKETLAUNCHER_DAMAGE, ROCKETLAUNCHER_RANGE,
+            ROCKETLAUNCHER_BULLET_SPEED, owner, manager) {}
 
 bool RocketLauncher::has_ammo() { return ammo > 0; }
 
 void RocketLauncher::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
-        Gun::add_bullet_to_map(pos_x, pos_y, direction, ROCKETLAUNCHER, ROCKETLAUNCHER_FIRE_COOLDOWN);
+        Gun::add_bullet_to_map(pos_x, pos_y, direction, ROCKETLAUNCHER,
+                               ROCKETLAUNCHER_FIRE_COOLDOWN);
         ammo--;
     }
 }

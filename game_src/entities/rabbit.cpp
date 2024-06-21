@@ -58,7 +58,9 @@ void Rabbit::add_health(int amount_health) {
 void Rabbit::add_machinegun_ammo(int amount_ammo) {
     gun_inventory[FLAMETHROWER]->add_ammo(amount_ammo);
 }
-void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[ROCKETLAUNCHER]->add_ammo(amount_ammo); }
+void Rabbit::add_sniper_ammo(int amount_ammo) {
+    gun_inventory[ROCKETLAUNCHER]->add_ammo(amount_ammo);
+}
 
 void Rabbit::add_raygun_ammo(int amount_ammo) { gun_inventory[RAYGUN]->add_ammo(amount_ammo); }
 
