@@ -14,7 +14,7 @@
 #include "../common_src/constants.h"
 #include "../game_src/constants_game.h"
 
-enum Tool { PAINT, ERASE };
+enum Tool { PAINT, ERASE, MOVE };
 enum Mode { TEXTURE, ENTITY };
 
 // g++ main.cpp -lyaml-cpp -lSDL2 -lSDL2_image -lSDL2_ttf -o myprogram
@@ -120,14 +120,10 @@ public:
         diamond_src = {147, 1241, 29, 30};
         diamond_dst = {32, 256, 32, 32};
 
-        std::cout << "DDDDDDDDDDDDDDDDDd: " << std::endl;
         // ahora cargamos las matrices de texturas
         for (int layer = 0; layer < 5; ++layer) {
-            std::cout << "EEEEEEEEEEEEEEEEEe: " << layer << std::endl;
             for (int i = 0; i < height; ++i) {
-                std::cout << "FFFFFFFFFFFFFFFf: " << i << std::endl;
                 for (int j = 0; j < width; ++j) {
-                    std::cout << "GGGGGGGGGGGGGGGGGGGGGgg: " << j << std::endl;
                     int index = map["layers"][layer]["data"][i][j].as<int>();
                     if (index != -1) {
                         grid[i][j][layer] = textures[index];
@@ -135,13 +131,9 @@ public:
                 }
             }
         }
-        std::cout << "HHHHHHHHHHHHHHHHHHHHHHh: " << std::endl;
         // ahora cargamos las matrices de entidades
         for (int i = 0; i < height; ++i) {
-            std::cout << "IIIIIIIIIIIIIIIIIIIIIIiiiiiiiiii: " << i << std::endl;
             for (int j = 0; j < width; ++j) {
-                std::cout << "JJJJJJJJJJJJJJJ: " << j << std::endl;
-
                 int index = map["layers"][5]["data"][i][j].as<int>();
                 if (index != -1) {
                     entities_grid[i][j] = {index, {0, 0, 0, 0}};
@@ -229,16 +221,18 @@ public:
 
     void run() {
         bool running = true;
-        bool painting = false;
+        bool mouseIsBeingClicked = false;
+        int last_x = 0;
+        int last_y = 0;
         SDL_Event event;
         Rect selectedEntityDst;
 
         while (running) {
-            while (SDL_PollEvent(&event) || painting) {
+            while (SDL_PollEvent(&event) || mouseIsBeingClicked) {
                 if (event.type == SDL_QUIT) {
                     running = false;
                 } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                    painting = true;
+                    mouseIsBeingClicked = true;
                     int x, y;
                     SDL_GetMouseState(&x, &y);
 
@@ -246,11 +240,11 @@ public:
                         // Click en el botón de guardar y salir
                         saveMap();
                         running = false;
-                    } else if (x >= 800 && x < 880 && y >= 10 &&
+                    } else if (x >= 890 && x < 970 && y >= 10 &&
                                y < 50) {  // Click en el botón de texturas
                         // Click en el botón de texturas
                         mode = TEXTURE;
-                    } else if (x >= 890 && x < 970 && y >= 10 && y < 50) {
+                    } else if (x >= 980 && x < 1060 && y >= 10 && y < 50) {
                         // Click en el botón de entidades
                         mode = ENTITY;
                     } else if (x >= 10 && x < 90 && y >= 10 && y < 50) {
@@ -259,16 +253,21 @@ public:
                     } else if (x >= 100 && x < 180 && y >= 10 && y < 50) {
                         // Click en el botón de borrar
                         currentTool = ERASE;
-                    } else if (x >= 280 && x < 360 && y >= 10 && y < 50) {
+                    } else if (x >= 190 && x < 270 && y >= 10 && y < 50) {
+                        // Click en el boton para moverse en pantalla
+                        currentTool = MOVE;
+                        last_x = x;
+                        last_y = y;
+                    } else if (x >= 370 && x < 450 && y >= 10 && y < 50) {
                         // Click en los botones de capas
                         currentLayer = BACKGROUND_LAYER;
-                    } else if (x >= 370 && x < 450 && y >= 10 && y < 50) {
-                        currentLayer = DIAG_LEFT_LAYER;
                     } else if (x >= 460 && x < 540 && y >= 10 && y < 50) {
-                        currentLayer = DIAG_RIGHT_LAYER;
+                        currentLayer = DIAG_LEFT_LAYER;
                     } else if (x >= 550 && x < 630 && y >= 10 && y < 50) {
-                        currentLayer = COLLIDER_LAYER;
+                        currentLayer = DIAG_RIGHT_LAYER;
                     } else if (x >= 640 && x < 720 && y >= 10 && y < 50) {
+                        currentLayer = COLLIDER_LAYER;
+                    } else if (x >= 730 && x < 810 && y >= 10 && y < 50) {
                         currentLayer = DECORATION_LAYER;
                     } else if (mode == TEXTURE && (x < SPACE_BEFORE_DRAWABLE_GRID &&
                                                    y >= BUTTONS_AREA_HEIGHT && y < 640)) {
@@ -412,48 +411,90 @@ public:
                             }
                         }
                     }
-                } else if (event.type == SDL_MOUSEMOTION) {
-                    if (painting) {
-                        int x, y;
-                        SDL_GetMouseState(&x, &y);
+                } else if (event.type == SDL_MOUSEMOTION && mouseIsBeingClicked) {
+                    int x, y;
+                    SDL_GetMouseState(&x, &y);
+                    if (currentTool == MOVE) {
                         if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
                             x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
                                          SCREEN_WIDTH) &&
                             y >= BUTTONS_AREA_HEIGHT &&
                             y < std::min(SCREEN_HEIGHT,
                                          BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
-                            // Click en la grilla dibujable
-                            // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
-                            // SCREEN_HEIGHT)
-                            if (mode == TEXTURE) {
-                                int gridX =
-                                        (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
+
+                            horizontalScrollOffset -= (x - last_x) * 5;
+                            if (horizontalScrollOffset < 0)
+                                horizontalScrollOffset =
+                                        0;  // Limito el desplazamiento hacia la izquierda
+                            int maxHorizontalScrollOffset = std::max(
+                                    0, BLOCK_DIVISION * width -
+                                               (SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
+                            if (horizontalScrollOffset > maxHorizontalScrollOffset)
+                                horizontalScrollOffset =
+                                        maxHorizontalScrollOffset;  // Limito el desplazamiento
+                                                                    // hacia la derecha
+
+                            verticalScrollOffset -= (y - last_y) * 5;
+                            if (verticalScrollOffset < 0)
+                                verticalScrollOffset = 0;  // Limito el desplazamiento hacia arriba
+                            int maxVerticalScrollOffset =
+                                    std::max(0, BLOCK_DIVISION * height -
+                                                        (SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT));
+                            if (verticalScrollOffset > maxVerticalScrollOffset) {
+                                verticalScrollOffset =
+                                        maxVerticalScrollOffset;  // Limito el desplazamiento hacia
+                                                                  // abajo
+                            }
+                        } else if (x < TEXTURE && y >= BUTTONS_AREA_HEIGHT) {
+                            scrollOffset -= event.wheel.y *
+                                            10;  // Se desplaza 10 píxeles por unidad de la rueda
+                            if (scrollOffset < 0)
+                                scrollOffset = 0;  // Limito el desplazamiento hacia arriba
+                            int maxScrollOffset = std::max(
+                                    0, static_cast<int>(((textures.size() + 9) / 10) * 32 - 640));
+                            if (scrollOffset > maxScrollOffset)
+                                scrollOffset =
+                                        maxScrollOffset;  // Limito el desplazamiento hacia abajo
+                        }
+                        last_x = x;
+                        last_y = y;
+                    }
+                    if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
+                        x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
+                                     SCREEN_WIDTH) &&
+                        y >= BUTTONS_AREA_HEIGHT &&
+                        y < std::min(SCREEN_HEIGHT,
+                                     BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
+                        // Click en la grilla dibujable
+                        // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
+                        // SCREEN_HEIGHT)
+                        // std::cout << "x: " << x << " y: " << y << std::endl;
+                        if (mode == TEXTURE) {
+                            int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
                                         BLOCK_DIVISION;
-                                int gridY = (y - BUTTONS_AREA_HEIGHT + verticalScrollOffset) /
-                                            BLOCK_DIVISION;
-                                if (currentTool == PAINT && selectedTextureIndex >= 0 &&
-                                    selectedTextureIndex < static_cast<int>(textures.size())) {
-                                    if (currentLayer == DIAG_LEFT_LAYER ||
-                                        currentLayer == DIAG_RIGHT_LAYER ||
-                                        currentLayer == COLLIDER_LAYER) {
-                                        if (grid[gridY][gridX][DIAG_LEFT_LAYER] != nullptr &&
-                                            currentLayer != DIAG_LEFT_LAYER) {
-                                            grid[gridY][gridX][DIAG_LEFT_LAYER] = nullptr;
-                                        }
-                                        if (grid[gridY][gridX][DIAG_RIGHT_LAYER] != nullptr &&
-                                            currentLayer != DIAG_RIGHT_LAYER) {
-                                            grid[gridY][gridX][DIAG_RIGHT_LAYER] = nullptr;
-                                        }
-                                        if (grid[gridY][gridX][COLLIDER_LAYER] != nullptr &&
-                                            currentLayer != COLLIDER_LAYER) {
-                                            grid[gridY][gridX][COLLIDER_LAYER] = nullptr;
-                                        }
+                            int gridY = (y - BUTTONS_AREA_HEIGHT + verticalScrollOffset) /
+                                        BLOCK_DIVISION;
+                            if (currentTool == PAINT && selectedTextureIndex >= 0 &&
+                                selectedTextureIndex < static_cast<int>(textures.size())) {
+                                if (currentLayer == DIAG_LEFT_LAYER ||
+                                    currentLayer == DIAG_RIGHT_LAYER ||
+                                    currentLayer == COLLIDER_LAYER) {
+                                    if (grid[gridY][gridX][DIAG_LEFT_LAYER] != nullptr &&
+                                        currentLayer != DIAG_LEFT_LAYER) {
+                                        grid[gridY][gridX][DIAG_LEFT_LAYER] = nullptr;
                                     }
-                                    grid[gridY][gridX][currentLayer] =
-                                            textures[selectedTextureIndex];
-                                } else if (currentTool == ERASE) {
-                                    grid[gridY][gridX][currentLayer] = nullptr;
+                                    if (grid[gridY][gridX][DIAG_RIGHT_LAYER] != nullptr &&
+                                        currentLayer != DIAG_RIGHT_LAYER) {
+                                        grid[gridY][gridX][DIAG_RIGHT_LAYER] = nullptr;
+                                    }
+                                    if (grid[gridY][gridX][COLLIDER_LAYER] != nullptr &&
+                                        currentLayer != COLLIDER_LAYER) {
+                                        grid[gridY][gridX][COLLIDER_LAYER] = nullptr;
+                                    }
                                 }
+                                grid[gridY][gridX][currentLayer] = textures[selectedTextureIndex];
+                            } else if (currentTool == ERASE) {
+                                grid[gridY][gridX][currentLayer] = nullptr;
                             }
                         }
                     }
@@ -462,7 +503,7 @@ public:
                     SDL_GetMouseState(&x, &y);
 
                     // Scroll solo sobre la grilla de texturas
-                    if (x < 320 && y >= 60) {
+                    if (x < TEXTURE_GRID && y >= BUTTONS_AREA_HEIGHT) {
                         scrollOffset -= event.wheel.y *
                                         10;  // Se desplaza 10 píxeles por unidad de la rueda
                         if (scrollOffset < 0)
@@ -498,7 +539,7 @@ public:
                                                               // abajo
                     }
                 } else if (event.type == SDL_MOUSEBUTTONUP) {
-                    painting = false;
+                    mouseIsBeingClicked = false;
                 }
             }
 
@@ -507,15 +548,16 @@ public:
 
             drawButton(10, 10, 80, 40, "Paint", currentTool == PAINT);
             drawButton(100, 10, 80, 40, "Erase", currentTool == ERASE);
+            drawButton(190, 10, 80, 40, "Move", currentTool == MOVE);
             if (mode == TEXTURE) {
-                drawButton(280, 10, 80, 40, "Backg", currentLayer == BACKGROUND_LAYER);
-                drawButton(370, 10, 80, 40, "DiagL", currentLayer == DIAG_LEFT_LAYER);
-                drawButton(460, 10, 80, 40, "DiagR", currentLayer == DIAG_RIGHT_LAYER);
-                drawButton(550, 10, 80, 40, "Coll", currentLayer == COLLIDER_LAYER);
-                drawButton(640, 10, 80, 40, "Decor", currentLayer == DECORATION_LAYER);
+                drawButton(370, 10, 80, 40, "Backg", currentLayer == BACKGROUND_LAYER);
+                drawButton(460, 10, 80, 40, "DiagL", currentLayer == DIAG_LEFT_LAYER);
+                drawButton(550, 10, 80, 40, "DiagR", currentLayer == DIAG_RIGHT_LAYER);
+                drawButton(640, 10, 80, 40, "Coll", currentLayer == COLLIDER_LAYER);
+                drawButton(730, 10, 80, 40, "Decor", currentLayer == DECORATION_LAYER);
             }
-            drawButton(800, 10, 80, 40, "Tile", mode == TEXTURE);
-            drawButton(890, 10, 80, 40, "Entity", mode == ENTITY);
+            drawButton(890, 10, 80, 40, "Tile", mode == TEXTURE);
+            drawButton(980, 10, 80, 40, "Entity", mode == ENTITY);
 
             drawButton(1200, 10, 80, 40, "Exit", false);
 
@@ -721,7 +763,7 @@ private:
             if (!nameExists) {
                 mapsFile << name << ".yml" << '\n';
             } else {
-                std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
+                // std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
             }
         } else {
             std::cerr << "Unable to open maps.txt for writing.\n";
