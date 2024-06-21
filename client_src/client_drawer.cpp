@@ -132,8 +132,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Background image
     TexturesProvider::init(renderer);
 
-    Texture background(renderer, SDL2pp::Surface(FONDO_PNG));
-
     MapLoader mapLoader(renderer, map_texture);
 
 
@@ -518,13 +516,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
         // Clear screen
         renderer.Clear();
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /*
-        Al sacar el copý reduce el uso del cpu a la mitad
-
-        */
-        renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Map render
         for (auto& tilePtr: mapComponents) {

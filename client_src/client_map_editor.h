@@ -625,6 +625,7 @@ public:
             }
             renderer.SetClipRect(SDL2pp::NullOpt);  // Limpiar el recorte
             renderer.Present();
+            SDL_Delay(200);
         }
     }
 

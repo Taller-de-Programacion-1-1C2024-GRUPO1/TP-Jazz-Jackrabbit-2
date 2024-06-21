@@ -22,7 +22,6 @@
 #include "../client_src/client_hearts_banner.h"
 #include "../client_src/client_shifting_drawable.h"
 #include "../client_src/client_top_scores.h"
-#include "../client_src/client_weapon_data.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
