@@ -206,7 +206,7 @@ enum /*SPAWN POINTS*/ {
 
 #define CHANGE_WEAPON_COOLDOWN 10
 
-enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER, RAYGUN };
+enum GUN_TYPE { BASIC_GUN, FLAMETHROWER, ROCKETLAUNCHER, RAYGUN };
 
 // BASIC GUN
 #define BASIC_GUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getBasicGunFireCooldown()
@@ -215,22 +215,22 @@ enum GUN_TYPE { BASIC_GUN, MACHINE_GUN, SNIPER, RAYGUN };
 #define BASIC_GUN_RANGE ConfigSingleton::getInstance().getBasicGunRange()
 #define BASIC_GUN_BULLET_SPEED ConfigSingleton::getInstance().getBasicGunBulletSpeed()
 
-// MACHINE GUN (FLAMETHROWER)
-#define MACHINEGUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getMachinegunFireCooldown()
-#define MACHINEGUN_MAX_AMMO ConfigSingleton::getInstance().getMachinegunMaxAmmo()
-#define MACHINEGUN_DAMAGE ConfigSingleton::getInstance().getMachinegunDamage()
-#define MACHINEGUN_RANGE ConfigSingleton::getInstance().getMachinegunRange()
-#define MACHINEGUN_BULLET_SPEED ConfigSingleton::getInstance().getMachinegunBulletSpeed()
-#define MACHINEGUN_AMMO_AMOUNT ConfigSingleton::getInstance().getMachinegunAmmoAmount()
+// FLAMETHROWER
+#define FLAMETHROWER_FIRE_COOLDOWN ConfigSingleton::getInstance().getFlamethrowerFireCooldown()
+#define FLAMETHROWER_MAX_AMMO ConfigSingleton::getInstance().getFlamethrowerMaxAmmo()
+#define FLAMETHROWER_DAMAGE ConfigSingleton::getInstance().getFlamethrowerDamage()
+#define FLAMETHROWER_RANGE ConfigSingleton::getInstance().getFlamethrowerRange()
+#define FLAMETHROWER_BULLET_SPEED ConfigSingleton::getInstance().getFlamethrowerBulletSpeed()
+#define FLAMETHROWER_AMMO_AMOUNT ConfigSingleton::getInstance().getFlamethrowerAmmoAmount()
 
 
-// SNIPER (ROCKET LAUNCHER)
-#define SNIPER_FIRE_COOLDOWN ConfigSingleton::getInstance().getSniperFireCooldown()
-#define SNIPER_MAX_AMMO ConfigSingleton::getInstance().getSniperMaxAmmo()
-#define SNIPER_DAMAGE ConfigSingleton::getInstance().getSniperDamage()
-#define SNIPER_RANGE ConfigSingleton::getInstance().getSniperRange()
-#define SNIPER_BULLET_SPEED ConfigSingleton::getInstance().getSniperBulletSpeed()
-#define SNIPER_AMMO_AMOUNT ConfigSingleton::getInstance().getSniperAmmoAmount()
+// ROCKET LAUNCHER
+#define ROCKETLAUNCHER_FIRE_COOLDOWN ConfigSingleton::getInstance().getRocketLauncherFireCooldown()
+#define ROCKETLAUNCHER_MAX_AMMO ConfigSingleton::getInstance().getRocketLauncherMaxAmmo()
+#define ROCKETLAUNCHER_DAMAGE ConfigSingleton::getInstance().getRocketLauncherDamage()
+#define ROCKETLAUNCHER_RANGE ConfigSingleton::getInstance().getRocketLauncherRange()
+#define ROCKETLAUNCHER_BULLET_SPEED ConfigSingleton::getInstance().getRocketLauncherBulletSpeed()
+#define ROCKETLAUNCHER_AMMO_AMOUNT ConfigSingleton::getInstance().getRocketLauncherAmmoAmount()
 
 // RAYGUN
 #define RAYGUN_FIRE_COOLDOWN ConfigSingleton::getInstance().getRaygunFireCooldown()

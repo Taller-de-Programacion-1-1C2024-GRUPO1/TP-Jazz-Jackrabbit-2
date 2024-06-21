@@ -46,17 +46,17 @@ public:
 };
 
 
-class MachineGun: public Gun {
+class FlameThrower: public Gun {
 public:
-    MachineGun(Rabbit& owner, Map& manager);
+    FlameThrower(Rabbit& owner, Map& manager);
     bool has_ammo() override;
     void fire(int pos_x, int pos_y, int direction) override;
 };
 
 
-class Sniper: public Gun {
+class RocketLauncher: public Gun {
 public:
-    Sniper(Rabbit& owner, Map& manager);
+    RocketLauncher(Rabbit& owner, Map& manager);
     bool has_ammo() override;
     void fire(int pos_x, int pos_y, int direction) override;
 };

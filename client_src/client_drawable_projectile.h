@@ -22,10 +22,10 @@ public:
             case BASIC_GUN:
                 this->loadAnimations(REGULAR_ANIMATIONS);
                 break;
-            case MACHINE_GUN:
+            case FLAMETHROWER:
                 this->loadAnimations(BLUE_RAY_ANIMATIONS);
                 break;
-            case SNIPER:
+            case ROCKETLAUNCHER:
                 this->loadAnimations(ROCKET_ANIMATIONS);
                 this->requires_explosion = true;
                 this->is_exploding = true;

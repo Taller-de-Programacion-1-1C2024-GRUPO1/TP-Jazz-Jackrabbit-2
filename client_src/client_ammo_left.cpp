@@ -15,10 +15,10 @@ void AmmoLeft::setWeapon(int weapon_type) {
         case BASIC_GUN:
             munitionRect = SDL2pp::Rect(69, 26, 22, 26);
             break;
-        case MACHINE_GUN:
+        case FLAMETHROWER:
             munitionRect = SDL2pp::Rect(66, 152, 22, 15);
             break;
-        case SNIPER:
+        case ROCKETLAUNCHER:
             munitionRect = SDL2pp::Rect(112, 220, 21, 24);
             break;
         case RAYGUN:

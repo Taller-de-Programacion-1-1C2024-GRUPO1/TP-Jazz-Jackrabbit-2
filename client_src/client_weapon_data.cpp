@@ -27,10 +27,10 @@ void WeaponData::loadAnimationsToProjectile(int id, ShiftingDrawable* projectile
         case BASIC_GUN:
             projectile->loadAnimations(REGULAR_ANIMATIONS);
             break;
-        case MACHINE_GUN:
+        case FLAMETHROWER:
             projectile->loadAnimations(BLUE_RAY_ANIMATIONS);
             break;
-        case SNIPER:
+        case ROCKETLAUNCHER:
             projectile->loadAnimations(ROCKET_ANIMATIONS);
             break;
     }

@@ -27,8 +27,8 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
         state_needs_change(false),
         state(new Alive(*this)) {
     gun_inventory.push_back(new BasicGun(*this, this->map));
-    gun_inventory.push_back(new MachineGun(*this, this->map));
-    gun_inventory.push_back(new Sniper(*this, this->map));
+    gun_inventory.push_back(new FlameThrower(*this, this->map));
+    gun_inventory.push_back(new RocketLauncher(*this, this->map));
     gun_inventory.push_back(new RayGun(*this, this->map));
 }
 
@@ -56,9 +56,9 @@ void Rabbit::add_health(int amount_health) {
 }
 
 void Rabbit::add_machinegun_ammo(int amount_ammo) {
-    gun_inventory[MACHINE_GUN]->add_ammo(amount_ammo);
+    gun_inventory[FLAMETHROWER]->add_ammo(amount_ammo);
 }
-void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[SNIPER]->add_ammo(amount_ammo); }
+void Rabbit::add_sniper_ammo(int amount_ammo) { gun_inventory[ROCKETLAUNCHER]->add_ammo(amount_ammo); }
 
 void Rabbit::add_raygun_ammo(int amount_ammo) { gun_inventory[RAYGUN]->add_ammo(amount_ammo); }
 
@@ -77,8 +77,8 @@ void Rabbit::respawn() {
 
 void Rabbit::revive() {
     health = PLAYER_INITIAL_HEALTH;
-    gun_inventory[MACHINE_GUN]->reset_ammo_amount();
-    gun_inventory[SNIPER]->reset_ammo_amount();
+    gun_inventory[FLAMETHROWER]->reset_ammo_amount();
+    gun_inventory[ROCKETLAUNCHER]->reset_ammo_amount();
     gun_inventory[RAYGUN]->reset_ammo_amount();
     current_gun = BASIC_GUN;
     set_state(ALIVE);

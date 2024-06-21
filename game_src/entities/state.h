@@ -122,7 +122,7 @@ public:
         if (change_status_cooldown > 0) {
             change_status_cooldown--;
         }
-        if (cooldown_take_damage >= (RABBIT_DEINTOXICATE_TIME * UPDATE_RATE)) {
+        if (cooldown_take_damage >= (UPDATE_RATE)) {
             rabbit.set_alive();
         }
     }
