@@ -279,8 +279,8 @@ Whether you're facing off against friends or competing with strangers, remember 
 | Ammo | Description |
 |-------|--------|
 |![IMG](utils_png/flamethrower.png) | This fiery weapon unleashes a continuous stream of scorching flames, causing constant damage to anything in its path. Perfect for dealing with multiple enemies at once, the flamethrower turns up the heat and leaves a trail of destruction. Just hold down the trigger and watch your foes burn! |
-| ![IMG](utils_png/sniper.png) | The raygun packs a powerful punch in a short-range blast. This high-tech weapon delivers a burst of energy that does a lot of damage, making it ideal for close encounters. When enemies get too close for comfort, the raygun's intense firepower ensures they won't stay there for long. |
-| ![IMG](utils_png/raygun.png) | For those who prefer to take out enemies from a distance, the sniper rifle is the perfect choice. This long-range weapon deals a significant amount of damage, allowing you to pick off foes before they even know what's hit them. With pinpoint accuracy and devastating power, the sniper rifle turns you into a lethal sharpshooter. |
+| ![IMG](utils_png/raygun.png) | The raygun packs a powerful punch in a short-range blast. This high-tech weapon delivers a burst of energy that does a lot of damage, making it ideal for close encounters. When enemies get too close for comfort, the raygun's intense firepower ensures they won't stay there for long. |
+| ![IMG](utils_png/rocketlauncher.png) | For those who prefer to take out enemies from a distance, the rocket launcher is the perfect choice. This long-range weapon deals a significant amount of damage, allowing you to pick off foes before they even know what's hit them. With pinpoint accuracy and devastating power, the rocke launcher turns you into a lethal sharpshooter. |
 
 #### Food
 
