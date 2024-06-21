@@ -1,0 +1,108 @@
+@startuml
+class TexturesProvider {
+    static std::map<std::string, std::shared_ptr<SDL2pp::Texture>> textures;
+
+    static void init(SDL2pp::Renderer& renderer);
+    static void loadTexture(SDL2pp::Renderer& renderer, const std::string& name,const std::string& path, SDL2pp::Color colorKey);
+    static std::shared_ptr<SDL2pp::Texture> getTexture(const std::string& name);
+
+}
+
+
+
+class DrawableRabbit {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setCharacterFromSnapshot(const int champion_type);
+    void setAnimationFromSnapshot(const RabbitSnapshot& snapshot);
+}
+
+
+
+class DrawableEnemy {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setEnemyFromSnapshot(const int enemy_type);
+}
+
+
+
+
+class DrawableProjectile {
+    bool requires_explosion;
+    bool is_exploding;
+    int explosion_frames;
+
+
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setProjectileFromSnapshot(const int projectile_type);
+    void setRequiresExplosion(bool requires_explosion);
+    bool requiresExplosion();
+    bool isExploding();
+    void playSoundOnDeath();
+}
+
+
+class DrawableValuable {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setValuableFromSnapshot(const int valuable_type);
+    void playSoundOnDeath();
+}
+
+
+class DrawableAmmo {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setAmmoFromSnapshot(const int ammo_type);
+    void playSoundOnDeath();
+}
+
+
+class MapLoader {
+    Renderer& renderer;
+    std::shared_ptr<SDL2pp::Texture> texture;
+
+    std::vector<std::unique_ptr<Drawable>> loadMap(const DynamicMap& map,SDL2pp::Point& cameraPosition);
+}
+
+class NumberImages {
+    int x, y;
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Texture numberTexture;
+    std::vector<SDL2pp::Rect> numberRects;
+
+    void renderNumber(int number, int offsetX, int offsetY, int size);
+    void loadNumbers();
+    void setCorner(int mode);
+}
+
+TexturesProvider --> DrawableRabbit
+TexturesProvider --> DrawableEnemy
+TexturesProvider --> DrawableProjectile
+TexturesProvider --> DrawableValuable
+TexturesProvider --> DrawableAmmo
+TexturesProvider --> MapLoader
+TexturesProvider --> NumberImages
+@enduml
