@@ -37,204 +37,37 @@ struct Entity {
 
 class Editor {
 public:
-    explicit Editor(const std::string& map_name):
-
-
-            sdl(SDL_INIT_VIDEO),
-            image(IMG_INIT_PNG),
-            ttf(),
-            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                   EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
-            renderer(window, -1, SDL_RENDERER_ACCELERATED),
-
-            font(FONT_TTF_04B_30, 15)
-
-
-    {
-        std::string mapPath = "../external/maps/" + map_name + ".yml";
-        YAML::Node map = YAML::LoadFile(mapPath);
-
-        name = map["name"].as<std::string>();
-        texture = map["texture"].as<int>();
-        maxPlayers = map["max_players"].as<int>();
-        width = map["width"].as<int>();
-        height = map["height"].as<int>();
-
-        currentRabbitSpawns = maxPlayers;
-
-        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
-
-        Surface surface(textureImg[texture]);
-        /*SDL2pp::Color colorKey = {87, 0, 203, 0};
-        Uint32 mappedColorKey =
-                SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
-        SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);*/
-
-
-        for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
-            for (int j = 0; j < surface.GetWidth(); j += BLOCK_DIVISION) {
-                Rect src;
-                src.x = j;
-                src.y = i;
-                src.w = BLOCK_DIVISION;
-                src.h = BLOCK_DIVISION;
-
-                Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
-                surface.Blit(src, destSurface, {0, 0, 0, 0});
-                SDL2pp::Texture current_texture(renderer, destSurface);
-                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
-            }
-        }
-
-
-        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
-                height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
-                                width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
-        entities_grid = std::vector<std::vector<Entity>>(
-                height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
-
-        // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ_IMG,   ENEMIES_PNG, ENEMIES_PNG,
-                                               TURTLE_PNG, ITEMS_PNG,   ITEMS_PNG};
-
-        for (const auto& path: imagePaths) {
-            Surface entitySurface(path);
-            Texture entityTexture(renderer, entitySurface);
-            entitiesTextures.push_back(std::move(entityTexture));
-        }
-
-        jazz_src = {1, 12, 35, 49};
-        jazz_dst = {0, 64, 64, 64};
-
-        crab_src = {734, 310, 40, 32};
-        crab_dst = {0, 128, 64, 64};
-
-        lizard_src = {18, 15, 64, 52};
-        lizard_dst = {64, 128, 64, 64};
-
-        turtle_src = {11, 58, 69, 54};
-        turtle_dst = {128, 128, 64, 64};
-
-        coin_src = {481, 1218, 28, 27};
-        coin_dst = {0, 256, 32, 32};
-
-        diamond_src = {147, 1241, 29, 30};
-        diamond_dst = {32, 256, 32, 32};
-
-        // ahora cargamos las matrices de texturas
-        for (int layer = 0; layer < 5; ++layer) {
-            for (int i = 0; i < height; ++i) {
-                for (int j = 0; j < width; ++j) {
-                    int index = map["layers"][layer]["data"][i][j].as<int>();
-                    if (index != -1) {
-                        grid[i][j][layer] = textures[index];
-                    }
-                }
-            }
-        }
-        // ahora cargamos las matrices de entidades
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
-                int index = map["layers"][5]["data"][i][j].as<int>();
-                if (index != -1) {
-                    switch (index) {
-                        case RABBIT_SPAWN:
-                            entities_grid[i][j] = {RABBIT_SPAWN, jazz_src};
-                            break;
-                        case LIZARD_SPAWN:
-                            entities_grid[i][j] = {LIZARD_SPAWN, lizard_src};
-                            break;
-                        case CRAB_SPAWN:
-                            entities_grid[i][j] = {CRAB_SPAWN, crab_src};
-                            break;
-                        case TURTLE_SPAWN:
-                            entities_grid[i][j] = {TURTLE_SPAWN, turtle_src};
-                            break;
-                        case COIN_SPAWN:
-                            entities_grid[i][j] = {COIN_SPAWN, coin_src};
-                            break;
-                        case GEM_SPAWN:
-                            entities_grid[i][j] = {GEM_SPAWN, coin_src};
-                            break;
-                    }
-                }
-            }
-        }
+    //Constructor for precharged map
+     explicit Editor(const std::string& map_name) : 
+        sdl(SDL_INIT_VIDEO), 
+        image(IMG_INIT_PNG), 
+        ttf(),
+        window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
+        renderer(window, -1, SDL_RENDERER_ACCELERATED),
+        font(FONT_TTF_04B_30, 15) {
+        loadTileTextures();
+        loadEntityTextures();
+        loadMapData(map_name);
     }
 
-
-    Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser,
-           const int max_players):
-            sdl(SDL_INIT_VIDEO),
-            image(IMG_INIT_PNG),
-            ttf(),
-            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                   EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
-            renderer(window, -1, SDL_RENDERER_ACCELERATED),
-            width(mapWidth),
-            height(mapHeight),
-            name(nameByUser),
-            maxPlayers(max_players),
-            texture(map),
-            currentRabbitSpawns(0),
-            font(FONT_TTF_04B_30, 15) {
-        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
-
-        Surface surface(textureImg[map]);
-        SDL2pp::Color colorKey = {87, 0, 203, 0};
-        Uint32 mappedColorKey =
-                SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
-        SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
-
-        for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
-            for (int j = 0; j < surface.GetWidth(); j += BLOCK_DIVISION) {
-                Rect src;
-                src.x = j;
-                src.y = i;
-                src.w = BLOCK_DIVISION;
-                src.h = BLOCK_DIVISION;
-
-                Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
-                surface.Blit(src, destSurface, {0, 0, 0, 0});
-                SDL2pp::Texture current_texture(renderer, destSurface);
-                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
-            }
-        }
-        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
-                height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
-                                width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
-        entities_grid = std::vector<std::vector<Entity>>(
-                height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
-
-        // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ_IMG, ENEMIES_PNG, ENEMIES_PNG,
-                                               TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
-
-        for (const auto& path: imagePaths) {
-            Surface entitySurface(path);
-            Texture entityTexture(renderer, entitySurface);
-            entitiesTextures.push_back(std::move(entityTexture));
-        }
-
-        jazz_src = {1, 12, 35, 49};
-        jazz_dst = {0, 64, 64, 64};
-
-        crab_src = {734, 310, 40, 32};
-        crab_dst = {0, 128, 64, 64};
-
-        lizard_src = {18, 15, 64, 52};
-        lizard_dst = {64, 128, 64, 64};
-
-        turtle_src = {11, 58, 69, 54};
-        turtle_dst = {128, 128, 64, 64};
-
-        coin_src = {481, 1218, 28, 27};
-        coin_dst = {0, 256, 32, 32};
-
-        diamond_src = {147, 1241, 29, 30};
-        diamond_dst = {32, 256, 32, 32};
+    //Constructor for new map
+    Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser, const int max_players) : 
+        sdl(SDL_INIT_VIDEO), 
+        image(IMG_INIT_PNG),    
+        ttf(),
+        window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
+        renderer(window, -1, SDL_RENDERER_ACCELERATED),
+        width(mapWidth),
+        height(mapHeight),
+        name(nameByUser),
+        maxPlayers(max_players),
+        texture(map),
+        currentRabbitSpawns(0),
+        font(FONT_TTF_04B_30, 15) {
+        loadTileTextures(map);
+        loadEntityTextures();
+        initializeGrids();
     }
-
 
     void run() {
         bool running = true;
@@ -340,13 +173,13 @@ public:
                         // Click en la grilla dibujable
                         // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
                         // EDITOR_SCREEN_HEIGHT)
-                        if (mode == ENTITY && selectedEntityIndex >= 0 &&
-                            selectedEntityIndex < static_cast<int>(entitiesTextures.size())) {
+                        if (mode == ENTITY) {
                             int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
                                         BLOCK_DIVISION;
                             int gridY = (y - BUTTONS_AREA_HEIGHT + verticalScrollOffset) /
                                         BLOCK_DIVISION;
-                            if (currentTool == PAINT) {
+                            if (currentTool == PAINT && selectedEntityIndex >= 0 &&
+                            selectedEntityIndex < static_cast<int>(entitiesTextures.size())) {
                                 // Verificar si la celda actual, la celda debajo y la celda a la
                                 // derecha no tienen una capa de tipo COLISIONABLE, DIAGONAL
                                 // IZQUIERDA o DIAGONAL DERECHA
@@ -355,18 +188,24 @@ public:
                                         COLLIDER_LAYER, DIAG_LEFT_LAYER, DIAG_RIGHT_LAYER};
                                 auto isRestrictedLayer = [&](int layer) {
                                     return grid[gridY][gridX][layer] != nullptr ||
-                                           (gridY + 1 < static_cast<int>(grid.size()) &&
+                                        (gridY + 1 < static_cast<int>(grid.size()) &&
                                             grid[gridY + 1][gridX][layer] != nullptr) ||
-                                           (gridX + 1 < static_cast<int>(grid[gridY].size()) &&
+                                        (gridX + 1 < static_cast<int>(grid[gridY].size()) &&
                                             grid[gridY][gridX + 1][layer] != nullptr) ||
-                                           (gridY + 1 < static_cast<int>(grid.size()) &&
+                                        (gridY + 1 < static_cast<int>(grid.size()) &&
                                             gridX + 1 < static_cast<int>(grid[gridY + 1].size()) &&
                                             grid[gridY + 1][gridX + 1][layer] != nullptr);
                                 };
-
                                 canPaint = !std::any_of(restrictedLayers.begin(),
-                                                        restrictedLayers.end(), isRestrictedLayer);
+                                                    restrictedLayers.end(), isRestrictedLayer);
 
+                                if (selectedEntityIndex == GEM_SPAWN || selectedEntityIndex == COIN_SPAWN){
+                                    auto restLayer = [&](int layer) {
+                                        return grid[gridY][gridX][layer] != nullptr;
+                                    };
+                                    canPaint = !std::any_of(restrictedLayers.begin(),
+                                                        restrictedLayers.end(), restLayer);
+                                }
                                 if (canPaint) {
                                     switch (selectedEntityIndex) {
                                         case RABBIT_SPAWN:
@@ -531,7 +370,7 @@ public:
                         if (scrollOffset < 0)
                             scrollOffset = 0;  // Limito el desplazamiento hacia arriba
                         int maxScrollOffset = std::max(
-                                0, static_cast<int>(((textures.size() + 9) / 10) * 32 - 640));
+                                0, static_cast<int>(((textures.size() + 9) / 10) * BLOCK_DIVISION - 640));
                         if (scrollOffset > maxScrollOffset)
                             scrollOffset = maxScrollOffset;  // Limito el desplazamiento hacia abajo
                     } else if (x >= SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT) {
@@ -598,10 +437,10 @@ public:
                 renderer.SetClipRect(textureClipRect);
                 for (int i = 0; i < static_cast<int>(textures.size()); ++i) {
                     Rect dst;
-                    dst.x = (i % 10) * 32;
-                    dst.y = 60 + (i / 10) * 32 - scrollOffset;
-                    dst.w = 32;
-                    dst.h = 32;
+                    dst.x = (i % 10) * BLOCK_DIVISION;
+                    dst.y = 60 + (i / 10) * BLOCK_DIVISION - scrollOffset;
+                    dst.w = BLOCK_DIVISION;
+                    dst.h = BLOCK_DIVISION;
 
                     renderer.Copy(*textures[i], SDL2pp::NullOpt, dst);
 
@@ -715,6 +554,123 @@ private:
         textRect.h = textSurface.GetHeight();
 
         renderer.Copy(textTexture, SDL2pp::NullOpt, textRect);
+    }
+
+    void loadMapData(const std::string& map_name) {
+        std::string mapPath = "../external/maps/" + map_name + ".yml";
+        YAML::Node map = YAML::LoadFile(mapPath);
+        name = map["name"].as<std::string>();
+        texture = map["texture"].as<int>();
+        maxPlayers = map["max_players"].as<int>();
+        width = map["width"].as<int>();
+        height = map["height"].as<int>();
+        initializeGrids();
+        populateTextureGrid(map);
+        populateEntityGrid(map);
+    }
+
+    void loadTileTextures(int map = -1) {
+        std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG};
+        int textureIndex = (map == -1) ? texture : map;
+        processTexture(textureImg[textureIndex]);
+    }
+
+    void processTexture(const std::string& path) {
+        Surface surface(path);
+        SDL2pp::Color colorKey = {87, 0, 203, 0};
+        Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
+        SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
+        
+        for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
+            for (int j = 0; j < surface.GetWidth(); j += BLOCK_DIVISION) {
+                Rect src;
+                src.x = j;
+                src.y = i;
+                src.w = BLOCK_DIVISION;
+                src.h = BLOCK_DIVISION;
+
+                Surface destSurface(0, BLOCK_DIVISION, BLOCK_DIVISION, BLOCK_DIVISION, 0, 0, 0, 0);
+                surface.Blit(src, destSurface, {0, 0, 0, 0});
+                SDL2pp::Texture current_texture(renderer, destSurface);
+                textures.push_back(std::make_shared<Texture>(std::move(current_texture)));
+            }
+        }
+    }
+
+    void loadEntityTextures() {
+        std::vector<std::string> imagePaths = {JAZZ_IMG, ENEMIES_PNG, ENEMIES_PNG, TURTLE_PNG, ITEMS_PNG, ITEMS_PNG};
+        for (const auto& path: imagePaths) {
+            Surface entitySurface(path);
+            Texture entityTexture(renderer, entitySurface);
+            entitiesTextures.push_back(std::move(entityTexture));
+        }
+
+        jazz_src = {1, 12, 35, 49};
+        jazz_dst = {0, 64, 64, 64};
+
+        crab_src = {734, 310, 40, 32};
+        crab_dst = {0, 128, 64, 64};
+
+        lizard_src = {18, 15, 64, 52};
+        lizard_dst = {64, 128, 64, 64};
+
+        turtle_src = {11, 58, 69, 54};
+        turtle_dst = {128, 128, 64, 64};
+
+        coin_src = {481, 1218, 28, 27};
+        coin_dst = {0, 256, 32, 32};
+
+        diamond_src = {147, 1241, 29, 30};
+        diamond_dst = {32, 256, 32, 32};
+    }
+
+    void initializeGrids() {
+        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
+        entities_grid = std::vector<std::vector<Entity>>(height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
+    }
+
+    void populateTextureGrid(YAML::Node &map) {
+        for (int layer = 0; layer < 5; ++layer) {
+            for (int i = 0; i < height; ++i) {
+                for (int j = 0; j < width; ++j) {
+                    int index = map["layers"][layer]["data"][i][j].as<int>();
+                    if (index != -1) {
+                        grid[i][j][layer] = textures[index];
+                    }
+                }
+            }
+        }
+    }
+
+    void populateEntityGrid(YAML::Node &map) {
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                int index = map["layers"][5]["data"][i][j].as<int>();
+                if (index != -1) {
+                    switch(index){
+                        case RABBIT_SPAWN:
+                            currentRabbitSpawns++;
+                            entities_grid[i][j] = {index, jazz_src};
+                            break;
+                        case CRAB_SPAWN:
+                            entities_grid[i][j] = {index, crab_src};
+                            break;
+                        case LIZARD_SPAWN:
+                            entities_grid[i][j] = {index, lizard_src};
+                            break;
+                        case TURTLE_SPAWN:
+                            entities_grid[i][j] = {index, turtle_src};
+                            break;
+                        case GEM_SPAWN:
+                            entities_grid[i][j] = {index, diamond_src};
+                            break;
+                        case COIN_SPAWN:
+                            entities_grid[i][j] = {index, coin_src};
+                            break;                            
+                    }
+                }
+            }
+        }
     }
 
     void saveMap() {
