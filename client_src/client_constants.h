@@ -5,6 +5,8 @@
 
 #include "client_config.h"
 
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 #define CLOSE_MAP_CREATOR -3
 #define PLAY_MAP -4
 #define EDIT_MAP -5

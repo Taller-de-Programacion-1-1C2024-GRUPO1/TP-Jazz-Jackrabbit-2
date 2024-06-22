@@ -1,8 +1,5 @@
 #include "client_drawer.h"
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
 ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds),
         q_snapshots(q_snapshots),
@@ -134,12 +131,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
     MapLoader mapLoader(renderer, map_texture);
 
-
-    SDL2pp::Point playerPosition(10, 10);
-    SDL2pp::Point cameraPosition(0, 0);
-    SDL2pp::Point desiredCameraPosition(0, 0);
-    float lerpFactor = 0.1f;
-
     // Number images
     NumberImages numberImages(renderer);
     numberImages.setCorner(0);
@@ -151,6 +142,10 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     TopScores topScores(renderer, player_id);
     Clock clock(renderer);
 
+    SDL2pp::Point playerPosition(10, 10);
+    SDL2pp::Point cameraPosition(0, 0);
+    SDL2pp::Point desiredCameraPosition(0, 0);
+
     // Read first snapshot!
     Snapshot initial_snapshot;
     while (!q_snapshots.try_pop(initial_snapshot)) {
@@ -159,6 +154,12 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     showLoadingScreen(renderer);
+
+    int map_width = initial_snapshot.map_dimensions.height;
+    int map_height = initial_snapshot.map_dimensions.width;
+
+    std::cout << "Map width: " << map_width << std::endl;
+    std::cout << "Map height: " << map_height << std::endl;
 
     game_running = !initial_snapshot.get_end_game();
     clock.update(initial_snapshot.get_match_time());
@@ -249,13 +250,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
         // EVENTS HANDLER
         keyboard_handler.listenForCommands(game_running);
-
-        desiredCameraPosition.x = playerPosition.x - (window.GetWidth() / 2);
-        desiredCameraPosition.y = playerPosition.y - (window.GetHeight() / 2);
-
-        // Interpolación lineal para suavizar el movimiento
-        cameraPosition.x += (desiredCameraPosition.x - cameraPosition.x) * lerpFactor;
-        cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
 
         // SNAPSHOT RECEIVER
 
@@ -488,6 +482,19 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         }
 
         // UPDATE ENTITIES
+
+        // Actualizar la posición de la cámara para que siga al jugador
+        cameraPosition.x = static_cast<int>(playerPosition.x - SCREEN_WIDTH / 2);
+        cameraPosition.y = static_cast<int>(playerPosition.y - SCREEN_HEIGHT / 2);
+
+        if (cameraPosition.x < 0)
+            cameraPosition.x = 0;
+        if (cameraPosition.y < 0)
+            cameraPosition.y = 0;
+        if (cameraPosition.x > map_width * BLOCK_DIVISION - SCREEN_WIDTH)
+            cameraPosition.x = map_width * BLOCK_DIVISION - SCREEN_WIDTH;
+        if (cameraPosition.y > map_height * BLOCK_DIVISION - SCREEN_HEIGHT)
+            cameraPosition.y = map_height * BLOCK_DIVISION - SCREEN_HEIGHT;
 
         topScores.update();
 

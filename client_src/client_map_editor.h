@@ -22,8 +22,8 @@ enum Mode { TEXTURE, ENTITY };
 // Donde se va a colocar el mapa resultante
 #define DEST_PATH "../external/maps/"
 
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 700;
+const int EDITOR_SCREEN_WIDTH = 1280;
+const int EDITOR_SCREEN_HEIGHT = 700;
 const int BUTTON_WIDTH = 80;
 const int BUTTON_HEIGHT = 40;
 const int BUTTONS_AREA_HEIGHT = 60;
@@ -43,8 +43,8 @@ public:
             sdl(SDL_INIT_VIDEO),
             image(IMG_INIT_PNG),
             ttf(),
-            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                   SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
+            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                   EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
             renderer(window, -1, SDL_RENDERER_ACCELERATED),
 
             font(FONT_TTF_04B_30, 15)
@@ -64,10 +64,10 @@ public:
         std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
 
         Surface surface(textureImg[texture]);
-        SDL2pp::Color colorKey = {87, 0, 203, 0};
+        /*SDL2pp::Color colorKey = {87, 0, 203, 0};
         Uint32 mappedColorKey =
                 SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
-        SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
+        SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);*/
 
 
         for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
@@ -93,8 +93,8 @@ public:
                 height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
         // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ_CHARACTER_PNG, ENEMIES_PNG, ENEMIES_PNG,
-                                               TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
+        std::vector<std::string> imagePaths = {JAZZ_IMG,   ENEMIES_PNG, ENEMIES_PNG,
+                                               TURTLE_PNG, ITEMS_PNG,   ITEMS_PNG};
 
         for (const auto& path: imagePaths) {
             Surface entitySurface(path);
@@ -136,9 +136,26 @@ public:
             for (int j = 0; j < width; ++j) {
                 int index = map["layers"][5]["data"][i][j].as<int>();
                 if (index != -1) {
-                    entities_grid[i][j] = {index, {0, 0, 0, 0}};
-                    if (index == RABBIT_SPAWN) {
-                        currentRabbitSpawns++;
+                    switch (index) {
+                        case RABBIT_SPAWN:
+                            entities_grid[i][j] = {RABBIT_SPAWN, jazz_src};
+                            currentRabbitSpawns++;
+                            break;
+                        case LIZARD_SPAWN:
+                            entities_grid[i][j] = {LIZARD_SPAWN, lizard_src};
+                            break;
+                        case CRAB_SPAWN:
+                            entities_grid[i][j] = {CRAB_SPAWN, crab_src};
+                            break;
+                        case TURTLE_SPAWN:
+                            entities_grid[i][j] = {TURTLE_SPAWN, turtle_src};
+                            break;
+                        case COIN_SPAWN:
+                            entities_grid[i][j] = {COIN_SPAWN, coin_src};
+                            break;
+                        case GEM_SPAWN:
+                            entities_grid[i][j] = {GEM_SPAWN, coin_src};
+                            break;
                     }
                 }
             }
@@ -151,8 +168,8 @@ public:
             sdl(SDL_INIT_VIDEO),
             image(IMG_INIT_PNG),
             ttf(),
-            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                   SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
+            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                   EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE),
             renderer(window, -1, SDL_RENDERER_ACCELERATED),
             width(mapWidth),
             height(mapHeight),
@@ -311,13 +328,13 @@ public:
                         }
                     } else if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
                                x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
-                                            SCREEN_WIDTH) &&
+                                            EDITOR_SCREEN_WIDTH) &&
                                y >= BUTTONS_AREA_HEIGHT &&
-                               y < std::min(SCREEN_HEIGHT,
+                               y < std::min(EDITOR_SCREEN_HEIGHT,
                                             BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
                         // Click en la grilla dibujable
                         // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
-                        // SCREEN_HEIGHT)
+                        // EDITOR_SCREEN_HEIGHT)
                         if (mode == ENTITY && selectedEntityIndex >= 0 &&
                             selectedEntityIndex < static_cast<int>(entitiesTextures.size())) {
                             int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
@@ -417,9 +434,9 @@ public:
                     if (currentTool == MOVE) {
                         if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
                             x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
-                                         SCREEN_WIDTH) &&
+                                         EDITOR_SCREEN_WIDTH) &&
                             y >= BUTTONS_AREA_HEIGHT &&
-                            y < std::min(SCREEN_HEIGHT,
+                            y < std::min(EDITOR_SCREEN_HEIGHT,
                                          BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
 
                             horizontalScrollOffset -= (x - last_x) * 5;
@@ -428,7 +445,7 @@ public:
                                         0;  // Limito el desplazamiento hacia la izquierda
                             int maxHorizontalScrollOffset = std::max(
                                     0, BLOCK_DIVISION * width -
-                                               (SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
+                                               (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
                             if (horizontalScrollOffset > maxHorizontalScrollOffset)
                                 horizontalScrollOffset =
                                         maxHorizontalScrollOffset;  // Limito el desplazamiento
@@ -437,9 +454,9 @@ public:
                             verticalScrollOffset -= (y - last_y) * 5;
                             if (verticalScrollOffset < 0)
                                 verticalScrollOffset = 0;  // Limito el desplazamiento hacia arriba
-                            int maxVerticalScrollOffset =
-                                    std::max(0, BLOCK_DIVISION * height -
-                                                        (SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT));
+                            int maxVerticalScrollOffset = std::max(
+                                    0, BLOCK_DIVISION * height -
+                                               (EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT));
                             if (verticalScrollOffset > maxVerticalScrollOffset) {
                                 verticalScrollOffset =
                                         maxVerticalScrollOffset;  // Limito el desplazamiento hacia
@@ -461,13 +478,13 @@ public:
                     }
                     if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
                         x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
-                                     SCREEN_WIDTH) &&
+                                     EDITOR_SCREEN_WIDTH) &&
                         y >= BUTTONS_AREA_HEIGHT &&
-                        y < std::min(SCREEN_HEIGHT,
+                        y < std::min(EDITOR_SCREEN_HEIGHT,
                                      BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
                         // Click en la grilla dibujable
                         // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
-                        // SCREEN_HEIGHT)
+                        // EDITOR_SCREEN_HEIGHT)
                         // std::cout << "x: " << x << " y: " << y << std::endl;
                         if (mode == TEXTURE) {
                             int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
@@ -521,7 +538,7 @@ public:
                             horizontalScrollOffset =
                                     0;  // Limito el desplazamiento hacia la izquierda
                         int maxHorizontalScrollOffset = std::max(
-                                0, 32 * width - (SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
+                                0, 32 * width - (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
                         if (horizontalScrollOffset > maxHorizontalScrollOffset)
                             horizontalScrollOffset =
                                     maxHorizontalScrollOffset;  // Limito el desplazamiento hacia la

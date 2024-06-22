@@ -18,16 +18,19 @@ const int BLOCK_SIZE = 32;
 class MapLoader {
 private:
     Renderer& renderer;
-    std::shared_ptr<SDL2pp::Texture> texture;
+    std::shared_ptr<SDL2pp::Texture> clean_texture;
+    std::shared_ptr<SDL2pp::Texture> default_texture;
 
 public:
     explicit MapLoader(Renderer& renderer, const int map_texture): renderer(renderer) {
         switch (map_texture) {
             case JUNGLE:
-                texture = TexturesProvider::getTexture("Jungle");
+                clean_texture = TexturesProvider::getTexture("Clean-Jungle");
+                default_texture = TexturesProvider::getTexture("Default-Jungle");
                 break;
             case CARROTUS:
-                texture = TexturesProvider::getTexture("Carrotus");
+                clean_texture = TexturesProvider::getTexture("Clean-Carrotus");
+                default_texture = TexturesProvider::getTexture("Default-Carrotus");
                 break;
             default:
                 throw std::invalid_argument("Invalid map texture");
@@ -62,7 +65,11 @@ public:
 
                             std::unique_ptr<Drawable> drawable = std::make_unique<Drawable>(
                                     renderer, cameraPosition, srcRect, destRect);
-                            drawable->setTexture(texture);
+                            if (key == BACKGROUND_LAYER) {
+                                drawable->setTexture(default_texture);
+                            } else {
+                                drawable->setTexture(clean_texture);
+                            }
                             tiles.push_back(std::move(drawable));
                         }
                         x++;

@@ -16,8 +16,11 @@ void TexturesProvider::init(SDL2pp::Renderer& renderer) {
     loadTexture(renderer, "Font", FONTS_PNG, elseColor);
 
     SDL2pp::Color mapColor = {87, 0, 203, 0};
-    loadTexture(renderer, "Carrotus", CARROTUS_TILES_PNG, mapColor);
-    loadTexture(renderer, "Jungle", JUNGLE_TILES_PNG, mapColor);
+    loadTexture(renderer, "Clean-Carrotus", CARROTUS_TILES_PNG, mapColor);
+    loadTexture(renderer, "Clean-Jungle", JUNGLE_TILES_PNG, mapColor);
+
+    loadTexture(renderer, "Default-Carrotus", CARROTUS_TILES_PNG, {0, 0, 0, 0});
+    loadTexture(renderer, "Default-Jungle", JUNGLE_TILES_PNG, {0, 0, 0, 0});
 }
 
 void TexturesProvider::loadTexture(SDL2pp::Renderer& renderer, const std::string& name,

@@ -37,7 +37,7 @@ void ShiftingDrawable::loadAnimations(const std::string& path) {
 }
 
 void ShiftingDrawable::render() {
-    renderer.Copy(*texture, textureRect, adjustPosition(), angle, SDL2pp::Point(0, 0),
+    renderer.Copy(*texture, textureRect, onMapRect, angle, SDL2pp::Point(0, 0),
                   direction == LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 

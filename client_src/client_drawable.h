@@ -17,8 +17,12 @@ protected:
 
     // Guarda: (x,y,w,h) en pantalla
     SDL2pp::Rect onMapRect;
+    SDL2pp::Point position;
 
-    SDL2pp::Rect adjustPosition();
+    SDL2pp::Point originalPosition;
+
+    int mapWidth;
+    int mapHeight;
 
 public:
     Drawable() = delete;
@@ -31,7 +35,6 @@ public:
     void render();
     void update();
     void setPosition(int x, int y);
-    void setCameraPosition(const SDL2pp::Point& cameraPosition);
     void resize(int w, int h);
 };
 
