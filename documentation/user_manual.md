@@ -106,6 +106,25 @@ Follow these steps to set up your perfect game and enjoy hours of fun with your 
 
 ## How to create a map
 
+### Before you start
+
+> ⚠️ **WARNING: everytime you want to edit or create a map, you MUST start a client inside the project build folder. Otherwise your progress won't be saved and you may experience some exceptions.** ⚠️
+
+**Navigate to the project directory with your client terminal**:
+   ```
+   cd TP-Jazz-Jackrabbit-2
+   ```
+**Then access to build folder**:
+   ```
+   cd build
+   ```
+**Start your client as usual**:
+   ```
+   jazz_client <host> <port>
+   ```
+
+Server is not attached to this procedure.
+
 ### Set map settings
 
 To create a new map in the game, you start by entering the "Create a Map" lobby, as shown in the image. In this lobby, you can customize the following settings for your new map:
@@ -127,12 +146,13 @@ In the HUD for creating a new map, you can start designing and customizing the d
 
 Here's a breakdown of the different tools available:
 
-1. ***Paint or Erase***:
+1. ***Paint, Erase or Move***:
    - **Paint**: Allows you to add tiles to your map.
    - **Erase**: Allows you to remove tiles from your map.
+   - **Move**: In case your map dimensions exceed screen limits, you can access to every spot by clicking and displacing with mouse.
 
 2. ***Editing Options***:
-   - **Edit Background**: Lets you modify the background tiles of your map.
+   - **Edit Background**: Lets you modify the background tiles of your map. 
    - **Diagonals Left (DIAGL)**: Enables you to add or edit diagonal tiles sloping to the left.
    - **Diagonals Right (DIAGR)**: Enables you to add or edit diagonal tiles sloping to the right.
    - **Collisonables (COLL)**: Used to designate collision tiles, which are areas that players cannot pass through.
@@ -143,7 +163,7 @@ Here's a breakdown of the different tools available:
    - **Entities**: Allows you to place interactive objects or entities (such as enemies, items, or power-ups) within your map.
 
 4. ***Navigation***:
-   - **Exit**: Saves your progress and exits the map editor.
+   - **Exit**: Saves your progress and exits the map editor. If you don't want to keep your current progress click on the cross that the window provides.
 
 > HUD for creating a new map
 
@@ -153,7 +173,33 @@ Here's a breakdown of the different tools available:
 
 Use these tools to creatively design and customize your map, ensuring it fits the desired gameplay experience!
 
+## Tiles
+
+A map consists of layers. As mentioned in the *Editing Options*, a field is composed of five layers, which are included in the Tile section.
+Here are a few points to consider while using these layers:
+1. Diagonals Left, Right, and Collidables cannot coexist within a single block. Since these layers are processed differently by the physics engine, only one can remain. If you paint two of these together, the one painted first will be automatically erased.
+2. A single block can support up to three layers: background, decorations, and one from the layers mentioned in the first point.
+3. The background layer is the deepest, while Decorations is the uppermost. The three middle layers have the same depth, positioned between the Background and Decorations layers.
+4. The Tileset on the left does not differentiate textures by layers. Users should find an appropriate texture for each layer. For example, find a sky texture for painting the background.
+
+## Entities
+
+There is an additional layer for entities. Once this option is selected, the texture grid will be replaced by images of game entities. Each represents a spawn point.
+There are some restrictions while placing a spawn point on the grid: 
+1. You can't spawn entities on the same block as a collidable or diagonal block. 
+2. Rabbit and enemy spawns are not allowed to be placed close to a right wall or the ground. There must be at least one block of space between them and a right collidable or the ground. This is because these entities occupy two blocks in height and width, so they need some space to be placed on the map correctly.
+
+> How to place a rabbit/enemy correctly 
+
+<p align="center">
+   <img src="utils_png/how_to_spawn.jpg" alt="IMG">
+</p>
+
 > ⚠️ **WARNING: don't forget to set as many rabbits spawn points as the maximum number of players you've selected** ⚠️
+
+### Where's my map?
+
+Once you finished creating or editing your map, close both server and client. A new project compilation is required, as it is needed to update every change made. Then start everything again (client does not need to be started inside build folder anymore as long as you don't need to work with the editor) and enjoy your new map!
 
 ## How to join a match
 
@@ -199,7 +245,7 @@ The Heads-Up Display (HUD) in the game provides crucial information to the playe
   - This indicates the current health level of your character, allowing you to see how much damage you can still take before dying.
 
 - **Bottom Left: Top Scores**
-  - This area displays the top scores, which are the scores of other players in the game.
+  - This area displays a top three score between all the current ones in game.
 
 - **Bottom Right: Current Weapon and Ammo Count**
   - This shows the weapon you are currently using and the amount of ammunition you have left for that weapon, ensuring you know when you need to switch weapons.
