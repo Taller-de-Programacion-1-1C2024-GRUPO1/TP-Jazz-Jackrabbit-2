@@ -452,6 +452,7 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_height);
     send_map(snapshot.map_dimensions.width, snapshot.map_dimensions.height,
              snapshot.map_dimensions.map_data);
+    send_uintEight(snapshot.map_dimensions.map_texture_id);
 }
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
@@ -534,7 +535,9 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_width = receive_uintThirtyTwo();
     uint32_t rabbit_height = receive_uintThirtyTwo();
     DynamicMap map_data = receive_map();
-    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
+    uint8_t map_texture_id = receive_uintEight();
+    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data,
+                            map_texture_id);
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {

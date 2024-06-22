@@ -109,7 +109,7 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
 }
 
 
-int ClientDrawer::run(int player_id, int map_texture) try {
+int ClientDrawer::run(int player_id) try {
     client_id = player_id;
     keyboard_handler.setId(player_id);
 
@@ -129,7 +129,21 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Background image
     TexturesProvider::init(renderer);
 
-    MapLoader mapLoader(renderer, map_texture);
+    // Read first snapshot!
+    Snapshot initial_snapshot;
+    while (!q_snapshots.try_pop(initial_snapshot)) {
+        std::cout << "Waiting for initial snapshot..." << std::endl;
+        showLoadingScreen(renderer);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    showLoadingScreen(renderer);
+
+    int map_width = initial_snapshot.map_dimensions.height;
+    int map_height = initial_snapshot.map_dimensions.width;
+    int map_texture = initial_snapshot.map_dimensions.map_texture_id;
+
+
+    MapLoader mapLoader(renderer, map_texture, map_width, map_height);
 
     // Number images
     NumberImages numberImages(renderer);
@@ -146,20 +160,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     SDL2pp::Point cameraPosition(0, 0);
     SDL2pp::Point desiredCameraPosition(0, 0);
 
-    // Read first snapshot!
-    Snapshot initial_snapshot;
-    while (!q_snapshots.try_pop(initial_snapshot)) {
-        std::cout << "Waiting for initial snapshot..." << std::endl;
-        showLoadingScreen(renderer);
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-    showLoadingScreen(renderer);
-
-    int map_width = initial_snapshot.map_dimensions.height;
-    int map_height = initial_snapshot.map_dimensions.width;
-
-    std::cout << "Map width: " << map_width << std::endl;
-    std::cout << "Map height: " << map_height << std::endl;
 
     game_running = !initial_snapshot.get_end_game();
     clock.update(initial_snapshot.get_match_time());

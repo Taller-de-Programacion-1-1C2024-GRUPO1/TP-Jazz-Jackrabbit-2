@@ -30,7 +30,6 @@ private:
     Queue<std::unique_ptr<Command>> q_cmds;
     Queue<std::unique_ptr<QtResponse>> q_responses;
     int player_id;
-    int map_texture;
     Queue<Snapshot> q_snapshots;
     ClientSender client_sender;
     ClientReceiver client_receiver;

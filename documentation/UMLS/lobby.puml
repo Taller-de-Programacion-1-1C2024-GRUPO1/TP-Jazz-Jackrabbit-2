@@ -6,7 +6,6 @@ class ClientLobby <<QMainWindow>> {
     Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
     NewMapInfo& new_map_info;
-    int& map_texture;
 
     void on_btnCreateMatch_clicked();
     void on_btnJoinMatch_clicked();
@@ -41,7 +40,6 @@ class MapSelector <<QDialog>> {
     std::string selected_map;
     std::string match_name;
     NewMapInfo& new_map_info;
-    int& map_texture;
     void on_btnMap1_clicked();
     void on_btnMap2_clicked();
     void on_btnMapCreate_clicked();

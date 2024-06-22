@@ -139,7 +139,7 @@ Snapshot Map::get_init_snapshot() {
 
     Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
     snapshot.set_dimensions(height, width, RABBIT_WIDTH_DEFAULT, RABBIT_HEIGHT_DEFAULT,
-                            RABBIT_AMOUNT_DEFAULT, dynamic_map);
+                            RABBIT_AMOUNT_DEFAULT, dynamic_map, texture_id);
     return snapshot;
 }
 

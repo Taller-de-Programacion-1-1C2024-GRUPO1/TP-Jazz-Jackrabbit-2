@@ -21,7 +21,7 @@ public:
     explicit MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses,
                          ChampionType selected_character, NewMapInfo& new_map_info,
-                         int& map_texture, QWidget* parent = nullptr);
+                         QWidget* parent = nullptr);
     ~MapSelector();
 
 signals:
@@ -52,7 +52,6 @@ private:
     std::string selected_map;
     std::string match_name;
     NewMapInfo& new_map_info;
-    int& map_texture;
 };
 
 #endif  // MAP_SELECTOR_H

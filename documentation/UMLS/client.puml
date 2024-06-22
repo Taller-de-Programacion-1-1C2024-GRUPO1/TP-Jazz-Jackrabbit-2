@@ -69,7 +69,6 @@ class ClientLobby <<QMainWindow>> {
     Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
     NewMapInfo& new_map_info;
-    int& map_texture;
 
     void on_btnCreateMatch_clicked();
     void on_btnJoinMatch_clicked();

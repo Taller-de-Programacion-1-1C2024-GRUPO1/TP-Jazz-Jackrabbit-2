@@ -20,9 +20,13 @@ private:
     Renderer& renderer;
     std::shared_ptr<SDL2pp::Texture> clean_texture;
     std::shared_ptr<SDL2pp::Texture> default_texture;
+    int map_width;
+    int map_heigth;
 
 public:
-    explicit MapLoader(Renderer& renderer, const int map_texture): renderer(renderer) {
+    explicit MapLoader(Renderer& renderer, const int map_texture, const int map_width,
+                       const int map_heigth):
+            renderer(renderer), map_width(map_width), map_heigth(map_heigth) {
         switch (map_texture) {
             case JUNGLE:
                 clean_texture = TexturesProvider::getTexture("Clean-Jungle");
@@ -47,8 +51,8 @@ public:
                 auto& matrix = it->second;
                 int x = 0;
                 int y = 0;
-                for (int j = 0; j < map.height; j++) {
-                    for (int k = 0; k < map.width; k++) {
+                for (int j = 0; j < map_heigth; j++) {
+                    for (int k = 0; k < map_width; k++) {
                         int id = matrix[k][j];
                         if (id != 65535) {
                             SDL2pp::Rect srcRect;
