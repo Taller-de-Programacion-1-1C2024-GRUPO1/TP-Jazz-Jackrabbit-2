@@ -44,7 +44,9 @@ void Rabbit::colided_with_enemy(Enemy* enemy, int damage) {
 
 void Rabbit::on_colision_with_rabbit(Rabbit* rabbit_2) {
     if (state->does_damage()) {
-        rabbit_2->receive_damage(PLAYER_DAMAGE);
+        if (rabbit_2->is_killed_by_taking_damage(PLAYER_DAMAGE)){
+            add_points(POINTS_KILLING_RABBIT);
+        }
     }
 }
 
