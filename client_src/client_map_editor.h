@@ -60,6 +60,7 @@ public:
         width = map["width"].as<int>();
         height = map["height"].as<int>();
 
+        currentRabbitSpawns = maxPlayers;
 
         std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG, CARROTUS_TILES_PNG};
 
@@ -139,7 +140,6 @@ public:
                     switch (index) {
                         case RABBIT_SPAWN:
                             entities_grid[i][j] = {RABBIT_SPAWN, jazz_src};
-                            currentRabbitSpawns++;
                             break;
                         case LIZARD_SPAWN:
                             entities_grid[i][j] = {LIZARD_SPAWN, lizard_src};
@@ -254,9 +254,14 @@ public:
                     SDL_GetMouseState(&x, &y);
 
                     if (x >= 1200 && x < 1280 && y >= 10 && y < 50) {
-                        // Click en el botón de guardar y salir
-                        saveMap();
-                        running = false;
+                        // Click en el botón de guardar 
+                        if (currentRabbitSpawns == maxPlayers){
+                            saveMap();
+                            correctSave = true;
+                        } else {
+                            wrongSave = true;
+                        }
+
                     } else if (x >= 890 && x < 970 && y >= 10 &&
                                y < 50) {  // Click en el botón de texturas
                         // Click en el botón de texturas
@@ -560,7 +565,16 @@ public:
                 }
             }
 
-            renderer.SetDrawColor(0, 0, 0, 255);
+            if (wrongSave) {
+                renderer.SetDrawColor(255, 0, 0, 0);
+                wrongSave = false;
+            } else if(correctSave) {
+                renderer.SetDrawColor(0, 255, 0, 0);
+                correctSave = false;
+            } else {
+                renderer.SetDrawColor(0, 0, 0, 255);
+            }
+
             renderer.Clear();
 
             drawButton(10, 10, 80, 40, "Paint", currentTool == PAINT);
@@ -576,7 +590,7 @@ public:
             drawButton(890, 10, 80, 40, "Tile", mode == TEXTURE);
             drawButton(980, 10, 80, 40, "Entity", mode == ENTITY);
 
-            drawButton(1200, 10, 80, 40, "Exit", false);
+            drawButton(1200, 10, 80, 40, "Save", false);
 
             // Renderizo la grilla de texturas
             if (mode == TEXTURE) {
@@ -668,6 +682,8 @@ private:
     int maxPlayers = 0;
     int texture = CARROTUS;
     int currentRabbitSpawns = 0;
+    bool wrongSave = false;
+    bool correctSave = false;
 
     Tool currentTool = PAINT;             // Herramienta actual
     int currentLayer = BACKGROUND_LAYER;  // Capa actual
