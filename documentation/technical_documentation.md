@@ -183,6 +183,7 @@ When a match concludes, all associated resources are released appropriately. Thi
 ## How does the lobby work?
 
 > Lobby class diagram
+
 ![IMG](UMLS/lobby.png)
 
 The lobby has a very practical and intuitive way of functioning. Players can select their character and create or join games as they wish. When creating a game, the user can configure it as desired (number of players, map, and game name). After creating the game, the user will enter a waiting room until the selected number of players is reached.
@@ -193,6 +194,7 @@ From the join game window, players can view the complete list of all available g
 ## How does the drawer work?
 
 > drawer class diagram
+
 ![IMG](UMLS/drawer.png)
 ![IMG](UMLS/sdl_miscellaneous.png)
 ![IMG](UMLS/texture_povider.png)

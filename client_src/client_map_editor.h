@@ -207,7 +207,7 @@ public:
                 height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
         // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ_CHARACTER_PNG, ENEMIES_PNG, ENEMIES_PNG,
+        std::vector<std::string> imagePaths = {JAZZ_IMG, ENEMIES_PNG, ENEMIES_PNG,
                                                TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
 
         for (const auto& path: imagePaths) {
