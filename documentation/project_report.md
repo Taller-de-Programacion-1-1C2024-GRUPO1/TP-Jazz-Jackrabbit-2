@@ -42,9 +42,14 @@ For this project, each team member chose to undertake different tasks, involving
 
 ### Ian von der Heyde
 
+- **COMPILATION**: Created CMake files for project compilation.
+
 - **QT**: Utilized an external library (QT) to create the game's lobby, providing an intuitive and visually appealing interface for players to navigate and interact with.
 
-- **CLIENT**: Designed and implemented the logic for clients, orchestrating their connection to the server and enabling them to receive game snapshots while sending commands seamlessly. He ensured a smooth and responsive gameplay experience by managing the flow of data between clients and the server, facilitating real-time interactions within the game environment.
+- **CLIENT**: Designed and implemented the logic for clients, orchestrating their connection to the server and enabling them to receive server responses and game snapshots while sending commands seamlessly. He ensured a smooth and responsive gameplay experience by managing the flow of data between clients and the server, facilitating real-time interactions within the game environment.
+
+- **DOCUMENTATION**: he created UML diagrams to assist with project documentation.
+
 
 In addition to the specific responsibilities assigned to each team member, we all applied optimal object-oriented programming logic to ensure a modular and scalable software design. We efficiently employed concepts such as inheritance, encapsulation, polymorphism, and abstraction to create clean and maintainable code.
 
@@ -58,7 +63,7 @@ None of us had prior experience in developing a project of this scale. We divide
 
 - **Server Logic and Protocol:** One team member focused on developing the server-side logic and handling communication protocols.
 - **Game Physics and Logic:** Another team member worked on the physics and core game logic to ensure smooth gameplay.
-- **QT and Client Logic:** A third team member was responsible for the client-side logic and user interface using QT.
+- **QT and Client Logic:** A third team member was responsible for the client-side logic and user interface using QT, and also contributed to the communication logic.
 - **SDL and Map Editor Development:** The final team member handled the development of SDL-related features and the map editor.
 
 During the first week, we concentrated on getting familiar with the specific libraries we would be using, such as QT and SDL. We also learned how to create and use shell scripts (.sh files) for quick installation and compilation of the game. This preparation was crucial for streamlining our development process and ensuring that everyone had a solid understanding of the tools and technologies involved.

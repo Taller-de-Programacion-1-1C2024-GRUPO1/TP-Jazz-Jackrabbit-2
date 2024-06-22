@@ -51,7 +51,7 @@ By utilizing these queues, the game can effectively manage communication and dat
 
 For the Lobby interface, we used Qt, a powerful framework for creating cross-platform applications. Qt allowed us to design and implement an intuitive and responsive user interface. In the Lobby, users can interact with several buttons to perform various actions:
 
-- Create a Map: Opens a dialog where users can design and save custom maps for their matches.
+- Create or edit a Map: Opens a dialog where users can design and save custom maps for their matches.
 - Create a Game: Allows users to set up a new game by selecting options such as number of players and map.
 - Join a Game: Provides a list of available matches that users can join.
 
@@ -87,6 +87,13 @@ Moreover, when a Client initiates a new match, the Acceptor thread, specifically
 
 By handling both the pre-game setup and the in-game logic, the server plays a pivotal role in maintaining the integrity and functionality of the game, providing a seamless and enjoyable experience for all players.
 
+## Client
+> Client class diagram 
+
+![IMG](UMLS/client.png)
+
+The Client is responsible for interacting with the player. It handles displaying the lobby and drawer interfaces on the screen, as well as capturing and sending the keys pressed by the player.
+
 ## PROTOCOL 
 
 > Protocol class diagram
@@ -107,7 +114,7 @@ Now that the Protocol has been explained, let's see how some commands are execut
 
 ![IMG](UMLS/start_match.png)
 
-When a player on the Client side initiates a request to create a new match, the process begins with the Client sending a MatchCommand containing essential details such as match type, player name, match name, selected map, and chosen character. The ClientLobby, responsible for managing Client interactions within the lobby environment and queues up this MatchCommand for further processing. Next, the Client Sender retrieves the MatchCommand from the queue and transmits it to the server using the specified communication protocol. On the server side, the Server receives this command. The MonitorMatches handles the creation of new matches, ensuring that the server acknowledges the receipt of this command and the creation of the match back to the Client Receiver.
+When a player on the Client side initiates a request to create a new match, the process begins with the Client sending a MatchCommand containing essential details such as match type, player name, match name, selected map, and chosen character. The ClientLobby, responsible for managing Client interactions within the lobby environment and queues up this MatchCommand for further processing. Next, the Client Sender retrieves the MatchCommand from the queue and transmits it to the server using the specified communication protocol. On the server side, the Server receives this command. The MonitorMatches handles the creation of new matches, ensuring that the server acknowledges (QtResponse) the receipt of this command and the creation of the match back to the Client.
 
 We would like to mention the importance of this MonitorMatches which uses a mutex to ensure thread safety and prevent concurrent access issues when managing the creation and monitoring of matches on the server side. In a multi-threaded environment, multiple threads may attempt to access and modify shared resources (such as the list of matches or player assignments) simultaneously. This can lead to race conditions where the outcome of operations becomes unpredictable or erroneous.
 
@@ -172,3 +179,20 @@ There are three scenarios where a match can come to an end:
 In the cases where a user wins, or all players leave, the match is closed and marked as inactive. If an attempt is made to create a match with a name that is still active, an error will be returned, indicating that the name is currently in use. This ensures that match names are unique and that ongoing matches are not disrupted by attempts to reuse existing names. 
 
 When a match concludes, all associated resources are released appropriately. This includes deallocating memory, closing network connections, and disposing of any game objects to prevent memory leaks. Proper resource management is crucial to ensure that no memory blocks (heap blocks) are left with residual information, which could otherwise lead to increased memory usage and potential crashes. By freeing up these resources, the system maintains optimal performance and stability, allowing new matches to be created and run efficiently.
+
+## How does the lobby work?
+
+> Lobby class diagram
+![IMG](UMLS/lobby.png)
+
+The lobby has a very practical and intuitive way of functioning. Players can select their character and create or join games as they wish. When creating a game, the user can configure it as desired (number of players, map, and game name). After creating the game, the user will enter a waiting room until the selected number of players is reached.
+
+From the join game window, players can view the complete list of all available games. The lobby also allows the player to create and edit maps to their liking, being able to configure various parameters such as the map's height and width, the desired texture, the maximum number of players, each block of the map, and the spawn points for each entity.
+
+
+## How does the drawer work?
+
+> drawer class diagram
+![IMG](UMLS/drawer.png)
+![IMG](UMLS/sdl_miscellaneous.png)
+![IMG](UMLS/texture_povider.png)

@@ -90,13 +90,13 @@ Choose your character wisely, as each one offers a unique gameplay experience an
 
 When you select to create a match you have several options to customize your game. Here's a step-by-step guide:
 
-> **NOTE**: The game supports up to 3 players, allowing for exciting multiplayer action.
+> **NOTE**: The default maps supports up to 3 players, allowing for exciting multiplayer action.
 
 1. ***Choose number of players***: You can select the number of players for your match. 
 
-2. ***Select a map***: You have the option to choose from a variety of maps. Some of the default maps include "Jungle" and "Carrotus." Additionally, you can create your own custom maps for a unique gaming experience.
+2. ***Name your match***: Give your match a unique name in the "Match Name" field. This helps you and your friends easily identify and join the match.
 
-3. ***Name your match***: Give your match a unique name in the "Match Name" field. This helps you and your friends easily identify and join the match.
+3. ***Select a map***: You have the option to choose from a variety of maps. Some of the default maps include "Jungle" and "Carrotus." Additionally, you can create your own custom maps for a unique gaming experience.
 
 <p align="center">
    <img src="utils_png/map_selector.png" alt="IMG" width="600" height="500">
@@ -152,6 +152,8 @@ Here's a breakdown of the different tools available:
 </p>
 
 Use these tools to creatively design and customize your map, ensuring it fits the desired gameplay experience!
+
+> ⚠️ **WARNING: don't forget to set as many rabbits spawn points as the maximum number of players you've selected** ⚠️
 
 ## How to join a match
 
