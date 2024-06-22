@@ -20,7 +20,7 @@ class MapSelector: public QDialog {
 public:
     explicit MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses,
-                         ChampionType selected_character, NewMapInfo& new_map_info,
+                         ChampionType selected_character, NewMapInfo& new_map_info, std::string player_name,
                          QWidget* parent = nullptr);
     ~MapSelector();
 
@@ -52,6 +52,7 @@ private:
     std::string selected_map;
     std::string match_name;
     NewMapInfo& new_map_info;
+    std::string player_name;
 };
 
 #endif  // MAP_SELECTOR_H

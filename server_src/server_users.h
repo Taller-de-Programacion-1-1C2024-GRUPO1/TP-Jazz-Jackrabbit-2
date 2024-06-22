@@ -35,8 +35,8 @@ public:
     void run() override;
 
     void create_new_match(int number_of_players, const std::string& match_name,
-                          const std::string& map_name, ChampionType character_name);
-    void join_match(const std::string& match_name, ChampionType character_name);
+                          const std::string& map_name, ChampionType character_name, std::string player_name);
+    void join_match(const std::string& match_name, ChampionType character_name, std::string player_name);
     void refresh();
 
     bool is_alive();

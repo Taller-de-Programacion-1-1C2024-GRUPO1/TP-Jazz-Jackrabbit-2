@@ -35,12 +35,13 @@ private:
     std::queue<std::shared_ptr<Command>> events_queue;
     bool state_needs_change;
     int next_state;
+    std::string player_name;
 
 public:
     Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
            Map& map);
-    void set_rabbit_id(int id);
-    void set_champion(uint8_t champion_type);
+
+    void set_rabbit_info (int id,uint8_t champion_type, std::string player_name);
     int get_rabbit_id();
     void update();
     void update_action();

@@ -36,6 +36,7 @@ bool offCheat = false;
 bool onCheat = true;
 bool needsNoMove = false;
 bool needsMove = true;
+const std::string& player_name = "PLAYER_NAME";
 
 // ------------------- INSTANTIATE SERVER AND CLIENT -------------------
 
@@ -258,7 +259,7 @@ TEST(ProtocolTestChangeWeapon, SendAndReceiveChangeWeapon) {
 
 
 TEST(ProtocolTestMatch, SendAndReceiveMatch) {
-    MatchCommand* match = new MatchCommand(player_id, number_players, match_test, map_test, jazz);
+    MatchCommand* match = new MatchCommand(player_id, number_players, match_test, map_test, jazz, player_name);
     client_protocol.send_Command(match);
     std::unique_ptr<Command> cmd = server_protocol.receive_Command();
     MatchCommand* received_match = dynamic_cast<MatchCommand*>(cmd.get());

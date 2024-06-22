@@ -31,7 +31,7 @@ void Match::run() {
             // Desencolo el protocolo de los jugadores que se conectaron
             std::shared_ptr<PlayerInfo> player_info = matches_protocols_players_queue->pop();
             // Agrego al jugador al mapa, seteando su id y champion a un rabbit particular
-            map.add_player(player_info->get_player_id(), player_info->get_character_name());
+            map.add_player(player_info->get_player_id(), player_info->get_character_name(), player_info->get_player_name());
             Player* player =
                     new Player(player_info->get_container_protocol(), player_info->get_player_id(),
                                broadcaster_snapshots, clients_cmd_queue);

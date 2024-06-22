@@ -13,20 +13,17 @@ CharacterSelector::~CharacterSelector() { delete ui; }
 
 
 void CharacterSelector::on_btnCharacterJazz_clicked() {
-    emit characterSelected(Jazz);
-    accept();
+    selectCharacter(Jazz);
 }
 
 
 void CharacterSelector::on_btnCharacterLori_clicked() {
-    emit characterSelected(Lori);
-    accept();
+    selectCharacter(Lori);
 }
 
 
 void CharacterSelector::on_btnCharacterSpaz_clicked() {
-    emit characterSelected(Spaz);
-    accept();
+    selectCharacter(Spaz);
 }
 
 
@@ -34,3 +31,14 @@ void CharacterSelector::closeEvent(QCloseEvent* event) {
     emit windowClosed();
     QDialog::closeEvent(event);
 }
+
+void CharacterSelector::selectCharacter(ChampionType character) {
+    if (ui->txtPlayerName->toPlainText().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please enter a player name");
+        return;
+    }
+    emit characterSelected(character, ui->txtPlayerName->toPlainText().toStdString());
+    accept();
+}
+
+

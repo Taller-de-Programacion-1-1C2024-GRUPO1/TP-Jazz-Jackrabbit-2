@@ -15,10 +15,11 @@ private:
     std::string map_name;
     int commandType = COMMAND_MATCH;
     ChampionType character_name;
+    std::string player_name;
 
 public:
     MatchCommand(int type, int number_players, const std::string& match_name,
-                 const std::string& map_name, ChampionType character_name);
+                 const std::string& map_name, ChampionType character_name, std::string player_name);
     void execute_Command(Rabbit& rabbit) override{};
     void send(Protocol& protocol) override;
     int get_playerId() override;
@@ -28,6 +29,7 @@ public:
     std::string get_map_name();
     int get_commandType() override;
     ChampionType get_character_name();
+    std::string get_player_name();
     ~MatchCommand();
 };
 

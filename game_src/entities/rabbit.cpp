@@ -25,15 +25,19 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
         points(0),
         current_gun(0),
         state_needs_change(false),
-        state(new Alive(*this)) {
+        state(new Alive(*this)),
+        player_name("") {
     gun_inventory.push_back(new BasicGun(*this, this->map));
     gun_inventory.push_back(new FlameThrower(*this, this->map));
     gun_inventory.push_back(new RocketLauncher(*this, this->map));
     gun_inventory.push_back(new RayGun(*this, this->map));
 }
 
-
-void Rabbit::set_rabbit_id(int id) { this->id = id; }
+void Rabbit::set_rabbit_info (int id_received, uint8_t champion_type_received, std::string player_name_received){
+    this->id = id_received;
+    this->champion_type = champion_type_received;
+    this->player_name = player_name_received;
+}
 
 void Rabbit::colided_with_enemy(Enemy* enemy, int damage) {
     receive_damage(damage);
@@ -89,7 +93,6 @@ void Rabbit::revive() {
     respawn();
 }
 
-void Rabbit::set_champion(uint8_t champion_type) { this->champion_type = champion_type; }
 
 void Rabbit::set_action_shoot() { action = SHOOT; }
 
@@ -341,7 +344,7 @@ void Rabbit::execute_special_lori() {
 // SNAPSHOT
 RabbitSnapshot Rabbit::get_snapshot() {
     return RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, points, health, current_gun,
-                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action);
+                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action, player_name);
 }
 
 // DESTRUCTOR

@@ -32,7 +32,7 @@ public:
 
 signals:
     void windowClosed();
-    void characterSelected(ChampionType character);
+    void characterSelected(ChampionType character, const std::string player_name);
 
 private slots:
 
@@ -42,6 +42,8 @@ private slots:
     void on_btnCharacterLori_clicked();
 
     void on_btnCharacterSpaz_clicked();
+
+    void selectCharacter(ChampionType character);
 
 
 protected:
