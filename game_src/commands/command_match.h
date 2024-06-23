@@ -19,7 +19,8 @@ private:
 
 public:
     MatchCommand(int type, int number_players, const std::string& match_name,
-                 const std::string& map_name, ChampionType character_name, std::string player_name);
+                 const std::string& map_name, ChampionType character_name,
+                 const std::string& player_name);
     void execute_Command(Rabbit& rabbit) override{};
     void send(Protocol& protocol) override;
     int get_playerId() override;

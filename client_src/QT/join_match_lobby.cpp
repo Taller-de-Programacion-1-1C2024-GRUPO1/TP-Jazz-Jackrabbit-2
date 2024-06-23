@@ -5,7 +5,8 @@
 
 JoinMatchLobby::JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                                Queue<std::unique_ptr<QtResponse>>& q_responses,
-                               ChampionType selected_character, std::string player_name, QWidget* parent):
+                               ChampionType selected_character, const std::string& player_name,
+                               QWidget* parent):
         QDialog(parent),
         ui(new Ui::JoinMatchLobby),
         q_cmds(q_cmds),
@@ -42,7 +43,8 @@ void JoinMatchLobby::processResponse(
 
 void JoinMatchLobby::on_btnJoin_clicked() {
     std::string match_name = ui->comboBoxMatches->currentText().toStdString();
-    q_cmds.push(std::make_unique<MatchCommand>(JOIN, 0, match_name, "", selected_character, player_name));
+    q_cmds.push(std::make_unique<MatchCommand>(JOIN, 0, match_name, "", selected_character,
+                                               player_name));
 
     processResponse(
             "Could not connect to the server", [&](std::unique_ptr<QtResponse> const& response) {

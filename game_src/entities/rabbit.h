@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <queue>
+#include <string>
 #include <vector>
 
 #include "../../common_src/snapshots/snapshot_rabbit.h"
@@ -41,7 +42,7 @@ public:
     Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
            Map& map);
 
-    void set_rabbit_info (int id,uint8_t champion_type, std::string player_name);
+    void set_rabbit_info(int id, uint8_t champion_type, const std::string& player_name);
     int get_rabbit_id();
     void update();
     void update_action();

@@ -36,10 +36,12 @@ std::vector<std::string> MonitorMatches::show_maps_availables() {
     std::lock_guard<std::mutex> lock(mutex);
     std::vector<std::string> availableMaps;
     for (auto& map: maps) {
-        // no tomar los que comienzen con el prefijo: "DEFAULT"
+        // Linea para no tomar los que comienzen con el prefijo: "DEFAULT"
+        /*
         if (map.first.find("default") != std::string::npos) {
             continue;
         }
+        */
         availableMaps.push_back(map.first);
     }
     return availableMaps;

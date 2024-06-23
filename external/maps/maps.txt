@@ -1,3 +1,3 @@
-carrotus.yml
+default_carrotus.yml
 map.yml
-jungle.yml
+default_jungle.yml

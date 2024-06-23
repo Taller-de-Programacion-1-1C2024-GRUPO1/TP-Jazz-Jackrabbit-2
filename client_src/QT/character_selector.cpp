@@ -12,19 +12,13 @@ CharacterSelector::CharacterSelector(QWidget* parent):
 CharacterSelector::~CharacterSelector() { delete ui; }
 
 
-void CharacterSelector::on_btnCharacterJazz_clicked() {
-    selectCharacter(Jazz);
-}
+void CharacterSelector::on_btnCharacterJazz_clicked() { selectCharacter(Jazz); }
 
 
-void CharacterSelector::on_btnCharacterLori_clicked() {
-    selectCharacter(Lori);
-}
+void CharacterSelector::on_btnCharacterLori_clicked() { selectCharacter(Lori); }
 
 
-void CharacterSelector::on_btnCharacterSpaz_clicked() {
-    selectCharacter(Spaz);
-}
+void CharacterSelector::on_btnCharacterSpaz_clicked() { selectCharacter(Spaz); }
 
 
 void CharacterSelector::closeEvent(QCloseEvent* event) {
@@ -40,5 +34,3 @@ void CharacterSelector::selectCharacter(ChampionType character) {
     emit characterSelected(character, ui->txtPlayerName->toPlainText().toStdString());
     accept();
 }
-
-

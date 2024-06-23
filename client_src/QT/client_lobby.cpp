@@ -30,7 +30,8 @@ void ClientLobby::on_btnCreateMatch_clicked() {
             &ClientLobby::handleCharacterSelected);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        MapSelector map_selector(q_cmds, q_responses, selected_character, new_map_info, player_name);
+        MapSelector map_selector(q_cmds, q_responses, selected_character, new_map_info,
+                                 player_name);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         int result = map_selector.exec();
         if (result == QDialog::Accepted) {
@@ -78,7 +79,8 @@ void ClientLobby::on_btnJoinMatch_clicked() {
 void ClientLobby::on_btnQuit_clicked() { QApplication::exit(ERROR); }
 
 
-void ClientLobby::handleCharacterSelected(ChampionType character, const std::string selected_player_name) {
+void ClientLobby::handleCharacterSelected(ChampionType character,
+                                          const std::string& selected_player_name) {
     selected_character = character;
     player_name = selected_player_name;
 }

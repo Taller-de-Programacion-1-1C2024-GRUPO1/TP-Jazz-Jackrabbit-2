@@ -2,6 +2,7 @@
 #define CLIENT_LOBBY_H
 
 #include <memory>
+#include <string>
 
 #include "character_selector.h"
 #include "join_match_lobby.h"
@@ -25,7 +26,7 @@ private slots:
     void on_btnJoinMatch_clicked();
     void on_btnQuit_clicked();
     void handleWindowClosed();
-    void handleCharacterSelected(ChampionType character, const std::string selected_player_name);
+    void handleCharacterSelected(ChampionType character, const std::string& selected_player_name);
 
 
 protected:

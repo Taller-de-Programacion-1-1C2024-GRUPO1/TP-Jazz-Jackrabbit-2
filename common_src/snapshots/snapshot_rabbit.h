@@ -19,7 +19,8 @@ public:
     std::string player_name;
 
     RabbitSnapshot(int id, int direction, int champion_type, int pos_x, int pos_y, int score,
-                   int lives, int weapon, int ammo, int state, int action, std::string player_name) :
+                   int lives, int weapon, int ammo, int state, int action,
+                   const std::string& player_name):
             id(id),
             direction(direction),
             champion_type(champion_type),

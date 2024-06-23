@@ -4,15 +4,15 @@
 
 MapSelector::MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses,
-                         ChampionType selected_character, NewMapInfo& new_map_info, std::string player_name,
-                         QWidget* parent):
+                         ChampionType selected_character, NewMapInfo& new_map_info,
+                         const std::string& player_name, QWidget* parent):
         QDialog(parent),
         ui(new Ui::MapSelector),
         q_cmds(q_cmds),
         q_responses(q_responses),
         selected_character(selected_character),
         new_map_info(new_map_info),
-        player_name(player_name){
+        player_name(player_name) {
     ui->setupUi(this);
     qt_common_init(this, ":/backgrounds/match_lobby.png");
 }
@@ -54,7 +54,7 @@ void MapSelector::start_match() {
         return;
     }
     try {
-        
+
         q_cmds.push(std::make_unique<MatchCommand>(NEW_MATCH, number_of_players, match_name,
                                                    selected_map, selected_character, player_name));
 

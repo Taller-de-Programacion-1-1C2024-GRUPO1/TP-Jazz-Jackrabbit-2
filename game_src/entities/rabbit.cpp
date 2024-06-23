@@ -33,7 +33,8 @@ Rabbit::Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMa
     gun_inventory.push_back(new RayGun(*this, this->map));
 }
 
-void Rabbit::set_rabbit_info (int id_received, uint8_t champion_type_received, std::string player_name_received){
+void Rabbit::set_rabbit_info(int id_received, uint8_t champion_type_received,
+                             const std::string& player_name_received) {
     this->id = id_received;
     this->champion_type = champion_type_received;
     this->player_name = player_name_received;
@@ -48,7 +49,7 @@ void Rabbit::colided_with_enemy(Enemy* enemy, int damage) {
 
 void Rabbit::on_colision_with_rabbit(Rabbit* rabbit_2) {
     if (state->does_damage()) {
-        if (rabbit_2->is_killed_by_taking_damage(PLAYER_DAMAGE)){
+        if (rabbit_2->is_killed_by_taking_damage(PLAYER_DAMAGE)) {
             add_points(POINTS_KILLING_RABBIT);
         }
     }
@@ -344,7 +345,8 @@ void Rabbit::execute_special_lori() {
 // SNAPSHOT
 RabbitSnapshot Rabbit::get_snapshot() {
     return RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, points, health, current_gun,
-                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action, player_name);
+                          gun_inventory[current_gun]->get_ammo(), state->get_type(), action,
+                          player_name);
 }
 
 // DESTRUCTOR

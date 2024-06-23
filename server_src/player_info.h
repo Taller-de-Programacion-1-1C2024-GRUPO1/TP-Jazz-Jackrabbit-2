@@ -21,7 +21,7 @@ struct PlayerInfo {
 
     PlayerInfo(int playerID, ChampionType character_name,
                std::shared_ptr<ContainerProtocol> container_protocol,
-               std::string player_name):
+               const std::string& player_name):
             playerID(playerID),
             character_name(character_name),
             container_protocol(container_protocol),

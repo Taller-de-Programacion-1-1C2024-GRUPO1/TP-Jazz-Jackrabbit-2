@@ -81,7 +81,7 @@ void Map::reap_dead() {
     }
 }
 
-void Map::add_player(int PlayerID, ChampionType champion, std::string player_name) {
+void Map::add_player(int PlayerID, ChampionType champion, const std::string& player_name) {
     for (auto& player: players) {
         if (player->get_rabbit_id() == NULL_ID) {
             player->set_rabbit_info(PlayerID, champion, player_name);

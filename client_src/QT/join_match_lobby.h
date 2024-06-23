@@ -19,7 +19,7 @@ class JoinMatchLobby: public QDialog {
 public:
     explicit JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                             Queue<std::unique_ptr<QtResponse>>& q_responses,
-                            ChampionType selected_character, std::string player_name,
+                            ChampionType selected_character, const std::string& player_name,
                             QWidget* parent = nullptr);
     ~JoinMatchLobby();
 

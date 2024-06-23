@@ -1,14 +1,15 @@
 #include "command_match.h"
 
 MatchCommand::MatchCommand(int type, int number_players, const std::string& match_name,
-                           const std::string& map_name, ChampionType character_name, std::string player_name):
+                           const std::string& map_name, ChampionType character_name,
+                           const std::string& player_name):
         Command(PLAYING),
         type(type),
         number_players(number_players),
         match_name(match_name),
         map_name(map_name),
-        character_name(character_name), 
-        player_name(player_name){}
+        character_name(character_name),
+        player_name(player_name) {}
 
 void MatchCommand::send(Protocol& protocol) { protocol.send_Command(this); }
 

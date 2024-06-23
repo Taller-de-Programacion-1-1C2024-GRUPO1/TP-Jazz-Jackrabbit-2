@@ -207,8 +207,8 @@ public:
                 height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
 
         // Cargar texturas de entidades
-        std::vector<std::string> imagePaths = {JAZZ_IMG, ENEMIES_PNG, ENEMIES_PNG,
-                                               TURTLE_PNG,         ITEMS_PNG,   ITEMS_PNG};
+        std::vector<std::string> imagePaths = {JAZZ_IMG,   ENEMIES_PNG, ENEMIES_PNG,
+                                               TURTLE_PNG, ITEMS_PNG,   ITEMS_PNG};
 
         for (const auto& path: imagePaths) {
             Surface entitySurface(path);
@@ -254,8 +254,8 @@ public:
                     SDL_GetMouseState(&x, &y);
 
                     if (x >= 1200 && x < 1280 && y >= 10 && y < 50) {
-                        // Click en el botón de guardar 
-                        if (currentRabbitSpawns == maxPlayers){
+                        // Click en el botón de guardar
+                        if (currentRabbitSpawns == maxPlayers) {
                             saveMap();
                             correctSave = true;
                         } else {
@@ -568,7 +568,7 @@ public:
             if (wrongSave) {
                 renderer.SetDrawColor(255, 0, 0, 0);
                 wrongSave = false;
-            } else if(correctSave) {
+            } else if (correctSave) {
                 renderer.SetDrawColor(0, 255, 0, 0);
                 correctSave = false;
             } else {

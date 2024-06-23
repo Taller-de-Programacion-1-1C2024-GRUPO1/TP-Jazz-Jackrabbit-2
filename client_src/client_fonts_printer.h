@@ -1,14 +1,15 @@
 #ifndef CLIENT_FONT_PRINTER
 #define CLIENT_FONT_PRINTER
 
+#include <map>
 #include <memory>
 #include <vector>
 
+#include "../game_src/constants_game.h"
 #include "SDL2pp/SDL2pp.hh"
 
 #include "client_constants.h"
 #include "client_textures_provider.h"
-#include "../game_src/constants_game.h"
 
 class FontPrinter {
 private:
