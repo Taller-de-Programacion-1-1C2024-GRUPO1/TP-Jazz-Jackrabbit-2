@@ -89,7 +89,7 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
     Texture texture(renderer,
                     font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
 
-    renderer.SetDrawColor(0, 63, 63);
+    renderer.SetDrawColor(135, 206, 235);
     renderer.Clear();
 
     int textWidth = texture.GetWidth();
