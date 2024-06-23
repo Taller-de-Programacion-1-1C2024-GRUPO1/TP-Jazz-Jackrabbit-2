@@ -8,7 +8,7 @@
 #include "SDL2pp/SDL2pp.hh"
 
 #include "client_constants.h"
-#include "client_number_images.h"
+#include "client_fonts_printer.h"
 #include "client_textures_provider.h"
 
 class AmmoLeft {
@@ -18,7 +18,7 @@ private:
     std::shared_ptr<SDL2pp::Texture> munitionTexture;
     int currentWeapon;
     int currentAmmo;
-    NumberImages numberImages;
+    FontPrinter fontPrinter;
 
 public:
     explicit AmmoLeft(SDL2pp::Renderer& renderer);

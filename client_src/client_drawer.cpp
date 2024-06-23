@@ -12,11 +12,11 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer,
-                                   const std::vector<std::pair<int, int>>& top_scores) {
+void ClientDrawer::showFinalScreen(Renderer& renderer, Snapshot& lastSnapshot) {
     const int initial_offset = 100;
     Font font(FONT_TTF_04B_30, 24);
-    // renderer.SetDrawColor(200, 200, 200);
+    std::vector<RabbitSnapshot> rabbits = lastSnapshot.rabbits;
+
     renderer.Clear();
 
     std::string titleText = "Game Over!";
@@ -33,14 +33,18 @@ void ClientDrawer::showFinalScreen(Renderer& renderer,
 
     renderer.Copy(titleTexture, NullOpt, titleRect);
 
+    // order rabbits vector
+    std::sort(rabbits.begin(), rabbits.end(),
+              [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score > b.score; });
+
     // Find the player with the highest score
-    int winner = top_scores[0].first;
+    RabbitSnapshot winner = rabbits[0];
     std::string winnerText;
-    if (winner == client_id) {
+    if (winner.id == client_id) {
         // If the winner is the client, show a different message
         winnerText = "Winner: YOU! Congratulations";
     } else {
-        winnerText = "Winner: Player " + std::to_string(winner);
+        winnerText = "Winner: " + winner.player_name;
     }
     Texture winnerTexture(renderer,
                           font.RenderText_Solid(winnerText, SDL_Color{255, 255, 255, 255}));
@@ -58,17 +62,10 @@ void ClientDrawer::showFinalScreen(Renderer& renderer,
     int yOffset = titleHeight + winnerHeight +
                   initial_offset * 2;  // Initial offset from top of the screen for the players
 
-    for (int i = 0; i < static_cast<int>(top_scores.size()); i++) {
+    for (int i = 0; i < static_cast<int>(rabbits.size()); i++) {
         std::string playerText;
-        if (top_scores[i].first == client_id) {
-            // If the player ID matches client_id, customize the message
-            playerText = std::to_string(i + 1) + ". You: " + std::to_string(top_scores[i].second) +
-                         " points";
-        } else {
-            // Default message for other players
-            playerText = std::to_string(i + 1) + ". Player " + std::to_string(top_scores[i].first) +
-                         ": " + std::to_string(top_scores[i].second) + " points";
-        }
+        playerText = std::to_string(i + 1) + ". " + rabbits[i].player_name + " - " +
+                     std::to_string(rabbits[i].score) + " points";
         Texture texture(renderer, font.RenderText_Solid(playerText, SDL_Color{255, 255, 255, 255}));
 
         int textWidth = texture.GetWidth();
@@ -146,8 +143,8 @@ int ClientDrawer::run(int player_id) try {
     MapLoader mapLoader(renderer, map_texture, map_width, map_height);
 
     // Number images
-    NumberImages numberImages(renderer);
-    numberImages.setCorner(0);
+    FontPrinter fontPrinter(renderer);
+    fontPrinter.setCorner(0);
 
     // Heart banner
     HeartsBanner banner(renderer);
@@ -170,7 +167,7 @@ int ClientDrawer::run(int player_id) try {
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
 
     for (auto& rabbit: initial_snapshot.rabbits) {
-        topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
+        topScores.addCurrentSnapshotScore(rabbit.id, rabbit.player_name, rabbit.score);
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width, rabbit_height);
         DrawableRabbit* newRabbit =
@@ -276,7 +273,7 @@ int ClientDrawer::run(int player_id) try {
                 rabbitIds.insert(pair.first);
             }
             for (const auto& rabbit: snapshot.rabbits) {
-                topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
+                topScores.addCurrentSnapshotScore(rabbit.id, rabbit.player_name, rabbit.score);
                 if (rabbit.id == client_id) {
                     score = rabbit.score;
                     ammoLeft.setAmmo(rabbit.ammo);
@@ -558,7 +555,7 @@ int ClientDrawer::run(int player_id) try {
 
         for (char c: scoreStr) {
             int number = c - '0';  // Convert char to int
-            numberImages.renderNumber(number, offset, 0, 32);
+            fontPrinter.renderNumber(number, offset, 0, 32);
             offset += 24;  // Move position to the left for the next digit
         }
 
@@ -607,13 +604,11 @@ int ClientDrawer::run(int player_id) try {
             frameStart += expectedFrameTime;
         }
     }
-    std::vector<std::pair<int, int>> final_top_scores;
-    topScores.getTopScores(final_top_scores);
 
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start + std::chrono::seconds(5);
     while (std::chrono::high_resolution_clock::now() < end) {
-        showFinalScreen(renderer, final_top_scores);
+        showFinalScreen(renderer, snapshot);
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     return 0;
