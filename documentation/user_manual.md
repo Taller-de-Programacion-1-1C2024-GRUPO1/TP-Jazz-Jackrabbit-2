@@ -163,7 +163,7 @@ Here's a breakdown of the different tools available:
    - **Entities**: Allows you to place interactive objects or entities (such as enemies, items, or power-ups) within your map.
 
 4. ***Navigation***:
-   - **Exit**: Saves your progress and exits the map editor. If you don't want to keep your current progress click on the cross that the window provides.
+   - **Save**: Saves your progress. If you don't want to keep your current progress just click on the regular cross that the window provides.
 
 > HUD for creating a new map
 
@@ -173,7 +173,7 @@ Here's a breakdown of the different tools available:
 
 Use these tools to creatively design and customize your map, ensuring it fits the desired gameplay experience!
 
-## Tiles
+### Tiles
 
 A map consists of layers. As mentioned in the *Editing Options*, a field is composed of five layers, which are included in the Tile section.
 Here are a few points to consider while using these layers:
@@ -182,12 +182,13 @@ Here are a few points to consider while using these layers:
 3. The background layer is the deepest, while Decorations is the uppermost. The three middle layers have the same depth, positioned between the Background and Decorations layers.
 4. The Tileset on the left does not differentiate textures by layers. Users should find an appropriate texture for each layer. For example, find a sky texture for painting the background.
 
-## Entities
+### Entities
 
 There is an additional layer for entities. Once this option is selected, the texture grid will be replaced by images of game entities. Each represents a spawn point.
 There are some restrictions while placing a spawn point on the grid: 
 1. You can't spawn entities on the same block as a collidable or diagonal block. 
 2. Rabbit and enemy spawns are not allowed to be placed close to a right wall or the ground. There must be at least one block of space between them and a right collidable or the ground. This is because these entities occupy two blocks in height and width, so they need some space to be placed on the map correctly.
+3. It is strongly recommended to add entities last. While entities have restrictions with tile blocks, tile blocks do not know about entities' existence. You could draw an enemy, then draw a field block one block below, and in the game, this enemy will be corrupted, probably appearing as if buried.
 
 > How to place a rabbit/enemy correctly 
 
@@ -195,9 +196,13 @@ There are some restrictions while placing a spawn point on the grid:
    <img src="utils_png/how_to_spawn.jpg" alt="IMG">
 </p>
 
+### Save progress
+
 > ⚠️ **WARNING: don't forget to set as many rabbits spawn points as the maximum number of players you've selected** ⚠️
 
-### Where's my map?
+The editor provides a button to save your current progress. To ensure a correct save, you must have drawn all the rabbit spawn points you previously defined. If everything is in order, the editor will turn green. If any rabbit spawn points are missing, you will notice a brief change to red.
+
+### Ok... now where's my map?
 
 Once you finished creating or editing your map, close both server and client. A new project compilation is required, as it is needed to update every change made. Then start everything again (client does not need to be started inside build folder anymore as long as you don't need to work with the editor) and enjoy your new map!
 
