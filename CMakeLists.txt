@@ -73,17 +73,6 @@ install(FILES ${CMAKE_SOURCE_DIR}/client_src/client_config.h
         DESTINATION /etc/jazz
 )
 
-
-###################################################################
-#install(FILES ${CMAKE_SOURCE_DIR}/external/config/client_config.yml
-#        DESTINATION /etc/jazz
-#)
-
-#install(FILES ${CMAKE_SOURCE_DIR}/client_src/client_config.h
-#        DESTINATION /etc/jazz
-#)
-###################################################################
-
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/client_src
         DESTINATION /var/jazz
 )
