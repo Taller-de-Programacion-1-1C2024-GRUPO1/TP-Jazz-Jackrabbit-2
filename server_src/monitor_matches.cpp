@@ -69,7 +69,7 @@ int MonitorMatches::join_match(std::string match_name,
     return OK;
 }
 
-Map MonitorMatches::get_map(std::string map_name) {
+std::shared_ptr<Map> MonitorMatches::get_map(std::string map_name) {
     std::lock_guard<std::mutex> lock(mutex);
     map_reader.refresh_load_maps(maps);
     return maps[map_name];

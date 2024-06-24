@@ -1,7 +1,7 @@
 #include "match.h"
 
 Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-             const Map& map_recibido, const std::string& match_name, bool& server_running,
+             std::shared_ptr<Map> map_recibido, const std::string& match_name, bool& server_running,
              int* status, int number_of_players):
         map(map_recibido),
         match_name(match_name),
@@ -10,8 +10,8 @@ Match::Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protoco
         playing(true),
         status(status) {
     this->number_of_players = number_of_players;
-    this->map.set_amount_players(number_of_players);
-    this->map.create_entities();
+    this->map->set_amount_players(number_of_players);
+    this->map->create_entities();
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
@@ -24,14 +24,14 @@ void Match::run() {
         for (int cont = 0; cont < number_of_players; cont++) {
             if (has_started())
                 throw MatchAlreadyStarted();
-            if (number_of_players > map.get_max_players())
+            if (number_of_players > map->get_max_players())
                 throw MatchFull();
 
 
             // Desencolo el protocolo de los jugadores que se conectaron
             std::shared_ptr<PlayerInfo> player_info = matches_protocols_players_queue->pop();
             // Agrego al jugador al mapa, seteando su id y champion a un rabbit particular
-            map.add_player(player_info->get_player_id(), player_info->get_character_name(),
+            map->add_player(player_info->get_player_id(), player_info->get_character_name(),
                            player_info->get_player_name());
             Player* player =
                     new Player(player_info->get_container_protocol(), player_info->get_player_id(),

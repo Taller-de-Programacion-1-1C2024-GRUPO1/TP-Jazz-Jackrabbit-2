@@ -14,7 +14,6 @@ public:
                         const std::map<int, std::vector<std::vector<int>>>& map_data):
             map_data(map_data) {}
     DynamicMap() = default;
-    ~DynamicMap() = default;
 };
 
 

@@ -21,11 +21,10 @@ class Character;
 
 class PhysicalMap {
 public:
-    int width = MAP_WIDTH_DEFAULT;
-    int height = MAP_HEIGHT_DEFAULT;
-    std::vector<std::vector<int>> map;
-    PhysicalMap(int width, int height, const std::vector<std::vector<int>>& matrix);
-    PhysicalMap() = default;
+    int map_width;
+    int map_height;
+    std::vector<std::vector<int>> map ;
+    PhysicalMap(int map_width, int map_height, const std::vector<std::vector<int>>& matrix);
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Bullet* bullet);
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Character* character);
     bool can_jump(int pos_x, int pos_y, int width, int height);
