@@ -13,7 +13,7 @@ This project is the final group assignment for the subject 'Taller de Programaci
 -----------------
 ### Installation and Usage
 
-> ⚠️ **WARNING THIS PROJECT IS STILL IN BETA** ⚠️
+> ⚠️ **WARNING THIS PROJECT CAN ONLY BE USED ON UBUNTU 22.04 LTS* ⚠️
 
 1. **Clone the repository**:
    ```
@@ -53,10 +53,15 @@ This project is the final group assignment for the subject 'Taller de Programaci
 ### Create or edit a map
 After building the game, if you want to create a new map and play with it, you will have to start the client from the `build` folder. 
 ```
-   cd build
-   ./jazz_client <host> <port>
+cd build
+./jazz_client <host> <port>
 ```
 Replace `<host>` with the hostname or IP address of the server you want to connect to, and `<port>` with the port number used by the server, e.g., `jazz_client localhost 8080`.
+
+After saving your awesome new map, you will need to build the game again: 
+```
+sudo ./run_all.sh
+```
 
 -----------------
 ### Testing
