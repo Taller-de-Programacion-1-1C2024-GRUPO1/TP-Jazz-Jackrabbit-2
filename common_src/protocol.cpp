@@ -195,6 +195,7 @@ void Protocol::send_Match(MatchCommand* match) {
     send_string(match->get_match_name());
     send_string(match->get_map_name());
     send_uintEight(match->get_character_name());
+    send_string(match->get_player_name());
 }
 
 void Protocol::send_Cheat(Cheats* cheat) {
@@ -315,8 +316,9 @@ std::unique_ptr<MatchCommand> Protocol::receive_Match() {
     std::string match_name = receive_string();
     std::string map_name = receive_string();
     ChampionType character_name = static_cast<ChampionType>(receive_uintEight());
+    std::string player_name = receive_string();
     return std::make_unique<MatchCommand>(type, number_players, match_name, map_name,
-                                          character_name);
+                                          character_name, player_name);
 }
 
 std::unique_ptr<Cheats> Protocol::receive_Cheat() {
@@ -471,6 +473,7 @@ void Protocol::send_rabbits(Snapshot& snapshot) {
         send_uintThirtyTwo(rabbit.ammo);
         send_uintThirtyTwo(rabbit.state);
         send_uintThirtyTwo(rabbit.action);
+        send_string(rabbit.player_name);
     }
 }
 
@@ -558,9 +561,10 @@ void Protocol::receive_rabbits(Snapshot& snapshot) {
         uint32_t ammo = receive_uintThirtyTwo();
         uint32_t state = receive_uintThirtyTwo();
         uint32_t action = receive_uintThirtyTwo();
+        std::string player_name = receive_string();
         // crear un RabbitSnapshot y agregarlo al vector de rabbits del snapshot
         RabbitSnapshot rabbit = RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, score,
-                                               lives, weapon, ammo, state, action);
+                                               lives, weapon, ammo, state, action, player_name);
         snapshot.rabbits.push_back(rabbit);
     }
 }

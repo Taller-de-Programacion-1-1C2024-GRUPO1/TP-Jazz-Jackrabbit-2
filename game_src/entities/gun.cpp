@@ -30,8 +30,9 @@ void Gun::add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int c
     } else if (direction == RIGHT) {
         direction_variable = 1;
     }
-    manager.add_bullet(new Bullet(manager.get_projectile_id(), type, pos_x-(direction_variable*(BLOCK_DIVISION/4)), pos_y-(BLOCK_DIVISION/8),
-                                  direction_variable * bullet_speed, damage, range, owner));
+    manager.add_bullet(new Bullet(
+            manager.get_projectile_id(), type, pos_x - (direction_variable * (BLOCK_DIVISION / 4)),
+            pos_y - (BLOCK_DIVISION / 8), direction_variable * bullet_speed, damage, range, owner));
     fire_cooldown = cooldown;
     owner.set_action_shoot();
 }

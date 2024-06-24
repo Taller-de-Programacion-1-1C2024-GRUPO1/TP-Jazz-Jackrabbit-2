@@ -30,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>290</y>
+     <y>310</y>
      <width>650</width>
      <height>258</height>
     </rect>
@@ -76,6 +76,24 @@ border: none;</string>
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPlainTextEdit" name="txtPlayerName">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>280</y>
+     <width>211</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="placeholderText">
+    <string>Player Name</string>
+   </property>
   </widget>
  </widget>
  <resources/>

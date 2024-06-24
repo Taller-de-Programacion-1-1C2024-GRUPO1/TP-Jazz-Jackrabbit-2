@@ -13,27 +13,8 @@
 
 #include "../common_src/constants.h"
 #include "../game_src/constants_game.h"
-
-enum Tool { PAINT, ERASE, MOVE };
-enum Mode { TEXTURE, ENTITY };
-
-// g++ main.cpp -lyaml-cpp -lSDL2 -lSDL2_image -lSDL2_ttf -o myprogram
-
-// Donde se va a colocar el mapa resultante
-#define DEST_PATH "../external/maps/"
-
-const int EDITOR_SCREEN_WIDTH = 1280;
-const int EDITOR_SCREEN_HEIGHT = 700;
-const int BUTTON_WIDTH = 80;
-const int BUTTON_HEIGHT = 40;
-const int BUTTONS_AREA_HEIGHT = 60;
-const int TEXTURE_GRID = 320;
-const int SPACE_BEFORE_DRAWABLE_GRID = 380;
-
-struct Entity {
-    int who;
-    Rect rect;
-};
+#include "client_constants.h"
+#include "client_textures_provider.h"
 
 class Editor {
 public:
@@ -79,335 +60,30 @@ public:
 
         while (running) {
             while (SDL_PollEvent(&event) || mouseIsBeingClicked) {
-                if (event.type == SDL_QUIT) {
-                    running = false;
-                } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                    mouseIsBeingClicked = true;
-                    int x, y;
-                    SDL_GetMouseState(&x, &y);
-
-                    if (x >= 1200 && x < 1280 && y >= 10 && y < 50) {
-                        // Click en el botón de guardar 
-                        if (currentRabbitSpawns == maxPlayers){
-                            saveMap();
-                            correctSave = true;
-                        } else {
-                            wrongSave = true;
-                        }
-
-                    } else if (x >= 890 && x < 970 && y >= 10 &&
-                               y < 50) {  // Click en el botón de texturas
-                        // Click en el botón de texturas
-                        mode = TEXTURE;
-                    } else if (x >= 980 && x < 1060 && y >= 10 && y < 50) {
-                        // Click en el botón de entidades
-                        mode = ENTITY;
-                    } else if (x >= 10 && x < 90 && y >= 10 && y < 50) {
-                        // Click en el botón de pintar
-                        currentTool = PAINT;
-                    } else if (x >= 100 && x < 180 && y >= 10 && y < 50) {
-                        // Click en el botón de borrar
-                        currentTool = ERASE;
-                    } else if (x >= 190 && x < 270 && y >= 10 && y < 50) {
-                        // Click en el boton para moverse en pantalla
-                        currentTool = MOVE;
-                        last_x = x;
-                        last_y = y;
-                    } else if (x >= 370 && x < 450 && y >= 10 && y < 50) {
-                        // Click en los botones de capas
-                        currentLayer = BACKGROUND_LAYER;
-                    } else if (x >= 460 && x < 540 && y >= 10 && y < 50) {
-                        currentLayer = DIAG_LEFT_LAYER;
-                    } else if (x >= 550 && x < 630 && y >= 10 && y < 50) {
-                        currentLayer = DIAG_RIGHT_LAYER;
-                    } else if (x >= 640 && x < 720 && y >= 10 && y < 50) {
-                        currentLayer = COLLIDER_LAYER;
-                    } else if (x >= 730 && x < 810 && y >= 10 && y < 50) {
-                        currentLayer = DECORATION_LAYER;
-                    } else if (mode == TEXTURE && (x < SPACE_BEFORE_DRAWABLE_GRID &&
-                                                   y >= BUTTONS_AREA_HEIGHT && y < 640)) {
-                        // Click en la grilla de texturas
-                        y += scrollOffset -
-                             BUTTONS_AREA_HEIGHT;  // Ajustar para el desplazamiento vertical y la
-                                                   // posición de los botones
-
-                        if (y < BLOCK_DIVISION * (static_cast<int>((textures.size() + 9) / 10))) {
-                            int index = (y / BLOCK_DIVISION) * 10 + (x / BLOCK_DIVISION);
-                            if (index < static_cast<int>(textures.size())) {
-                                selectedTextureIndex = index;
-                            }
-                        }
-                    } else if (mode == ENTITY && x < SPACE_BEFORE_DRAWABLE_GRID &&
-                               y >= BUTTONS_AREA_HEIGHT && y < 640) {
-                        if (x > jazz_dst.x && x < jazz_dst.x + jazz_dst.w && y > jazz_dst.y &&
-                            y < jazz_dst.y + jazz_dst.h) {
-                            selectedEntityIndex = RABBIT_SPAWN;
-                            selectedEntityDst = jazz_dst;
-                        } else if (x > crab_dst.x && x < crab_dst.x + crab_dst.w &&
-                                   y > crab_dst.y && y < crab_dst.y + crab_dst.h) {
-                            selectedEntityIndex = CRAB_SPAWN;
-                            selectedEntityDst = crab_dst;
-                        } else if (x > lizard_dst.x && x < lizard_dst.x + lizard_dst.w &&
-                                   y > lizard_dst.y && y < lizard_dst.y + lizard_dst.h) {
-                            selectedEntityIndex = LIZARD_SPAWN;
-                            selectedEntityDst = lizard_dst;
-                        } else if (x > turtle_dst.x && x < turtle_dst.x + turtle_dst.w &&
-                                   y > turtle_dst.y && y < turtle_dst.y + turtle_dst.h) {
-                            selectedEntityIndex = TURTLE_SPAWN;
-                            selectedEntityDst = turtle_dst;
-                        } else if (x > coin_dst.x && x < coin_dst.x + coin_dst.w &&
-                                   y > coin_dst.y && y < coin_dst.y + coin_dst.h) {
-                            selectedEntityIndex = COIN_SPAWN;
-                            selectedEntityDst = coin_dst;
-                        } else if (x > diamond_dst.x && x < diamond_dst.x + diamond_dst.w &&
-                                   y > diamond_dst.y && y < diamond_dst.y + diamond_dst.h) {
-                            selectedEntityIndex = GEM_SPAWN;
-                            selectedEntityDst = diamond_dst;
-                        }
-                    } else if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
-                               x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
-                                            EDITOR_SCREEN_WIDTH) &&
-                               y >= BUTTONS_AREA_HEIGHT &&
-                               y < std::min(EDITOR_SCREEN_HEIGHT,
-                                            BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
-                        // Click en la grilla dibujable
-                        // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
-                        // EDITOR_SCREEN_HEIGHT)
-                        if (mode == ENTITY) {
-                            int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
-                                        BLOCK_DIVISION;
-                            int gridY = (y - BUTTONS_AREA_HEIGHT + verticalScrollOffset) /
-                                        BLOCK_DIVISION;
-                            if (currentTool == PAINT && selectedEntityIndex >= 0 &&
-                            selectedEntityIndex < static_cast<int>(entitiesTextures.size())) {
-                                // Verificar si la celda actual, la celda debajo y la celda a la
-                                // derecha no tienen una capa de tipo COLISIONABLE, DIAGONAL
-                                // IZQUIERDA o DIAGONAL DERECHA
-                                bool canPaint = true;
-                                std::vector<int> restrictedLayers = {
-                                        COLLIDER_LAYER, DIAG_LEFT_LAYER, DIAG_RIGHT_LAYER};
-                                auto isRestrictedLayer = [&](int layer) {
-                                    return grid[gridY][gridX][layer] != nullptr ||
-                                        (gridY + 1 < static_cast<int>(grid.size()) &&
-                                            grid[gridY + 1][gridX][layer] != nullptr) ||
-                                        (gridX + 1 < static_cast<int>(grid[gridY].size()) &&
-                                            grid[gridY][gridX + 1][layer] != nullptr) ||
-                                        (gridY + 1 < static_cast<int>(grid.size()) &&
-                                            gridX + 1 < static_cast<int>(grid[gridY + 1].size()) &&
-                                            grid[gridY + 1][gridX + 1][layer] != nullptr);
-                                };
-                                canPaint = !std::any_of(restrictedLayers.begin(),
-                                                    restrictedLayers.end(), isRestrictedLayer);
-
-                                if (selectedEntityIndex == GEM_SPAWN || selectedEntityIndex == COIN_SPAWN){
-                                    auto restLayer = [&](int layer) {
-                                        return grid[gridY][gridX][layer] != nullptr;
-                                    };
-                                    canPaint = !std::any_of(restrictedLayers.begin(),
-                                                        restrictedLayers.end(), restLayer);
-                                }
-                                if (canPaint) {
-                                    switch (selectedEntityIndex) {
-                                        case RABBIT_SPAWN:
-                                            if (currentRabbitSpawns < maxPlayers) {
-                                                entities_grid[gridY][gridX] =
-                                                        Entity{RABBIT_SPAWN, jazz_src};
-                                                currentRabbitSpawns++;
-                                            }
-                                            break;
-                                        case CRAB_SPAWN:
-                                            entities_grid[gridY][gridX] =
-                                                    Entity{CRAB_SPAWN, crab_src};
-                                            break;
-                                        case LIZARD_SPAWN:
-                                            entities_grid[gridY][gridX] =
-                                                    Entity{LIZARD_SPAWN, lizard_src};
-                                            break;
-                                        case TURTLE_SPAWN:
-                                            entities_grid[gridY][gridX] =
-                                                    Entity{TURTLE_SPAWN, turtle_src};
-                                            break;
-                                        case COIN_SPAWN:
-                                            entities_grid[gridY][gridX] =
-                                                    Entity{COIN_SPAWN, coin_src};
-                                            break;
-                                        case GEM_SPAWN:
-                                            entities_grid[gridY][gridX] =
-                                                    Entity{GEM_SPAWN, diamond_src};
-                                            break;
-                                    }
-                                }
-                            } else if (currentTool == ERASE) {
-                                if (entities_grid[gridY][gridX].who == RABBIT_SPAWN) {
-                                    currentRabbitSpawns--;
-                                }
-                                entities_grid[gridY][gridX] = {-1, {0, 0, 0, 0}};
-                            }
-                        } else if (mode == TEXTURE) {
-                            int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
-                                        BLOCK_DIVISION;
-                            int gridY = (y - BUTTONS_AREA_HEIGHT + verticalScrollOffset) /
-                                        BLOCK_DIVISION;
-                            if (currentTool == PAINT && selectedTextureIndex >= 0 &&
-                                selectedTextureIndex < static_cast<int>(textures.size())) {
-                                if (currentLayer == DIAG_LEFT_LAYER ||
-                                    currentLayer == DIAG_RIGHT_LAYER ||
-                                    currentLayer == COLLIDER_LAYER) {
-                                    if (grid[gridY][gridX][DIAG_LEFT_LAYER] != nullptr &&
-                                        currentLayer != DIAG_LEFT_LAYER) {
-                                        grid[gridY][gridX][DIAG_LEFT_LAYER] = nullptr;
-                                    }
-                                    if (grid[gridY][gridX][DIAG_RIGHT_LAYER] != nullptr &&
-                                        currentLayer != DIAG_RIGHT_LAYER) {
-                                        grid[gridY][gridX][DIAG_RIGHT_LAYER] = nullptr;
-                                    }
-                                    if (grid[gridY][gridX][COLLIDER_LAYER] != nullptr &&
-                                        currentLayer != COLLIDER_LAYER) {
-                                        grid[gridY][gridX][COLLIDER_LAYER] = nullptr;
-                                    }
-                                }
-                                grid[gridY][gridX][currentLayer] = textures[selectedTextureIndex];
-                            } else if (currentTool == ERASE) {
-                                grid[gridY][gridX][currentLayer] = nullptr;
-                            }
-                        }
-                    }
-                } else if (event.type == SDL_MOUSEMOTION && mouseIsBeingClicked) {
-                    int x, y;
-                    SDL_GetMouseState(&x, &y);
-                    if (currentTool == MOVE) {
-                        if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
-                            x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
-                                         EDITOR_SCREEN_WIDTH) &&
-                            y >= BUTTONS_AREA_HEIGHT &&
-                            y < std::min(EDITOR_SCREEN_HEIGHT,
-                                         BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
-
-                            horizontalScrollOffset -= (x - last_x) * 5;
-                            if (horizontalScrollOffset < 0)
-                                horizontalScrollOffset =
-                                        0;  // Limito el desplazamiento hacia la izquierda
-                            int maxHorizontalScrollOffset = std::max(
-                                    0, BLOCK_DIVISION * width -
-                                               (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
-                            if (horizontalScrollOffset > maxHorizontalScrollOffset)
-                                horizontalScrollOffset =
-                                        maxHorizontalScrollOffset;  // Limito el desplazamiento
-                                                                    // hacia la derecha
-
-                            verticalScrollOffset -= (y - last_y) * 5;
-                            if (verticalScrollOffset < 0)
-                                verticalScrollOffset = 0;  // Limito el desplazamiento hacia arriba
-                            int maxVerticalScrollOffset = std::max(
-                                    0, BLOCK_DIVISION * height -
-                                               (EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT));
-                            if (verticalScrollOffset > maxVerticalScrollOffset) {
-                                verticalScrollOffset =
-                                        maxVerticalScrollOffset;  // Limito el desplazamiento hacia
-                                                                  // abajo
-                            }
-                        } else if (x < TEXTURE && y >= BUTTONS_AREA_HEIGHT) {
-                            scrollOffset -= event.wheel.y *
-                                            10;  // Se desplaza 10 píxeles por unidad de la rueda
-                            if (scrollOffset < 0)
-                                scrollOffset = 0;  // Limito el desplazamiento hacia arriba
-                            int maxScrollOffset = std::max(
-                                    0, static_cast<int>(((textures.size() + 9) / 10) * 32 - 640));
-                            if (scrollOffset > maxScrollOffset)
-                                scrollOffset =
-                                        maxScrollOffset;  // Limito el desplazamiento hacia abajo
-                        }
-                        last_x = x;
-                        last_y = y;
-                    }
-                    if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
-                        x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
-                                     EDITOR_SCREEN_WIDTH) &&
-                        y >= BUTTONS_AREA_HEIGHT &&
-                        y < std::min(EDITOR_SCREEN_HEIGHT,
-                                     BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
-                        // Click en la grilla dibujable
-                        // NOTA: X es absoluto, Y lo toma como relativo (siempre entre 0 y
-                        // EDITOR_SCREEN_HEIGHT)
-                        // std::cout << "x: " << x << " y: " << y << std::endl;
-                        if (mode == TEXTURE) {
-                            int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + horizontalScrollOffset) /
-                                        BLOCK_DIVISION;
-                            int gridY = (y - BUTTONS_AREA_HEIGHT + verticalScrollOffset) /
-                                        BLOCK_DIVISION;
-                            if (currentTool == PAINT && selectedTextureIndex >= 0 &&
-                                selectedTextureIndex < static_cast<int>(textures.size())) {
-                                if (currentLayer == DIAG_LEFT_LAYER ||
-                                    currentLayer == DIAG_RIGHT_LAYER ||
-                                    currentLayer == COLLIDER_LAYER) {
-                                    if (grid[gridY][gridX][DIAG_LEFT_LAYER] != nullptr &&
-                                        currentLayer != DIAG_LEFT_LAYER) {
-                                        grid[gridY][gridX][DIAG_LEFT_LAYER] = nullptr;
-                                    }
-                                    if (grid[gridY][gridX][DIAG_RIGHT_LAYER] != nullptr &&
-                                        currentLayer != DIAG_RIGHT_LAYER) {
-                                        grid[gridY][gridX][DIAG_RIGHT_LAYER] = nullptr;
-                                    }
-                                    if (grid[gridY][gridX][COLLIDER_LAYER] != nullptr &&
-                                        currentLayer != COLLIDER_LAYER) {
-                                        grid[gridY][gridX][COLLIDER_LAYER] = nullptr;
-                                    }
-                                }
-                                grid[gridY][gridX][currentLayer] = textures[selectedTextureIndex];
-                            } else if (currentTool == ERASE) {
-                                grid[gridY][gridX][currentLayer] = nullptr;
-                            }
-                        }
-                    }
-                } else if (event.type == SDL_MOUSEWHEEL) {
-                    int x, y;
-                    SDL_GetMouseState(&x, &y);
-
-                    // Scroll solo sobre la grilla de texturas
-                    if (x < TEXTURE_GRID && y >= BUTTONS_AREA_HEIGHT) {
-                        scrollOffset -= event.wheel.y *
-                                        10;  // Se desplaza 10 píxeles por unidad de la rueda
-                        if (scrollOffset < 0)
-                            scrollOffset = 0;  // Limito el desplazamiento hacia arriba
-                        int maxScrollOffset = std::max(
-                                0, static_cast<int>(((textures.size() + 9) / 10) * BLOCK_DIVISION - 640));
-                        if (scrollOffset > maxScrollOffset)
-                            scrollOffset = maxScrollOffset;  // Limito el desplazamiento hacia abajo
-                    } else if (x >= SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT) {
-                        // Scroll horizontal para la grilla dibujable
-                        horizontalScrollOffset -=
-                                event.wheel.x *
-                                10;  // Se desplaza 10 píxeles por unidad de la rueda
-                        if (horizontalScrollOffset < 0)
-                            horizontalScrollOffset =
-                                    0;  // Limito el desplazamiento hacia la izquierda
-                        int maxHorizontalScrollOffset = std::max(
-                                0, 32 * width - (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID));
-                        if (horizontalScrollOffset > maxHorizontalScrollOffset)
-                            horizontalScrollOffset =
-                                    maxHorizontalScrollOffset;  // Limito el desplazamiento hacia la
-                                                                // derecha
-
-                        verticalScrollOffset -=
-                                event.wheel.y *
-                                10;  // Se desplaza 10 píxeles por unidad de la rueda
-                        if (verticalScrollOffset < 0)
-                            verticalScrollOffset = 0;  // Limito el desplazamiento hacia arriba
-                        int maxVerticalScrollOffset = std::max(0, BLOCK_DIVISION * height - 640);
-                        if (verticalScrollOffset > maxVerticalScrollOffset)
-                            verticalScrollOffset =
-                                    maxVerticalScrollOffset;  // Limito el desplazamiento hacia
-                                                              // abajo
-                    }
-                } else if (event.type == SDL_MOUSEBUTTONUP) {
-                    mouseIsBeingClicked = false;
+                switch (event.type) {
+                    case SDL_QUIT:
+                        running = false;
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        handleMouseClick(event, mouseIsBeingClicked, last_x, last_y, selectedEntityDst);
+                        break;
+                    case SDL_MOUSEMOTION:
+                        handleMouseMotion(event, mouseIsBeingClicked, last_x, last_y);
+                        break;
+                    case SDL_MOUSEWHEEL:
+                        handleMouseWheel(event);
+                        break;
+                    case SDL_MOUSEBUTTONUP:
+                        mouseIsBeingClicked = false;
+                        break;
                 }
             }
 
+            // Update the renderer's color based on save status
             if (wrongSave) {
                 renderer.SetDrawColor(255, 0, 0, 0);
                 wrongSave = false;
-            } else if(correctSave) {
+            } else if (correctSave) {
                 renderer.SetDrawColor(0, 255, 0, 0);
                 correctSave = false;
             } else {
@@ -415,88 +91,268 @@ public:
             }
 
             renderer.Clear();
-
-            drawButton(10, 10, 80, 40, "Paint", currentTool == PAINT);
-            drawButton(100, 10, 80, 40, "Erase", currentTool == ERASE);
-            drawButton(190, 10, 80, 40, "Move", currentTool == MOVE);
+            renderDrawableGrid();
+            renderButtons();
             if (mode == TEXTURE) {
-                drawButton(370, 10, 80, 40, "Backg", currentLayer == BACKGROUND_LAYER);
-                drawButton(460, 10, 80, 40, "DiagL", currentLayer == DIAG_LEFT_LAYER);
-                drawButton(550, 10, 80, 40, "DiagR", currentLayer == DIAG_RIGHT_LAYER);
-                drawButton(640, 10, 80, 40, "Coll", currentLayer == COLLIDER_LAYER);
-                drawButton(730, 10, 80, 40, "Decor", currentLayer == DECORATION_LAYER);
-            }
-            drawButton(890, 10, 80, 40, "Tile", mode == TEXTURE);
-            drawButton(980, 10, 80, 40, "Entity", mode == ENTITY);
-
-            drawButton(1200, 10, 80, 40, "Save", false);
-
-            // Renderizo la grilla de texturas
-            if (mode == TEXTURE) {
-                Rect textureClipRect = {0, 60, 320, 640};
-                renderer.SetClipRect(textureClipRect);
-                for (int i = 0; i < static_cast<int>(textures.size()); ++i) {
-                    Rect dst;
-                    dst.x = (i % 10) * BLOCK_DIVISION;
-                    dst.y = 60 + (i / 10) * BLOCK_DIVISION - scrollOffset;
-                    dst.w = BLOCK_DIVISION;
-                    dst.h = BLOCK_DIVISION;
-
-                    renderer.Copy(*textures[i], SDL2pp::NullOpt, dst);
-
-                    if (i == selectedTextureIndex) {
-                        renderer.SetDrawColor(255, 0, 0, 255);
-                        renderer.DrawRect(dst);
-                        renderer.SetDrawColor(255, 0, 0, 255);
-                    }
-                }
-                renderer.SetClipRect(SDL2pp::NullOpt);  // Limpip el recorte
+                renderTextureGrid();
             } else if (mode == ENTITY) {
-                renderer.Copy(entitiesTextures[RABBIT_SPAWN], jazz_src, jazz_dst);
-                renderer.Copy(entitiesTextures[CRAB_SPAWN], crab_src, crab_dst);
-                renderer.Copy(entitiesTextures[LIZARD_SPAWN], lizard_src, lizard_dst);
-                renderer.Copy(entitiesTextures[TURTLE_SPAWN], turtle_src, turtle_dst);
-                renderer.Copy(entitiesTextures[COIN_SPAWN], coin_src, coin_dst);
-                renderer.Copy(entitiesTextures[GEM_SPAWN], diamond_src, diamond_dst);
-
-                // Dibujo un rectángulo rojo alrededor de la entidad seleccionada
-                if (selectedEntityIndex != -1) {
-                    renderer.SetDrawColor(255, 0, 0, 255);
-                    renderer.DrawRect(selectedEntityDst);
-                    renderer.SetDrawColor(255, 0, 0, 255);
-                }
+                renderEntities(selectedEntityDst);
             }
-
-            // Renderizo la grilla dibujable
-            Rect gridClipRect = {SPACE_BEFORE_DRAWABLE_GRID, BUTTONS_AREA_HEIGHT, 960, 640};
-            renderer.SetClipRect(gridClipRect);
-            for (int i = 0; i < height; ++i) {
-                for (int j = 0; j < width; ++j) {
-                    Rect dst;
-                    dst.x = SPACE_BEFORE_DRAWABLE_GRID + j * BLOCK_DIVISION -
-                            horizontalScrollOffset;
-                    dst.y = BUTTONS_AREA_HEIGHT + i * BLOCK_DIVISION - verticalScrollOffset;
-                    dst.w = BLOCK_DIVISION;
-                    dst.h = BLOCK_DIVISION;
-
-                    for (int layer = 0; layer < 5; ++layer) {
-                        if (grid[i][j][layer] != nullptr) {
-                            renderer.Copy(*grid[i][j][layer], SDL2pp::NullOpt, dst);
-                        }
-                    }
-                    Entity entity = entities_grid[i][j];
-                    if (entity.who != -1) {
-                        renderer.Copy(entitiesTextures[entity.who], entity.rect, dst);
-                    }
-                    renderer.SetDrawColor(255, 255, 255, 255);
-                    renderer.DrawRect(dst);
-                    renderer.SetDrawColor(0, 0, 0, 255);
-                }
-            }
-            renderer.SetClipRect(SDL2pp::NullOpt);  // Limpiar el recorte
             renderer.Present();
             SDL_Delay(200);
         }
+    }
+
+    void handleMouseClick(SDL_Event &event, bool &mouseIsBeingClicked, int &last_x, int &last_y, Rect &selectedEntityDst) {
+        mouseIsBeingClicked = true;
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+
+        if (x >= SAVE_BUTTON_POS_X && x < SAVE_BUTTON_POS_X + BUTTON_WIDTH 
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en el botón de guardar
+            if (currentRabbitSpawns == maxPlayers) {
+                saveMap();
+                correctSave = true;
+            } else {
+                wrongSave = true;
+            }
+        } else if (x >= TILE_BUTTON_POS_X && x < TILE_BUTTON_POS_X + BUTTON_WIDTH 
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en el botón de texturas
+            mode = TEXTURE;
+        } else if (x >= ENTITY_BUTTON_POS_X && x < ENTITY_BUTTON_POS_X + BUTTON_WIDTH 
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en el botón de entidades
+            mode = ENTITY;
+        } else if (x >= PAINT_BUTTON_POS_X && x < PAINT_BUTTON_POS_X + BUTTON_WIDTH
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en el botón de pintar
+            currentTool = PAINT;
+        } else if (x >= ERASE_BUTTON_POS_X && x < ERASE_BUTTON_POS_X + BUTTON_WIDTH 
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en el botón de borrar
+            currentTool = ERASE;
+        } else if (x >= MOVE_BUTTON_POS_X && x < MOVE_BUTTON_POS_X + BUTTON_WIDTH 
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en el botón para moverse en pantalla
+            currentTool = MOVE;
+            last_x = x;
+            last_y = y;
+        } else if (x >= BACKGROUND_BUTTON_POS_X && x < BACKGROUND_BUTTON_POS_X + BUTTON_WIDTH
+             && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            // Click en los botones de capas
+            currentLayer = BACKGROUND_LAYER;
+        } else if (x >= DIAG_LEFT_BUTTON_POS_X && x < DIAG_LEFT_BUTTON_POS_X + BUTTON_WIDTH
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            currentLayer = DIAG_LEFT_LAYER;
+        } else if (x >= DIAG_RIGHT_BUTTON_POS_X && x < DIAG_RIGHT_BUTTON_POS_X + BUTTON_WIDTH
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            currentLayer = DIAG_RIGHT_LAYER;
+        } else if (x >= COLLIDER_BUTTON_POS_X && x < COLLIDER_BUTTON_POS_X + BUTTON_WIDTH
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            currentLayer = COLLIDER_LAYER;
+        } else if (x >= DECORATION_BUTTON_POS_X && x < DECORATION_BUTTON_POS_X + BUTTON_WIDTH
+            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+            currentLayer = DECORATION_LAYER;
+        } else if (mode == TEXTURE && (x < SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT && y < EDITOR_SCREEN_WIDTH - BUTTONS_AREA_HEIGHT)) {
+            // Click en la grilla de texturas
+            y += tileVerticalOffset - BUTTONS_AREA_HEIGHT; // Ajustar para el desplazamiento vertical y la posición de los botones
+
+            if (y < BLOCK_DIVISION * (static_cast<int>((textures.size() + 9) / TILE_WIDTH))) {
+                int index = (y / BLOCK_DIVISION) * TILE_WIDTH + (x / BLOCK_DIVISION);
+                if (index < static_cast<int>(textures.size())) {
+                    selectedTextureIndex = index;
+                }
+            }
+        } else if (mode == ENTITY && x < SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT && y < EDITOR_SCREEN_WIDTH - BUTTONS_AREA_HEIGHT) {
+            // Click en la grilla de entidades
+            for (auto& entity : entities_dst) {
+                int entityX = entity.second.GetX();
+                int entityY = entity.second.GetY();
+                int entityWidth = entity.second.GetW();
+                int entityHeight = entity.second.GetH();
+
+                if (x >= entityX && x < entityX + entityWidth && y >= entityY && y < entityY + entityHeight) {
+                    selectedEntityIndex = entity.first; 
+                    selectedEntityDst = entity.second;
+                    break; 
+                }
+            }
+        } else if (x >= SPACE_BEFORE_DRAWABLE_GRID && x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID, EDITOR_SCREEN_WIDTH) &&
+                y >= BUTTONS_AREA_HEIGHT && y < std::min(EDITOR_SCREEN_HEIGHT, BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
+            // Click en la grilla dibujable
+            int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + gridHorizontalOffset) / BLOCK_DIVISION;
+            int gridY = (y - BUTTONS_AREA_HEIGHT + gridVerticalOffset) / BLOCK_DIVISION;
+            if (mode == ENTITY) {
+                handleEntityGridClick(gridX, gridY);
+            } else if (mode == TEXTURE) {
+                handleTextureGridClick(gridX, gridY);
+            }
+        }
+    }
+
+    void handleEntityGridClick(int gridX, int gridY) {
+        if (currentTool == PAINT && selectedEntityIndex >= 0 && selectedEntityIndex < static_cast<int>(entities_textures.size())) {
+            bool canPaint = true;
+            std::vector<int> restrictedLayers = {COLLIDER_LAYER, DIAG_LEFT_LAYER, DIAG_RIGHT_LAYER};
+            auto isRestrictedLayer = [&](int layer) {
+                return grid[gridY][gridX][layer] != nullptr || (gridY + 1 < static_cast<int>(grid.size()) && grid[gridY + 1][gridX][layer] != nullptr) ||
+                    (gridX + 1 < static_cast<int>(grid[gridY].size()) && grid[gridY][gridX + 1][layer] != nullptr) || (gridY + 1 < static_cast<int>(grid.size()) &&
+                                                                                                                        gridX + 1 < static_cast<int>(grid[gridY + 1].size()) && grid[gridY + 1][gridX + 1][layer] != nullptr);
+            };
+            canPaint = !std::any_of(restrictedLayers.begin(), restrictedLayers.end(), isRestrictedLayer);
+
+            if (selectedEntityIndex == GEM_SPAWN || selectedEntityIndex == COIN_SPAWN) {
+                auto restLayer = [&](int layer) {
+                    return grid[gridY][gridX][layer] == nullptr && (gridY + 1 >= static_cast<int>(grid.size()) || grid[gridY + 1][gridX][layer] == nullptr) &&
+                        (gridX + 1 >= static_cast<int>(grid[gridY].size()) || grid[gridY][gridX + 1][layer] == nullptr) && (gridY + 1 >= static_cast<int>(grid.size()) ||
+                                                                                                                        gridX + 1 >= static_cast<int>(grid[gridY + 1].size()) || grid[gridY + 1][gridX + 1][layer] == nullptr);
+                };
+                canPaint = std::any_of(restrictedLayers.begin(), restrictedLayers.end(), restLayer);
+            }
+
+            if (canPaint) {
+                if (selectedEntityIndex == RABBIT_SPAWN) {
+                    if (currentRabbitSpawns == maxPlayers) {
+                        return;
+                    }
+                    currentRabbitSpawns++;
+                }
+                entities_grid[gridY][gridX] = selectedEntityIndex;
+            }
+        } else if (currentTool == ERASE) {
+            if (entities_grid[gridY][gridX] == RABBIT_SPAWN) {
+                currentRabbitSpawns--;
+            }
+            entities_grid[gridY][gridX] = -1;
+        }
+    }
+
+    void handleTextureGridClick(int gridX, int gridY) {
+        if (currentTool == PAINT && selectedTextureIndex >= 0 && selectedTextureIndex < static_cast<int>(textures.size())) {
+            grid[gridY][gridX][currentLayer] = textures[selectedTextureIndex];
+        } else if (currentTool == ERASE) {
+            grid[gridY][gridX][currentLayer] = nullptr;
+        }
+    }
+
+    void handleMouseMotion(SDL_Event &event, bool mouseIsBeingClicked, int &last_x, int &last_y) {
+        int x, y;
+        SDL_GetMouseState(&x, &y);
+        if (x >= SPACE_BEFORE_DRAWABLE_GRID && x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID, EDITOR_SCREEN_WIDTH) &&
+                y >= BUTTONS_AREA_HEIGHT && y < std::min(EDITOR_SCREEN_HEIGHT, BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height) && mouseIsBeingClicked) {
+            // Motion en la grilla dibujable
+            if (currentTool == MOVE) {
+                updateScrollOffsets(x - last_x, y - last_y, gridHorizontalOffset, gridVerticalOffset);
+                last_x = x;
+                last_y = y;
+            } else if (currentTool == PAINT || currentTool == ERASE) {
+                int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + gridHorizontalOffset) / BLOCK_DIVISION;
+                int gridY = (y - BUTTONS_AREA_HEIGHT + gridVerticalOffset) / BLOCK_DIVISION;
+                if (mode == TEXTURE) {
+                    handleTextureGridClick(gridX, gridY);
+                }
+            }
+        }
+    }
+
+    void handleMouseWheel(SDL_Event &event) {
+        if (mode == TEXTURE) {
+            tileVerticalOffset = std::max(std::min((tileVerticalOffset + event.wheel.y * SCROLL_SPEED), static_cast<int>((((textures.size() + 9) / 10) * BLOCK_DIVISION) + BUTTONS_AREA_HEIGHT - 640)), 0);
+        }
+    }
+
+    void renderButtons() {
+        renderer.SetClipRect(SDL2pp::NullOpt); 
+        drawButton(PAINT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Paint", currentTool == PAINT);
+        drawButton(ERASE_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Erase", currentTool == ERASE);
+        drawButton(MOVE_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Move", currentTool == MOVE);
+        if (mode == TEXTURE) {
+            drawButton(BACKGROUND_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Backg", currentLayer == BACKGROUND_LAYER);
+            drawButton(DIAG_LEFT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "DiagL", currentLayer == DIAG_LEFT_LAYER);
+            drawButton(DIAG_RIGHT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "DiagR", currentLayer == DIAG_RIGHT_LAYER);
+            drawButton(COLLIDER_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Coll", currentLayer == COLLIDER_LAYER);
+            drawButton(DECORATION_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Decor", currentLayer == DECORATION_LAYER);
+        }
+        drawButton(890, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Tile", mode == TEXTURE);
+        drawButton(980, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Entity", mode == ENTITY);
+        drawButton(1200, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Save", false); 
+    }
+
+    void renderTextureGrid() {
+        // Renderizo la grilla de texturas
+        Rect textureClipRect = {0, 60, 320, 640};
+        renderer.SetClipRect(textureClipRect);
+        for (int i = 0; i < static_cast<int>(textures.size()); ++i) {
+            Rect dst;
+            dst.x = (i % TILE_WIDTH) * BLOCK_DIVISION;
+            dst.y = BUTTONS_AREA_HEIGHT + (i / TILE_WIDTH) * BLOCK_DIVISION - tileVerticalOffset;
+            dst.w = BLOCK_DIVISION;
+            dst.h = BLOCK_DIVISION;
+
+            renderer.Copy(*textures[i], SDL2pp::NullOpt, dst);
+
+            if (i == selectedTextureIndex) {
+                renderer.SetDrawColor(255, 0, 0, 255);
+                renderer.DrawRect(dst);
+                renderer.SetDrawColor(255, 0, 0, 255);
+            }
+        }
+        renderer.SetClipRect(SDL2pp::NullOpt);  // Limpip el recorte
+    }
+
+    void renderEntities(SDL2pp::Rect selectedEntityDst) {
+        Rect entityClipRect = {0, BUTTONS_AREA_HEIGHT, SPACE_BEFORE_DRAWABLE_GRID, EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT};
+        renderer.SetClipRect(entityClipRect);
+        renderer.Copy(entities_textures[RABBIT_SPAWN], entities_src[RABBIT_SPAWN], entities_dst[RABBIT_SPAWN]);
+        renderer.Copy(entities_textures[CRAB_SPAWN], entities_src[CRAB_SPAWN], entities_dst[CRAB_SPAWN]);
+        renderer.Copy(entities_textures[LIZARD_SPAWN], entities_src[LIZARD_SPAWN], entities_dst[LIZARD_SPAWN]);
+        renderer.Copy(entities_textures[TURTLE_SPAWN], entities_src[TURTLE_SPAWN], entities_dst[TURTLE_SPAWN]);
+        renderer.Copy(entities_textures[COIN_SPAWN], entities_src[COIN_SPAWN], entities_dst[COIN_SPAWN]);
+        renderer.Copy(entities_textures[GEM_SPAWN], entities_src[GEM_SPAWN], entities_dst[GEM_SPAWN]);
+
+        // Dibujo un rectángulo rojo alrededor de la entidad seleccionada
+        if (selectedEntityIndex != -1) {
+            renderer.SetDrawColor(255, 0, 0, 255);
+            renderer.DrawRect(selectedEntityDst);
+            renderer.SetDrawColor(255, 0, 0, 255);
+        }
+        renderer.SetClipRect(SDL2pp::NullOpt);  // Limpio el recorte
+    }
+
+    void renderDrawableGrid() {
+        // Renderizo la grilla dibujable
+        Rect gridClipRect = {SPACE_BEFORE_DRAWABLE_GRID, BUTTONS_AREA_HEIGHT, 960, 640};
+        renderer.SetClipRect(gridClipRect);
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
+                Rect dst;
+                dst.x = SPACE_BEFORE_DRAWABLE_GRID + j * BLOCK_DIVISION -
+                        gridHorizontalOffset;
+                dst.y = BUTTONS_AREA_HEIGHT + i * BLOCK_DIVISION - gridVerticalOffset;
+                dst.w = BLOCK_DIVISION;
+                dst.h = BLOCK_DIVISION;
+
+                for (int layer = 0; layer < TEXTURE_LAYERS; ++layer) {
+                    if (grid[i][j][layer] != nullptr) {
+                        renderer.Copy(*grid[i][j][layer], SDL2pp::NullOpt, dst);
+                    }
+                }
+                int entity = entities_grid[i][j];
+                if (entity != -1) {
+                    renderer.Copy(entities_textures[entity], entities_src[entity], dst);
+                }
+                renderer.SetDrawColor(255, 255, 255, 255);
+                renderer.DrawRect(dst);
+                renderer.SetDrawColor(0, 0, 0, 255);
+            }
+        }
+    }
+
+    void updateScrollOffsets(int x, int y, int &gridHorizontalOffset, int &gridVerticalOffset) {
+        gridHorizontalOffset = std::max(std::min(gridHorizontalOffset - x, (width * BLOCK_DIVISION) - (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID)), 0);
+        gridVerticalOffset = std::max(std::min(gridVerticalOffset - y, (height * BLOCK_DIVISION) - (EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT)), 0);
     }
 
 private:
@@ -507,14 +363,14 @@ private:
     Renderer renderer;
     std::vector<std::shared_ptr<SDL2pp::Texture>> textures;
     std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>> grid;
-    std::vector<Texture> entitiesTextures;  // Grilla de entidades
-    std::vector<std::vector<Entity>> entities_grid;
+    std::vector<std::vector<int>> entities_grid;
+    std::vector<Texture> entities_textures; 
 
     int selectedTextureIndex = -1;
     int selectedEntityIndex = -1;
-    int scrollOffset = 0;            // Desplazamiento vertical para la grilla de texturas
-    int horizontalScrollOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
-    int verticalScrollOffset = 0;    // Desplazamiento vertical para la grilla dibujable
+    int tileVerticalOffset = 0;            // Desplazamiento vertical para la grilla de texturas
+    int gridHorizontalOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
+    int gridVerticalOffset = 0;    // Desplazamiento vertical para la grilla dibujable
     int width = 0;
     int height = 0;
     std::string name = "";
@@ -528,8 +384,9 @@ private:
     int currentLayer = BACKGROUND_LAYER;  // Capa actual
     Mode mode = TEXTURE;                  // Modo actual
     Font font;
-    Rect jazz_src, jazz_dst, crab_src, crab_dst, lizard_src, lizard_dst, turtle_src, turtle_dst,
-            coin_src, coin_dst, diamond_src, diamond_dst;
+
+    std::map<int, Rect> entities_src;
+    std::map<int, Rect> entities_dst;
 
     void drawButton(int x, int y, int w, int h, const char* label, bool selected) {
         Rect rect = {x, y, w, h};
@@ -602,35 +459,31 @@ private:
         for (const auto& path: imagePaths) {
             Surface entitySurface(path);
             Texture entityTexture(renderer, entitySurface);
-            entitiesTextures.push_back(std::move(entityTexture));
+            entities_textures.push_back(std::move(entityTexture));
         }
+       
+        entities_src[RABBIT_SPAWN] = {1, 12, 35, 49};
+        entities_src[CRAB_SPAWN] = {734, 310, 40, 32};
+        entities_src[LIZARD_SPAWN] = {18, 15, 64, 52};
+        entities_src[TURTLE_SPAWN] = {11, 58, 69, 54};
+        entities_src[COIN_SPAWN] = {481, 1218, 28, 27};
+        entities_src[GEM_SPAWN] = {147, 1241, 29, 30};
 
-        jazz_src = {1, 12, 35, 49};
-        jazz_dst = {0, 64, 64, 64};
-
-        crab_src = {734, 310, 40, 32};
-        crab_dst = {0, 128, 64, 64};
-
-        lizard_src = {18, 15, 64, 52};
-        lizard_dst = {64, 128, 64, 64};
-
-        turtle_src = {11, 58, 69, 54};
-        turtle_dst = {128, 128, 64, 64};
-
-        coin_src = {481, 1218, 28, 27};
-        coin_dst = {0, 256, 32, 32};
-
-        diamond_src = {147, 1241, 29, 30};
-        diamond_dst = {32, 256, 32, 32};
+        entities_dst[RABBIT_SPAWN] = {0, 64, 64, 64};
+        entities_dst[CRAB_SPAWN] = {0, 128, 64, 64};
+        entities_dst[LIZARD_SPAWN] = {64, 128, 64, 64};
+        entities_dst[TURTLE_SPAWN] = {128, 128, 64, 64};
+        entities_dst[COIN_SPAWN] = {0, 256, 32, 32};
+        entities_dst[GEM_SPAWN] = {32, 256, 32, 32};
     }
 
     void initializeGrids() {
         grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
-        entities_grid = std::vector<std::vector<Entity>>(height, std::vector<Entity>(width, {-1, {0, 0, 0, 0}}));
+        entities_grid = std::vector<std::vector<int>>(height, std::vector<int>(width,-1));
     }
 
     void populateTextureGrid(YAML::Node &map) {
-        for (int layer = 0; layer < 5; ++layer) {
+        for (int layer = 0; layer < TEXTURE_LAYERS; ++layer) {
             for (int i = 0; i < height; ++i) {
                 for (int j = 0; j < width; ++j) {
                     int index = map["layers"][layer]["data"][i][j].as<int>();
@@ -645,29 +498,12 @@ private:
     void populateEntityGrid(YAML::Node &map) {
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
-                int index = map["layers"][5]["data"][i][j].as<int>();
+                int index = map["layers"][TEXTURE_LAYERS]["data"][i][j].as<int>();
                 if (index != -1) {
-                    switch(index){
-                        case RABBIT_SPAWN:
-                            currentRabbitSpawns++;
-                            entities_grid[i][j] = {index, jazz_src};
-                            break;
-                        case CRAB_SPAWN:
-                            entities_grid[i][j] = {index, crab_src};
-                            break;
-                        case LIZARD_SPAWN:
-                            entities_grid[i][j] = {index, lizard_src};
-                            break;
-                        case TURTLE_SPAWN:
-                            entities_grid[i][j] = {index, turtle_src};
-                            break;
-                        case GEM_SPAWN:
-                            entities_grid[i][j] = {index, diamond_src};
-                            break;
-                        case COIN_SPAWN:
-                            entities_grid[i][j] = {index, coin_src};
-                            break;                            
+                    if (index == RABBIT_SPAWN) {
+                        currentRabbitSpawns++;
                     }
+                    entities_grid[i][j] = index;
                 }
             }
         }
@@ -717,7 +553,7 @@ private:
         for (const auto& row: entities_grid) {
             std::vector<int> entityRow(row.size());
             std::transform(row.begin(), row.end(), entityRow.begin(),
-                           [](const auto& entity) { return entity.who; });
+                           [](const auto& entity) { return entity; });
             out << YAML::Flow << entityRow;
         }
 
@@ -753,7 +589,7 @@ private:
             if (!nameExists) {
                 mapsFile << name << ".yml" << '\n';
             } else {
-                // std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
+                std::cout << "Name already exists in maps.txt: " << name << ".yml" << '\n';
             }
         } else {
             std::cerr << "Unable to open maps.txt for writing.\n";

@@ -194,7 +194,43 @@ From the join game window, players can view the complete list of all available g
 ## How does the drawer work?
 
 > drawer class diagram
-
 ![IMG](UMLS/drawer.png)
+
+The Drawer class is responsible for managing the game's rendering by following these steps:
+
+1. Listen to the keyboard.
+2. Push an incoming command into the protocol queue.
+3. Receive the resulting snapshot.
+4. Update all existing entities (players, enemies, resources, etc.).
+5. Draw.
+6. Sleep if there is frame time remaining.
+
+Drawer stores these entities in vectors and knows what type of drawable they are.
+
+### Drawable Hierarchy
+
+The foundation of all drawables is the Drawable class, which represents a static image that can be drawn on the map relative to the camera. A map block or food dropped by enemies are examples of Drawable. They don't do much more than just be there. 
+
+Next, there is a more active class, ShiftingDrawable, which inherits from Drawable. As its name suggests, ShiftingDrawable encompasses entities with animations, meaning they have visible movement in the game. To achieve this, they contain a map pairing animation names (move, jump) with their corresponding frames. Playing these animations requires adding new methods that constantly update the visible frame. ShiftingDrawable also has a reference to the SoundManager object, to emit sounds along with the mentioned animations. 
+
+At the bottom, we find the concrete Drawables, which specialize in a particular entity. They don't do much more than load the corresponding textures and animations. For example, a DrawableRabbit knows which rabbit texture should be loaded based on the player's choice.
+
+> complementary classes
 ![IMG](UMLS/sdl_miscellaneous.png)
+
+Drawer also has the support of certain classes with which to perform a complete and efficient job.
+
+- HeartsBanner: delegates the task of drawing the player's number of hearts based on their current life.
+- AmmoLeft: displays on the screen the type of weapon the player is using and how much ammunition is left.
+- Clock: draws the remaining match time.
+- TopScores: draws a top 3 of the best scores while playing the game.
+- KeyboardHandler: listens to the commands entered by the player and passes them to the protocol.
+- MapLoader: loads the map at the start of the game.
+- FontsImage: a very useful class, which renders numbers and letters by concatening them.
+
+> ¿when are textures load?
 ![IMG](UMLS/texture_povider.png)
+
+#### The Importance of TextureProvider
+
+To avoid memory and CPU overload, textures are loaded only once at the start of the game. This task falls to TextureProvider, who also remains attentive to requests from various classes wanting to obtain the instance corresponding to their texture.

@@ -22,7 +22,7 @@ MapEditorLobby::~MapEditorLobby() { delete ui; }
 
 void MapEditorLobby::on_btnRefresh_clicked() {
     try {
-        q_cmds.push(std::make_unique<MatchCommand>(REFRESH, 0, "", "", NULL_CHAMPION_TYPE));
+        q_cmds.push(std::make_unique<MatchCommand>(REFRESH, 0, "", "", NULL_CHAMPION_TYPE, ""));
         bool could_pop = false;
         std::unique_ptr<QtResponse> response;
         while (!could_pop) {

@@ -13,15 +13,44 @@
 
 enum /*Map Textures*/ { JUNGLE = 0, CARROTUS };
 
+// Map editor constants
+
+enum Tool { PAINT, ERASE, MOVE };
+enum Mode { TEXTURE, ENTITY };
+
+// Destination for new maps
+#define DEST_PATH "../external/maps/"
+
+#define EDITOR_SCREEN_WIDTH 1280
+#define EDITOR_SCREEN_HEIGHT 700
+#define BUTTON_WIDTH 80
+#define BUTTON_HEIGHT 40
+#define BUTTONS_AREA_HEIGHT 60
+#define TEXTURE_GRID 320
+#define SPACE_BEFORE_DRAWABLE_GRID 380
+#define SCROLL_SPEED 10
+#define TILE_WIDTH 10
+#define TILE_HEIGHT 66
+#define TEXTURE_LAYERS 5
+
+#define BUTTON_POS_Y 10
+#define BUTTON_END_Y 50
+#define SAVE_BUTTON_POS_X 1200
+#define TILE_BUTTON_POS_X 890
+#define ENTITY_BUTTON_POS_X 980
+#define PAINT_BUTTON_POS_X 10
+#define ERASE_BUTTON_POS_X 100
+#define MOVE_BUTTON_POS_X 190
+#define BACKGROUND_BUTTON_POS_X 370
+#define DIAG_LEFT_BUTTON_POS_X 460
+#define DIAG_RIGHT_BUTTON_POS_X 550
+#define COLLIDER_BUTTON_POS_X 640
+#define DECORATION_BUTTON_POS_X 730
 
 // Music & Game Constants
 
 #define MUSIC_VOLUME ClientConfigSingleton::getInstance().getMusicVolume()
 #define GAME_TITLE "Jack Jazzrabbit 2"
-
-// Maps
-//#define MAPS ClientConfigSingleton::getInstance().getMapsPath()
-//#define MAPS_TXT MAPS + "/maps.txt"
 
 // Paths
 

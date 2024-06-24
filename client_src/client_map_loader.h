@@ -12,14 +12,10 @@
 #include "client_drawable.h"
 #include "client_textures_provider.h"
 
-const int TILE_WIDTH = 10;
-const int BLOCK_SIZE = 32;
-
 class MapLoader {
 private:
     Renderer& renderer;
-    std::shared_ptr<SDL2pp::Texture> clean_texture;
-    std::shared_ptr<SDL2pp::Texture> default_texture;
+    std::shared_ptr<SDL2pp::Texture> texture;
     int map_width;
     int map_heigth;
 
@@ -29,12 +25,10 @@ public:
             renderer(renderer), map_width(map_width), map_heigth(map_heigth) {
         switch (map_texture) {
             case JUNGLE:
-                clean_texture = TexturesProvider::getTexture("Clean-Jungle");
-                default_texture = TexturesProvider::getTexture("Default-Jungle");
+                texture = TexturesProvider::getTexture("Jungle");
                 break;
             case CARROTUS:
-                clean_texture = TexturesProvider::getTexture("Clean-Carrotus");
-                default_texture = TexturesProvider::getTexture("Default-Carrotus");
+                texture = TexturesProvider::getTexture("Carrotus");
                 break;
             default:
                 throw std::invalid_argument("Invalid map texture");
@@ -58,22 +52,18 @@ public:
                             SDL2pp::Rect srcRect;
                             srcRect.x = (id % TILE_WIDTH) * 32;
                             srcRect.y = (id / TILE_WIDTH) * 32;
-                            srcRect.w = BLOCK_SIZE;
-                            srcRect.h = BLOCK_SIZE;
+                            srcRect.w = BLOCK_DIVISION;
+                            srcRect.h = BLOCK_DIVISION;
 
                             SDL2pp::Rect destRect;
-                            destRect.x = x * BLOCK_SIZE;
-                            destRect.y = y * BLOCK_SIZE;
-                            destRect.w = BLOCK_SIZE;
-                            destRect.h = BLOCK_SIZE;
+                            destRect.x = x * BLOCK_DIVISION;
+                            destRect.y = y * BLOCK_DIVISION;
+                            destRect.w = BLOCK_DIVISION;
+                            destRect.h = BLOCK_DIVISION;
 
                             std::unique_ptr<Drawable> drawable = std::make_unique<Drawable>(
                                     renderer, cameraPosition, srcRect, destRect);
-                            if (key == BACKGROUND_LAYER) {
-                                drawable->setTexture(default_texture);
-                            } else {
-                                drawable->setTexture(clean_texture);
-                            }
+                            drawable->setTexture(texture);
                             tiles.push_back(std::move(drawable));
                         }
                         x++;

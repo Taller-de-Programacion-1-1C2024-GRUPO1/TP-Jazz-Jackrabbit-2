@@ -16,9 +16,11 @@ void User::run() {
                     std::dynamic_pointer_cast<MatchCommand>(command);
             if (new_match->getType() == NEW_MATCH) {
                 create_new_match(new_match->get_number_players(), new_match->get_match_name(),
-                                 new_match->get_map_name(), new_match->get_character_name());
+                                 new_match->get_map_name(), new_match->get_character_name(),
+                                 new_match->get_player_name());
             } else if (new_match->getType() == JOIN) {
-                join_match(new_match->get_match_name(), new_match->get_character_name());
+                join_match(new_match->get_match_name(), new_match->get_character_name(),
+                           new_match->get_player_name());
             } else if (new_match->getType() == REFRESH) {
                 refresh();
             }
@@ -33,7 +35,8 @@ void User::run() {
 }
 
 void User::create_new_match(int number_of_players, const std::string& match_name,
-                            const std::string& map_name, ChampionType character_name) {
+                            const std::string& map_name, ChampionType character_name,
+                            std::string player_name) {
 
     Map map = monitor_matches.get_map(map_name);
 
@@ -41,7 +44,7 @@ void User::create_new_match(int number_of_players, const std::string& match_name
             std::make_shared<Queue<std::shared_ptr<PlayerInfo>>>();
 
     std::shared_ptr<PlayerInfo> player_info =
-            std::make_shared<PlayerInfo>(this->id, character_name, container_protocol);
+            std::make_shared<PlayerInfo>(this->id, character_name, container_protocol, player_name);
 
     protocols_queue->push(player_info);
 
@@ -60,9 +63,11 @@ void User::create_new_match(int number_of_players, const std::string& match_name
     this->status = INACTIVE;
 }
 
-void User::join_match(const std::string& match_name, ChampionType character_name) {
+void User::join_match(const std::string& match_name, ChampionType character_name,
+                      const std::string& player_name) {
     // se fija si el match esta vivo
-    int ACK = monitor_matches.join_match(match_name, container_protocol, this->id, character_name);
+    int ACK = monitor_matches.join_match(match_name, container_protocol, this->id, character_name,
+                                         player_name);
 
     QtResponse response = QtResponse(ACK, JOIN);
     response.send(container_protocol->protocol);

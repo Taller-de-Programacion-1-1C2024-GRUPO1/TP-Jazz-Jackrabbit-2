@@ -36,10 +36,12 @@ std::vector<std::string> MonitorMatches::show_maps_availables() {
     std::lock_guard<std::mutex> lock(mutex);
     std::vector<std::string> availableMaps;
     for (auto& map: maps) {
-        // no tomar los que comienzen con el prefijo: "DEFAULT"
+        // Linea para no tomar los que comienzen con el prefijo: "DEFAULT"
+        /*
         if (map.first.find("default") != std::string::npos) {
             continue;
         }
+        */
         availableMaps.push_back(map.first);
     }
     return availableMaps;
@@ -47,7 +49,7 @@ std::vector<std::string> MonitorMatches::show_maps_availables() {
 
 int MonitorMatches::join_match(std::string match_name,
                                std::shared_ptr<ContainerProtocol> cont_protocol, int id,
-                               ChampionType character_name) {
+                               ChampionType character_name, std::string player_name) {
     std::lock_guard<std::mutex> lock(mutex);
     // chequeo si la partida existe
     auto name = matches.find(match_name);
@@ -62,7 +64,7 @@ int MonitorMatches::join_match(std::string match_name,
     std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_queue =
             matches[match_name]->matches_protocols_players_queue;
     std::shared_ptr<PlayerInfo> player_info =
-            std::make_shared<PlayerInfo>(id, character_name, cont_protocol);
+            std::make_shared<PlayerInfo>(id, character_name, cont_protocol, player_name);
     matches_protocols_queue->push(player_info);
     return OK;
 }
