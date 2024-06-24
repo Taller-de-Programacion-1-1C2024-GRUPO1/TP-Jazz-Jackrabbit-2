@@ -182,6 +182,8 @@ Here are a few points to consider while using these layers:
 3. The background layer is the deepest, while Decorations is the uppermost. The three middle layers have the same depth, positioned between the Background and Decorations layers.
 4. The Tileset on the left does not differentiate textures by layers. Users should find an appropriate texture for each layer. For example, find a sky texture for painting the background.
 
+> ⚠️ **WARNING DO NOT FORGET TO COVER EVERY SIDE OF THE MAP WITH COLLISIONABLE BLOCKS** ⚠️
+
 ### Entities
 
 There is an additional layer for entities. Once this option is selected, the texture grid will be replaced by images of game entities. Each represents a spawn point.

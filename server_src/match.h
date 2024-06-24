@@ -46,8 +46,8 @@ private:
 
 public:
     Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-          std::shared_ptr<Map> map, const std::string& match_name, bool& server_running, int* status,
-          int number_of_players);
+          std::shared_ptr<Map> map, const std::string& match_name, bool& server_running,
+          int* status, int number_of_players);
     ~Match();
 
     bool has_started();

@@ -46,8 +46,9 @@ void User::create_new_match(int number_of_players, const std::string& match_name
 
     protocols_queue->push(player_info);
 
-    std::shared_ptr<MatchInfo> new_match = std::make_shared<MatchInfo>(
-            match_name, monitor_matches.get_map(map_name), protocols_queue, server_running, number_of_players);
+    std::shared_ptr<MatchInfo> new_match =
+            std::make_shared<MatchInfo>(match_name, monitor_matches.get_map(map_name),
+                                        protocols_queue, server_running, number_of_players);
 
     int ACK = monitor_matches.add_new_match(match_name, new_match);
 

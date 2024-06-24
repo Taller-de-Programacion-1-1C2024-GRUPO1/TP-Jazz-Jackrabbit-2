@@ -13,37 +13,41 @@
 
 #include "../common_src/constants.h"
 #include "../game_src/constants_game.h"
+
 #include "client_constants.h"
 #include "client_textures_provider.h"
 
 class Editor {
 public:
-    //Constructor for precharged map
-     explicit Editor(const std::string& map_name) : 
-        sdl(SDL_INIT_VIDEO), 
-        image(IMG_INIT_PNG), 
-        ttf(),
-        window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
-        renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        font(FONT_TTF_04B_30, 15) {
+    // Constructor for precharged map
+    explicit Editor(const std::string& map_name):
+            sdl(SDL_INIT_VIDEO),
+            image(IMG_INIT_PNG),
+            ttf(),
+            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                   EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
+            renderer(window, -1, SDL_RENDERER_ACCELERATED),
+            font(FONT_TTF_04B_30, 15) {
         loadEntityTextures();
         loadMapData(map_name);
     }
 
-    //Constructor for new map
-    Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser, const int max_players) : 
-        sdl(SDL_INIT_VIDEO), 
-        image(IMG_INIT_PNG),    
-        ttf(),
-        window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
-        renderer(window, -1, SDL_RENDERER_ACCELERATED),
-        width(mapWidth),
-        height(mapHeight),
-        name(nameByUser),
-        maxPlayers(max_players),
-        texture(map),
-        currentRabbitSpawns(0),
-        font(FONT_TTF_04B_30, 15) {
+    // Constructor for new map
+    Editor(const int map, const int mapWidth, const int mapHeight, const std::string& nameByUser,
+           const int max_players):
+            sdl(SDL_INIT_VIDEO),
+            image(IMG_INIT_PNG),
+            ttf(),
+            window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                   EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
+            renderer(window, -1, SDL_RENDERER_ACCELERATED),
+            width(mapWidth),
+            height(mapHeight),
+            name(nameByUser),
+            maxPlayers(max_players),
+            texture(map),
+            currentRabbitSpawns(0),
+            font(FONT_TTF_04B_30, 15) {
         loadTileTextures(map);
         loadEntityTextures();
         initializeGrids();
@@ -64,7 +68,8 @@ public:
                         running = false;
                         break;
                     case SDL_MOUSEBUTTONDOWN:
-                        handleMouseClick(event, mouseIsBeingClicked, last_x, last_y, selectedEntityDst);
+                        handleMouseClick(event, mouseIsBeingClicked, last_x, last_y,
+                                         selectedEntityDst);
                         break;
                     case SDL_MOUSEMOTION:
                         handleMouseMotion(event, mouseIsBeingClicked, last_x, last_y);
@@ -102,13 +107,14 @@ public:
         }
     }
 
-    void handleMouseClick(SDL_Event &event, bool &mouseIsBeingClicked, int &last_x, int &last_y, Rect &selectedEntityDst) {
+    void handleMouseClick(SDL_Event& event, bool& mouseIsBeingClicked, int& last_x, int& last_y,
+                          Rect& selectedEntityDst) {
         mouseIsBeingClicked = true;
         int x, y;
         SDL_GetMouseState(&x, &y);
 
-        if (x >= SAVE_BUTTON_POS_X && x < SAVE_BUTTON_POS_X + BUTTON_WIDTH 
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        if (x >= SAVE_BUTTON_POS_X && x < SAVE_BUTTON_POS_X + BUTTON_WIDTH && y >= BUTTON_POS_Y &&
+            y < BUTTON_END_Y) {
             // Click en el botón de guardar
             if (currentRabbitSpawns == maxPlayers) {
                 saveMap();
@@ -116,47 +122,49 @@ public:
             } else {
                 wrongSave = true;
             }
-        } else if (x >= TILE_BUTTON_POS_X && x < TILE_BUTTON_POS_X + BUTTON_WIDTH 
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= TILE_BUTTON_POS_X && x < TILE_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             // Click en el botón de texturas
             mode = TEXTURE;
-        } else if (x >= ENTITY_BUTTON_POS_X && x < ENTITY_BUTTON_POS_X + BUTTON_WIDTH 
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= ENTITY_BUTTON_POS_X && x < ENTITY_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             // Click en el botón de entidades
             mode = ENTITY;
-        } else if (x >= PAINT_BUTTON_POS_X && x < PAINT_BUTTON_POS_X + BUTTON_WIDTH
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= PAINT_BUTTON_POS_X && x < PAINT_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             // Click en el botón de pintar
             currentTool = PAINT;
-        } else if (x >= ERASE_BUTTON_POS_X && x < ERASE_BUTTON_POS_X + BUTTON_WIDTH 
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= ERASE_BUTTON_POS_X && x < ERASE_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             // Click en el botón de borrar
             currentTool = ERASE;
-        } else if (x >= MOVE_BUTTON_POS_X && x < MOVE_BUTTON_POS_X + BUTTON_WIDTH 
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= MOVE_BUTTON_POS_X && x < MOVE_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             // Click en el botón para moverse en pantalla
             currentTool = MOVE;
             last_x = x;
             last_y = y;
-        } else if (x >= BACKGROUND_BUTTON_POS_X && x < BACKGROUND_BUTTON_POS_X + BUTTON_WIDTH
-             && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= BACKGROUND_BUTTON_POS_X && x < BACKGROUND_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             // Click en los botones de capas
             currentLayer = BACKGROUND_LAYER;
-        } else if (x >= DIAG_LEFT_BUTTON_POS_X && x < DIAG_LEFT_BUTTON_POS_X + BUTTON_WIDTH
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= DIAG_LEFT_BUTTON_POS_X && x < DIAG_LEFT_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             currentLayer = DIAG_LEFT_LAYER;
-        } else if (x >= DIAG_RIGHT_BUTTON_POS_X && x < DIAG_RIGHT_BUTTON_POS_X + BUTTON_WIDTH
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= DIAG_RIGHT_BUTTON_POS_X && x < DIAG_RIGHT_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             currentLayer = DIAG_RIGHT_LAYER;
-        } else if (x >= COLLIDER_BUTTON_POS_X && x < COLLIDER_BUTTON_POS_X + BUTTON_WIDTH
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= COLLIDER_BUTTON_POS_X && x < COLLIDER_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             currentLayer = COLLIDER_LAYER;
-        } else if (x >= DECORATION_BUTTON_POS_X && x < DECORATION_BUTTON_POS_X + BUTTON_WIDTH
-            && y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
+        } else if (x >= DECORATION_BUTTON_POS_X && x < DECORATION_BUTTON_POS_X + BUTTON_WIDTH &&
+                   y >= BUTTON_POS_Y && y < BUTTON_END_Y) {
             currentLayer = DECORATION_LAYER;
-        } else if (mode == TEXTURE && (x < SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT && y < EDITOR_SCREEN_WIDTH - BUTTONS_AREA_HEIGHT)) {
+        } else if (mode == TEXTURE && (x < SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT &&
+                                       y < EDITOR_SCREEN_WIDTH - BUTTONS_AREA_HEIGHT)) {
             // Click en la grilla de texturas
-            y += tileVerticalOffset - BUTTONS_AREA_HEIGHT; // Ajustar para el desplazamiento vertical y la posición de los botones
+            y += tileVerticalOffset - BUTTONS_AREA_HEIGHT;  // Ajustar para el desplazamiento
+                                                            // vertical y la posición de los botones
 
             if (y < BLOCK_DIVISION * (static_cast<int>((textures.size() + 9) / TILE_WIDTH))) {
                 int index = (y / BLOCK_DIVISION) * TILE_WIDTH + (x / BLOCK_DIVISION);
@@ -164,22 +172,28 @@ public:
                     selectedTextureIndex = index;
                 }
             }
-        } else if (mode == ENTITY && x < SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT && y < EDITOR_SCREEN_WIDTH - BUTTONS_AREA_HEIGHT) {
+        } else if (mode == ENTITY && x < SPACE_BEFORE_DRAWABLE_GRID && y >= BUTTONS_AREA_HEIGHT &&
+                   y < EDITOR_SCREEN_WIDTH - BUTTONS_AREA_HEIGHT) {
             // Click en la grilla de entidades
-            for (auto& entity : entities_dst) {
+            for (auto& entity: entities_dst) {
                 int entityX = entity.second.GetX();
                 int entityY = entity.second.GetY();
                 int entityWidth = entity.second.GetW();
                 int entityHeight = entity.second.GetH();
 
-                if (x >= entityX && x < entityX + entityWidth && y >= entityY && y < entityY + entityHeight) {
-                    selectedEntityIndex = entity.first; 
+                if (x >= entityX && x < entityX + entityWidth && y >= entityY &&
+                    y < entityY + entityHeight) {
+                    selectedEntityIndex = entity.first;
                     selectedEntityDst = entity.second;
-                    break; 
+                    break;
                 }
             }
-        } else if (x >= SPACE_BEFORE_DRAWABLE_GRID && x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID, EDITOR_SCREEN_WIDTH) &&
-                y >= BUTTONS_AREA_HEIGHT && y < std::min(EDITOR_SCREEN_HEIGHT, BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
+        } else if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
+                   x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
+                                EDITOR_SCREEN_WIDTH) &&
+                   y >= BUTTONS_AREA_HEIGHT &&
+                   y < std::min(EDITOR_SCREEN_HEIGHT,
+                                BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height)) {
             // Click en la grilla dibujable
             int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + gridHorizontalOffset) / BLOCK_DIVISION;
             int gridY = (y - BUTTONS_AREA_HEIGHT + gridVerticalOffset) / BLOCK_DIVISION;
@@ -192,21 +206,33 @@ public:
     }
 
     void handleEntityGridClick(int gridX, int gridY) {
-        if (currentTool == PAINT && selectedEntityIndex >= 0 && selectedEntityIndex < static_cast<int>(entities_textures.size())) {
+        if (currentTool == PAINT && selectedEntityIndex >= 0 &&
+            selectedEntityIndex < static_cast<int>(entities_textures.size())) {
             bool canPaint = true;
             std::vector<int> restrictedLayers = {COLLIDER_LAYER, DIAG_LEFT_LAYER, DIAG_RIGHT_LAYER};
             auto isRestrictedLayer = [&](int layer) {
-                return grid[gridY][gridX][layer] != nullptr || (gridY + 1 < static_cast<int>(grid.size()) && grid[gridY + 1][gridX][layer] != nullptr) ||
-                    (gridX + 1 < static_cast<int>(grid[gridY].size()) && grid[gridY][gridX + 1][layer] != nullptr) || (gridY + 1 < static_cast<int>(grid.size()) &&
-                                                                                                                        gridX + 1 < static_cast<int>(grid[gridY + 1].size()) && grid[gridY + 1][gridX + 1][layer] != nullptr);
+                return grid[gridY][gridX][layer] != nullptr ||
+                       (gridY + 1 < static_cast<int>(grid.size()) &&
+                        grid[gridY + 1][gridX][layer] != nullptr) ||
+                       (gridX + 1 < static_cast<int>(grid[gridY].size()) &&
+                        grid[gridY][gridX + 1][layer] != nullptr) ||
+                       (gridY + 1 < static_cast<int>(grid.size()) &&
+                        gridX + 1 < static_cast<int>(grid[gridY + 1].size()) &&
+                        grid[gridY + 1][gridX + 1][layer] != nullptr);
             };
-            canPaint = !std::any_of(restrictedLayers.begin(), restrictedLayers.end(), isRestrictedLayer);
+            canPaint = !std::any_of(restrictedLayers.begin(), restrictedLayers.end(),
+                                    isRestrictedLayer);
 
             if (selectedEntityIndex == GEM_SPAWN || selectedEntityIndex == COIN_SPAWN) {
                 auto restLayer = [&](int layer) {
-                    return grid[gridY][gridX][layer] == nullptr && (gridY + 1 >= static_cast<int>(grid.size()) || grid[gridY + 1][gridX][layer] == nullptr) &&
-                        (gridX + 1 >= static_cast<int>(grid[gridY].size()) || grid[gridY][gridX + 1][layer] == nullptr) && (gridY + 1 >= static_cast<int>(grid.size()) ||
-                                                                                                                        gridX + 1 >= static_cast<int>(grid[gridY + 1].size()) || grid[gridY + 1][gridX + 1][layer] == nullptr);
+                    return grid[gridY][gridX][layer] == nullptr &&
+                           (gridY + 1 >= static_cast<int>(grid.size()) ||
+                            grid[gridY + 1][gridX][layer] == nullptr) &&
+                           (gridX + 1 >= static_cast<int>(grid[gridY].size()) ||
+                            grid[gridY][gridX + 1][layer] == nullptr) &&
+                           (gridY + 1 >= static_cast<int>(grid.size()) ||
+                            gridX + 1 >= static_cast<int>(grid[gridY + 1].size()) ||
+                            grid[gridY + 1][gridX + 1][layer] == nullptr);
                 };
                 canPaint = std::any_of(restrictedLayers.begin(), restrictedLayers.end(), restLayer);
             }
@@ -229,25 +255,32 @@ public:
     }
 
     void handleTextureGridClick(int gridX, int gridY) {
-        if (currentTool == PAINT && selectedTextureIndex >= 0 && selectedTextureIndex < static_cast<int>(textures.size())) {
+        if (currentTool == PAINT && selectedTextureIndex >= 0 &&
+            selectedTextureIndex < static_cast<int>(textures.size())) {
             grid[gridY][gridX][currentLayer] = textures[selectedTextureIndex];
         } else if (currentTool == ERASE) {
             grid[gridY][gridX][currentLayer] = nullptr;
         }
     }
 
-    void handleMouseMotion(SDL_Event &event, bool mouseIsBeingClicked, int &last_x, int &last_y) {
+    void handleMouseMotion(SDL_Event& event, bool mouseIsBeingClicked, int& last_x, int& last_y) {
         int x, y;
         SDL_GetMouseState(&x, &y);
-        if (x >= SPACE_BEFORE_DRAWABLE_GRID && x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID, EDITOR_SCREEN_WIDTH) &&
-                y >= BUTTONS_AREA_HEIGHT && y < std::min(EDITOR_SCREEN_HEIGHT, BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height) && mouseIsBeingClicked) {
+        if (x >= SPACE_BEFORE_DRAWABLE_GRID &&
+            x < std::min(BLOCK_DIVISION * width + SPACE_BEFORE_DRAWABLE_GRID,
+                         EDITOR_SCREEN_WIDTH) &&
+            y >= BUTTONS_AREA_HEIGHT &&
+            y < std::min(EDITOR_SCREEN_HEIGHT, BUTTONS_AREA_HEIGHT + BLOCK_DIVISION * height) &&
+            mouseIsBeingClicked) {
             // Motion en la grilla dibujable
             if (currentTool == MOVE) {
-                updateScrollOffsets(x - last_x, y - last_y, gridHorizontalOffset, gridVerticalOffset);
+                updateScrollOffsets(x - last_x, y - last_y, gridHorizontalOffset,
+                                    gridVerticalOffset);
                 last_x = x;
                 last_y = y;
             } else if (currentTool == PAINT || currentTool == ERASE) {
-                int gridX = (x - SPACE_BEFORE_DRAWABLE_GRID + gridHorizontalOffset) / BLOCK_DIVISION;
+                int gridX =
+                        (x - SPACE_BEFORE_DRAWABLE_GRID + gridHorizontalOffset) / BLOCK_DIVISION;
                 int gridY = (y - BUTTONS_AREA_HEIGHT + gridVerticalOffset) / BLOCK_DIVISION;
                 if (mode == TEXTURE) {
                     handleTextureGridClick(gridX, gridY);
@@ -256,27 +289,39 @@ public:
         }
     }
 
-    void handleMouseWheel(SDL_Event &event) {
+    void handleMouseWheel(SDL_Event& event) {
         if (mode == TEXTURE) {
-            tileVerticalOffset = std::max(std::min((tileVerticalOffset + event.wheel.y * SCROLL_SPEED), static_cast<int>((((textures.size() + 9) / 10) * BLOCK_DIVISION) + BUTTONS_AREA_HEIGHT - 640)), 0);
+            tileVerticalOffset = std::max(
+                    std::min((tileVerticalOffset + event.wheel.y * SCROLL_SPEED),
+                             static_cast<int>((((textures.size() + 9) / 10) * BLOCK_DIVISION) +
+                                              BUTTONS_AREA_HEIGHT - 640)),
+                    0);
         }
     }
 
     void renderButtons() {
-        renderer.SetClipRect(SDL2pp::NullOpt); 
-        drawButton(PAINT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Paint", currentTool == PAINT);
-        drawButton(ERASE_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Erase", currentTool == ERASE);
-        drawButton(MOVE_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Move", currentTool == MOVE);
+        renderer.SetClipRect(SDL2pp::NullOpt);
+        drawButton(PAINT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Paint",
+                   currentTool == PAINT);
+        drawButton(ERASE_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Erase",
+                   currentTool == ERASE);
+        drawButton(MOVE_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Move",
+                   currentTool == MOVE);
         if (mode == TEXTURE) {
-            drawButton(BACKGROUND_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Backg", currentLayer == BACKGROUND_LAYER);
-            drawButton(DIAG_LEFT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "DiagL", currentLayer == DIAG_LEFT_LAYER);
-            drawButton(DIAG_RIGHT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "DiagR", currentLayer == DIAG_RIGHT_LAYER);
-            drawButton(COLLIDER_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Coll", currentLayer == COLLIDER_LAYER);
-            drawButton(DECORATION_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Decor", currentLayer == DECORATION_LAYER);
+            drawButton(BACKGROUND_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Backg",
+                       currentLayer == BACKGROUND_LAYER);
+            drawButton(DIAG_LEFT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "DiagL",
+                       currentLayer == DIAG_LEFT_LAYER);
+            drawButton(DIAG_RIGHT_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "DiagR",
+                       currentLayer == DIAG_RIGHT_LAYER);
+            drawButton(COLLIDER_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Coll",
+                       currentLayer == COLLIDER_LAYER);
+            drawButton(DECORATION_BUTTON_POS_X, BUTTON_POS_Y, BUTTON_WIDTH, BUTTON_HEIGHT, "Decor",
+                       currentLayer == DECORATION_LAYER);
         }
         drawButton(890, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Tile", mode == TEXTURE);
         drawButton(980, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Entity", mode == ENTITY);
-        drawButton(1200, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Save", false); 
+        drawButton(1200, 10, BUTTON_WIDTH, BUTTON_HEIGHT, "Save", false);
     }
 
     void renderTextureGrid() {
@@ -302,14 +347,21 @@ public:
     }
 
     void renderEntities(SDL2pp::Rect selectedEntityDst) {
-        Rect entityClipRect = {0, BUTTONS_AREA_HEIGHT, SPACE_BEFORE_DRAWABLE_GRID, EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT};
+        Rect entityClipRect = {0, BUTTONS_AREA_HEIGHT, SPACE_BEFORE_DRAWABLE_GRID,
+                               EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT};
         renderer.SetClipRect(entityClipRect);
-        renderer.Copy(entities_textures[RABBIT_SPAWN], entities_src[RABBIT_SPAWN], entities_dst[RABBIT_SPAWN]);
-        renderer.Copy(entities_textures[CRAB_SPAWN], entities_src[CRAB_SPAWN], entities_dst[CRAB_SPAWN]);
-        renderer.Copy(entities_textures[LIZARD_SPAWN], entities_src[LIZARD_SPAWN], entities_dst[LIZARD_SPAWN]);
-        renderer.Copy(entities_textures[TURTLE_SPAWN], entities_src[TURTLE_SPAWN], entities_dst[TURTLE_SPAWN]);
-        renderer.Copy(entities_textures[COIN_SPAWN], entities_src[COIN_SPAWN], entities_dst[COIN_SPAWN]);
-        renderer.Copy(entities_textures[GEM_SPAWN], entities_src[GEM_SPAWN], entities_dst[GEM_SPAWN]);
+        renderer.Copy(entities_textures[RABBIT_SPAWN], entities_src[RABBIT_SPAWN],
+                      entities_dst[RABBIT_SPAWN]);
+        renderer.Copy(entities_textures[CRAB_SPAWN], entities_src[CRAB_SPAWN],
+                      entities_dst[CRAB_SPAWN]);
+        renderer.Copy(entities_textures[LIZARD_SPAWN], entities_src[LIZARD_SPAWN],
+                      entities_dst[LIZARD_SPAWN]);
+        renderer.Copy(entities_textures[TURTLE_SPAWN], entities_src[TURTLE_SPAWN],
+                      entities_dst[TURTLE_SPAWN]);
+        renderer.Copy(entities_textures[COIN_SPAWN], entities_src[COIN_SPAWN],
+                      entities_dst[COIN_SPAWN]);
+        renderer.Copy(entities_textures[GEM_SPAWN], entities_src[GEM_SPAWN],
+                      entities_dst[GEM_SPAWN]);
 
         // Dibujo un rectángulo rojo alrededor de la entidad seleccionada
         if (selectedEntityIndex != -1) {
@@ -327,8 +379,7 @@ public:
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
                 Rect dst;
-                dst.x = SPACE_BEFORE_DRAWABLE_GRID + j * BLOCK_DIVISION -
-                        gridHorizontalOffset;
+                dst.x = SPACE_BEFORE_DRAWABLE_GRID + j * BLOCK_DIVISION - gridHorizontalOffset;
                 dst.y = BUTTONS_AREA_HEIGHT + i * BLOCK_DIVISION - gridVerticalOffset;
                 dst.w = BLOCK_DIVISION;
                 dst.h = BLOCK_DIVISION;
@@ -349,9 +400,16 @@ public:
         }
     }
 
-    void updateScrollOffsets(int x, int y, int &gridHorizontalOffset, int &gridVerticalOffset) {
-        gridHorizontalOffset = std::max(std::min(gridHorizontalOffset - x, (width * BLOCK_DIVISION) - (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID)), 0);
-        gridVerticalOffset = std::max(std::min(gridVerticalOffset - y, (height * BLOCK_DIVISION) - (EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT)), 0);
+    void updateScrollOffsets(int x, int y, int& gridHorizontalOffset, int& gridVerticalOffset) {
+        gridHorizontalOffset =
+                std::max(std::min(gridHorizontalOffset - x,
+                                  (width * BLOCK_DIVISION) -
+                                          (EDITOR_SCREEN_WIDTH - SPACE_BEFORE_DRAWABLE_GRID)),
+                         0);
+        gridVerticalOffset = std::max(
+                std::min(gridVerticalOffset - y,
+                         (height * BLOCK_DIVISION) - (EDITOR_SCREEN_HEIGHT - BUTTONS_AREA_HEIGHT)),
+                0);
     }
 
 private:
@@ -363,11 +421,11 @@ private:
     std::vector<std::shared_ptr<SDL2pp::Texture>> textures;
     std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>> grid;
     std::vector<std::vector<int>> entities_grid;
-    std::vector<Texture> entities_textures; 
+    std::vector<Texture> entities_textures;
 
     int selectedTextureIndex = -1;
     int selectedEntityIndex = -1;
-    int tileVerticalOffset = 0;            // Desplazamiento vertical para la grilla de texturas
+    int tileVerticalOffset = 0;    // Desplazamiento vertical para la grilla de texturas
     int gridHorizontalOffset = 0;  // Desplazamiento horizontal para la grilla dibujable
     int gridVerticalOffset = 0;    // Desplazamiento vertical para la grilla dibujable
     int width = 0;
@@ -438,9 +496,10 @@ private:
         std::cout << "Loading texture: " << path << std::endl;
         Surface surface(path);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
-        Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
+        Uint32 mappedColorKey =
+                SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
         SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
-        
+
         for (int i = 0; i < surface.GetHeight(); i += BLOCK_DIVISION) {
             for (int j = 0; j < surface.GetWidth(); j += BLOCK_DIVISION) {
                 Rect src;
@@ -458,13 +517,14 @@ private:
     }
 
     void loadEntityTextures() {
-        std::vector<std::string> imagePaths = {JAZZ_IMG, ENEMIES_PNG, ENEMIES_PNG, TURTLE_PNG, ITEMS_PNG, ITEMS_PNG};
+        std::vector<std::string> imagePaths = {JAZZ_IMG,   ENEMIES_PNG, ENEMIES_PNG,
+                                               TURTLE_PNG, ITEMS_PNG,   ITEMS_PNG};
         for (const auto& path: imagePaths) {
             Surface entitySurface(path);
             Texture entityTexture(renderer, entitySurface);
             entities_textures.push_back(std::move(entityTexture));
         }
-       
+
         entities_src[RABBIT_SPAWN] = {1, 12, 35, 49};
         entities_src[CRAB_SPAWN] = {734, 310, 40, 32};
         entities_src[LIZARD_SPAWN] = {18, 15, 64, 52};
@@ -481,11 +541,13 @@ private:
     }
 
     void initializeGrids() {
-        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
-        entities_grid = std::vector<std::vector<int>>(height, std::vector<int>(width,-1));
+        grid = std::vector<std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>>(
+                height, std::vector<std::vector<std::shared_ptr<SDL2pp::Texture>>>(
+                                width, std::vector<std::shared_ptr<SDL2pp::Texture>>(5, nullptr)));
+        entities_grid = std::vector<std::vector<int>>(height, std::vector<int>(width, -1));
     }
 
-    void populateTextureGrid(YAML::Node &map) {
+    void populateTextureGrid(YAML::Node& map) {
         for (int layer = 0; layer < TEXTURE_LAYERS; ++layer) {
             for (int i = 0; i < height; ++i) {
                 for (int j = 0; j < width; ++j) {
@@ -498,7 +560,7 @@ private:
         }
     }
 
-    void populateEntityGrid(YAML::Node &map) {
+    void populateEntityGrid(YAML::Node& map) {
         for (int i = 0; i < height; ++i) {
             for (int j = 0; j < width; ++j) {
                 int index = map["layers"][TEXTURE_LAYERS]["data"][i][j].as<int>();

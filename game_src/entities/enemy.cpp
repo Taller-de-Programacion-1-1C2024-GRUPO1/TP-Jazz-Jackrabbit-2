@@ -126,7 +126,7 @@ void Enemy::update() {
             direction == LEFT ? direction = RIGHT : direction = LEFT;
         }
         position_iterator--;
-        pos_x += speed * direction_int;
+        spe_x = (speed * direction_int);
         Character::update_position();
     }
 }

@@ -23,7 +23,7 @@ class PhysicalMap {
 public:
     int map_width;
     int map_height;
-    std::vector<std::vector<int>> map ;
+    std::vector<std::vector<int>> map;
     PhysicalMap(int map_width, int map_height, const std::vector<std::vector<int>>& matrix);
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Bullet* bullet);
     void check_colision_with_map(int pos_x, int pos_y, int width, int height, Character* character);

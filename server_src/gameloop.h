@@ -33,8 +33,8 @@ private:
 
 public:
     Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
-             BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players, std::shared_ptr<Map> map,
-             bool& server_running, bool& playing);
+             BroadcasterSnapshots& broadcaster_snapshot, std::list<Player*>& players,
+             std::shared_ptr<Map> map, bool& server_running, bool& playing);
 
     void send_initial_snapshots();
 

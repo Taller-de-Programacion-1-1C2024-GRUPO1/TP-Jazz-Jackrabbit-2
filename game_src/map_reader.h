@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -55,7 +56,8 @@ private:
         }
     }
 
-    void load_map(const std::string& map_path, std::map<std::string, std::shared_ptr<Map>>& dicc_maps) {
+    void load_map(const std::string& map_path,
+                  std::map<std::string, std::shared_ptr<Map>>& dicc_maps) {
         if (map_path.empty()) {
             throw std::runtime_error("Maps file path is not set");
         }
@@ -90,8 +92,11 @@ private:
                 }
             }
 
-            dicc_maps[game_map_name] = std::make_shared<Map>(width, height, texture_id, max_players, game_map_name, parse_physical_map(width, height, map_data), DynamicMap(width, height, map_data),
-                        parse_spawn_points(width, height, map_data));
+            dicc_maps[game_map_name] =
+                    std::make_shared<Map>(width, height, texture_id, max_players, game_map_name,
+                                          parse_physical_map(width, height, map_data),
+                                          DynamicMap(width, height, map_data),
+                                          parse_spawn_points(width, height, map_data));
         } catch (const YAML::BadFile& e) {
             throw std::runtime_error("Error reading map file: " + file_path);
         }
