@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>TP Jazz Jackrabbit 2</string>
   </property>
   <widget class="QLabel" name="txtSelectMap">
    <property name="geometry">
@@ -26,11 +26,11 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt; color:#ffffff;&quot;&gt;Select a character&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>290</y>
+     <y>310</y>
      <width>650</width>
      <height>258</height>
     </rect>
@@ -76,6 +76,24 @@ border: none;</string>
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QPlainTextEdit" name="txtPlayerName">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>280</y>
+     <width>211</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+   <property name="placeholderText">
+    <string>Player Name</string>
+   </property>
   </widget>
  </widget>
  <resources/>

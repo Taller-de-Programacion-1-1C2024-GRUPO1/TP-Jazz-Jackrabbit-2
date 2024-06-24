@@ -4,6 +4,7 @@ Jump::Jump(int id, int dir): Command(id), dir(dir) {}
 
 void Jump::execute_Command(Rabbit& rabbit) { rabbit.jump(); }
 
+
 void Jump::send(Protocol& protocol) { protocol.send_Command(this); }
 
 int Jump::get_playerId() { return this->playerID; }

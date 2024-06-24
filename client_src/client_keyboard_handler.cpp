@@ -13,16 +13,15 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     const Uint8* state = SDL_GetKeyboardState(NULL);
 
     // CHECK CHEATS
-    if (state[SDL_SCANCODE_GRAVE]) {
-        if (state[SDL_SCANCODE_1]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, MAX_AMMO));
-        } else if (state[SDL_SCANCODE_2]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, MAX_HEALTH));
-        } else if (state[SDL_SCANCODE_3]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, GODMODE));
-        } else if (state[SDL_SCANCODE_4]) {
-            q_cmds.push(std::make_unique<Cheats>(client_id, RESPAWN));
-        }
+    if (state[SDL_SCANCODE_F1]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, MAX_AMMO));
+    } else if (state[SDL_SCANCODE_F2]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, MAX_HEALTH));
+    } else if (state[SDL_SCANCODE_F3]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, RESPAWN));
+    } else if (state[SDL_SCANCODE_D] && state[SDL_SCANCODE_I] && state[SDL_SCANCODE_P] &&
+               state[SDL_SCANCODE_A]) {
+        q_cmds.push(std::make_unique<Cheats>(client_id, GODMODE));
     }
 
     if (state[SDL_SCANCODE_RIGHT]) {
@@ -58,10 +57,10 @@ void KeyboardHandler::listenForCommands(bool& game_running) {
     if (state[SDL_SCANCODE_SPACE]) {
         q_cmds.push(std::make_unique<Shoot>(client_id));
     }
-    if (state[SDL_SCANCODE_W]) {
+    if (state[SDL_SCANCODE_LALT]) {
         q_cmds.push(std::make_unique<ChangeWeapon>(client_id));
     }
-    if (state[SDL_SCANCODE_Q] || state[SDL_SCANCODE_ESCAPE]) {
+    if (state[SDL_SCANCODE_ESCAPE]) {
         game_running = false;
     } else {
     }

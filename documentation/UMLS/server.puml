@@ -130,17 +130,10 @@ struct ContainerProtocol {
 class MapReader {
     std::string file_path
     std::vector<std::string> map_paths
-    MapParser map_parser
     void get_maps(std::map<std::string, Map>& dicc_maps)
     void refresh_load_maps(std::map<std::string, Map>& dicc_maps)
     void load_maps_files()
     void set_maps(dicc_maps)
-}
-
-class MapParser {
-    std::map<int, std::vector<SpawnPoint>> parse_spawn_points(int width, int height, std::map<int, std::vector<std::vector<int>>> map_data)
-    void parse_maps(std::string map_name, int width, int height, int max_players, int texture, const std::map<int, std::vector<std::vector<int>>>& map_data, std::map<std::string, Map>& maps)
-    PhysicalMap parse_physical_map(int width, int height, std::map<int, std::vector<std::vector<int>>> map_data) 
 }
 
 class Map {
@@ -171,7 +164,6 @@ ServerAcceptor --* User
 User --> ContainerProtocol
 User --> MonitorMatches
 MonitorMatches --> MapReader
-MapReader --> MapParser
 MonitorMatches --* Map
 MonitorMatches --* MatchInfo
 MatchInfo --> Match

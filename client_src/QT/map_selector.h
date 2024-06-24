@@ -1,21 +1,9 @@
 #ifndef MAP_SELECTOR_H
 #define MAP_SELECTOR_H
-#include <QApplication>
-#include <QDebug>
-#include <QDialog>
-#include <QFontDatabase>
-#include <QMainWindow>
-#include <QMessageBox>
+
+
 #include <memory>
 #include <string>
-
-#include "../../common_src/constants.h"
-#include "../../game_src/commands/command.h"
-#include "../../game_src/commands/command_match.h"
-#include "../../game_src/qt_response.h"
-#include "../client_receiver.h"
-#include "../client_sender.h"
-#include "../new_map_info.h"
 
 #include "character_selector.h"
 #include "map_creator_lobby.h"
@@ -33,7 +21,7 @@ public:
     explicit MapSelector(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses,
                          ChampionType selected_character, NewMapInfo& new_map_info,
-                         int& map_texture, QWidget* parent = nullptr);
+                         const std::string& player_name, QWidget* parent = nullptr);
     ~MapSelector();
 
 signals:
@@ -64,7 +52,7 @@ private:
     std::string selected_map;
     std::string match_name;
     NewMapInfo& new_map_info;
-    int& map_texture;
+    std::string player_name;
 };
 
 #endif  // MAP_SELECTOR_H

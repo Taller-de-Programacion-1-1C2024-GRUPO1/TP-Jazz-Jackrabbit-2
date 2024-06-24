@@ -15,14 +15,6 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <yaml-cpp/yaml.h>
 
-#include "../client_keyboard_handler.h"
-#include "../client_src/client_ammo_left.h"
-#include "../client_src/client_animation.h"
-#include "../client_src/client_drawable.h"
-#include "../client_src/client_hearts_banner.h"
-#include "../client_src/client_shifting_drawable.h"
-#include "../client_src/client_top_scores.h"
-#include "../client_src/client_weapon_data.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshots/snapshot.h"
@@ -32,8 +24,16 @@
 #include "../game_src/commands/command_move_faster.h"
 #include "../game_src/commands/command_shoot.h"
 
+#include "client_ammo_left.h"
+#include "client_animation.h"
 #include "client_clock.h"
 #include "client_constants.h"
+#include "client_drawable.h"
+#include "client_hearts_banner.h"
+#include "client_keyboard_handler.h"
+#include "client_shifting_drawable.h"
+#include "client_top_scores.h"
+
 
 using SDL2pp::Chunk;
 using SDL2pp::Font;
@@ -56,10 +56,11 @@ using SDL2pp::Window;
 #include "client_drawable_projectile.h"
 #include "client_drawable_rabbit.h"
 #include "client_drawable_valuable.h"
+#include "client_fonts_printer.h"
 #include "client_food_provider.h"
 #include "client_map_loader.h"
-#include "client_number_images.h"
 #include "client_sound_manager.h"
+#include "client_textures_provider.h"
 
 class ClientDrawer {
 private:
@@ -87,12 +88,11 @@ private:
     KeyboardHandler keyboard_handler;
 
 public:
-    int run(int player_id, int map_texture);
+    int run(int player_id);
     ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots);
 
     void showLoadingScreen(Renderer& renderer);
-    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot);
-    //~ClientDrawer();
+    void showFinalScreen(Renderer& renderer, Snapshot& last_snapshot);
 };
 
 #endif

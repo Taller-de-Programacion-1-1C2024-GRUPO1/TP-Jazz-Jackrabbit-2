@@ -1,3 +1,6 @@
+#Game configuration
+music_volume: 5
+
 # Path
 base_path: /var/jazz/client_src
 

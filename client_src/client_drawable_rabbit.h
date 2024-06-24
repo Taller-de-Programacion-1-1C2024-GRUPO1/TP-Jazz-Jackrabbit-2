@@ -3,6 +3,7 @@
 
 #include "client_constants.h"
 #include "client_shifting_drawable.h"
+#include "client_textures_provider.h"
 
 class DrawableRabbit: public ShiftingDrawable {
 
@@ -12,18 +13,17 @@ public:
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setCharacterFromSnapshot(const int champion_type) {
-        SDL2pp::Color characterColor = {44, 102, 150, 255};  // Color en formato RGBA
         switch (champion_type) {
             case Jazz:
-                this->setTexture(JAZZ_IMG, characterColor);
+                this->setTexture(TexturesProvider::getTexture("Jazz"));
                 this->loadAnimations(JAZZ_ANIMATIONS);
                 break;
             case Spaz:
-                this->setTexture(SPAZ_IMG, characterColor);
+                this->setTexture(TexturesProvider::getTexture("Spaz"));
                 this->loadAnimations(SPAZ_ANIMATIONS);
                 break;
             case Lori:
-                this->setTexture(LORI_IMG, characterColor);
+                this->setTexture(TexturesProvider::getTexture("Lori"));
                 this->loadAnimations(LORI_ANIMATIONS);
                 break;
         }

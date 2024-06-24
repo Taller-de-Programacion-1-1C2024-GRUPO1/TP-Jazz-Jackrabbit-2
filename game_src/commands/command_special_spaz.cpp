@@ -2,6 +2,7 @@
 
 SpecialSpaz::SpecialSpaz(int id, int dir): Command(id), dir(dir) {}
 
+
 void SpecialSpaz::execute_Command(Rabbit& rabbit) { rabbit.special_attack_spaz(dir); }
 
 void SpecialSpaz::send(Protocol& protocol) { protocol.send_Command(this); }

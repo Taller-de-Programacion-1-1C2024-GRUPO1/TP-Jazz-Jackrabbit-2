@@ -49,7 +49,7 @@ public:
     void check_colision();
     void reap_dead();
     void update();
-    void add_player(int PlayerID, ChampionType champion);
+    void add_player(int PlayerID, ChampionType champion, const std::string& player_name);
     void add_enemy(Enemy* enemy);
     void add_bullet(Bullet* bullet);
     void add_item(Item* item);
@@ -59,7 +59,6 @@ public:
         const PhysicalMap& physical_map, const DynamicMap& dynamic_map,
         const std::map<int, std::vector<SpawnPoint>>& spawn_points);
 
-    Map() = default;
 
     void set_amount_players(int amount_players);
 

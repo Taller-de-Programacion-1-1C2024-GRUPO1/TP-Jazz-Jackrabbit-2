@@ -71,9 +71,7 @@ void Protocol::send_map(int width, int heigth, DynamicMap map) {
         for (int y = 0; y < heigth; y++) {
             for (int x = 0; x < width; x++) {
                 send_uintSixteen(key_value.second[x][y]);
-                std::cout << key_value.second[x][y] << " ";
             }
-            std::cout << std::endl;
         }
     }
     check_closed();
@@ -197,6 +195,7 @@ void Protocol::send_Match(MatchCommand* match) {
     send_string(match->get_match_name());
     send_string(match->get_map_name());
     send_uintEight(match->get_character_name());
+    send_string(match->get_player_name());
 }
 
 void Protocol::send_Cheat(Cheats* cheat) {
@@ -317,8 +316,9 @@ std::unique_ptr<MatchCommand> Protocol::receive_Match() {
     std::string match_name = receive_string();
     std::string map_name = receive_string();
     ChampionType character_name = static_cast<ChampionType>(receive_uintEight());
+    std::string player_name = receive_string();
     return std::make_unique<MatchCommand>(type, number_players, match_name, map_name,
-                                          character_name);
+                                          character_name, player_name);
 }
 
 std::unique_ptr<Cheats> Protocol::receive_Cheat() {
@@ -410,8 +410,6 @@ void Protocol::send_qt_response(QtResponse* qt_response) {
     send_uintEight(qt_response->get_info_type());
     send_uintEight(qt_response->get_response());
     send_info_available(qt_response->get_info_available());
-    std::cout << "Enviando QTResponse: " << qt_response->get_response() << " "
-              << qt_response->get_info_type() << std::endl;
 }
 
 
@@ -421,7 +419,6 @@ std::unique_ptr<QtResponse> Protocol::receive_qt_response() {
     int response = receive_uintEight();
     std::tuple<std::vector<std::string>, std::vector<std::string>> info_available =
             receive_info_available();
-    std::cout << "Recibiendo QTResponse: " << response << " " << response_type << std::endl;
     if (response_type == REFRESH) {
         return std::make_unique<QtResponse>(info_available, response_type);
     }
@@ -457,6 +454,7 @@ void Protocol::send_dimensions(const Snapshot& snapshot) {
     send_uintThirtyTwo(snapshot.map_dimensions.rabbit_height);
     send_map(snapshot.map_dimensions.width, snapshot.map_dimensions.height,
              snapshot.map_dimensions.map_data);
+    send_uintEight(snapshot.map_dimensions.map_texture_id);
 }
 
 void Protocol::send_rabbits(Snapshot& snapshot) {
@@ -475,6 +473,7 @@ void Protocol::send_rabbits(Snapshot& snapshot) {
         send_uintThirtyTwo(rabbit.ammo);
         send_uintThirtyTwo(rabbit.state);
         send_uintThirtyTwo(rabbit.action);
+        send_string(rabbit.player_name);
     }
 }
 
@@ -539,7 +538,9 @@ void Protocol::receive_dimensions(Snapshot& snapshot) {
     uint32_t rabbit_width = receive_uintThirtyTwo();
     uint32_t rabbit_height = receive_uintThirtyTwo();
     DynamicMap map_data = receive_map();
-    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data);
+    uint8_t map_texture_id = receive_uintEight();
+    snapshot.set_dimensions(width, height, rabbit_width, rabbit_height, rabbit_ammount, map_data,
+                            map_texture_id);
 }
 
 void Protocol::receive_rabbits(Snapshot& snapshot) {
@@ -560,9 +561,10 @@ void Protocol::receive_rabbits(Snapshot& snapshot) {
         uint32_t ammo = receive_uintThirtyTwo();
         uint32_t state = receive_uintThirtyTwo();
         uint32_t action = receive_uintThirtyTwo();
+        std::string player_name = receive_string();
         // crear un RabbitSnapshot y agregarlo al vector de rabbits del snapshot
         RabbitSnapshot rabbit = RabbitSnapshot(id, direction, champion_type, pos_x, pos_y, score,
-                                               lives, weapon, ammo, state, action);
+                                               lives, weapon, ammo, state, action, player_name);
         snapshot.rabbits.push_back(rabbit);
     }
 }

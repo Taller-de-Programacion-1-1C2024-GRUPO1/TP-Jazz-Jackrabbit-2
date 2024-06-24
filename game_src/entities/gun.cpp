@@ -30,8 +30,9 @@ void Gun::add_bullet_to_map(int pos_x, int pos_y, int direction, int type, int c
     } else if (direction == RIGHT) {
         direction_variable = 1;
     }
-    manager.add_bullet(new Bullet(manager.get_projectile_id(), type, pos_x, pos_y,
-                                  direction_variable * bullet_speed, damage, range, owner));
+    manager.add_bullet(new Bullet(
+            manager.get_projectile_id(), type, pos_x - (direction_variable * (BLOCK_DIVISION / 4)),
+            pos_y - (BLOCK_DIVISION / 8), direction_variable * bullet_speed, damage, range, owner));
     fire_cooldown = cooldown;
     owner.set_action_shoot();
 }
@@ -63,27 +64,29 @@ void BasicGun::fire(int pos_x, int pos_y, int direction) {
     }
 }
 
-MachineGun::MachineGun(Rabbit& owner, Map& manager):
-        Gun(MACHINEGUN_MAX_AMMO, MACHINEGUN_DAMAGE, MACHINEGUN_RANGE, MACHINEGUN_BULLET_SPEED,
-            owner, manager) {}
+FlameThrower::FlameThrower(Rabbit& owner, Map& manager):
+        Gun(FLAMETHROWER_MAX_AMMO, FLAMETHROWER_DAMAGE, FLAMETHROWER_RANGE,
+            FLAMETHROWER_BULLET_SPEED, owner, manager) {}
 
-bool MachineGun::has_ammo() { return ammo > 0; }
+bool FlameThrower::has_ammo() { return ammo > 0; }
 
-void MachineGun::fire(int pos_x, int pos_y, int direction) {
+void FlameThrower::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
-        Gun::add_bullet_to_map(pos_x, pos_y, direction, MACHINE_GUN, MACHINEGUN_FIRE_COOLDOWN);
+        Gun::add_bullet_to_map(pos_x, pos_y, direction, FLAMETHROWER, FLAMETHROWER_FIRE_COOLDOWN);
         ammo--;
     }
 }
 
-Sniper::Sniper(Rabbit& owner, Map& manager):
-        Gun(SNIPER_MAX_AMMO, SNIPER_DAMAGE, SNIPER_RANGE, SNIPER_BULLET_SPEED, owner, manager) {}
+RocketLauncher::RocketLauncher(Rabbit& owner, Map& manager):
+        Gun(ROCKETLAUNCHER_MAX_AMMO, ROCKETLAUNCHER_DAMAGE, ROCKETLAUNCHER_RANGE,
+            ROCKETLAUNCHER_BULLET_SPEED, owner, manager) {}
 
-bool Sniper::has_ammo() { return ammo > 0; }
+bool RocketLauncher::has_ammo() { return ammo > 0; }
 
-void Sniper::fire(int pos_x, int pos_y, int direction) {
+void RocketLauncher::fire(int pos_x, int pos_y, int direction) {
     if (can_fire()) {
-        Gun::add_bullet_to_map(pos_x, pos_y, direction, SNIPER, SNIPER_FIRE_COOLDOWN);
+        Gun::add_bullet_to_map(pos_x, pos_y, direction, ROCKETLAUNCHER,
+                               ROCKETLAUNCHER_FIRE_COOLDOWN);
         ammo--;
     }
 }

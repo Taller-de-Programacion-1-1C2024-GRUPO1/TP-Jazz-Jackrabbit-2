@@ -36,6 +36,7 @@ protected:
 
 public:
     explicit Command(int playerID): playerID(playerID) {}
+
     virtual void execute_Command(Rabbit& rabbit) = 0;
     virtual void send(Protocol& protocol) = 0;
     virtual int get_playerId() = 0;

@@ -1,17 +1,8 @@
 #ifndef MAP_CREATOR_LOBBY_H
 #define MAP_CREATOR_LOBBY_H
-
-#include <QApplication>
-#include <QDebug>
-#include <QDialog>
-#include <QFontDatabase>
-#include <QMainWindow>
-#include <QMessageBox>
 #include <string>
 
-#include "../../common_src/constants.h"
-#include "../client_constants.h"
-#include "../new_map_info.h"
+#include "qt_common_init.h"
 
 namespace Ui {
 class MapCreatorLobby;
@@ -35,12 +26,10 @@ private slots:
 
     void on_btnTexture2_clicked();
 
-    void on_btnTexture3_clicked();
-
 private:
     NewMapInfo& new_map_info;
     Ui::MapCreatorLobby* ui;
     void start_creating_map(int texture);
 };
 
-#endif  // MAP_CREATOR_LOBBY_H
+#endif

@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>TP Jazz Jackrabbit 2</string>
   </property>
   <widget class="QPushButton" name="btnJoin">
    <property name="geometry">

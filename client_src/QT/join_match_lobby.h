@@ -1,22 +1,13 @@
 #ifndef JOIN_MATCH_LOBBY_H
 #define JOIN_MATCH_LOBBY_H
 
-#include <QApplication>
-#include <QDebug>
-#include <QDialog>
-#include <QFontDatabase>
-#include <QMainWindow>
-#include <QMessageBox>
+
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "../../game_src/constants_game.h"
-#include "../../game_src/qt_response.h"
-#include "../client_receiver.h"
-#include "../client_sender.h"
-
 #include "waiting_room.h"
+
 
 namespace Ui {
 class JoinMatchLobby;
@@ -28,7 +19,8 @@ class JoinMatchLobby: public QDialog {
 public:
     explicit JoinMatchLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                             Queue<std::unique_ptr<QtResponse>>& q_responses,
-                            ChampionType selected_character, QWidget* parent = nullptr);
+                            ChampionType selected_character, const std::string& player_name,
+                            QWidget* parent = nullptr);
     ~JoinMatchLobby();
 
 signals:
@@ -43,11 +35,15 @@ private slots:
 
     void on_btnRefresh_clicked();
 
+    void processResponse(const std::string& errorMessage,
+                         std::function<void(std::unique_ptr<QtResponse>&)> handleResponse);
+
 private:
     Ui::JoinMatchLobby* ui;
     Queue<std::unique_ptr<Command>>& q_cmds;
     Queue<std::unique_ptr<QtResponse>>& q_responses;
     ChampionType selected_character;
+    std::string player_name;
 };
 
-#endif  // JOIN_MATCH_LOBBY_H
+#endif

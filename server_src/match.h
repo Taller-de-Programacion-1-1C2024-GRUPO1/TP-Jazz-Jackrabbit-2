@@ -30,7 +30,7 @@
 class Match: public Thread {
 
 private:
-    Map map;
+    std::shared_ptr<Map> map;
 
     std::string match_name;
     std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue;
@@ -46,7 +46,7 @@ private:
 
 public:
     Match(std::shared_ptr<Queue<std::shared_ptr<PlayerInfo>>> matches_protocols_players_queue,
-          const Map& map, const std::string& match_name, bool& server_running, int* status,
+          std::shared_ptr<Map> map, const std::string& match_name, bool& server_running, int* status,
           int number_of_players);
     ~Match();
 

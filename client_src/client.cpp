@@ -5,7 +5,6 @@ Client::Client(const std::string& host, const std::string& service):
         q_cmds(Queue<std::unique_ptr<Command>>()),
         q_responses(Queue<std::unique_ptr<QtResponse>>()),
         player_id(-1),
-        map_texture(CARROTUS),
         q_snapshots(),
         client_sender(protocol, q_cmds),
         client_receiver(protocol, q_responses, q_snapshots, player_id, q_cmds),
@@ -14,32 +13,35 @@ Client::Client(const std::string& host, const std::string& service):
 
 
 void Client::run(int argc, char* argv[]) {
-    client_sender.start();
-    client_receiver.start();
+    try {
+        client_sender.start();
+        client_receiver.start();
 
-    // QT
-    QApplication a(argc, argv);
-    Q_INIT_RESOURCE(resources);
-    ClientLobby w(q_cmds, q_responses, new_map_info, map_texture);
-    w.show();
-    int result = a.exec();
+        // QT
+        QApplication a(argc, argv);
+        Q_INIT_RESOURCE(resources);
+        ClientLobby w(q_cmds, q_responses, new_map_info);
+        w.show();
+        int qt_result = a.exec();
 
-    if (result == OK) {
         // SDL
-        drawer.run(player_id, map_texture);
-    } else if (result == OK_MAP_CREATOR) {
-        // create map
-        std::cout << "Creando mapa" << std::endl;
-        Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
-                      new_map_info.map_name, new_map_info.max_players);
-        editor.run();
-    } else if (result == EDIT_MAP) {
-        std::cout << "EDITANDO MAPA: " << new_map_info.map_name << std::endl;
-        Editor editor(new_map_info.map_name);
-        editor.run();
+        if (qt_result == OK) {
+            drawer.run(player_id);
+        } else if (qt_result == OK_MAP_CREATOR) {
+            Editor editor(new_map_info.texture, new_map_info.width, new_map_info.height,
+                          new_map_info.map_name, new_map_info.max_players);
+            editor.run();
+        } else if (qt_result == EDIT_MAP) {
+            Editor editor(new_map_info.map_name);
+            editor.run();
 
-    } else {
-        std::cerr << "Cerrando QT" << std::endl;
+        } else {
+            std::cerr << "Closing Lobby..." << std::endl;
+        }
+
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return;
     }
 }
 

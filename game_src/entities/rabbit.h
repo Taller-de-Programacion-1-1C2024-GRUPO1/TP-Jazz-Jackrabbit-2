@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <queue>
+#include <string>
 #include <vector>
 
 #include "../../common_src/snapshots/snapshot_rabbit.h"
@@ -33,12 +34,15 @@ private:
     State* state;
     int direction;
     std::queue<std::shared_ptr<Command>> events_queue;
+    bool state_needs_change;
+    int next_state;
+    std::string player_name;
 
 public:
     Rabbit(uint8_t champion_type, int init_pos_x, int init_pos_y, PhysicalMap& physical_map,
            Map& map);
-    void set_rabbit_id(int id);
-    void set_champion(uint8_t champion_type);
+
+    void set_rabbit_info(int id, uint8_t champion_type, const std::string& player_name);
     int get_rabbit_id();
     void update();
     void update_action();
@@ -82,10 +86,11 @@ public:
     void add_command(std::shared_ptr<Command> command);
 
     // ESTADOS
-    void set_state(State* state);
+    void set_state(int state);
     void set_intoxicated();
     void set_alive();
     void set_godmode();
+    void change_state();
 
 
     void execute_jump();

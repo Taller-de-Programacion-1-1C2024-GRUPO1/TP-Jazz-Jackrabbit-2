@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>TP Jazz Jackrabbit 2</string>
   </property>
   <widget class="QLabel" name="labelCreateMap">
    <property name="geometry">
@@ -29,8 +29,8 @@
   <widget class="QSpinBox" name="spinWidth">
    <property name="geometry">
     <rect>
-     <x>70</x>
-     <y>330</y>
+     <x>90</x>
+     <y>340</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -55,8 +55,8 @@ background-color: rgba(255, 255, 255, 100);
   <widget class="QLabel" name="labelMapName">
    <property name="geometry">
     <rect>
-     <x>440</x>
-     <y>270</y>
+     <x>420</x>
+     <y>290</y>
      <width>400</width>
      <height>61</height>
     </rect>
@@ -70,33 +70,12 @@ background-color: rgba(255, 255, 255, 100);
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Map name:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnTexture3">
-   <property name="geometry">
-    <rect>
-     <x>510</x>
-     <y>390</y>
-     <width>200</width>
-     <height>150</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/maps/create_a_map.png);
-background-repeat: no-repeat;
-background-position: center;
-background-size: cover;
-color: white;
-font: 20pt;</string>
-   </property>
-   <property name="text">
-    <string>texture 3</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnTexture2">
    <property name="geometry">
     <rect>
-     <x>300</x>
+     <x>410</x>
      <y>390</y>
-     <width>200</width>
+     <width>305</width>
      <height>150</height>
     </rect>
    </property>
@@ -104,12 +83,14 @@ font: 20pt;</string>
     <string notr="true">background-image: url(:/maps/carrotus.png);
 background-repeat: no-repeat;
 background-position: center;
-background-size: cover;
 color: white;
-font: 20pt;</string>
+font: 20pt;
+min-width: 100px;
+min-height: 100px;</string>
    </property>
    <property name="text">
-    <string>texture 2</string>
+    <string>carrotus
+Texture</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btnTexture1">
@@ -117,7 +98,7 @@ font: 20pt;</string>
     <rect>
      <x>90</x>
      <y>390</y>
-     <width>200</width>
+     <width>305</width>
      <height>150</height>
     </rect>
    </property>
@@ -125,19 +106,19 @@ font: 20pt;</string>
     <string notr="true">background-image: url(:/maps/jungle.png);
 background-repeat: no-repeat;
 background-position: center;
-background-size: cover;
 color: white;
 font: 20pt;</string>
    </property>
    <property name="text">
-    <string>texture 1</string>
+    <string>Jungle
+texture</string>
    </property>
   </widget>
   <widget class="QPlainTextEdit" name="txtMapName">
    <property name="geometry">
     <rect>
      <x>560</x>
-     <y>330</y>
+     <y>340</y>
      <width>151</width>
      <height>41</height>
     </rect>
@@ -149,8 +130,8 @@ font: 20pt;</string>
   <widget class="QLabel" name="labelWidth">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>270</y>
+     <x>30</x>
+     <y>290</y>
      <width>200</width>
      <height>61</height>
     </rect>
@@ -168,7 +149,7 @@ font: 20pt;</string>
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>270</y>
+     <y>290</y>
      <width>200</width>
      <height>61</height>
     </rect>
@@ -186,7 +167,7 @@ font: 20pt;</string>
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>330</y>
+     <y>340</y>
      <width>91</width>
      <height>41</height>
     </rect>
@@ -214,8 +195,8 @@ background-color: rgba(255, 255, 255, 100);
   <widget class="QLabel" name="labelMaxPlayers">
    <property name="geometry">
     <rect>
-     <x>340</x>
-     <y>280</y>
+     <x>310</x>
+     <y>290</y>
      <width>200</width>
      <height>61</height>
     </rect>
@@ -232,8 +213,8 @@ background-color: rgba(255, 255, 255, 100);
   <widget class="QSpinBox" name="spinMaxPlayers">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>330</y>
+     <x>360</x>
+     <y>340</y>
      <width>91</width>
      <height>41</height>
     </rect>

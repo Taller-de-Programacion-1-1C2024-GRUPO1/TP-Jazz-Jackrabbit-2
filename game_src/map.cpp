@@ -81,11 +81,10 @@ void Map::reap_dead() {
     }
 }
 
-void Map::add_player(int PlayerID, ChampionType champion) {
+void Map::add_player(int PlayerID, ChampionType champion, const std::string& player_name) {
     for (auto& player: players) {
         if (player->get_rabbit_id() == NULL_ID) {
-            player->set_rabbit_id(PlayerID);
-            player->set_champion(champion);
+            player->set_rabbit_info(PlayerID, champion, player_name);
             return;
         }
     }
@@ -139,7 +138,7 @@ Snapshot Map::get_init_snapshot() {
 
     Snapshot snapshot(rabbit_snapshots, enemy_snapshots, projectile_snapshots, supply_snapshots);
     snapshot.set_dimensions(height, width, RABBIT_WIDTH_DEFAULT, RABBIT_HEIGHT_DEFAULT,
-                            RABBIT_AMOUNT_DEFAULT, dynamic_map);
+                            RABBIT_AMOUNT_DEFAULT, dynamic_map, texture_id);
     return snapshot;
 }
 

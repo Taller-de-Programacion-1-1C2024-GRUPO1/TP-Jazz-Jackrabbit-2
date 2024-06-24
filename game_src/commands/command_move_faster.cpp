@@ -2,6 +2,7 @@
 
 MoveFaster::MoveFaster(int id, int dir): Command(id), dir(dir) {}
 
+
 void MoveFaster::execute_Command(Rabbit& rabbit) {
     if (dir == RIGHT) {
         rabbit.run_fast_right();

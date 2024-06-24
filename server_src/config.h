@@ -14,28 +14,27 @@ public:
         return instance;
     }
 
-    int getMaxPlayers() const { return max_players; }
+    int getGameDurationMinutes() const { return game_duration_minutes; }
     int getRabbitSpeed() const { return rabbit_speed; }
     int getRabbitJumpSpeed() const { return rabbit_jump_speed; }
     int getRabbitRevivalTime() const { return rabbit_revival_time; }
     int getRabbitDeintoxicateTime() const { return rabbit_desintoxicate_time; }
     int getBasicGunFireCooldown() const { return basic_gun_fire_cooldown; }
-    int getBasicGunMaxAmmo() const { return basic_gun_max_ammo; }
     int getBasicGunDamage() const { return basic_gun_damage; }
     int getBasicGunRange() const { return basic_gun_range; }
     int getBasicGunBulletSpeed() const { return basic_gun_bullet_speed; }
-    int getMachinegunFireCooldown() const { return machinegun_fire_cooldown; }
-    int getMachinegunMaxAmmo() const { return machinegun_max_ammo; }
-    int getMachinegunDamage() const { return machinegun_damage; }
-    int getMachinegunRange() const { return machinegun_range; }
-    int getMachinegunBulletSpeed() const { return machinegun_bullet_speed; }
-    int getMachinegunAmmoAmount() const { return machinegun_ammo_amount; }
-    int getSniperFireCooldown() const { return sniper_fire_cooldown; }
-    int getSniperMaxAmmo() const { return sniper_max_ammo; }
-    int getSniperDamage() const { return sniper_damage; }
-    int getSniperRange() const { return sniper_range; }
-    int getSniperBulletSpeed() const { return sniper_bullet_speed; }
-    int getSniperAmmoAmount() const { return sniper_ammo_amount; }
+    int getFlamethrowerFireCooldown() const { return flamethrower_fire_cooldown; }
+    int getFlamethrowerMaxAmmo() const { return flamethrower_max_ammo; }
+    int getFlamethrowerDamage() const { return flamethrower_damage; }
+    int getFlamethrowerRange() const { return flamethrower_range; }
+    int getFlamethrowerBulletSpeed() const { return flamethrower_bullet_speed; }
+    int getFlamethrowerAmmoAmount() const { return flamethrower_ammo_amount; }
+    int getRocketLauncherFireCooldown() const { return rocket_launcher_fire_cooldown; }
+    int getRocketLauncherMaxAmmo() const { return rocket_launcher_max_ammo; }
+    int getRocketLauncherDamage() const { return rocket_launcher_damage; }
+    int getRocketLauncherRange() const { return rocket_launcher_range; }
+    int getRocketLauncherBulletSpeed() const { return rocket_launcher_bullet_speed; }
+    int getRocketLauncherAmmoAmount() const { return rocket_launcher_ammo_amount; }
     int getRaygunFireCooldown() const { return raygun_fire_cooldown; }
     int getRaygunMaxAmmo() const { return raygun_max_ammo; }
     int getRaygunDamage() const { return raygun_damage; }
@@ -98,28 +97,27 @@ private:
         try {
             std::cout << "Reading config file: " << file_path << std::endl;
             YAML::Node config = YAML::LoadFile(file_path);
-            max_players = config["max_players"].as<int>();
+            game_duration_minutes = config["game_duration_minutes"].as<int>();
             rabbit_speed = config["rabbit_speed"].as<int>();
             rabbit_jump_speed = config["rabbit_jump_speed"].as<int>();
             rabbit_revival_time = config["rabbit_revival_time"].as<int>();
             rabbit_desintoxicate_time = config["rabbit_desintoxicate_time"].as<int>();
             basic_gun_fire_cooldown = config["basic_gun_fire_cooldown"].as<int>();
-            basic_gun_max_ammo = config["basic_gun_max_ammo"].as<int>();
             basic_gun_damage = config["basic_gun_damage"].as<int>();
             basic_gun_range = config["basic_gun_range"].as<int>();
             basic_gun_bullet_speed = config["basic_gun_bullet_speed"].as<int>();
-            machinegun_fire_cooldown = config["machinegun_fire_cooldown"].as<int>();
-            machinegun_max_ammo = config["machinegun_max_ammo"].as<int>();
-            machinegun_damage = config["machinegun_damage"].as<int>();
-            machinegun_range = config["machinegun_range"].as<int>();
-            machinegun_bullet_speed = config["machinegun_bullet_speed"].as<int>();
-            machinegun_ammo_amount = config["machinegun_ammo_amount"].as<int>();
-            sniper_fire_cooldown = config["sniper_fire_cooldown"].as<int>();
-            sniper_max_ammo = config["sniper_max_ammo"].as<int>();
-            sniper_damage = config["sniper_damage"].as<int>();
-            sniper_range = config["sniper_range"].as<int>();
-            sniper_bullet_speed = config["sniper_bullet_speed"].as<int>();
-            sniper_ammo_amount = config["sniper_ammo_amount"].as<int>();
+            flamethrower_fire_cooldown = config["flamethrower_fire_cooldown"].as<int>();
+            flamethrower_max_ammo = config["flamethrower_max_ammo"].as<int>();
+            flamethrower_damage = config["flamethrower_damage"].as<int>();
+            flamethrower_range = config["flamethrower_range"].as<int>();
+            flamethrower_bullet_speed = config["flamethrower_bullet_speed"].as<int>();
+            flamethrower_ammo_amount = config["flamethrower_ammo_amount"].as<int>();
+            rocket_launcher_fire_cooldown = config["rocket_launcher_fire_cooldown"].as<int>();
+            rocket_launcher_max_ammo = config["rocket_launcher_max_ammo"].as<int>();
+            rocket_launcher_damage = config["rocket_launcher_damage"].as<int>();
+            rocket_launcher_range = config["rocket_launcher_range"].as<int>();
+            rocket_launcher_bullet_speed = config["rocket_launcher_bullet_speed"].as<int>();
+            rocket_launcher_ammo_amount = config["rocket_launcher_ammo_amount"].as<int>();
             raygun_fire_cooldown = config["raygun_fire_cooldown"].as<int>();
             raygun_max_ammo = config["raygun_max_ammo"].as<int>();
             raygun_damage = config["raygun_damage"].as<int>();
@@ -170,7 +168,7 @@ private:
         }
     }
     // Game
-    int max_players;
+    int game_duration_minutes;
 
     // Physics
     int rabbit_speed;
@@ -181,26 +179,25 @@ private:
 
     // Basic gun
     int basic_gun_fire_cooldown;
-    int basic_gun_max_ammo;
     int basic_gun_damage;
     int basic_gun_range;
     int basic_gun_bullet_speed;
 
-    // Machine gun
-    int machinegun_fire_cooldown;
-    int machinegun_max_ammo;
-    int machinegun_damage;
-    int machinegun_range;
-    int machinegun_bullet_speed;
-    int machinegun_ammo_amount;
+    // Flamrethrower
+    int flamethrower_fire_cooldown;
+    int flamethrower_max_ammo;
+    int flamethrower_damage;
+    int flamethrower_range;
+    int flamethrower_bullet_speed;
+    int flamethrower_ammo_amount;
 
-    // Sniper
-    int sniper_fire_cooldown;
-    int sniper_max_ammo;
-    int sniper_damage;
-    int sniper_range;
-    int sniper_bullet_speed;
-    int sniper_ammo_amount;
+    // Rocket Launcher
+    int rocket_launcher_fire_cooldown;
+    int rocket_launcher_max_ammo;
+    int rocket_launcher_damage;
+    int rocket_launcher_range;
+    int rocket_launcher_bullet_speed;
+    int rocket_launcher_ammo_amount;
 
     // Raygun
     int raygun_fire_cooldown;

@@ -26,13 +26,15 @@ control MonitorMatches
 
 User -> MonitorMatches : createNewMatch()
 
-MonitorMatches -> User: ACK
+MonitorMatches -> User: QtResponse
 
-User --// PROTOCOL : ACK
+User --// PROTOCOL : QtResponse
 
-PROTOCOL --// ClientReceiver : ACK
+PROTOCOL --// ClientReceiver : QtResponse
 
-ClientReceiver -> ClientLobby : ACK
+ClientReceiver ->x ClientReceiver : push(QtResponse)
+
+ClientLobby o-> ClientLobby : pop(QtResponse)
 
 User ->x User : push(peer)
 

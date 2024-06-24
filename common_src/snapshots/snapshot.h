@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "../../client_src/client_constants.h"
 #include "../../game_src/constants_game.h"
 #include "../../game_src/dynamic_map.h"
 #include "../../server_src/config.h"
@@ -22,6 +23,7 @@ struct MapDimensions {
     int rabbit_width = RABBIT_WIDTH_DEFAULT;
     int rabbit_height = RABBIT_HEIGHT_DEFAULT;
     DynamicMap map_data = {};
+    int map_texture_id = CARROTUS;
 } typedef MapDimensions_t;
 
 class Snapshot {
@@ -59,8 +61,8 @@ public:
      */
     void set_dimensions(int height = 0, int width = 0, int rabbit_width = RABBIT_WIDTH_DEFAULT,
                         int rabbit_height = RABBIT_HEIGHT_DEFAULT,
-                        int rabbit_ammount = RABBIT_AMOUNT_DEFAULT,
-                        const DynamicMap& map_data = {}) {
+                        int rabbit_ammount = RABBIT_AMOUNT_DEFAULT, const DynamicMap& map_data = {},
+                        int texture = 0) {  // JUNGLE CARROTUS
 
         map_dimensions.height = height;
         map_dimensions.width = width;
@@ -68,6 +70,7 @@ public:
         map_dimensions.rabbit_width = rabbit_width;
         map_dimensions.rabbit_height = rabbit_height;
         map_dimensions.map_data = map_data;
+        map_dimensions.map_texture_id = texture;
     }
 
     void set_end_game() { this->end_game = true; }

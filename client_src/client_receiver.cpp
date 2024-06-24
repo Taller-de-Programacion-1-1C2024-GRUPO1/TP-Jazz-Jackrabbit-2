@@ -1,6 +1,5 @@
 #include "client_receiver.h"
 
-#include <chrono>
 
 ClientReceiver::ClientReceiver(Protocol& protocol, Queue<std::unique_ptr<QtResponse>>& q_responses,
                                Queue<Snapshot>& q_snapshots, int& player_id,
@@ -29,17 +28,15 @@ void ClientReceiver::run() {
                 Snapshot snap = this->protocol.receive_Snapshot();
                 q_snapshots.push(snap);
             }
-
-
         } catch (const ClosedQueue& e) {
-            // HACER EL CORRECTO MANEJO DE ERRORES
-            std::cerr << "Se cerró la Snapshot queue" << std::endl;
+            // std::cerr << "Client Receiver: Snapshot queue or Responses queue closed" <<
+            // std::endl;
             break;
         } catch (const SocketClosed& e) {
-            std::cerr << "Se cerro el socket (Receiver)" << std::endl;
+            // std::cerr << "Client Receiver: The socket was closed" << std::endl;
             break;
         } catch (const std::exception& e) {
-            std::cerr << "Client Receiver: error al recibir snapshot " << std::endl;
+            // std::cerr << "Client Receiver: error receiving snapshot or response" << std::endl;
             break;
         }
     }

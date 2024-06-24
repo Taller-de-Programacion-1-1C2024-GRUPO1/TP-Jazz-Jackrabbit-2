@@ -1,0 +1,126 @@
+https://www.plantuml.com/plantuml/png/pLMnRjim4Dtr5PoCTl3GZh8X170pD8YBsZ6GKJYBbuYeo5D8ggvTzDyhYx6hd0JMo134aybx9xx7ktUySXwiRtIL51Ku9nQLGkDlQRlTY_byjGHbxfMHjCioyJiHxM_LO8DpvsMQDaOzDPZNtiuNf3KOcMKJyPGNMhfP1BpoQtGr6OS1RvzNpqcB4dIjo6psDGg75HOUPLwKOA7zPmFe6-wMK7yr3pGH1dUvXZfNxIf4bV4JSTpo-Cit5cT9j_sJb1Haygqt2ulWSGc-AFEYKiKFb1y-pZZgXfJv7sRLADyF_qbETtbYVDTf89iUh_IBWeeUmtKoIYVy3HmExC1Ht2rPTGdkheR3ACEplAxWZDuxgZOlIKJq6Xyikd9KxZqehypZcaZtj4utfKMGRoYvW_lkLB4BdFAmxCN1arR5V4jKPUqErMV8MKzh0DvQxwzsGOtpjbNv3wEX7aPrvpG36b_bSTuARUudrYai_3aU3ZCYvh36UT8jqes2kjcQTwgE-_t2XM-J7JTUJ3ldi0dgcT8nI5_j2oxNKZ4gRzT7l0acmnw9tqNS_1pnlO9z97mj1xEy_o9EfzbmgeiqzgHSdXyUctXsiFn5v_QHRMP_-8dqPMiEHBA78SgGGGT7ZOxj9E7yk2T2uhWFUIxhOP56x9amx3XVtYZ95HhPwEel
+
+@startuml
+class ClientLobby <<QMainWindow>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    ChampionType selected_character;
+    NewMapInfo& new_map_info;
+
+    void on_btnCreateMatch_clicked();
+    void on_btnJoinMatch_clicked();
+    void on_btnQuit_clicked();
+}
+
+class CharacterSelector <<QDialog>> {
+    void on_btnCharacterJazz_clicked();
+    void on_btnCharacterLori_clicked();
+    void on_btnCharacterSpaz_clicked();
+}
+
+class JoinMatchLobby <<QDialog>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    ChampionType selected_character;
+    void on_btnJoin_clicked();
+    void on_btnRefresh_clicked();
+}
+
+class WaitingRoom <<QDialog-Thread>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    std::thread waiting_thread;
+    std::atomic<bool> stop_thread;
+}
+
+class MapSelector <<QDialog>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    ChampionType selected_character;
+    std::string selected_map;
+    std::string match_name;
+    NewMapInfo& new_map_info;
+    void on_btnMap1_clicked();
+    void on_btnMap2_clicked();
+    void on_btnMapCreate_clicked();
+    void on_btnCustomMaps_clicked();
+    void start_match();
+
+}
+
+class MapCreatorLobby <<QDialog>> {
+    NewMapInfo& new_map_info;
+    void on_btnTexture1_clicked();
+    void on_btnTexture2_clicked();
+}
+
+class MapEditorLobby <<QDialog>> {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<std::unique_ptr<QtResponse>>& q_responses;
+    std::string& selected_map;
+    NewMapInfo& new_map_info;
+    void on_btnRefresh_clicked();
+    void on_btnPlay_clicked();
+    void on_btnEdit_clicked();
+}
+
+
+
+
+
+
+
+class QtResponse {
+    int response;
+    std::tuple<std::vector<std::string>, std::vector<std::string>> info_available;
+    int response_type;
+
+    int get_response();
+    std::tuple<std::vector<std::string>, std::vector<std::string>> get_info_available();
+    std::vector<std::string> get_matches_available();
+    std::vector<std::string> get_maps_available(); 
+    void send(Protocol& protocol);
+    int get_info_type();
+    int get_map_texture();
+}
+
+
+
+abstract class Command {
+    int playerID
+    virtual void executeCommand() = 0
+    virtual void send(Protocol& protocol) = 0
+    virtual int get_playerID() = 0
+    virtual int get_commandType() = 0
+}
+
+class Match {
+   int commandType
+   int amount_players
+   std::string match_name
+   std::string match_name
+   ChampionType character_name
+}
+
+
+
+
+
+
+
+
+ClientLobby --> CharacterSelector : on_btnCreateMatch_clicked()
+ClientLobby --> CharacterSelector : on_btnJoinMatch_clicked()
+ClientLobby --> MapSelector : on_btnCreateMatch_clicked()
+MapSelector --> WaitingRoom : start_match()
+
+ClientLobby --> JoinMatchLobby : on_btnJoinMatch_clicked()
+JoinMatchLobby --> WaitingRoom : on_btnJoin_clicked()
+
+
+MapSelector --> MapCreatorLobby : on_btnMapCreate_clicked()
+MapSelector --> MapEditorLobby : on_btnCustomMaps_clicked()
+MapEditorLobby --> WaitingRoom : on_btnPlay_clicked()
+
+Command <|-- Match
+@enduml

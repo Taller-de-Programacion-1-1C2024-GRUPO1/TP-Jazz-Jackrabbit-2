@@ -1,0 +1,203 @@
+
+https://www.plantuml.com/plantuml/png/rPVDRkCs4CVlVWgU3EyY0OeUxTJOD1yeq0IRnejU1LeSMzoLI8OVTjpjldifSYHJakqOFMrqY4NoFyEP7uUayibOggshob5UKcF8JSb1s5jDjw39zn7npryE75mPowPJ9_YBWqnPVNKZgueADf-FoKkMLypC4l52K6KAQSEWmGOgbbAMP4qhoBGJWejrxER2aZnCdd6sxpAvrB1lbdm3wAUEaIvBUARB9RSV6sCTcb4IOgweklAc5ts3EObISqfx9w3QUIduNmudfKzQVeNSyXAyNZMDqpP_qzBHPR3OuEj9_NLLIQ-b_YTZMggJOYzSIRbdYVbcMyviCUWjWAyBvFOdx9QIQlO75Qm4JRvXEojYnsoqjtPYKl-gakv0-wMx2Dq-cCp2gtKQFaIV6yaPCONSFaZA_AelSWqW9iyW66ZGOwBnhQ-_vuAMHzKN99V2MD9Kt9WOVFD-VeomgXiaMD6BsuTVbPfEX-uIdgQW6bYezKR_9MOq9vZQhEFjINBXvyzf1Pe-ISCjbsBMcp2tZN7zVc1KYaUgubZ20IpEFJahjZvsi0lfT1xcd22mPD8w_zmc5iXZadOvnQY5ISylvXcBu3Kk_gwdkUaGmVbFKkk6OlW_4Fnle_yYNTf5mLVMrrEwnEcMYBoizf8BSYruHUi9veGshxY7sY5_aZYjGTYs9mgOTBLxAjPbSY0nxj6X2Bku1Hqz_mvWjm3YNlliS1w_488zKa7NTTsPf9KkU2afQ-StY2n9PKmKjSN_Mh5hdq346LBfZTus-Kmmku4r1eKnvGNL7udm-NM3eL-TiI7lu6WL27oHrsn3HTvgkRQEbi4cd201pcTn2pwvoGVo_STW2-FfVUP6xXUP6cwuyUdzE4usvBdhXrNloT3SWhxNicgE9wJ6HI1NAGyoipi5noWVi8q0ZfrtNLnuWRq3MY7E8wIW7ekOC4TCSdZrOgRX6qF3Y-CQJ0QlgfG6zoWESkncdG-GLfcjSCkEVdfo--IFu5Eju52fFIEbkoRroH5uQ8UZVQDqbFj-H8lzHtOuBYSkPk-Rw1qKBOPw3Fm6Xn7xco3mGHvf53qMZ_pLzrNrtrbtm1cUawh-6mVwN-sDyAPmujkykUd2L9XRSicGjQyk7zwzr45nw1eIj3gSsjrgvO6UOsAiLC6aXw6BepqIaKNYCdYC3lTtJLAFzLNqMS23b2gXie7SIYI2bJ2FjlMhQVqXf7YPaT_8BxF-_B54Eh4FlaekB_-TaxOrzOuBqDoQqQZp7vUylEpTT5xh39YZCZpXJwlI8_9DALRr6qByRwGH3VFe5F0Go41HFxtK0xI-PGglm-1iUGhZR1kaShO5udbJxP-3RDfw7tq2mLnL_WS0
+
+@startuml
+class ClientDrawer {
+    Queue<std::unique_ptr<Command>>& q_cmds;
+    Queue<Snapshot>& q_snapshots;
+    bool game_running;
+    int client_id;
+    int score;
+    int lives;
+    DrawableRabbit* client_rabbit;
+    std::map<int, DrawableRabbit*> rabbits;
+    std::map<int, DrawableEnemy*> enemies;
+    std::map<int, DrawableProjectile*> projectiles;
+    std::map<int, DrawableValuable*> valuables;
+    std::map<int, DrawableAmmo*> ammo_drops;
+    std::map<int, Drawable*> food;
+    int rabbit_width;
+    int rabbit_height;
+    KeyboardHandler keyboard_handler;
+
+    int run(int player_id, int map_texture);
+    void showLoadingScreen(Renderer& renderer);
+    void showFinalScreen(Renderer& renderer, const Snapshot& snapshot);
+}
+
+class Drawable {
+    SDL2pp::Renderer& renderer;
+    std::shared_ptr<SDL2pp::Texture> texture;
+    SDL2pp::Point& cameraPosition;
+    SDL2pp::Rect textureRect;
+    SDL2pp::Rect onMapRect;
+
+    void setTexture(std::shared_ptr<SDL2pp::Texture> texture);
+    void setSourceRect(const SDL2pp::Rect& rect);
+    void render();
+    void update();
+    void setPosition(int x, int y);
+    void setCameraPosition(const SDL2pp::Point& cameraPosition);
+    void resize(int w, int h);
+}
+
+class ShiftingDrawable {
+    std::map<std::string, Animation> animations;
+    Animation* currentAnimation;
+    double angle;
+    int direction;
+    int iterationsBeetweenFrames;
+    SoundManager& soundManager;
+
+    void loadAnimations(const std::string& path);
+    void render();
+    void update();
+    void setAngle(int angle);
+    void setDirection(int dir);
+    void setAnimation(const char* name);
+    void reajustFrame(int framesToAdvance);
+    virtual void playSoundOnDeath() {}
+}
+
+class DrawableRabbit {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setCharacterFromSnapshot(const int champion_type);
+    void setAnimationFromSnapshot(const RabbitSnapshot& snapshot);
+}
+
+
+
+class DrawableEnemy {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setEnemyFromSnapshot(const int enemy_type);
+}
+
+
+
+
+class DrawableProjectile {
+    bool requires_explosion;
+    bool is_exploding;
+    int explosion_frames;
+
+
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setProjectileFromSnapshot(const int projectile_type);
+    void setRequiresExplosion(bool requires_explosion);
+    bool requiresExplosion();
+    bool isExploding();
+    void playSoundOnDeath();
+}
+
+
+class DrawableValuable {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setValuableFromSnapshot(const int valuable_type);
+    void playSoundOnDeath();
+}
+
+
+class DrawableAmmo {
+    SDL2pp::Renderer& renderer;
+    SDL2pp::Point& cp;
+    SDL2pp::Rect& textureRect;
+    SDL2pp::Rect& onMapRect;
+    SoundManager& soundManager;
+
+    void setAmmoFromSnapshot(const int ammo_type);
+    void playSoundOnDeath();
+}
+
+
+
+
+
+
+class SoundManager {
+    SDL2pp::Mixer mixer;
+    SDL2pp::Music music;
+    std::unique_ptr<SDL2pp::Chunk> currentSound;
+
+    std::string getPathForSound(const std::string& name);
+    void playSoundEffect(const std::string& name);
+    void stopSound();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Animation {
+    std::string name;
+    int frames;
+    bool justOneLoop;
+    std::vector<SDL2pp::Rect> frameRects;
+    int currentFrame = 0;
+    std::string sound;
+}
+
+
+
+
+
+
+
+
+
+ShiftingDrawable --|> Drawable : inherits
+
+ClientDrawer o-- DrawableRabbit : uses
+ClientDrawer o-- DrawableEnemy : uses
+ClientDrawer o-- DrawableProjectile : uses
+ClientDrawer o-- DrawableValuable : uses
+ClientDrawer o-- DrawableAmmo : uses
+
+
+ClientDrawer o-- SoundManager
+ShiftingDrawable o-- SoundManager
+
+
+
+
+DrawableRabbit --|> ShiftingDrawable : inherits
+DrawableEnemy --|> ShiftingDrawable : inherits
+DrawableProjectile --|> ShiftingDrawable : inherits
+DrawableValuable --|> ShiftingDrawable : inherits
+DrawableAmmo --|> ShiftingDrawable : inherits
+
+
+
+ShiftingDrawable o-- Animation
+@enduml

@@ -10,20 +10,32 @@
 #include <yaml-cpp/yaml.h>
 
 #include "client_drawable.h"
-
-const int TILE_WIDTH = 10;
-const int BLOCK_SIZE = 32;
+#include "client_textures_provider.h"
 
 class MapLoader {
 private:
     Renderer& renderer;
+    std::shared_ptr<SDL2pp::Texture> texture;
+    int map_width;
+    int map_heigth;
 
 public:
-    explicit MapLoader(Renderer& renderer): renderer(renderer) {}
+    explicit MapLoader(Renderer& renderer, const int map_texture, const int map_width,
+                       const int map_heigth):
+            renderer(renderer), map_width(map_width), map_heigth(map_heigth) {
+        switch (map_texture) {
+            case JUNGLE:
+                texture = TexturesProvider::getTexture("Jungle");
+                break;
+            case CARROTUS:
+                texture = TexturesProvider::getTexture("Carrotus");
+                break;
+            default:
+                throw std::invalid_argument("Invalid map texture");
+        }
+    }
 
     std::vector<std::unique_ptr<Drawable>> loadMap(const DynamicMap& map,
-                                                   const std::string& texturePath,
-                                                   const SDL2pp::Color& colorKey,
                                                    SDL2pp::Point& cameraPosition) {
         std::vector<std::unique_ptr<Drawable>> tiles;
         const auto& data = map.map_data;
@@ -33,25 +45,25 @@ public:
                 auto& matrix = it->second;
                 int x = 0;
                 int y = 0;
-                for (int j = 0; j < map.height; j++) {
-                    for (int k = 0; k < map.width; k++) {
+                for (int j = 0; j < map_heigth; j++) {
+                    for (int k = 0; k < map_width; k++) {
                         int id = matrix[k][j];
                         if (id != 65535) {
                             SDL2pp::Rect srcRect;
-                            srcRect.x = (id % TILE_WIDTH) * 32;
-                            srcRect.y = (id / TILE_WIDTH) * 32;
-                            srcRect.w = BLOCK_SIZE;
-                            srcRect.h = BLOCK_SIZE;
+                            srcRect.x = (id % TILE_WIDTH) * BLOCK_DIVISION;
+                            srcRect.y = (id / TILE_WIDTH) * BLOCK_DIVISION;
+                            srcRect.w = BLOCK_DIVISION;
+                            srcRect.h = BLOCK_DIVISION;
 
                             SDL2pp::Rect destRect;
-                            destRect.x = x * BLOCK_SIZE;
-                            destRect.y = y * BLOCK_SIZE;
-                            destRect.w = BLOCK_SIZE;
-                            destRect.h = BLOCK_SIZE;
+                            destRect.x = x * BLOCK_DIVISION;
+                            destRect.y = y * BLOCK_DIVISION;
+                            destRect.w = BLOCK_DIVISION;
+                            destRect.h = BLOCK_DIVISION;
 
                             std::unique_ptr<Drawable> drawable = std::make_unique<Drawable>(
                                     renderer, cameraPosition, srcRect, destRect);
-                            drawable->setTexture(texturePath, colorKey);
+                            drawable->setTexture(texture);
                             tiles.push_back(std::move(drawable));
                         }
                         x++;

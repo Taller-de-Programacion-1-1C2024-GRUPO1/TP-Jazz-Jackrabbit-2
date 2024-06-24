@@ -33,11 +33,11 @@ void Gem::on_colision_with_rabbit(Rabbit* rabbit) {
     kill();
 }
 void MachineGunAmmo::on_colision_with_rabbit(Rabbit* rabbit) {
-    rabbit->add_machinegun_ammo(MACHINEGUN_AMMO_AMOUNT);
+    rabbit->add_machinegun_ammo(FLAMETHROWER_AMMO_AMOUNT);
     kill();
 }
 void SniperAmmo::on_colision_with_rabbit(Rabbit* rabbit) {
-    rabbit->add_sniper_ammo(SNIPER_AMMO_AMOUNT);
+    rabbit->add_sniper_ammo(ROCKETLAUNCHER_AMMO_AMOUNT);
     kill();
 }
 void RayGunAmmo::on_colision_with_rabbit(Rabbit* rabbit) {

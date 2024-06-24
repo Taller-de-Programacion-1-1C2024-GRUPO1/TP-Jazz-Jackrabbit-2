@@ -3,6 +3,7 @@
 
 #include "client_constants.h"
 #include "client_shifting_drawable.h"
+#include "client_textures_provider.h"
 
 class DrawableProjectile: public ShiftingDrawable {
 private:
@@ -16,16 +17,15 @@ public:
             ShiftingDrawable(renderer, cp, textureRect, onMapRect, soundManager) {}
 
     void setProjectileFromSnapshot(const int projectile_type) {
-        SDL2pp::Color color = {0, 128, 255, 1};  // Color en formato RGBA
-        this->setTexture(PROJECTILES_PNG, color);
+        this->setTexture(TexturesProvider::getTexture("Projectiles"));
         switch (projectile_type) {
             case BASIC_GUN:
                 this->loadAnimations(REGULAR_ANIMATIONS);
                 break;
-            case MACHINE_GUN:
+            case FLAMETHROWER:
                 this->loadAnimations(BLUE_RAY_ANIMATIONS);
                 break;
-            case SNIPER:
+            case ROCKETLAUNCHER:
                 this->loadAnimations(ROCKET_ANIMATIONS);
                 this->requires_explosion = true;
                 this->is_exploding = true;
@@ -36,7 +36,6 @@ public:
                 this->is_exploding = true;
                 break;
             default:
-                std::cout << "Tipo: " << projectile_type << std::endl;
                 throw std::invalid_argument("Invalid projectile type");
         }
     }

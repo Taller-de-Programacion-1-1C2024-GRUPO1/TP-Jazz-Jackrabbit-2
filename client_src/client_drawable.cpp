@@ -13,49 +13,26 @@ Drawable::Drawable(SDL2pp::Renderer& renderer, SDL2pp::Point& cp, SDL2pp::Rect& 
         texture(nullptr),
         cameraPosition(cp),
         textureRect(textureRect),
-        onMapRect(onMapRect) {}
+        onMapRect(onMapRect),
+        position(onMapRect.x, onMapRect.y),
+        mapWidth(1120),
+        mapHeight(608) {}
 
-void Drawable::setTexture(const std::string& path, const SDL2pp::Color& colorKey) {
-    SDL2pp::Surface surface(path);
-    Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
-    SDL_SetColorKey(surface.Get(), SDL_TRUE, mappedColorKey);
-    texture = std::make_unique<SDL2pp::Texture>(renderer, surface);
-}
+void Drawable::setTexture(std::shared_ptr<SDL2pp::Texture> texture) { this->texture = texture; }
 
 void Drawable::setSourceRect(const SDL2pp::Rect& rect) { textureRect = rect; }
 
-SDL2pp::Rect Drawable::adjustPosition() {
-    SDL2pp::Rect adjustedOnMapRect = onMapRect;
-    adjustedOnMapRect.x -= cameraPosition.x;
-    adjustedOnMapRect.y -= cameraPosition.y;
-    return adjustedOnMapRect;
-}
-
-void Drawable::render() { renderer.Copy(*texture, textureRect, adjustPosition()); }
-
 void Drawable::update() {
-    int mapWidth = 1120;
-    int mapHeight = 608;
-
-    // Ensure the camera doesn't go outside the map boundaries
-    if (cameraPosition.x < 0) {
-        cameraPosition.x = 0;
-    } else if (cameraPosition.x + 800 > mapWidth) {
-        cameraPosition.x = mapWidth - 800;
-    }
-    if (cameraPosition.y < 0) {
-        cameraPosition.y = 0;
-    } else if (cameraPosition.y + 600 > mapHeight) {
-        cameraPosition.y = mapHeight - 600;
-    }
+    onMapRect.x = position.x - cameraPosition.x;
+    onMapRect.y = position.y - cameraPosition.y;
 }
+
+void Drawable::render() { renderer.Copy(*texture, textureRect, onMapRect); }
 
 void Drawable::setPosition(int x, int y) {
-    onMapRect.x = x;
-    onMapRect.y = y;
+    position.x = x;
+    position.y = y;
 }
-
-void Drawable::setCameraPosition(const SDL2pp::Point& position) { cameraPosition = position; }
 
 void Drawable::resize(int w, int h) {
     onMapRect.w = w;

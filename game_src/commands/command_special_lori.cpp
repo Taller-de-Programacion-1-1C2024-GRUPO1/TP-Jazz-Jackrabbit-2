@@ -2,6 +2,7 @@
 
 SpecialLori::SpecialLori(int id, int dir): Command(id), dir(dir) {}
 
+
 void SpecialLori::execute_Command(Rabbit& rabbit) { rabbit.special_attack_lori(); }
 
 void SpecialLori::send(Protocol& protocol) { protocol.send_Command(this); }

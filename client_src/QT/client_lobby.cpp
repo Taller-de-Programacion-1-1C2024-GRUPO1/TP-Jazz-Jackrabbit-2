@@ -5,31 +5,18 @@
 
 ClientLobby::ClientLobby(Queue<std::unique_ptr<Command>>& q_cmds,
                          Queue<std::unique_ptr<QtResponse>>& q_responses, NewMapInfo& new_map_info,
-                         int& map_texture, QWidget* parent):
+                         QWidget* parent):
         QMainWindow(parent),
         ui(new Ui::ClientLobby),
         q_cmds(q_cmds),
         q_responses(q_responses),
-        new_map_info(new_map_info),
-        map_texture(map_texture) {
+        new_map_info(new_map_info) {
     ui->setupUi(this);
-
-    int fontId = QFontDatabase::addApplicationFont(":/fonts/04B_30__.ttf");
-    if (fontId != -1) {
-        QString fontFamily = QFontDatabase::applicationFontFamilies(fontId).at(0);
-        QFont font(fontFamily);
-        QApplication::setFont(font);
-        QFont buttonFont(fontFamily, 24);
-        ui->btnCreateMatch->setFont(buttonFont);
-        ui->btnJoinMatch->setFont(buttonFont);
-        ui->btnQuit->setFont(buttonFont);
-    } else {
-        qWarning() << "No se pudo cargar la fuente 04B_30__";
-    }
-    QPixmap pixmap(":/backgrounds/lobby.png");
-    QPalette palette;
-    palette.setBrush(QPalette::Window, pixmap);
-    this->setPalette(palette);
+    QString fontFamily = qt_common_init(this, ":/backgrounds/lobby.png");
+    QFont buttonFont(fontFamily, 24);
+    ui->btnCreateMatch->setFont(buttonFont);
+    ui->btnJoinMatch->setFont(buttonFont);
+    ui->btnQuit->setFont(buttonFont);
 }
 
 ClientLobby::~ClientLobby() { delete ui; }
@@ -44,7 +31,7 @@ void ClientLobby::on_btnCreateMatch_clicked() {
 
     if (characterSelector.exec() == QDialog::Accepted) {
         MapSelector map_selector(q_cmds, q_responses, selected_character, new_map_info,
-                                 map_texture);
+                                 player_name);
         connect(&map_selector, &MapSelector::windowClosed, this, &ClientLobby::handleWindowClosed);
         int result = map_selector.exec();
         if (result == QDialog::Accepted) {
@@ -54,14 +41,13 @@ void ClientLobby::on_btnCreateMatch_clicked() {
         } else if (result == EDIT_MAP) {
             QApplication::exit(EDIT_MAP);
         } else if (result == CLOSE_MAP_CREATOR) {
-            std::cout << "Cerrando QT..." << std::endl;
             QApplication::exit(ERROR);
         } else {
-            std::cerr << "Error al crear partida, map_selector falló" << std::endl;
+            std::cerr << "Error creating match, map_selector failed" << std::endl;
             QApplication::exit(ERROR);
         }
     } else {
-        std::cerr << "Error al crear partida, characterSelector falló" << std::endl;
+        std::cerr << "Error creating match, characterSelector failed" << std::endl;
         QApplication::exit(ERROR);
     }
 }
@@ -75,17 +61,17 @@ void ClientLobby::on_btnJoinMatch_clicked() {
             &ClientLobby::handleWindowClosed);
 
     if (characterSelector.exec() == QDialog::Accepted) {
-        JoinMatchLobby joinMatchLobby(q_cmds, q_responses, selected_character);
+        JoinMatchLobby joinMatchLobby(q_cmds, q_responses, selected_character, player_name);
         connect(&joinMatchLobby, &JoinMatchLobby::windowClosed, this,
                 &ClientLobby::handleWindowClosed);
         if (joinMatchLobby.exec() == QDialog::Accepted) {
             QApplication::exit(OK);
         } else {
-            std::cerr << "Error al unirse a partida, joinMatchLobby room falló" << std::endl;
+            std::cerr << "Failed to join game, joinMatchLobby failed" << std::endl;
             QApplication::exit(ERROR);
         }
     } else {
-        std::cerr << "Error al unirse a partida, character selector falló" << std::endl;
+        std::cerr << "Failed to join game, character selector failed" << std::endl;
         QApplication::exit(ERROR);
     }
 }
@@ -93,8 +79,10 @@ void ClientLobby::on_btnJoinMatch_clicked() {
 void ClientLobby::on_btnQuit_clicked() { QApplication::exit(ERROR); }
 
 
-void ClientLobby::handleCharacterSelected(ChampionType character) {
+void ClientLobby::handleCharacterSelected(ChampionType character,
+                                          const std::string& selected_player_name) {
     selected_character = character;
+    player_name = selected_player_name;
 }
 
 

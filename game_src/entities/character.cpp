@@ -16,18 +16,8 @@ void Character::is_on_left_wall() { on_left_wall = true; }
 
 void Character::is_on_right_wall() { on_right_wall = true; }
 
-void Character::is_on_left_slope() {
-    on_left_slope = true;
-    if (((pos_x % BLOCK_DIVISION)) <= pos_y % BLOCK_DIVISION) {
-        on_floor = true;
-    }
-}
-void Character::is_on_right_slope() {
-    on_right_slope = true;
-    if ((pos_x % BLOCK_DIVISION) + (BLOCK_DIVISION * 1.5) >= pos_y % BLOCK_DIVISION) {
-        on_floor = true;
-    }
-}
+void Character::is_on_left_slope() { on_left_slope = true; }
+void Character::is_on_right_slope() { on_right_slope = true; }
 void Character::update_position() {
     // GRAVITY
     if (!on_floor && spe_y < MAX_FALLING_SPEED) {
@@ -58,11 +48,11 @@ void Character::update_position() {
 
     check_colision_with_map();
     if (on_right_slope) {
-
-        pos_y += BLOCK_DIVISION - (pos_x % BLOCK_DIVISION) - (pos_y % BLOCK_DIVISION);
+        pos_y += BLOCK_DIVISION - (pos_x % BLOCK_DIVISION) - 1 - (pos_y % BLOCK_DIVISION);
+        spe_y = 0;
     } else if (on_left_slope) {
-
-        pos_y += (pos_x % BLOCK_DIVISION) - (pos_y % BLOCK_DIVISION);
+        pos_y += (pos_x % BLOCK_DIVISION) - 1 - (pos_y % BLOCK_DIVISION);
+        spe_y = 0;
     }
 }
 

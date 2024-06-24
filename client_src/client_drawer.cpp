@@ -1,8 +1,5 @@
 #include "client_drawer.h"
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-
 ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapshot>& q_snapshots):
         q_cmds(q_cmds),
         q_snapshots(q_snapshots),
@@ -15,10 +12,11 @@ ClientDrawer::ClientDrawer(Queue<std::unique_ptr<Command>>& q_cmds, Queue<Snapsh
         rabbit_height(0),
         keyboard_handler(q_cmds) {}
 
-void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot) {
+void ClientDrawer::showFinalScreen(Renderer& renderer, Snapshot& lastSnapshot) {
     const int initial_offset = 100;
     Font font(FONT_TTF_04B_30, 24);
-    renderer.SetDrawColor(200, 200, 200);
+    std::vector<RabbitSnapshot> rabbits = lastSnapshot.rabbits;
+
     renderer.Clear();
 
     std::string titleText = "Game Over!";
@@ -35,15 +33,21 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot)
 
     renderer.Copy(titleTexture, NullOpt, titleRect);
 
-    // Find the player with the highest score
-    auto winner = std::max_element(
-            snapshot.rabbits.begin(), snapshot.rabbits.end(),
-            [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score < b.score; });
+    // order rabbits vector
+    std::sort(rabbits.begin(), rabbits.end(),
+              [](const RabbitSnapshot& a, const RabbitSnapshot& b) { return a.score > b.score; });
 
-    std::string winnerText = "Winner: Player " + std::to_string(winner->id);
+    // Find the player with the highest score
+    RabbitSnapshot winner = rabbits[0];
+    std::string winnerText;
+    if (winner.id == client_id) {
+        // If the winner is the client, show a different message
+        winnerText = "Winner: YOU! Congratulations";
+    } else {
+        winnerText = "Winner: " + winner.player_name;
+    }
     Texture winnerTexture(renderer,
                           font.RenderText_Solid(winnerText, SDL_Color{255, 255, 255, 255}));
-
     int winnerWidth = winnerTexture.GetWidth();
     int winnerHeight = winnerTexture.GetHeight();
 
@@ -58,9 +62,10 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot)
     int yOffset = titleHeight + winnerHeight +
                   initial_offset * 2;  // Initial offset from top of the screen for the players
 
-    for (const auto& player: snapshot.rabbits) {
-        std::string playerText = "Player " + std::to_string(player.id) + ": " +
-                                 std::to_string(player.score) + " points";
+    for (int i = 0; i < static_cast<int>(rabbits.size()); i++) {
+        std::string playerText;
+        playerText = std::to_string(i + 1) + ". " + rabbits[i].player_name + " - " +
+                     std::to_string(rabbits[i].score) + " points";
         Texture texture(renderer, font.RenderText_Solid(playerText, SDL_Color{255, 255, 255, 255}));
 
         int textWidth = texture.GetWidth();
@@ -76,7 +81,6 @@ void ClientDrawer::showFinalScreen(Renderer& renderer, const Snapshot& snapshot)
 
         yOffset += textHeight + 20;  // Move offset down for the next player
     }
-
     renderer.Present();
 }
 
@@ -85,7 +89,7 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
     Texture texture(renderer,
                     font.RenderText_Solid("Cargando partida...", SDL_Color{255, 255, 255, 255}));
 
-    renderer.SetDrawColor(0, 63, 63);
+    renderer.SetDrawColor(135, 206, 235);
     renderer.Clear();
 
     int textWidth = texture.GetWidth();
@@ -101,7 +105,8 @@ void ClientDrawer::showLoadingScreen(Renderer& renderer) {
     renderer.Present();
 }
 
-int ClientDrawer::run(int player_id, int map_texture) try {
+
+int ClientDrawer::run(int player_id) try {
     client_id = player_id;
     keyboard_handler.setId(player_id);
 
@@ -119,37 +124,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     // Create accelerated video renderer with default driver
     Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
     // Background image
-    Texture background(renderer, SDL2pp::Surface(FONDO_PNG));
-
-    SDL_Color enemyAndItemsColor = {0, 128, 255, 1};  // Color en formato RGBA
-    SDL_Color mapColor = {87, 0, 203, 0};
-    MapLoader mapLoader(renderer);
-
-    SDL2pp::Point playerPosition(10, 10);
-    SDL2pp::Point cameraPosition(0, 0);
-    SDL2pp::Point desiredCameraPosition(0, 0);
-    float lerpFactor = 0.1f;
-
-    std::string map_texture_path;
-    switch (map_texture) {
-        case JUNGLE:
-            map_texture_path = JUNGLE_TILES_PNG;
-            break;
-        case CARROTUS:
-            map_texture_path = CARROTUS_TILES_PNG;
-            break;
-    }
-
-    // Number images
-    NumberImages numberImages(renderer);
-    numberImages.setCorner(0);
-
-    // Heart banner
-    HeartsBanner banner(renderer);
-    AmmoLeft ammoLeft(renderer);
-    FoodProvider foodProvider;
-    TopScores topScores(renderer);
-    Clock clock(renderer);
+    TexturesProvider::init(renderer);
 
     // Read first snapshot!
     Snapshot initial_snapshot;
@@ -160,16 +135,39 @@ int ClientDrawer::run(int player_id, int map_texture) try {
     }
     showLoadingScreen(renderer);
 
+    int map_width = initial_snapshot.map_dimensions.height;
+    int map_height = initial_snapshot.map_dimensions.width;
+    int map_texture = initial_snapshot.map_dimensions.map_texture_id;
+
+
+    MapLoader mapLoader(renderer, map_texture, map_width, map_height);
+
+    // Number images
+    FontPrinter fontPrinter(renderer);
+    fontPrinter.setCorner(0);
+
+    // Heart banner
+    HeartsBanner banner(renderer);
+    AmmoLeft ammoLeft(renderer);
+    FoodProvider foodProvider;
+    TopScores topScores(renderer, player_id);
+    Clock clock(renderer);
+
+    SDL2pp::Point playerPosition(10, 10);
+    SDL2pp::Point cameraPosition(0, 0);
+    SDL2pp::Point desiredCameraPosition(0, 0);
+
+
     game_running = !initial_snapshot.get_end_game();
     clock.update(initial_snapshot.get_match_time());
-    std::vector<std::unique_ptr<Drawable>> mapComponents = mapLoader.loadMap(
-            initial_snapshot.map_dimensions.map_data, map_texture_path, mapColor, cameraPosition);
+    std::vector<std::unique_ptr<Drawable>> mapComponents =
+            mapLoader.loadMap(initial_snapshot.map_dimensions.map_data, cameraPosition);
 
     rabbit_width = initial_snapshot.map_dimensions.rabbit_width;
     rabbit_height = initial_snapshot.map_dimensions.rabbit_height;
 
     for (auto& rabbit: initial_snapshot.rabbits) {
-        topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
+        topScores.addCurrentSnapshotScore(rabbit.id, rabbit.player_name, rabbit.score);
         SDL2pp::Rect textureRect(0, 0, rabbit_width, rabbit_height);
         SDL2pp::Rect onMapRect(rabbit.pos_x, rabbit.pos_y, rabbit_width, rabbit_height);
         DrawableRabbit* newRabbit =
@@ -232,7 +230,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                    supply.supply_type == HAMBURGER || supply.supply_type == ROTTEN_CHEESE) {
             SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
             Drawable* newFood = new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-            newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
+            newFood->setTexture(TexturesProvider::getTexture("Items"));
             food.emplace(supply.id, newFood);
         }
     }
@@ -249,13 +247,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
         // EVENTS HANDLER
         keyboard_handler.listenForCommands(game_running);
-
-        desiredCameraPosition.x = playerPosition.x - (window.GetWidth() / 2);
-        desiredCameraPosition.y = playerPosition.y - (window.GetHeight() / 2);
-
-        // Interpolación lineal para suavizar el movimiento
-        cameraPosition.x += (desiredCameraPosition.x - cameraPosition.x) * lerpFactor;
-        cameraPosition.y += (desiredCameraPosition.y - cameraPosition.y) * lerpFactor;
 
         // SNAPSHOT RECEIVER
 
@@ -282,7 +273,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                 rabbitIds.insert(pair.first);
             }
             for (const auto& rabbit: snapshot.rabbits) {
-                topScores.addCurrentSnapshotScore(rabbit.id, rabbit.score);
+                topScores.addCurrentSnapshotScore(rabbit.id, rabbit.player_name, rabbit.score);
                 if (rabbit.id == client_id) {
                     score = rabbit.score;
                     ammoLeft.setAmmo(rabbit.ammo);
@@ -473,7 +464,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
                         SDL2pp::Rect textureRect = foodProvider.getFood(supply.supply_type);
                         Drawable* newFood =
                                 new Drawable(renderer, cameraPosition, textureRect, onMapRect);
-                        newFood->setTexture(ITEMS_PNG, enemyAndItemsColor);
+                        newFood->setTexture(TexturesProvider::getTexture("Items"));
                         food.emplace(supply.id, newFood);
                     } else {
                         foodIds.erase(supply.id);
@@ -488,6 +479,19 @@ int ClientDrawer::run(int player_id, int map_texture) try {
         }
 
         // UPDATE ENTITIES
+
+        // Actualizar la posición de la cámara para que siga al jugador
+        cameraPosition.x = static_cast<int>(playerPosition.x - SCREEN_WIDTH / 2);
+        cameraPosition.y = static_cast<int>(playerPosition.y - SCREEN_HEIGHT / 2);
+
+        if (cameraPosition.x < 0)
+            cameraPosition.x = 0;
+        if (cameraPosition.y < 0)
+            cameraPosition.y = 0;
+        if (cameraPosition.x > map_width * BLOCK_DIVISION - SCREEN_WIDTH)
+            cameraPosition.x = map_width * BLOCK_DIVISION - SCREEN_WIDTH;
+        if (cameraPosition.y > map_height * BLOCK_DIVISION - SCREEN_HEIGHT)
+            cameraPosition.y = map_height * BLOCK_DIVISION - SCREEN_HEIGHT;
 
         topScores.update();
 
@@ -516,7 +520,6 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
         // Clear screen
         renderer.Clear();
-        renderer.Copy(background, SDL2pp::NullOpt, SDL2pp::NullOpt);
 
         // Map render
         for (auto& tilePtr: mapComponents) {
@@ -552,7 +555,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
 
         for (char c: scoreStr) {
             int number = c - '0';  // Convert char to int
-            numberImages.renderNumber(number, offset, 0, 32);
+            fontPrinter.renderNumber(number, offset, 0, 32);
             offset += 24;  // Move position to the left for the next digit
         }
 
@@ -601,6 +604,7 @@ int ClientDrawer::run(int player_id, int map_texture) try {
             frameStart += expectedFrameTime;
         }
     }
+
     auto start = std::chrono::high_resolution_clock::now();
     auto end = start + std::chrono::seconds(5);
     while (std::chrono::high_resolution_clock::now() < end) {

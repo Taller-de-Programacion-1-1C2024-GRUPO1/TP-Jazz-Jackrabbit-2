@@ -2,6 +2,7 @@
 
 SpecialJazz::SpecialJazz(int id): Command(id) {}
 
+
 void SpecialJazz::execute_Command(Rabbit& rabbit) { rabbit.special_attack_jazz(); }
 
 void SpecialJazz::send(Protocol& protocol) { protocol.send_Command(this); }

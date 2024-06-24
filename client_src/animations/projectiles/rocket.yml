@@ -1,32 +1,21 @@
 Move:
-  frames: 6
-  loop: false
+  frames: 3
+  loop: true
   sound: ""
   rects:
-    - x: 180
-      y: 68
-      w: 23
-      h: 13
-    - x: 203
-      y: 68
-      w: 21
-      h: 13
-    - x: 224
-      y: 68
-      w: 23
-      h: 13
-    - x: 247
-      y: 68
-      w: 21
-      h: 13
-    - x: 268
-      y: 68
-      w: 22
-      h: 13
-    - x: 290
-      y: 68
-      w: 34
-      h: 13
+  - x: 353
+    y: 24
+    w: 20
+    h: 12
+  - x: 373
+    y: 24
+    w: 21
+    h: 12
+  - x: 394
+    y: 24
+    w: 21
+    h: 12
+   
 
 Explode:
   frames: 7

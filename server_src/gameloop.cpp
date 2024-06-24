@@ -4,7 +4,7 @@
 
 Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
                    BroadcasterSnapshots& broadcaster_snapshots, std::list<Player*>& players,
-                   Map& map, bool& server_running, bool& playing):
+                   std::shared_ptr<Map> map, bool& server_running, bool& playing):
         client_cmds_queue(client_cmds_queue),
         broadcaster_snapshots(broadcaster_snapshots),
         players(players),
@@ -16,7 +16,7 @@ Gameloop::Gameloop(Queue<std::shared_ptr<Command>>& client_cmds_queue,
 }
 
 void Gameloop::send_initial_snapshots() {
-    Snapshot snapshot = map.get_init_snapshot();
+    Snapshot snapshot = map->get_init_snapshot();
 
     // Enviar el snapshot inicial
     push_all_players(snapshot);
@@ -29,7 +29,7 @@ void Gameloop::push_all_players(const Snapshot& snapshot) {
 
 void Gameloop::run() {
     auto game_start = std::chrono::high_resolution_clock::now();
-    int game_duration_seconds = 3 * 60;
+    int game_duration_seconds = GAME_DURATION_MINUTES * UPDATE_RATE;
 
     while (playing && server_running) {
         try {
@@ -37,15 +37,15 @@ void Gameloop::run() {
 
             std::shared_ptr<Command> game_command;
             while (client_cmds_queue.try_pop(game_command)) {
-                map.add_command(game_command);
+                map->add_command(game_command);
             }
 
-            map.update();
+            map->update();
 
             uint32_t match_time =
                     std::chrono::duration_cast<std::chrono::seconds>(start - game_start).count();
 
-            push_all_players(map.get_snapshot(game_duration_seconds - match_time));
+            push_all_players(map->get_snapshot(game_duration_seconds - match_time));
 
             auto end = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -69,10 +69,10 @@ void Gameloop::run() {
             playing = false;
         }
     }
-    Snapshot final_snapshot = map.get_snapshot(game_duration_seconds);
+    Snapshot final_snapshot = map->get_snapshot(game_duration_seconds);
     final_snapshot.set_end_game();
     push_all_players(final_snapshot);
-    std::cout << "Finalizando juego..." << std::endl;
+    std::cout << "Closing match..." << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 }
 
