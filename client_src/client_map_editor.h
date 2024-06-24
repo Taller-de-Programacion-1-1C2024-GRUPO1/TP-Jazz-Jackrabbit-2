@@ -26,7 +26,6 @@ public:
         window("Map editor", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, EDITOR_SCREEN_WIDTH, EDITOR_SCREEN_HEIGHT, 0),
         renderer(window, -1, SDL_RENDERER_ACCELERATED),
         font(FONT_TTF_04B_30, 15) {
-        loadTileTextures();
         loadEntityTextures();
         loadMapData(map_name);
     }
@@ -422,6 +421,7 @@ private:
         width = map["width"].as<int>();
         height = map["height"].as<int>();
         initializeGrids();
+        loadTileTextures(texture);
         populateTextureGrid(map);
         populateEntityGrid(map);
     }
@@ -429,10 +429,13 @@ private:
     void loadTileTextures(int map = -1) {
         std::string textureImg[] = {JUNGLE_TILES_PNG, CARROTUS_TILES_PNG};
         int textureIndex = (map == -1) ? texture : map;
+
+        std::cout << "Loading texture: " << texture << std::endl;
         processTexture(textureImg[textureIndex]);
     }
 
     void processTexture(const std::string& path) {
+        std::cout << "Loading texture: " << path << std::endl;
         Surface surface(path);
         SDL2pp::Color colorKey = {87, 0, 203, 0};
         Uint32 mappedColorKey = SDL_MapRGB(surface.Get()->format, colorKey.r, colorKey.g, colorKey.b);
