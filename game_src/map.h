@@ -59,7 +59,6 @@ public:
         const PhysicalMap& physical_map, const DynamicMap& dynamic_map,
         const std::map<int, std::vector<SpawnPoint>>& spawn_points);
 
-    Map() = default;
 
     void set_amount_players(int amount_players);
 
