@@ -50,8 +50,8 @@ public:
                         int id = matrix[k][j];
                         if (id != 65535) {
                             SDL2pp::Rect srcRect;
-                            srcRect.x = (id % TILE_WIDTH) * 32;
-                            srcRect.y = (id / TILE_WIDTH) * 32;
+                            srcRect.x = (id % TILE_WIDTH) * BLOCK_DIVISION;
+                            srcRect.y = (id / TILE_WIDTH) * BLOCK_DIVISION;
                             srcRect.w = BLOCK_DIVISION;
                             srcRect.h = BLOCK_DIVISION;
 
