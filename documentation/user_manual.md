@@ -360,6 +360,8 @@ Now, there are three ways the party can wrap up:
 
 When the game session ends, either because it's finished or because you have decided to leave, you will see the scoreboard pop up. It is a summary of everyone's performance during the game. You can see who scored the most points, who got the most kills, or any other achievements earned during the match. It is a cool way to see how everyone did and celebrate the winners before you head out.
 
+<p align="center"><img src=utils_png/top_scores.png style="width:80%;"></p>
+
 -------
 
 ### **Congratulations, you have now got all the tools and tips you need to master Jazz Jackrabbit 2! From understanding the controls and special ammos to knowing your enemies and collecting valuable points, you're well-prepared to jump into the action. Remember, practice makes perfect, so keep honing your skills and discovering all the secrets the game has to offer. Whether you are playing solo or challenging friends, may your adventures be filled with high scores, epic victories, and endless fun. Thank you very much for reading the entire manual. Here's a gift from the developers: "DIPA". Now, go out there and show the world what a true Jazz Jackrabbit hero looks like! Happy hopping!**
