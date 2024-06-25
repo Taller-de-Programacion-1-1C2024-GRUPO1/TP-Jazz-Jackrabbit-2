@@ -108,12 +108,12 @@ enum /*SPAWN POINTS*/ {
 
 // ----------------- Messurements -----------------
 
-// GAME CONSTANTS
+//----------------- GAME CONSTANTS -----------------
 #define GAME_DURATION_MINUTES ConfigSingleton::getInstance().getGameDurationMinutes()
 #define BLOCK_DIVISION 32
-#define MAP_WIDTH_DEFAULT 35     // modificar
-#define MAP_HEIGHT_DEFAULT 19    // modificar
-#define RABBIT_AMOUNT_DEFAULT 1  // modificar
+#define MAP_WIDTH_DEFAULT 35
+#define MAP_HEIGHT_DEFAULT 19
+#define RABBIT_AMOUNT_DEFAULT 1
 
 #define PLAYER_SIDE BLOCK_DIVISION * 2
 #define RABBIT_COOLDOWN_TAKE_DAMAGE 3
@@ -126,7 +126,7 @@ enum /*SPAWN POINTS*/ {
 #define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
 
 
-// PHYSICS
+//----------------- PHYSICS -----------------
 #define GRAVITY 1
 #define MAX_FALLING_SPEED 15
 #define PLAYER_SPEED ConfigSingleton::getInstance().getRabbitSpeed()
@@ -135,12 +135,12 @@ enum /*SPAWN POINTS*/ {
 #define JUMPING_INITIAL_SPEED ConfigSingleton::getInstance().getRabbitJumpSpeed()
 #define SPECIAL_ATTACK_TIME JUMPING_INITIAL_SPEED / GRAVITY
 
-// PLAYER CONSTANTS
+//----------------- PLAYER CONSTANTS -----------------
 #define PLAYER_INITIAL_HEALTH ConfigSingleton::getInstance().getPlayerStartingLife()
 #define PLAYER_DAMAGE ConfigSingleton::getInstance().getPlayerDamage()
 #define CARROT_HEALTH_AMOUNT ConfigSingleton::getInstance().getCantHealthCarrotLife()
 
-// ENEMY CONSTANTS
+//----------------- ENEMY CONSTANTS -----------------
 #define ENEMY_WIDTH_DEFAULT BLOCK_DIVISION * 2   // modificar
 #define ENEMY_HEIGHT_DEFAULT BLOCK_DIVISION * 2  // modificar
 
@@ -150,7 +150,6 @@ enum /*SPAWN POINTS*/ {
 #define CRAB_SPEED 4
 #define LIZARD_SPEED 2
 #define TURTLE_SPEED 1
-////////////////////////////////////////////////////////////////////////
 
 
 #define CRAB_HEALTH ConfigSingleton::getInstance().getEnemyCrabLife()
@@ -174,7 +173,8 @@ enum /*SPAWN POINTS*/ {
 #define TURTLE_DROP_AMOUNT ConfigSingleton::getInstance().getEnemyTurtleDropAmount()
 
 
-// ENEMIES DROP PROBABILITIES (NO necesita que la sumatoria sea 100)
+//----------------- ENEMIES DROP PROBABILITIES (NO necesita que la sumatoria sea 100)
+//-----------------
 
 #define HOTDOG_DROP_PROBABILITY ConfigSingleton::getInstance().getHotdogDropProbability()
 #define HAMBURGER_DROP_PROBABILITY ConfigSingleton::getInstance().getHamburgerDropProbability()
@@ -191,7 +191,17 @@ enum /*SPAWN POINTS*/ {
 #define NOTHING_DROP_PROBABILITY ConfigSingleton::getInstance().getNothingDropProbability()
 
 
-//////////////////////////////////////////////////////////////////////////////
+#define HOTDOG_DROP_CONSTANT HOTDOG_DROP_PROBABILITY
+#define HAMBURGER_DROP_CONSTANT HAMBURGER_DROP_PROBABILITY
+#define HEALTHCARROT_DROP_CONSTANT HAMBURGER_DROP_CONSTANT + HEALTHCARROT_DROP_PROBABILITY
+#define COIN_DROP_CONSTANT HEALTHCARROT_DROP_CONSTANT + COIN_DROP_PROBABILITY
+#define GEM_DROP_CONSTANT COIN_DROP_CONSTANT + GEM_DROP_PROBABILITY
+#define ROTTENCHEESE_DROP_CONSTANT GEM_DROP_CONSTANT + ROTTENCHEESE_DROP_PROBABILITY
+#define MACHINEGUNAMMO_DROP_CONSTANT ROTTENCHEESE_DROP_CONSTANT + MACHINEGUNAMMO_DROP_PROBABILITY
+#define SNIPERAMMO_DROP_CONSTANT MACHINEGUNAMMO_DROP_CONSTANT + SNIPERAMMO_DROP_PROBABILITY
+#define RAYGUNAMMO_DROP_CONSTANT SNIPERAMMO_DROP_CONSTANT + RAYGUNAMMO_DROP_PROBABILITY
+#define NOTHING_DROP_CONSTANT RAYGUNAMMO_DROP_CONSTANT + NOTHING_DROP_PROBABILITY
+#define TOTAL_PROBABILITY NOTHING_DROP_CONSTANT
 
 
 //----------------- POINTS CONSTANTS -----------------

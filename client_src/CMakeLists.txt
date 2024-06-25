@@ -1,8 +1,3 @@
-# PREGUNTAR
-#VARIABLE + "/resources/characters/" + "player1.png" 
-
-
-
 project(JazzClient)
 
 # Buscar paquetes de Qt5

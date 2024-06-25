@@ -19,8 +19,9 @@ void ClientReceiver::run() {
         try {
             if (!game_started) {
                 std::unique_ptr<QtResponse> response = this->protocol.receive_qt_response();
-                if (response->get_response() > 0) {
-                    player_id = response->get_response();
+                int response_type = response->get_response();
+                if (response_type > 0 && response_type < ERROR_PROT) {
+                    player_id = response_type;
                     game_started = true;
                 }
                 q_responses.push(std::move(response));

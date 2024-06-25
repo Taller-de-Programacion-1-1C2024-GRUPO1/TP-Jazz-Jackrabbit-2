@@ -32,7 +32,7 @@ class Snapshot {
 
 public:
     /*
-     * El snapshot tiene un vector de conejos, proyectiles y suministros
+     * El snapshot tiene un vector de conejos, enemigos, proyectiles y suministros
      * que se envian al cliente para que pueda renderizarlos en su pantalla
      * Además, tiene las dimensiones del mapa para que el cliente pueda renderizarlo correctamente
      */
@@ -54,15 +54,10 @@ public:
     Snapshot() {}
     ~Snapshot() {}
 
-    /*
-     * Probablemente se use en un futuro para setear las dimensiones del mapa iniciales
-     * Cuando se conecta un cliente, se le envía un snapshot con las dimensiones del mapa inicial
-     * para que pueda renderizarlo correctamente en su pantalla
-     */
     void set_dimensions(int height = 0, int width = 0, int rabbit_width = RABBIT_WIDTH_DEFAULT,
                         int rabbit_height = RABBIT_HEIGHT_DEFAULT,
                         int rabbit_ammount = RABBIT_AMOUNT_DEFAULT, const DynamicMap& map_data = {},
-                        int texture = 0) {  // JUNGLE CARROTUS
+                        int texture = 0) {
 
         map_dimensions.height = height;
         map_dimensions.width = width;

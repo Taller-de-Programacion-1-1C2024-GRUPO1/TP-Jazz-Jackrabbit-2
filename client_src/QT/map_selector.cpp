@@ -72,9 +72,9 @@ void MapSelector::start_match() {
                 std::cerr << "Error in waiting room" << std::endl;
                 this->done(ERROR);
             }
-        } else if (response->get_response() == ERROR) {
+        } else if (response->get_response() == ERROR_PROT) {
             QMessageBox::warning(this, "MapSelector Error: ", "Match name already exists.");
-            this->done(ERROR);
+            return;
         } else {
             QMessageBox::warning(this, "MapSelector Error: ", "Received an unexpected response");
             this->done(ERROR);

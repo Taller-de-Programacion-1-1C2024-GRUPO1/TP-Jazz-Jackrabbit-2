@@ -56,7 +56,7 @@ void JoinMatchLobby::on_btnJoin_clicked() {
                     } else {
                         std::cerr << "Error in waiting room" << std::endl;
                     }
-                } else if (response->get_response() == ERROR) {
+                } else if (response->get_response() == ERROR_PROT) {
                     QMessageBox::warning(this, "Error",
                                          "Match name does not exists or has already started");
                 } else {

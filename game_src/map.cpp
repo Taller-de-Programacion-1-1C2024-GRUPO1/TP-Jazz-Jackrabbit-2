@@ -59,7 +59,6 @@ void Map::update() {
     reap_dead();
 }
 
-// FALTA HACER DELETE SI SE USA HEAP
 void Map::reap_dead() {
     int i = 0;
     while (i < bullets.size()) {
