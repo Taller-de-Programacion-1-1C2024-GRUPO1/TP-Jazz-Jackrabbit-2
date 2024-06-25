@@ -17,7 +17,7 @@ This project is the final group assignment for the subject 'Taller de Programaci
 
 1. **Clone the repository**:
    ```
-   git clone git@github.com:Taller-de-Programacion-1-1C2024-GRUPO1/TP-Jazz-Jackrabbit-2.git
+   git clone https://github.com/Taller-de-Programacion-1-1C2024-GRUPO1/TP-Jazz-Jackrabbit-2.git
    ```
 2. **Navigate to the project directory**:
    ```
@@ -26,12 +26,12 @@ This project is the final group assignment for the subject 'Taller de Programaci
 3. **Install all the dependencies**:
    ```
    chmod +x install_all.sh
-   sudo ./install_all.sh
+   sh install_all.sh
    ```
 4. **Build the game**:
    ```
    chmod +x run_all.sh
-   sudo ./run_all.sh
+   sh run_all.sh
    ```
 4. **Run the game**:
    > **NOTE**: You need to open two terminals - one dedicated to running the server and another for the client.
@@ -63,14 +63,14 @@ Replace `<host>` with the hostname or IP address of the server you want to conne
 
 After saving your awesome new map, you will need to build the game again: 
 ```
-sudo ./run_all.sh
+sh run_all.sh
 ```
 
 -----------------
 ### Testing
 After building the game, to run the tests you will have to execute:
 ```
-./run_tests.sh
+sh run_tests.sh
 ```
 -----------------
 ### Acknowledgements
