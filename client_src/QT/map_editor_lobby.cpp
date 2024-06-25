@@ -27,6 +27,7 @@ void MapEditorLobby::on_btnRefresh_clicked() {
         std::unique_ptr<QtResponse> response;
         while (!could_pop) {
             could_pop = q_responses.try_pop(response);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         if (response->get_info_type() == REFRESH) {
             std::vector<std::string> maps = response->get_maps_available();

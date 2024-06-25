@@ -62,6 +62,7 @@ void MapSelector::start_match() {
         std::unique_ptr<QtResponse> response;
         while (!could_pop) {
             could_pop = q_responses.try_pop(response);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         if (response->get_response() == OK) {
             hide();
