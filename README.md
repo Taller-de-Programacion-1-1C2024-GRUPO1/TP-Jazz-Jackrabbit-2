@@ -10,6 +10,11 @@ This project is the final group assignment for the subject 'Taller de Programaci
 | Juan Martín | de la Cruz | jdelacruz@fi.uba.ar | 109588 |
 | Juan Patricio | Amboage | jamboage@fi.uba.ar | 106892 |
 
+### WEBSITE
+https://juandelahd.github.io/JJ2-Website/
+### TRAILER
+https://youtu.be/DaEdsMeefTc?si=qgN-JfcvZC5dTQ7
+
 -----------------
 ### Installation and Usage
 
